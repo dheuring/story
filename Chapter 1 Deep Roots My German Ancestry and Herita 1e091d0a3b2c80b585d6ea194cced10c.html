@@ -1,133 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <title>Chapter 1 – Deep Roots: My German Ancestry and Heritage</title>
 
 <style>
-  /* -------------------------------------------------------------
-     Keep only the layout / colour rules that were already in your
-     original Chapter 1 file.  No font‑family declarations – this
-     lets the page fall back to the browser’s default system fonts,
-     exactly like Chapter 2.
-     ------------------------------------------------------------- */
-  body{
-    line-height:1.6;
-    margin:0;
-    padding:0;
-    background:#f9f9f9;
-    color:#333;
-  }
-  .container{
-    max-width:900px;
-    margin:2rem auto;
-    padding:0 1rem;
-  }
-  .link-grid{
-    display:flex;
-    gap:1rem;
-    justify-content:center;
-    flex-wrap:wrap;
-    margin-top:2rem;
-  }
-  .link-grid a{
-    flex:1 1 260px;
-    text-align:center;
-    padding:0.9rem 1.2rem;
-    background:#557699;          /* main button colour */
-    color:#fff;
-    text-decoration:none;
-    font-size:1rem;
-    font-weight:600;
-    border-radius:8px;
-    box-shadow:0 3px 6px rgba(0,0,0,.15);
-    transition:background .25s ease,
-                transform .15s ease;
-    position:relative;          /* needed for the glow overlay */
-  }
-  .link-grid a:hover,
-  .link-grid a:focus{
-    background:#445977;        /* slightly darker on hover/focus */
-    transform:translateY(-2px);
-  }
-  .link-grid a:active{
-    background:#334455;        /* darkest shade for active press */
-    transform:translateY(0);
-  }
-  /* optional subtle hover glow */
-  .link-grid a::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:rgba(255,255,255,.15);
-    opacity:0;
-    transition:opacity .3s;
-  }
-  .link-grid a:hover::after{opacity:1;}
+/* ---------- Core layout & typography (same as Chapter 2) ---------- */
+html{-webkit-print-color-adjust:exact}
+*,*::before,*::after{box-sizing:border-box;-webkit-print-color-adjust:exact}
+body{
+  margin:0;padding:0;
+  line-height:1.5;
+  color:rgb(55,53,47);
+  font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,
+               "Segoe UI Variable Display","Segoe UI",Helvetica,
+               "Apple Color Emoji",Arial,sans-serif,
+               "Segoe UI Emoji","Segoe UI Symbol";
+}
+@media only screen{
+  body{margin:2em auto;max-width:900px}
+}
+h1,h2,h3{
+  letter-spacing:-.01em;line-height:1.2;font-weight:600;margin:0 0 .4rem
+}
+h1{font-size:1.4rem}               /* <<< smaller title >>> */
+h2{font-size:1.5rem}
+h3{font-size:1.25rem}
+.page-title{
+  font-size:1.5rem;font-weight:700;margin:.75rem 0 1rem
+}
+
+/* ---------- Image handling ---------- */
+.page-cover-image{display:block;width:100%;max-height:30vh;object-fit:cover}
+
+/* ---------- Link‑grid (buttons) ---------- */
+.link-grid{
+  display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;
+  margin-top:1.5rem;               /* pulls the grid up – no extra whitespace */
+}
+.link-grid a{
+  flex:1 1 260px;
+  text-align:center;
+  padding:.9rem 1.2rem;
+  background:#557699;color:#fff;
+  text-decoration:none;font-size:1rem;font-weight:600;
+  border-radius:8px;box-shadow:0 3px 6px rgba(0,0,0,.15);
+  transition:background .25s ease,transform .15s ease;
+ position:relative;
+}
+.link-grid a:hover,
+.link-grid a:focus{
+  background:#445977;transform:translateY(-2px);
+}
+.link-grid a:active{
+  background:#334455;transform:translateY(0);
+}
+.link-grid a::after{
+  content:"";position:absolute;inset:0;
+  background:rgba(255,255,255,.15);opacity:0;
+  transition:opacity .3s;
+}
+.link-grid a:hover::after{opacity:1}
+
+/* ---------- Minor utilities kept from original --------- */
+img{max-width:100%}
+pre,code{font-family:"SFMono-Regular",Menlo,Consolas,"PT Mono",monospace}
+blockquote{border-left:3px solid rgb(55,53,47);padding-left:1em;margin:1em 0}
 </style>
 </head>
 
 <body>
-<div class="container">
-
-  <!-- ==== Header copied from Chapter 2 ==== -->
+<article class="page serif">
   <header>
-    <!-- Replace the image source with the actual Chapter 2 cover if you have it -->
-    <img class="page-cover-image"
-         src="Heading20%202.png"
-         style="object-position:center 50%; max-width:100%; height:auto;">
-    <h1 class="page-title"><strong>Chapter 1 – Deep Roots: My German Ancestry and Heritage</strong></h1>
+    <img class="page-cover-image" src="Heading20%201.png"
+         style="object-position:center 50%">
+    <h1 class="page-title"><strong>Chapter 1 - Deep Roots: My German Ancestry and Heritage</strong></h1>
   </header>
-  <!-- ==== End of copied header ==== -->
 
-  <p>
-    In the opening chapter of this story, I explore the roots that shaped my identity. Growing up,
-    I was aware of my German ancestry. My parents came from German‑American families who had
-    spoken the language at home until World II prompted them to stop to avoid suspicion.
-    Yet our heritage persisted through family stories, surnames, and the older generation's
-    occasional switch to German when they wanted privacy from young ears. Years later, DNA tests
-    confirmed my predominantly European roots while revealing a surprising 1.7 % Bedouin ancestry—
-    an intriguing connection given my decades working with Arab communities.
-  </p>
+  <div class="page-body">
+    <p>
+      In the opening chapter of my story, I explore the roots that shaped my identity.
+      Growing up, I was always aware of my German ancestry. My parents came from
+      German‑American families who had spoken the language at home until World War II
+      prompted them to stop to avoid suspicion. Yet our heritage persisted through family
+      stories, surnames, and the older generation’s occasional switch to German when they
+      wanted privacy from young ears. Years later, DNA tests confirmed my predominantly
+      European roots while revealing a surprising 1.7 % Bedouin ancestry—an intriguing
+      connection given my decades working with Arab communities.
+    </p>
 
-  <p>
-    I once viewed my heritage simply as half Heuring and half Becker, but ancestry research
-    uncovered a more complex legacy of sixteen distinct family lines, each contributing equally to
-    who I am. This discovery highlighted the often‑overlooked importance of one’s maternal lineage.
-    Heuring (herdsman) and Becker (baker) weren't just names but reflections of ancestral trades,
-    with agriculture forming a common thread on both sides. My great‑great‑grandfather Andreas
-    Heuring left Bavaria, Germany in 1867, settling in Otsego Township to establish his farm.
-    Though his original house is gone, the one built by his son, my great‑grandfather George
-    David, still stands amid modern developments. Similarly, my great‑grandfather Pius Becker
-    immigrated from Baden in 1887, also drawn by Homestead Act promises, eventually owning two
-    farms in Hassan Township near the Crow River dam.
-  </p>
+    <p>
+      I once viewed my heritage simply as half Heuring and half Becker, but ancestry
+      research uncovered a more complex legacy of sixteen distinct family lines, each
+      contributing equally to who I am. This discovery highlighted the often‑overlooked
+      importance of one’s maternal lineage. Heuring (herdsman) and Becker (baker) weren’t
+      just names but reflections of ancestral trades, with agriculture forming a common
+      thread on both sides. My great‑great‑grandfather Andreas Heuring left Bavaria,
+      Germany in 1867, settling in Otsego Township to establish his farm. Though his
+      original house is gone, the one built by his son, my great‑grandfather George
+      David, still stands amid modern developments. Similarly, my great‑grandfather
+      Pius Becker immigrated from Baden in 1887, also drawn by Homestead Act promises,
+      eventually owning two farms in Hassan Township near the Crow River dam.
+    </p>
 
-  <p>
-    Though I grew up in town, my childhood was enriched by time on my uncles' farms—baling hay,
-    riding a Shetland pony, and playing hide‑and‑seek among the sheds. These experiences fostered
-    values of hard work, family bonds, and connection to the land deeply rooted in generations of
-    agricultural life. St. Michael wasn't just my hometown but a pocket of faith, German tradition,
-    and shared values, with the church, convent, and Catholic school at its centre.
-  </p>
+    <p>
+      Though I grew up in town, my childhood was enriched by time on my uncles’ farms—
+      baling hay, riding a Shetland pony, and playing hide‑and‑seek among the sheds.
+      These experiences fostered values of hard work, family bonds, and connection to
+      the land deeply rooted in generations of agricultural life. St. Michael wasn’t
+      just my hometown but a pocket of faith, German tradition, and shared values,
+      with the church, convent, and Catholic school at its centre.
+    </p>
 
-  <p>
-    This heritage formed my foundation, remaining steady as I journeyed beyond Minnesota. Decades
-    abroad, immersed in diverse cultures, never diminished my connection to that small‑town grounding.
-    The values shaped by rural life—family farms, close‑knit community, and enduring German traditions—
-    remained an anchor. No matter how far I traveled or how many years passed, my roots in German
-    heritage and rural Minnesota remained an unshakable part of my identity.
-  </p>
+    <p>
+      This heritage formed my foundation, remaining steady as I journeyed beyond
+      Minnesota. Decades abroad, immersed in diverse cultures, never diminished my
+      connection to that small‑town grounding. The values shaped by rural life—family
+      farms, close‑knit community, and enduring German traditions—remained my anchor.
+      No matter how far I traveled or how many years passed, my roots in German
+      heritage and rural Minnesota remained an unshakable part of my identity.
+    </p>
 
-  <div class="link-grid">
-    <a href="Chapter%202%20Early%20Life%20An%20Idyllic%20and%20Sheltered%20Chil%201df91d0a3b2c807795e6f1713e496622.html">
-      📖 <strong>Summary of Chapter 2</strong>
-    </a>
-
-    <a href="https://drive.google.com/file/d/1Ahfo7BkzFS7VDoOGITcUBD_jAC-rtsaa/view?usp=sharing">
-      🔗 <strong>Read Chapter 1 (Google Drive)</strong>
-    </a>
+    <!-- ----------- Link grid (no extra whitespace above) ----------- -->
+    <div class="link-grid">
+      <a href="Chapter%202%20Early%20Life%20An%20Idyllic%20and%20Sheltered%20Chil%201df91d0a3b2c807795e6f1713e496622.html">
+        📖 <strong>Summary of Chapter 2</strong>
+      </a>
+      <a href="https://drive.google.com/file/d/1Ahfo7BkzFS7VDoOGITcUBD_jAC-rtsaa/view?usp=sharing">
+        🔗 <strong>Read Chapter 1 (Google Drive)</strong>
+      </a>
+    </div>
   </div>
-</div>
+</article>
 </body>
 </html>
