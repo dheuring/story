@@ -1,136 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<title>Chapter 1 – Deep Roots: My German Ancestry and Heritage</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1 – Deep Roots: My German Ancestry and Heritage</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
-/* ---------- Core layout & typography (same as Chapter 2) ---------- */
-html{-webkit-print-color-adjust:exact}
-*,*::before,*::after{box-sizing:border-box;-webkit-print-color-adjust:exact}
-body{
-  margin:0;padding:0;
-  line-height:1.5;
-  color:rgb(55,53,47);
-  font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,
-               "Segoe UI Variable Display","Segoe UI",Helvetica,
-               "Apple Color Emoji",Arial,sans-serif,
-               "Segoe UI Emoji","Segoe UI Symbol";
-}
-@media only screen{
-  body{margin:2em auto;max-width:900px}
-}
-h1,h2,h3{
-  letter-spacing:-.01em;line-height:1.2;font-weight:600;margin:0 0 .4rem
-}
-h1{font-size:1.4rem}               /* <<< smaller title >>> */
-h2{font-size:1.5rem}
-h3{font-size:1.25rem}
-.page-title{
-  font-size:1.5rem;font-weight:700;margin:.75rem 0 1rem
-}
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: #2c2c2c;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
 
-/* ---------- Image handling ---------- */
-.page-cover-image{display:block;width:100%;max-height:30vh;object-fit:cover}
+        .header {
+            position: relative;
+            height: 250px;
+            background: #557699 url('Heading20%201.png') center 50%/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
 
-/* ---------- Link‑grid (buttons) ---------- */
-.link-grid{
-  display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;
-  margin-top:1.5rem;               /* pulls the grid up – no extra whitespace */
-}
-.link-grid a{
-  flex:1 1 260px;
-  text-align:center;
-  padding:.9rem 1.2rem;
-  background:#557699;color:#fff;
-  text-decoration:none;font-size:1rem;font-weight:600;
-  border-radius:8px;box-shadow:0 3px 6px rgba(0,0,0,.15);
-  transition:background .25s ease,transform .15s ease;
- position:relative;
-}
-.link-grid a:hover,
-.link-grid a:focus{
-  background:#445977;transform:translateY(-2px);
-}
-.link-grid a:active{
-  background:#334455;transform:translateY(0);
-}
-.link-grid a::after{
-  content:"";position:absolute;inset:0;
-  background:rgba(255,255,255,.15);opacity:0;
-  transition:opacity .3s;
-}
-.link-grid a:hover::after{opacity:1}
+        .header-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+            padding: 20px;
+            max-width: 900px;
+        }
 
-/* ---------- Minor utilities kept from original --------- */
-img{max-width:100%}
-pre,code{font-family:"SFMono-Regular",Menlo,Consolas,"PT Mono",monospace}
-blockquote{border-left:3px solid rgb(55,53,47);padding-left:1em;margin:1em 0}
-</style>
+        .chapter-number {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+        }
+
+        .chapter-title {
+            font-size: 2rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .chapter-content {
+            background: white;
+            padding: 50px;
+            border-radius: 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            border-left: 5px solid #6b8e99;
+        }
+
+        .chapter-content p {
+            font-size: 1.1rem;
+            line-height: 1.9;
+            color: #555;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .chapter-content p:last-of-type {
+            margin-bottom: 2rem;
+        }
+
+        .link-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .link-grid a {
+            flex: 1 1 300px;
+            max-width: 400px;
+            text-align: center;
+            padding: 18px 25px;
+            background: linear-gradient(135deg, #6b8e99 0%, #557699 100%);
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(107, 142, 153, 0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .link-grid a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(107, 142, 153, 0.4);
+            background: linear-gradient(135deg, #557699 0%, #6b8e99 100%);
+        }
+
+        .link-grid a:active {
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                height: 200px;
+            }
+
+            .chapter-number {
+                font-size: 1.1rem;
+            }
+
+            .chapter-title {
+                font-size: 1.5rem;
+            }
+
+            .chapter-content {
+                padding: 30px 25px;
+            }
+
+            .chapter-content p {
+                font-size: 1rem;
+            }
+
+            .link-grid {
+                flex-direction: column;
+            }
+
+            .link-grid a {
+                flex: 1 1 auto;
+                max-width: 100%;
+            }
+        }
+    </style>
 </head>
-
 <body>
-<article class="page serif">
-  <header>
-    <img class="page-cover-image" src="Heading20%201.png"
-         style="object-position:center 50%">
-    <h1 class="page-title"><strong>Chapter 1 - Deep Roots: My German Ancestry and Heritage</strong></h1>
-  </header>
+    <header class="header">
+        <div class="header-content">
+            <div class="chapter-number">CHAPTER 1</div>
+            <div class="chapter-title">Deep Roots: My German Ancestry and Heritage</div>
+        </div>
+    </header>
 
-  <div class="page-body">
-    <p>
-      In the opening chapter of my story, I explore the roots that shaped my identity.
-      Growing up, I was always aware of my German ancestry. My parents came from
-      German‑American families who had spoken the language at home until World War II
-      prompted them to stop to avoid suspicion. Yet our heritage persisted through family
-      stories, surnames, and the older generation’s occasional switch to German when they
-      wanted privacy from young ears. Years later, DNA tests confirmed my predominantly
-      European roots while revealing a surprising 1.7 % Bedouin ancestry—an intriguing
-      connection given my decades working with Arab communities.
-    </p>
+    <div class="container">
+        <div class="chapter-content">
+            <p>
+                In the opening chapter of my story, I explore the roots that shaped my identity.
+                Growing up, I was always aware of my German ancestry. My parents came from
+                German-American families who had spoken the language at home until World War II
+                prompted them to stop to avoid suspicion. Yet our heritage persisted through family
+                stories, surnames, and the older generation's occasional switch to German when they
+                wanted privacy from young ears. Years later, DNA tests confirmed my predominantly
+                European roots while revealing a surprising 1.7% Bedouin ancestry—an intriguing
+                connection given my decades working with Arab communities.
+            </p>
 
-    <p>
-      I once viewed my heritage simply as half Heuring and half Becker, but ancestry
-      research uncovered a more complex legacy of sixteen distinct family lines, each
-      contributing equally to who I am. This discovery highlighted the often‑overlooked
-      importance of one’s maternal lineage. Heuring (herdsman) and Becker (baker) weren’t
-      just names but reflections of ancestral trades, with agriculture forming a common
-      thread on both sides. My great‑great‑grandfather Andreas Heuring left Bavaria,
-      Germany in 1867, settling in Otsego Township to establish his farm. Though his
-      original house is gone, the one built by his son, my great‑grandfather George
-      David, still stands amid modern developments. Similarly, my great‑grandfather
-      Pius Becker immigrated from Baden in 1887, also drawn by Homestead Act promises,
-      eventually owning two farms in Hassan Township near the Crow River dam.
-    </p>
+            <p>
+                I once viewed my heritage simply as half Heuring and half Becker, but ancestry
+                research uncovered a more complex legacy of sixteen distinct family lines, each
+                contributing equally to who I am. This discovery highlighted the often-overlooked
+                importance of one's maternal lineage. Heuring (herdsman) and Becker (baker) weren't
+                just names but reflections of ancestral trades, with agriculture forming a common
+                thread on both sides. My great-great-grandfather Andreas Heuring left Bavaria,
+                Germany in 1867, settling in Otsego Township to establish his farm. Though his
+                original house is gone, the one built by his son, my great-grandfather George
+                David, still stands amid modern developments. Similarly, my great-grandfather
+                Pius Becker immigrated from Baden in 1887, also drawn by Homestead Act promises,
+                eventually owning two farms in Hassan Township near the Crow River dam.
+            </p>
 
-    <p>
-      Though I grew up in town, my childhood was enriched by time on my uncles’ farms—
-      baling hay, riding a Shetland pony, and playing hide‑and‑seek among the sheds.
-      These experiences fostered values of hard work, family bonds, and connection to
-      the land deeply rooted in generations of agricultural life. St. Michael wasn’t
-      just my hometown but a pocket of faith, German tradition, and shared values,
-      with the church, convent, and Catholic school at its centre.
-    </p>
+            <p>
+                Though I grew up in town, my childhood was enriched by time on my uncles' farms—
+                baling hay, riding a Shetland pony, and playing hide-and-seek among the sheds.
+                These experiences fostered values of hard work, family bonds, and connection to
+                the land deeply rooted in generations of agricultural life. St. Michael wasn't
+                just my hometown but a pocket of faith, German tradition, and shared values,
+                with the church, convent, and Catholic school at its centre.
+            </p>
 
-    <p>
-      This heritage formed my foundation, remaining steady as I journeyed beyond
-      Minnesota. Decades abroad, immersed in diverse cultures, never diminished my
-      connection to that small‑town grounding. The values shaped by rural life—family
-      farms, close‑knit community, and enduring German traditions—remained my anchor.
-      No matter how far I traveled or how many years passed, my roots in German
-      heritage and rural Minnesota remained an unshakable part of my identity.
-    </p>
+            <p>
+                This heritage formed my foundation, remaining steady as I journeyed beyond
+                Minnesota. Decades abroad, immersed in diverse cultures, never diminished my
+                connection to that small-town grounding. The values shaped by rural life—family
+                farms, close-knit community, and enduring German traditions—remained my anchor.
+                No matter how far I traveled or how many years passed, my roots in German
+                heritage and rural Minnesota remained an unshakable part of my identity.
+            </p>
 
-    <!-- ----------- Link grid (no extra whitespace above) ----------- -->
-    <div class="link-grid">
-      <a href="Chapter%202%20Early%20Life%20An%20Idyllic%20and%20Sheltered%20Chil%201df91d0a3b2c807795e6f1713e496622.html">
-        📖 <strong>Summary of Chapter 2</strong>
-      </a>
-      <a href="https://drive.google.com/file/d/1Ahfo7BkzFS7VDoOGITcUBD_jAC-rtsaa/view?usp=sharing">
-        🔗 <strong>Read Chapter 1 (Google Drive)</strong>
-      </a>
+            <div class="link-grid">
+                <a href="Chapter%202%20Early%20Life%20An%20Idyllic%20and%20Sheltered%20Chil%201df91d0a3b2c807795e6f1713e496622.html">
+                    📖 Summary of Chapter 2
+                </a>
+                <a href="https://drive.google.com/file/d/1Ahfo7BkzFS7VDoOGITcUBD_jAC-rtsaa/view?usp=sharing" target="_blank">
+                    📄 Read Chapter 1 (Google Drive)
+                </a>
+            </div>
+        </div>
     </div>
-  </div>
-</article>
 </body>
 </html>
