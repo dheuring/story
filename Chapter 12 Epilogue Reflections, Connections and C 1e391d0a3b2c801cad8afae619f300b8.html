@@ -17,6 +17,7 @@
             color: #2c2c2c;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         .header {
@@ -26,7 +27,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            overflow: visible;
         }
 
         .header-content {
@@ -39,15 +40,17 @@
         }
 		.header-image {
             position: absolute;
-            bottom: -40px;
+            top: 210px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 3;
+            z-index: 100;
             width: 100px;
             height: 100px;
             border-radius: 50%;
             box-shadow: 0 8px 30px rgba(0,0,0,0.3);
             border: 4px solid white;
+            background: white;
+            object-fit: cover;
         }
         .chapter-number {
             font-size: 1.3rem;
@@ -76,9 +79,8 @@
         .container {
             max-width: 900px;
             margin: 0 auto;
-            padding: 0 20px 60px;
+            padding: 60px 20px 60px;
             position: relative;
-            z-index: 10;
         }
 
         .chapter-content {
@@ -181,16 +183,17 @@
             <div class="chapter-number">CHAPTER 12</div>
             <div class="chapter-title">Epilogue: Reflections, Connections and Closing Thoughts</div>
         </div>
-		<img src="Dave.png" alt="Book Cover" class="header-image">
     </header>
+	
+	<img src="Dave.png" alt="Book Cover" class="header-image">
 	
 	<div class="container">
         <div class="chapter-content">
-              <p>As I bring this book to a close, I find myself deeply moved by the journey we’ve taken together—one marked by unexpected turns, detours, and the courage to step beyond the boundaries of the ordinary. Looking back, I am still amazed at how a boy from small-town St. Michael, Minnesota, could build a life that spanned continents and cultures, and how, even in my late sixties, I would find myself embracing fatherhood anew. Life’s capacity for surprise and renewal has been a constant reminder to stay open to possibilities, even when they lead far from conventional expectations.</p>
+              <p>As I bring this book to a close, I find myself deeply moved by the journey we've taken together—one marked by unexpected turns, detours, and the courage to step beyond the boundaries of the ordinary. Looking back, I am still amazed at how a boy from small-town St. Michael, Minnesota, could build a life that spanned continents and cultures, and how, even in my late sixties, I would find myself embracing fatherhood anew. Life's capacity for surprise and renewal has been a constant reminder to stay open to possibilities, even when they lead far from conventional expectations.</p>
 			  
-			  <p>Writing this memoir forced me to confront the complexities of my heritage. Tracing my German ancestry filled me with pride for their resilience but also brought a sobering realization: my family’s opportunities in Minnesota were inextricably linked to the dispossession of the Dakota people after the U.S.-Dakota War of 1862. This knowledge unsettled the comfortable pioneer narrative I’d grown up with, revealing that my family’s gains were built on the losses of others. Holding both the resilience of my ancestors and the trauma endured by those displaced has taught me that history is rarely simple, and that acknowledging uncomfortable truths is an ongoing responsibility.</p>
+			  <p>Writing this memoir forced me to confront the complexities of my heritage. Tracing my German ancestry filled me with pride for their resilience but also brought a sobering realization: my family's opportunities in Minnesota were inextricably linked to the dispossession of the Dakota people after the U.S.-Dakota War of 1862. This knowledge unsettled the comfortable pioneer narrative I'd grown up with, revealing that my family's gains were built on the losses of others. Holding both the resilience of my ancestors and the trauma endured by those displaced has taught me that history is rarely simple, and that acknowledging uncomfortable truths is an ongoing responsibility.</p>
 			  
-			  <p>Reflecting on my life’s pivotal moments, I see how both uncontrollable events and conscious decisions shaped my path. The abrupt move from Michigan to Minnesota as an infant, the closure of my Catholic high school, and the gradual loss of religious certainty each nudged me in new directions. Later, critical choices—like applying for an English tutoring job in Thailand when I was at my lowest, or accepting a leadership role in Cairo—became turning points that opened doors I hadn’t known existed. These moments taught me that transformation often arrives disguised as disruption, and that readiness to adapt is as important as any plan.</p>
+			  <p>Reflecting on my life's pivotal moments, I see how both uncontrollable events and conscious decisions shaped my path. The abrupt move from Michigan to Minnesota as an infant, the closure of my Catholic high school, and the gradual loss of religious certainty each nudged me in new directions. Later, critical choices—like applying for an English tutoring job in Thailand when I was at my lowest, or accepting a leadership role in Cairo—became turning points that opened doors I hadn't known existed. These moments taught me that transformation often arrives disguised as disruption, and that readiness to adapt is as important as any plan.</p>
 			  
 			  <p>Thailand, in particular, became the unexpected constant in my life. From my earliest days as a young GI to my eventual decision to retire there, Thailand shaped not only my personal identity but also the cultural fabric of my family. Marrying into Thai families, raising bicultural children, and absorbing values of harmony and empathy gradually changed me. I learned to be comfortable with ambiguity, to yield rather than always push, and to see conflict not as something to win, but as something to understand. My children, raised between worlds, embody the adaptability and cultural fluency that come from living outside neat categories—a legacy I cherish.</p>
 			  
