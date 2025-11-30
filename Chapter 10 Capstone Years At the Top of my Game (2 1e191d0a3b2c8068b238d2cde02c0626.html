@@ -39,12 +39,15 @@
             max-width: 900px;
         }
 
-        .header-image {
+        .header-image-wrapper {
             position: absolute;
             top: -40px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 100;
+        }
+
+        .header-image {
             width: 100px;
             height: 100px;
             border-radius: 50%;
@@ -52,6 +55,40 @@
             border: 4px solid white;
             background: white;
             object-fit: cover;
+            cursor: pointer;
+        }
+
+        .image-tooltip {
+            position: absolute;
+            bottom: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .image-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .header-image-wrapper:hover .image-tooltip {
+            opacity: 1;
+            visibility: visible;
         }
 
         .chapter-number {
@@ -160,6 +197,21 @@
                 font-size: 1.1rem;
             }
 
+            .header-image-wrapper {
+                top: -35px;
+            }
+
+            .header-image {
+                width: 70px;
+                height: 70px;
+            }
+
+            .image-tooltip {
+                bottom: 80px;
+                font-size: 0.85rem;
+                padding: 10px 16px;
+            }
+
             .chapter-content {
                 padding: 30px 25px;
             }
@@ -189,7 +241,10 @@
     </header>
 	
 	<div style="position: relative; height: 0;">
-        <img src="jordan.png" alt="Book Cover" class="header-image">
+        <div class="header-image-wrapper">
+            <div class="image-tooltip">Jordan - Regional leadership and innovation</div>
+            <img src="jordan.png" alt="Petra, Jordan" class="header-image">
+        </div>
     </div>
 	
 	<div class="container">
