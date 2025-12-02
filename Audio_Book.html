@@ -272,13 +272,27 @@
         </div>
 
         <div class="audio-grid">
+            <!-- ==================== Chapter 1 – UPDATED ==================== -->
             <div class="audio-card">
                 <div class="audio-icon">🎙️</div>
                 <div class="audio-content">
                     <h3>Chapter 1</h3>
-                    <a href="https://drive.google.com/file/d/1GpIYXvikqmNxjEFgZR8TiJ4CllfFNgft/view?usp=sharing" target="_blank">
-                        ▶️ Listen Now
+
+                    <!-- Direct Cloudflare R2 link (replace with your real bucket/domain) -->
+                    <a href="https://my-mp3-library.r2.dev/Chapter_1_audio.mp3"
+                       target="_blank" rel="noopener">
+                        ▶️ Listen Now (Cloudflare)
                     </a>
+
+                    <!-- Optional embedded player – keep or delete -->
+                    <div style="margin-top:12px; text-align:center;">
+                        <audio controls preload="metadata"
+                               style="width:100%; max-width:480px;">
+                            <source src="https://my-mp3-library.r2.dev/Chapter_1_audio.mp3"
+                                    type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
                 </div>
             </div>
 
