@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EPUB Reader</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js">    backLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (document.referrer && document.referrer !== window.location.href) {
+            history.back();
+        } else {
+            window.location.href = "https://heuring.us/Table-of-Contents";
+        }
+    });
+</script>
     <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -159,7 +167,7 @@
         <h1>Dave's e-Reader</h1>
         <div class="header-center">
             <span class="book-title" id="bookTitle"></span>
-            <a href="javascript:history.back()" class="back-link" id="backLink">← Back</a>
+            <a href="#" class="back-link" id="backLink">← Back</a>
         </div>
     </div>
 
