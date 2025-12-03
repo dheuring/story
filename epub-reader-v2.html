@@ -149,6 +149,16 @@
             margin: 1rem auto;
         }
 
+        /* Hide InDesign page numbers */
+        #content .page-number,
+        #content [class*="page-number"],
+        #content [class*="pagenumber"],
+        #content [class*="PageNumber"],
+        #content .Basic-Graphics-Frame,
+        #content ._idGenObjectAttribute-1 {
+            display: none !important;
+        }
+
         .page-number {
             position: absolute;
             bottom: 1rem;
@@ -431,29 +441,41 @@
                 const src = img.getAttribute('src');
                 if (!src) continue;
                 
-                // Construct full path relative to EPUB base
-                let imagePath = src;
-                if (!src.startsWith('http')) {
-                    // Handle relative paths
-                    if (src.startsWith('../')) {
-                        imagePath = src.substring(3);
-                    } else if (!src.startsWith('/')) {
-                        imagePath = epubData.basePath + src;
-                    }
-                    
-                    // Try to find the image in the zip
+                // Skip if already a blob or http URL
+                if (src.startsWith('blob:') || src.startsWith('http')) continue;
+                
+                // Try multiple possible paths for InDesign EPUBs
+                const possiblePaths = [
+                    src, // Original path
+                    'images/' + src.split('/').pop(), // images/filename.png
+                    'OEBPS/images/' + src.split('/').pop(), // OEBPS/images/filename.png
+                    epubData.basePath + src, // Relative to base
+                    epubData.basePath + 'images/' + src.split('/').pop(), // base + images/
+                    src.replace('../', ''), // Remove ../ prefix
+                    'image/' + src.split('/').pop() // Sometimes 'image' not 'images'
+                ];
+                
+                let imageLoaded = false;
+                
+                for (const imagePath of possiblePaths) {
                     const imageFile = epubData.zip.file(imagePath);
                     if (imageFile) {
                         try {
                             const blob = await imageFile.async('blob');
                             const objectUrl = URL.createObjectURL(blob);
                             img.src = objectUrl;
+                            imageLoaded = true;
+                            console.log('Loaded image from:', imagePath);
+                            break;
                         } catch (error) {
                             console.error('Error loading image:', imagePath, error);
                         }
-                    } else {
-                        console.warn('Image not found in EPUB:', imagePath);
                     }
+                }
+                
+                if (!imageLoaded) {
+                    console.warn('Image not found in any location:', src);
+                    console.log('Tried paths:', possiblePaths);
                 }
             }
         }
