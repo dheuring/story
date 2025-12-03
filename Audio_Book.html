@@ -140,9 +140,6 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
             border-left: 5px solid #6b8e99;
-            display: flex;
-            align-items: center;
-            gap: 20px;
         }
 
         .audio-card:hover {
@@ -150,24 +147,40 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
 
+        .audio-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
         .audio-icon {
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: #6b8e99;
             flex-shrink: 0;
         }
 
-        .audio-content {
+        .audio-header h3 {
+            font-size: 1.3rem;
+            color: #2c2c2c;
+            font-weight: 600;
             flex: 1;
         }
 
-        .audio-content h3 {
-            font-size: 1.3rem;
-            color: #2c2c2c;
-            margin-bottom: 8px;
-            font-weight: 600;
+        .audio-player {
+            width: 100%;
+            border-radius: 8px;
+            outline: none;
+            background: #f8f9fa;
+            padding: 8px;
         }
 
-        .audio-content a {
+        .audio-player::-webkit-media-controls-panel {
+            background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
+            border-radius: 8px;
+        }
+
+        .google-drive-link {
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -176,11 +189,23 @@
             font-size: 1rem;
             font-weight: 600;
             transition: all 0.3s ease;
+            padding: 8px 0;
         }
 
-        .audio-content a:hover {
+        .google-drive-link:hover {
             color: #557699;
             transform: translateX(5px);
+        }
+
+        .listen-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #6b8e99;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 8px 0;
+            margin-bottom: 10px;
         }
 
         .back-button {
@@ -272,138 +297,160 @@
         </div>
 
         <div class="audio-grid">
-            <!-- ==================== Chapter 1 – UPDATED ==================== -->
+            <!-- Chapter 1 -->
             <div class="audio-card">
-                <div class="audio-icon">🎙️</div>
-                <div class="audio-content">
+                <div class="audio-header">
+                    <div class="audio-icon">🎙️</div>
                     <h3>Chapter 1</h3>
-
-                    <!-- Direct Cloudflare R2 link (replace with your real bucket/domain) -->
-                    <a href="https://audio.heuring.us/Chapter_1_audio.mp3"
-                       target="_blank" rel="noopener">
-                        ▶️ Listen Now
-                    </a>
-
-                    <!-- Optional embedded player – keep or delete -->
-                    <div style="margin-top:12px; text-align:center;">
-                        <audio controls preload="metadata"
-                               style="width:100%; max-width:480px;">
-                            <source src="https://audio.heuring.us/Chapter_1_audio.mp3"
-                                    type="audio/mpeg">
-                            Your browser does not support the audio element.
-                        </audio>
-                    </div>
                 </div>
+                <div class="listen-label">▶️ Listen Now</div>
+                <audio controls preload="metadata" class="audio-player">
+                    <source src="https://audio.heuring.us/Chapter_1_audio.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
             </div>
 
+            <!-- Chapter 2 -->
             <div class="audio-card">
-                <div class="audio-icon">🎙️</div>
-                <div class="audio-content">
+                <div class="audio-header">
+                    <div class="audio-icon">🎙️</div>
                     <h3>Chapter 2</h3>
-                    <a href="https://drive.google.com/file/d/1mPd_yoUzfUVCgtuka2hCkXZFFn5ymP0x/view?usp=sharing" target="_blank">
-                        ▶️ Listen Now
-                    </a>
                 </div>
+                <div class="listen-label">▶️ Listen Now</div>
+                <audio controls preload="metadata" class="audio-player">
+                    <source src="https://audio.heuring.us/Chapter_2_audio.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
             </div>
 
+            <!-- Chapter 3 -->
             <div class="audio-card">
-                <div class="audio-icon">🎙️</div>
-                <div class="audio-content">
+                <div class="audio-header">
+                    <div class="audio-icon">🎙️</div>
                     <h3>Chapter 3</h3>
-                    <a href="https://drive.google.com/file/d/1k-ZQbfQTX-yEhwXEKSBH-PMp02926Ta9/view?usp=sharing" target="_blank">
-                        ▶️ Listen Now
-                    </a>
                 </div>
+                <div class="listen-label">▶️ Listen Now</div>
+                <audio controls preload="metadata" class="audio-player">
+                    <source src="https://audio.heuring.us/Chapter_3_audio.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
             </div>
 
+            <!-- Chapter 4 -->
             <div class="audio-card">
-                <div class="audio-icon">🎙️</div>
-                <div class="audio-content">
+                <div class="audio-header">
+                    <div class="audio-icon">🎙️</div>
                     <h3>Chapter 4</h3>
-                    <a href="https://drive.google.com/file/d/18UmM5vV0LnD3VsNGotkBdVBXR_4kFRl5/view?usp=sharing" target="_blank">
-                        ▶️ Listen Now
-                    </a>
                 </div>
+                <div class="listen-label">▶️ Listen Now</div>
+                <audio controls preload="metadata" class="audio-player">
+                    <source src="https://audio.heuring.us/Chapter_4_audio.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
             </div>
 
+            <!-- Chapter 5 -->
             <div class="audio-card">
-                <div class="audio-icon">🎙️</div>
-                <div class="audio-content">
+                <div class="audio-header">
+                    <div class="audio-icon">🎙️</div>
                     <h3>Chapter 5</h3>
-                    <a href="https://drive.google.com/file/d/1Dou0D0PmJPhb9uSvc7MyHUQJh9zQC0x0/view?usp=sharing" target="_blank">
-                        ▶️ Listen Now
-                    </a>
                 </div>
+                <div class="listen-label">▶️ Listen Now</div>
+                <audio controls preload="metadata" class="audio-player">
+                    <source src="https://audio.heuring.us/Chapter_5_audio.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
             </div>
 
+            <!-- Chapter 6 -->
             <div class="audio-card">
-                <div class="audio-icon">🎙️</div>
-                <div class="audio-content">
+                <div class="audio-header">
+                    <div class="audio-icon">🎙️</div>
                     <h3>Chapter 6</h3>
-                    <a href="https://drive.google.com/file/d/1dkGCTr6apIR-ieGni6fo1bsd4B5eitxj/view?usp=sharing" target="_blank">
-                        ▶️ Listen Now
-                    </a>
                 </div>
+                <div class="listen-label">▶️ Listen Now</div>
+                <audio controls preload="metadata" class="audio-player">
+                    <source src="https://audio.heuring.us/Chapter_6_audio.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
             </div>
 
+            <!-- Chapter 7 -->
             <div class="audio-card">
-                <div class="audio-icon">🎙️</div>
-                <div class="audio-content">
+                <div class="audio-header">
+                    <div class="audio-icon">🎙️</div>
                     <h3>Chapter 7</h3>
-                    <a href="https://drive.google.com/file/d/1M4_2LL8Q4RCQYXYceV4GKmOmvpDomkPn/view?usp=sharing" target="_blank">
-                        ▶️ Listen Now
-                    </a>
                 </div>
+                <div class="listen-label">▶️ Listen Now</div>
+                <audio controls preload="metadata" class="audio-player">
+                    <source src="https://audio.heuring.us/Chapter_7_audio.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
             </div>
 
+            <!-- Chapter 8 -->
             <div class="audio-card">
-                <div class="audio-icon">🎙️</div>
-                <div class="audio-content">
+                <div class="audio-header">
+                    <div class="audio-icon">🎙️</div>
                     <h3>Chapter 8</h3>
-                    <a href="https://drive.google.com/file/d/1W4RDHfAfQ93hTEjRZA6BqaRMEXhbpP7Z/view?usp=sharing" target="_blank">
-                        ▶️ Listen Now
-                    </a>
                 </div>
+                <div class="listen-label">▶️ Listen Now</div>
+                <audio controls preload="metadata" class="audio-player">
+                    <source src="https://audio.heuring.us/Chapter_8_audio.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
             </div>
 
+            <!-- Chapter 9 -->
             <div class="audio-card">
-                <div class="audio-icon">🎙️</div>
-                <div class="audio-content">
+                <div class="audio-header">
+                    <div class="audio-icon">🎙️</div>
                     <h3>Chapter 9</h3>
-                    <a href="https://drive.google.com/file/d/1Kecl3kDHhbYYSUPMDia9ujLVG-3Zazs8/view?usp=sharing" target="_blank">
-                        ▶️ Listen Now
-                    </a>
                 </div>
+                <div class="listen-label">▶️ Listen Now</div>
+                <audio controls preload="metadata" class="audio-player">
+                    <source src="https://audio.heuring.us/Chapter_9_audio.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
             </div>
 
+            <!-- Chapter 10 -->
             <div class="audio-card">
-                <div class="audio-icon">🎙️</div>
-                <div class="audio-content">
+                <div class="audio-header">
+                    <div class="audio-icon">🎙️</div>
                     <h3>Chapter 10</h3>
-                    <a href="https://drive.google.com/file/d/1hIiFXWMXKkBjSq3GM6KPUeZtgn6UHnzO/view?usp=sharing" target="_blank">
-                        ▶️ Listen Now
-                    </a>
                 </div>
+                <div class="listen-label">▶️ Listen Now</div>
+                <audio controls preload="metadata" class="audio-player">
+                    <source src="https://audio.heuring.us/Chapter_10_audio.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
             </div>
 
+            <!-- Chapter 11 -->
             <div class="audio-card">
-                <div class="audio-icon">🎙️</div>
-                <div class="audio-content">
+                <div class="audio-header">
+                    <div class="audio-icon">🎙️</div>
                     <h3>Chapter 11</h3>
-                    <a href="https://drive.google.com/file/d/1btSQsHrZBWzHJ000gIdM7jRM9eP4Sz94/view?usp=sharing" target="_blank">
-                        ▶️ Listen Now
-                    </a>
                 </div>
+                <div class="listen-label">▶️ Listen Now</div>
+                <audio controls preload="metadata" class="audio-player">
+                    <source src="https://audio.heuring.us/Chapter_11_audio.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
             </div>
 
+            <!-- Chapter 12 -->
             <div class="audio-card">
-                <div class="audio-icon">🎙️</div>
-                <div class="audio-content">
+                <div class="audio-header">
+                    <div class="audio-icon">🎙️</div>
                     <h3>Chapter 12</h3>
-                    <a href="https://drive.google.com/file/d/1J2fLN5EYU2unODHFyOVNvJE370rKxFZu/view?usp=sharing" target="_blank">
-                        ▶️ Listen Now
-                    </a>
                 </div>
+                <div class="listen-label">▶️ Listen Now</div>
+                <audio controls preload="metadata" class="audio-player">
+                    <source src="https://audio.heuring.us/Chapter_12_audio.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
             </div>
         </div>
 
