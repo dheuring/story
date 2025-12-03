@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EPUB Reader</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js">    backLink.addEventListener("click", (e) => {
-        e.preventDefault();
-        if (document.referrer && document.referrer !== window.location.href) {
-            history.back();
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js">    document.addEventListener("DOMContentLoaded", () => {
+        const backLink = document.getElementById("backLink");
+        backLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (document.referrer && document.referrer !== window.location.href) {
+                history.back();
         } else {
-            window.location.href = "https://heuring.us/Table-of-Contents";
-        }
+                            window.location.href = "https://heuring.us/Table-of-Contents";
+            }
+        });
     });
 </script>
     <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
@@ -166,8 +169,8 @@
     <div class="header">
         <h1>Dave's e-Reader</h1>
         <div class="header-center">
-            <span class="book-title" id="bookTitle"></span>
-            <a href="#" class="back-link" id="backLink">← Back</a>
+            <span class="book-title font-bold text-center" style="display:block; text-align:center; font-weight:bold;"></span>
+            <a href="#" id="backLink" class="back-link" onclick="event.preventDefault(); if (document.referrer && document.referrer !== window.location.href) { history.back(); } else { window.location.href='https://heuring.us/Table-of-Contents'; }">← Back</a>
         </div>
     </div>
 
