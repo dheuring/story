@@ -107,6 +107,8 @@
         .location-info {
             font-size: 0.9rem;
             color: #666;
+            min-width: 80px;
+            text-align: center;
         }
 
         #viewer {
@@ -117,6 +119,7 @@
             border-radius: 4px;
             overflow-y: auto;
             padding: 2rem;
+            position: relative;
         }
 
         #content {
@@ -126,6 +129,7 @@
             font-size: 1.1rem;
             line-height: 1.8;
             color: #333;
+            padding-bottom: 3rem;
         }
 
         #content h1, #content h2, #content h3 {
@@ -143,6 +147,19 @@
             height: auto;
             display: block;
             margin: 1rem auto;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            color: #666;
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .welcome {
@@ -199,6 +216,7 @@
             <div class="loading">Loading book...</div>
         </div>
         <div id="content" style="display: none;"></div>
+        <div class="page-number" id="pageNumber" style="display: none;"></div>
     </div>
 
     <div class="controls">
@@ -206,9 +224,7 @@
             <option>Select Chapter...</option>
         </select>
         <button class="btn" id="prevBtn" disabled>Previous</button>
-        <span class="location-info" id="locationInfo"></span>
         <button class="btn" id="nextBtn" disabled>Next</button>
-        <button class="btn btn-secondary" id="debugBtn" style="display: none;">Show Debug Info</button>
     </div>
 
     <script>
@@ -216,7 +232,8 @@
             contentFiles: [],
             currentIndex: 0,
             title: '',
-            baseUrl: null
+            zip: null,
+            basePath: ''
         };
 
         const viewer = document.getElementById('viewer');
@@ -225,10 +242,9 @@
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const bookTitle = document.getElementById('bookTitle');
-        const locationInfo = document.getElementById('locationInfo');
+        const pageNumber = document.getElementById('pageNumber');
         const backLink = document.getElementById('backLink');
         const chapterSelect = document.getElementById('chapterSelect');
-        const debugBtn = document.getElementById('debugBtn');
 
         const urlParams = new URLSearchParams(window.location.search);
         const bookParam = urlParams.get('book');
@@ -268,6 +284,7 @@
         async function parseEpub(arrayBuffer) {
             try {
                 const zip = await JSZip.loadAsync(arrayBuffer);
+                epubData.zip = zip;
                 
                 // Read container.xml to find content.opf location
                 const containerFile = zip.file('META-INF/container.xml');
@@ -295,7 +312,7 @@
                 bookTitle.textContent = epubData.title;
                 
                 // Get base directory for content files
-                const basePath = opfPath.substring(0, opfPath.lastIndexOf('/') + 1);
+                epubData.basePath = opfPath.substring(0, opfPath.lastIndexOf('/') + 1);
                 
                 // Find all content files (HTML/XHTML)
                 const itemRegex = /<item[^>]*id="([^"]*)"[^>]*href="([^"]*)"[^>]*media-type="application\/xhtml\+xml"[^>]*>/gi;
@@ -319,7 +336,7 @@
                 for (const spineId of spineIds) {
                     const item = items.find(i => i.id === spineId);
                     if (item) {
-                        const fullPath = basePath + item.href;
+                        const fullPath = epubData.basePath + item.href;
                         const file = zip.file(fullPath);
                         if (file) {
                             const htmlContent = await file.async('text');
@@ -374,7 +391,7 @@
             chapterSelect.disabled = false;
         }
 
-        function displayChapter(index) {
+        async function displayChapter(index) {
             if (index < 0 || index >= epubData.contentFiles.length) return;
             
             epubData.currentIndex = index;
@@ -389,17 +406,56 @@
             
             // Clean up and display
             content.innerHTML = bodyContent;
+            
+            // Fix image paths
+            await fixImagePaths(content);
+            
             content.style.display = 'block';
             welcomeMsg.style.display = 'none';
             
             // Update controls
             prevBtn.disabled = index === 0;
             nextBtn.disabled = index === epubData.contentFiles.length - 1;
-            locationInfo.textContent = `${index + 1} / ${epubData.contentFiles.length}`;
+            pageNumber.textContent = `Page ${index + 1} of ${epubData.contentFiles.length}`;
+            pageNumber.style.display = 'block';
             chapterSelect.value = index;
             
             // Scroll to top
             viewer.scrollTop = 0;
+        }
+
+        async function fixImagePaths(contentElement) {
+            const images = contentElement.querySelectorAll('img');
+            
+            for (const img of images) {
+                const src = img.getAttribute('src');
+                if (!src) continue;
+                
+                // Construct full path relative to EPUB base
+                let imagePath = src;
+                if (!src.startsWith('http')) {
+                    // Handle relative paths
+                    if (src.startsWith('../')) {
+                        imagePath = src.substring(3);
+                    } else if (!src.startsWith('/')) {
+                        imagePath = epubData.basePath + src;
+                    }
+                    
+                    // Try to find the image in the zip
+                    const imageFile = epubData.zip.file(imagePath);
+                    if (imageFile) {
+                        try {
+                            const blob = await imageFile.async('blob');
+                            const objectUrl = URL.createObjectURL(blob);
+                            img.src = objectUrl;
+                        } catch (error) {
+                            console.error('Error loading image:', imagePath, error);
+                        }
+                    } else {
+                        console.warn('Image not found in EPUB:', imagePath);
+                    }
+                }
+            }
         }
 
         prevBtn.addEventListener('click', () => {
