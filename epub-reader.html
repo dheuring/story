@@ -335,10 +335,10 @@
                 spread: 'none'
             });
 
-            // Simple font size increase using the documented method
-            rendition.themes.fontSize('200%');
-
             await rendition.display();
+
+            // Apply font size AFTER display
+            rendition.themes.fontSize('200%');
 
             const metadata = await book.loaded.metadata;
             bookTitle.textContent = metadata.title || 'Untitled Book';
