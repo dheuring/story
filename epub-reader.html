@@ -318,7 +318,7 @@
     <script>
         let book;
         let rendition;
-        let currentFontSize = 120; // Start at 120% for better readability
+        let currentFontSize = 140; // Start at 140% for better readability
 
         const viewer = document.getElementById('viewer');
         const prevBtn = document.getElementById('prevBtn');
@@ -383,22 +383,30 @@
             rendition = book.renderTo(viewer, {
                 width: '100%',
                 height: '100%',
-                spread: 'none'
-            });
-
-            // Apply initial font size and styling
-            rendition.themes.default({
-                'body': {
-                    'font-size': `${currentFontSize}%`,
-                    'line-height': '1.6',
-                    'padding': '20px 40px'
-                },
-                'p': {
-                    'margin-bottom': '1em'
-                }
+                spread: 'none',
+                minSpreadWidth: 0
             });
 
             await rendition.display();
+
+            // Apply styling after display
+            rendition.themes.register('custom', {
+                'body': {
+                    'font-size': `${currentFontSize}% !important`,
+                    'line-height': '1.7 !important',
+                    'padding': '30px 50px !important'
+                },
+                'p': {
+                    'margin-bottom': '1.2em !important',
+                    'font-size': '1em !important'
+                },
+                'h1, h2, h3, h4, h5, h6': {
+                    'margin-top': '1.5em !important',
+                    'margin-bottom': '0.8em !important'
+                }
+            });
+
+            rendition.themes.select('custom');
 
             const metadata = await book.loaded.metadata;
             bookTitle.textContent = metadata.title || 'Untitled Book';
@@ -421,12 +429,12 @@
         function updateFontSize(newSize) {
             currentFontSize = newSize;
             if (rendition) {
-                rendition.themes.fontSize(`${currentFontSize}%`);
+                rendition.themes.override('font-size', `${currentFontSize}% !important`);
             }
         }
 
         increaseFontBtn.addEventListener('click', () => {
-            if (currentFontSize < 200) {
+            if (currentFontSize < 220) {
                 updateFontSize(currentFontSize + 10);
             }
         });
@@ -438,7 +446,7 @@
         });
 
         resetFontBtn.addEventListener('click', () => {
-            updateFontSize(120);
+            updateFontSize(140);
         });
 
         prevBtn.addEventListener('click', () => {
@@ -482,7 +490,7 @@
             } else if (e.key === 'ArrowRight') {
                 rendition.next();
             } else if (e.key === '+' || e.key === '=') {
-                if (currentFontSize < 200) {
+                if (currentFontSize < 220) {
                     updateFontSize(currentFontSize + 10);
                 }
             } else if (e.key === '-') {
