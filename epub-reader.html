@@ -120,6 +120,8 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            border-left: 1px solid #ddd;
+            padding-left: 1rem;
         }
 
         .font-controls span {
@@ -136,6 +138,8 @@
         .location-info {
             font-size: 0.9rem;
             color: #666;
+            min-width: 60px;
+            text-align: center;
         }
 
         #viewer {
@@ -318,7 +322,7 @@
     <script>
         let book;
         let rendition;
-        let currentFontSize = 140; // Start at 140% for better readability
+        let currentFontSize = 150; // percentage
 
         const viewer = document.getElementById('viewer');
         const prevBtn = document.getElementById('prevBtn');
@@ -369,8 +373,51 @@
                 welcomeMsg.innerHTML = `
                     <div class="error">Error loading book</div>
                     <div style="font-size: 0.9rem; color: #666;">Could not find or load: ${bookPath}</div>
-                    <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">Please upload a book manually</div>
+                    <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">Please check the file path</div>
                 `;
+            }
+        }
+
+        function applyStyles() {
+            const styleContent = `
+                html {
+                    font-size: ${currentFontSize}% !important;
+                }
+                body {
+                    font-size: 1rem !important;
+                    line-height: 1.8 !important;
+                    padding: 40px 60px !important;
+                    max-width: 100% !important;
+                }
+                p {
+                    font-size: 1rem !important;
+                    line-height: 1.8 !important;
+                    margin-bottom: 1.2em !important;
+                }
+                h1, h2, h3, h4, h5, h6 {
+                    margin-top: 1.5em !important;
+                    margin-bottom: 0.8em !important;
+                    line-height: 1.4 !important;
+                }
+                * {
+                    max-width: 100% !important;
+                }
+            `;
+            
+            if (rendition) {
+                const contents = rendition.getContents();
+                contents.forEach(content => {
+                    const doc = content.document;
+                    if (doc) {
+                        let styleEl = doc.getElementById('custom-reader-styles');
+                        if (!styleEl) {
+                            styleEl = doc.createElement('style');
+                            styleEl.id = 'custom-reader-styles';
+                            doc.head.appendChild(styleEl);
+                        }
+                        styleEl.textContent = styleContent;
+                    }
+                });
             }
         }
 
@@ -383,30 +430,14 @@
             rendition = book.renderTo(viewer, {
                 width: '100%',
                 height: '100%',
-                spread: 'none',
-                minSpreadWidth: 0
+                spread: 'none'
             });
 
             await rendition.display();
 
-            // Apply styling after display
-            rendition.themes.register('custom', {
-                'body': {
-                    'font-size': `${currentFontSize}% !important`,
-                    'line-height': '1.7 !important',
-                    'padding': '30px 50px !important'
-                },
-                'p': {
-                    'margin-bottom': '1.2em !important',
-                    'font-size': '1em !important'
-                },
-                'h1, h2, h3, h4, h5, h6': {
-                    'margin-top': '1.5em !important',
-                    'margin-bottom': '0.8em !important'
-                }
-            });
-
-            rendition.themes.select('custom');
+            // Apply styles after content loads
+            rendition.on('rendered', applyStyles);
+            applyStyles();
 
             const metadata = await book.loaded.metadata;
             bookTitle.textContent = metadata.title || 'Untitled Book';
@@ -423,18 +454,18 @@
             rendition.on('relocated', (location) => {
                 const percent = Math.round(location.start.percentage * 100);
                 locationInfo.textContent = `${percent}%`;
+                // Reapply styles when page changes
+                setTimeout(applyStyles, 100);
             });
         }
 
         function updateFontSize(newSize) {
             currentFontSize = newSize;
-            if (rendition) {
-                rendition.themes.override('font-size', `${currentFontSize}% !important`);
-            }
+            applyStyles();
         }
 
         increaseFontBtn.addEventListener('click', () => {
-            if (currentFontSize < 220) {
+            if (currentFontSize < 250) {
                 updateFontSize(currentFontSize + 10);
             }
         });
@@ -446,7 +477,7 @@
         });
 
         resetFontBtn.addEventListener('click', () => {
-            updateFontSize(140);
+            updateFontSize(150);
         });
 
         prevBtn.addEventListener('click', () => {
@@ -490,7 +521,7 @@
             } else if (e.key === 'ArrowRight') {
                 rendition.next();
             } else if (e.key === '+' || e.key === '=') {
-                if (currentFontSize < 220) {
+                if (currentFontSize < 250) {
                     updateFontSize(currentFontSize + 10);
                 }
             } else if (e.key === '-') {
