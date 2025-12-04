@@ -27,25 +27,30 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             gap: 1rem;
+            position: relative;
         }
 
         .header h1 {
             font-size: 1.5rem;
             color: #333;
+            position: absolute;
+            left: 2rem;
         }
 
         .header-right {
             display: flex;
             align-items: center;
             gap: 1rem;
+            position: absolute;
+            right: 2rem;
         }
 
         .book-title {
-            font-size: 0.9rem;
-            color: #666;
-            max-width: 300px;
+            font-size: 1.1rem;
+            color: #333;
+            max-width: 400px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -54,16 +59,19 @@
         .back-link {
             display: inline-block;
             padding: 0.5rem 1rem;
-            background: #6c757d;
+            background: linear-gradient(135deg, #6b8e99 0%, #557699 100%);
             color: white;
             text-decoration: none;
             border-radius: 4px;
             font-size: 0.9rem;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(85, 118, 153, 0.3);
         }
 
         .back-link:hover {
-            background: #545b62;
+            background: linear-gradient(135deg, #557699 0%, #6b8e99 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(85, 118, 153, 0.4);
         }
 
         .controls {
@@ -78,17 +86,20 @@
 
         .btn {
             padding: 0.5rem 1rem;
-            background: #007bff;
+            background: linear-gradient(135deg, #6b8e99 0%, #557699 100%);
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 1rem;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(85, 118, 153, 0.3);
         }
 
         .btn:hover:not(:disabled) {
-            background: #0056b3;
+            background: linear-gradient(135deg, #557699 0%, #6b8e99 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(85, 118, 153, 0.4);
         }
 
         .btn:disabled {
@@ -230,8 +241,8 @@
 <body>
     <div class="header">
         <h1>Dave's eReader</h1>
+        <span class="book-title" id="bookTitle"></span>
         <div class="header-right">
-            <span class="book-title" id="bookTitle"></span>
             <a href="#" class="back-link" id="backLink" style="display: none;">← Back to Summary</a>
         </div>
     </div>
@@ -264,7 +275,6 @@
         const viewer = document.getElementById('viewer');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
-        const tocBtn = document.getElementById('tocBtn');
         const bookTitle = document.getElementById('bookTitle');
         const locationInfo = document.getElementById('locationInfo');
         const tocPanel = document.getElementById('tocPanel');
@@ -281,7 +291,7 @@
 
         // Setup back link if return URL is provided
         if (returnUrl) {
-            backLink.href = returnUrl;
+            backLink.href = decodeURIComponent(returnUrl);
             backLink.style.display = 'inline-block';
         }
 
@@ -332,7 +342,6 @@
 
             prevBtn.disabled = false;
             nextBtn.disabled = false;
-            tocBtn.disabled = false;
 
             const navigation = await book.loaded.navigation;
             displayTOC(navigation.toc);
@@ -349,11 +358,6 @@
 
         nextBtn.addEventListener('click', () => {
             if (rendition) rendition.next();
-        });
-
-        tocBtn.addEventListener('click', () => {
-            tocPanel.classList.add('open');
-            overlay.classList.add('show');
         });
 
         closeToc.addEventListener('click', closeTOCPanel);
