@@ -371,7 +371,7 @@
                 currentFontSize -= 10;
                 if (currentFontSize < 50) currentFontSize = 50;
                 console.log('Setting font size to:', currentFontSize + '%');
-                rendition.themes.fontSize(currentFontSize + '%');
+                applyFontSize();
             }
         });
 
@@ -380,9 +380,36 @@
                 currentFontSize += 10;
                 if (currentFontSize > 300) currentFontSize = 300;
                 console.log('Setting font size to:', currentFontSize + '%');
-                rendition.themes.fontSize(currentFontSize + '%');
+                applyFontSize();
             }
         });
+
+        function applyFontSize() {
+            try {
+                // Get the iframe
+                const iframe = document.querySelector('#viewer iframe');
+                if (iframe && iframe.contentDocument) {
+                    const iframeDoc = iframe.contentDocument;
+                    
+                    // Remove old style if exists
+                    const oldStyle = iframeDoc.getElementById('custom-font-size');
+                    if (oldStyle) oldStyle.remove();
+                    
+                    // Add new style
+                    const style = iframeDoc.createElement('style');
+                    style.id = 'custom-font-size';
+                    style.textContent = `
+                        body, p, div, span, td, th, li {
+                            font-size: ${currentFontSize}% !important;
+                        }
+                    `;
+                    iframeDoc.head.appendChild(style);
+                    console.log('Applied CSS to iframe successfully');
+                }
+            } catch (e) {
+                console.error('Error applying font size:', e);
+            }
+        }
 
         closeToc.addEventListener('click', closeTOCPanel);
         overlay.addEventListener('click', closeTOCPanel);
