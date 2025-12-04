@@ -127,18 +127,6 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             border-radius: 4px;
             overflow: hidden;
-            font-size: 20px;
-        }
-
-        /* Force larger text in epub content */
-        #viewer iframe html,
-        #viewer iframe body {
-            font-size: 20px !important;
-        }
-
-        #viewer iframe body * {
-            font-size: 20px !important;
-            line-height: 1.8 !important;
         }
 
         .toc-panel {
@@ -267,6 +255,8 @@
 
     <div class="controls">
         <button class="btn" id="prevBtn" disabled>Previous</button>
+        <button class="btn btn-secondary" id="fontSmaller">A-</button>
+        <button class="btn btn-secondary" id="fontLarger">A+</button>
         <span class="location-info" id="locationInfo"></span>
         <button class="btn" id="nextBtn" disabled>&nbsp;&nbsp;&nbsp;Next&nbsp;&nbsp;&nbsp;</button>
     </div>
@@ -283,10 +273,13 @@
     <script>
         let book;
         let rendition;
+        let currentFontSize = 180; // Start with larger font (180%)
 
         const viewer = document.getElementById('viewer');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
+        const fontSmaller = document.getElementById('fontSmaller');
+        const fontLarger = document.getElementById('fontLarger');
         const bookTitle = document.getElementById('bookTitle');
         const locationInfo = document.getElementById('locationInfo');
         const tocPanel = document.getElementById('tocPanel');
@@ -347,17 +340,10 @@
                 spread: 'none'
             });
 
-            // Set much larger font size for better laptop readability
-            rendition.themes.fontSize('140%');
-            
-            rendition.themes.default({
-                '*': {
-                    'font-size': '1.5em !important',
-                    'line-height': '1.8 !important'
-                }
-            });
-
             await rendition.display();
+
+            // Set initial large font size
+            rendition.themes.fontSize(currentFontSize + '%');
 
             const metadata = await book.loaded.metadata;
             bookTitle.textContent = metadata.title || 'Untitled Book';
@@ -380,6 +366,20 @@
 
         nextBtn.addEventListener('click', () => {
             if (rendition) rendition.next();
+        });
+
+        fontSmaller.addEventListener('click', () => {
+            if (rendition && currentFontSize > 100) {
+                currentFontSize -= 20;
+                rendition.themes.fontSize(currentFontSize + '%');
+            }
+        });
+
+        fontLarger.addEventListener('click', () => {
+            if (rendition && currentFontSize < 300) {
+                currentFontSize += 20;
+                rendition.themes.fontSize(currentFontSize + '%');
+            }
         });
 
         closeToc.addEventListener('click', closeTOCPanel);
