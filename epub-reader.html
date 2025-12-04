@@ -255,8 +255,6 @@
 
     <div class="controls">
         <button class="btn" id="prevBtn" disabled>Previous</button>
-        <button class="btn btn-secondary" id="fontSmaller">A-</button>
-        <button class="btn btn-secondary" id="fontLarger">A+</button>
         <span class="location-info" id="locationInfo"></span>
         <button class="btn" id="nextBtn" disabled>&nbsp;&nbsp;&nbsp;Next&nbsp;&nbsp;&nbsp;</button>
     </div>
@@ -273,13 +271,10 @@
     <script>
         let book;
         let rendition;
-        let currentFontSize = 180; // Start with larger font (180%)
 
         const viewer = document.getElementById('viewer');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
-        const fontSmaller = document.getElementById('fontSmaller');
-        const fontLarger = document.getElementById('fontLarger');
         const bookTitle = document.getElementById('bookTitle');
         const locationInfo = document.getElementById('locationInfo');
         const tocPanel = document.getElementById('tocPanel');
@@ -337,13 +332,40 @@
             rendition = book.renderTo(viewer, {
                 width: '100%',
                 height: '100%',
-                spread: 'none'
+                spread: 'none',
+                allowScriptedContent: true
+            });
+
+            // Apply styles to every page as it loads
+            rendition.hooks.content.register((contents) => {
+                const doc = contents.document;
+                const style = doc.createElement('style');
+                style.textContent = `
+                    * {
+                        font-size: 22px !important;
+                        line-height: 1.8 !important;
+                    }
+                    body {
+                        font-size: 22px !important;
+                    }
+                    p {
+                        font-size: 22px !important;
+                        margin-bottom: 1em !important;
+                    }
+                    div {
+                        font-size: 22px !important;
+                    }
+                    span {
+                        font-size: 22px !important;
+                    }
+                    h1 { font-size: 32px !important; }
+                    h2 { font-size: 28px !important; }
+                    h3 { font-size: 24px !important; }
+                `;
+                doc.head.appendChild(style);
             });
 
             await rendition.display();
-
-            // Set initial large font size
-            rendition.themes.fontSize(currentFontSize + '%');
 
             const metadata = await book.loaded.metadata;
             bookTitle.textContent = metadata.title || 'Untitled Book';
@@ -366,20 +388,6 @@
 
         nextBtn.addEventListener('click', () => {
             if (rendition) rendition.next();
-        });
-
-        fontSmaller.addEventListener('click', () => {
-            if (rendition && currentFontSize > 100) {
-                currentFontSize -= 20;
-                rendition.themes.fontSize(currentFontSize + '%');
-            }
-        });
-
-        fontLarger.addEventListener('click', () => {
-            if (rendition && currentFontSize < 300) {
-                currentFontSize += 20;
-                rendition.themes.fontSize(currentFontSize + '%');
-            }
         });
 
         closeToc.addEventListener('click', closeTOCPanel);
