@@ -254,6 +254,8 @@
     </div>
 
     <div class="controls">
+        <button class="btn btn-secondary" id="fontSmaller">A-</button>
+        <button class="btn btn-secondary" id="fontLarger">A+</button>
         <button class="btn" id="prevBtn" disabled>Previous</button>
         <span class="location-info" id="locationInfo"></span>
         <button class="btn" id="nextBtn" disabled>&nbsp;&nbsp;&nbsp;Next&nbsp;&nbsp;&nbsp;</button>
@@ -271,10 +273,13 @@
     <script>
         let book;
         let rendition;
+        let currentFontSize = 100; // Start at 100% (normal size)
 
         const viewer = document.getElementById('viewer');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
+        const fontSmaller = document.getElementById('fontSmaller');
+        const fontLarger = document.getElementById('fontLarger');
         const bookTitle = document.getElementById('bookTitle');
         const locationInfo = document.getElementById('locationInfo');
         const tocPanel = document.getElementById('tocPanel');
@@ -337,9 +342,6 @@
 
             await rendition.display();
 
-            // Apply font size AFTER display
-            rendition.themes.fontSize('200%');
-
             const metadata = await book.loaded.metadata;
             bookTitle.textContent = metadata.title || 'Untitled Book';
 
@@ -361,6 +363,24 @@
 
         nextBtn.addEventListener('click', () => {
             if (rendition) rendition.next();
+        });
+
+        fontSmaller.addEventListener('click', () => {
+            if (rendition) {
+                currentFontSize -= 10;
+                if (currentFontSize < 50) currentFontSize = 50;
+                console.log('Setting font size to:', currentFontSize + '%');
+                rendition.themes.fontSize(currentFontSize + '%');
+            }
+        });
+
+        fontLarger.addEventListener('click', () => {
+            if (rendition) {
+                currentFontSize += 10;
+                if (currentFontSize > 300) currentFontSize = 300;
+                console.log('Setting font size to:', currentFontSize + '%');
+                rendition.themes.fontSize(currentFontSize + '%');
+            }
         });
 
         closeToc.addEventListener('click', closeTOCPanel);
