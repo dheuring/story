@@ -239,48 +239,77 @@
 
         async function loadBook(bookPath) {
             try {
+                console.log('Starting to load book from:', bookPath);
                 welcomeMsg.innerHTML = '<div class="loading">Loading book...</div>';
                 
                 const response = await fetch(bookPath);
+                console.log('Fetch response status:', response.ok, response.status);
                 if (!response.ok) throw new Error('Could not load book');
                 
                 const arrayBuffer = await response.arrayBuffer();
+                console.log('ArrayBuffer loaded, size:', arrayBuffer.byteLength);
+                
                 zip = await JSZip.loadAsync(arrayBuffer);
+                console.log('ZIP loaded successfully');
                 
                 await parseEpub();
+                console.log('EPUB parsed, spine length:', spine.length);
+                
                 displayChapter(0);
                 
                 welcomeMsg.style.display = 'none';
                 content.style.display = 'block';
                 
             } catch (error) {
-                console.error('Error:', error);
-                welcomeMsg.innerHTML = '<div class="error">Error loading book</div>';
+                console.error('Error in loadBook:', error);
+                welcomeMsg.innerHTML = '<div class="error">Error loading book: ' + error.message + '</div>';
             }
         }
 
         async function parseEpub() {
+            console.log('Starting parseEpub');
+            
             // Get container.xml to find the OPF file
-            const containerXml = await zip.file('META-INF/container.xml').async('text');
+            const containerFile = zip.file('META-INF/container.xml');
+            console.log('Container file found:', !!containerFile);
+            
+            const containerXml = await containerFile.async('text');
+            console.log('Container XML loaded, length:', containerXml.length);
+            
             const parser = new DOMParser();
             const containerDoc = parser.parseFromString(containerXml, 'text/xml');
-            const opfPath = containerDoc.querySelector('rootfile').getAttribute('full-path');
+            const rootfileEl = containerDoc.querySelector('rootfile');
+            console.log('Rootfile element found:', !!rootfileEl);
+            
+            const opfPath = rootfileEl.getAttribute('full-path');
+            console.log('OPF path:', opfPath);
             
             // Get OPF file
-            const opfXml = await zip.file(opfPath).async('text');
+            const opfFile = zip.file(opfPath);
+            console.log('OPF file found:', !!opfFile);
+            
+            const opfXml = await opfFile.async('text');
+            console.log('OPF XML loaded, length:', opfXml.length);
+            
             const opfDoc = parser.parseFromString(opfXml, 'text/xml');
             
             // Get book title
             const titleEl = opfDoc.querySelector('title');
-            if (titleEl) bookTitle.textContent = titleEl.textContent;
+            if (titleEl) {
+                bookTitle.textContent = titleEl.textContent;
+                console.log('Book title:', titleEl.textContent);
+            }
             
             // Get spine (reading order)
             const spineItems = opfDoc.querySelectorAll('spine itemref');
+            console.log('Spine items found:', spineItems.length);
+            
             const manifest = {};
             
             opfDoc.querySelectorAll('manifest item').forEach(item => {
                 manifest[item.getAttribute('id')] = item.getAttribute('href');
             });
+            console.log('Manifest entries:', Object.keys(manifest).length);
             
             spine = Array.from(spineItems).map(item => {
                 const idref = item.getAttribute('idref');
@@ -288,6 +317,9 @@
                 const basePath = opfPath.substring(0, opfPath.lastIndexOf('/') + 1);
                 return basePath + href;
             });
+            
+            console.log('Spine array created with', spine.length, 'items');
+            console.log('First spine item:', spine[0]);
         }
 
         async function displayChapter(index) {
@@ -301,48 +333,80 @@
             try {
                 let html = await zip.file(chapterPath).async('text');
                 console.log('HTML loaded, length:', html.length);
+                console.log('First 500 chars:', html.substring(0, 500));
                 
-                // Extract body content
+                // Try multiple parsing methods
+                let bodyContent = '';
+                
+                // Method 1: Parse as HTML and get body
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
-                const body = doc.querySelector('body');
+                let body = doc.querySelector('body');
                 
-                console.log('Body found:', !!body);
+                if (body && body.innerHTML.trim()) {
+                    bodyContent = body.innerHTML;
+                    console.log('Method 1 (HTML body) worked');
+                } else {
+                    // Method 2: Parse as XML (for XHTML)
+                    const xmlDoc = parser.parseFromString(html, 'application/xhtml+xml');
+                    body = xmlDoc.querySelector('body') || xmlDoc.getElementsByTagName('body')[0];
+                    
+                    if (body && body.innerHTML.trim()) {
+                        bodyContent = body.innerHTML;
+                        console.log('Method 2 (XML body) worked');
+                    } else {
+                        // Method 3: Just use the raw HTML
+                        bodyContent = html;
+                        console.log('Method 3 (raw HTML) used');
+                    }
+                }
                 
-                if (body) {
-                    console.log('Body innerHTML length:', body.innerHTML.length);
+                console.log('Body content length:', bodyContent.length);
+                
+                if (bodyContent) {
+                    // Create a temporary div to fix image paths
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = bodyContent;
                     
                     // Fix image paths
                     const basePath = chapterPath.substring(0, chapterPath.lastIndexOf('/') + 1);
-                    const images = body.querySelectorAll('img');
+                    const images = tempDiv.querySelectorAll('img');
+                    
+                    console.log('Found', images.length, 'images');
                     
                     for (const img of images) {
                         const src = img.getAttribute('src');
-                        if (src && !src.startsWith('http')) {
+                        if (src && !src.startsWith('http') && !src.startsWith('data:')) {
                             const imgPath = basePath + src;
                             try {
                                 const imgFile = await zip.file(imgPath).async('base64');
                                 const ext = imgPath.split('.').pop().toLowerCase();
                                 const mimeType = ext === 'png' ? 'image/png' : 'image/jpeg';
                                 img.src = `data:${mimeType};base64,${imgFile}`;
+                                console.log('Loaded image:', imgPath);
                             } catch (e) {
-                                console.error('Could not load image:', imgPath);
+                                console.error('Could not load image:', imgPath, e);
                             }
                         }
                     }
                     
-                    content.innerHTML = body.innerHTML;
+                    content.innerHTML = tempDiv.innerHTML;
                     content.style.fontSize = fontSize + 'px';
                     
                     console.log('Content set, fontSize:', fontSize + 'px');
-                    console.log('Content display before:', content.style.display);
+                    console.log('Content has', content.children.length, 'child elements');
                     
                     // Make sure content is visible
                     welcomeMsg.style.display = 'none';
                     content.style.display = 'block';
                     
-                    console.log('Content display after:', content.style.display);
-                    console.log('Content innerHTML preview:', content.innerHTML.substring(0, 200));
+                    console.log('Content display:', content.style.display);
+                    console.log('First 200 chars of content:', content.textContent.substring(0, 200));
+                } else {
+                    console.error('No content found!');
+                    content.innerHTML = '<p style="color: red;">No content could be extracted from this page.</p>';
+                    content.style.display = 'block';
+                    welcomeMsg.style.display = 'none';
                 }
                 
                 // Update controls
@@ -355,7 +419,9 @@
                 
             } catch (error) {
                 console.error('Error displaying chapter:', error);
-                content.innerHTML = '<p>Error loading chapter</p>';
+                content.innerHTML = '<p style="color: red; font-size: 20px;">Error loading page: ' + error.message + '</p>';
+                content.style.display = 'block';
+                welcomeMsg.style.display = 'none';
             }
         }
 
