@@ -27,24 +27,33 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             gap: 1rem;
+            position: relative;
         }
 
         .header h1 {
             font-size: 1.5rem;
             color: #333;
+            position: absolute;
+            left: 2rem;
         }
 
-        .header-center {
-            flex: 1;
-            text-align: center;
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: absolute;
+            right: 2rem;
         }
 
         .book-title {
             font-size: 1.1rem;
             color: #333;
-            font-weight: 500;
+            max-width: 400px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .back-link {
@@ -57,7 +66,6 @@
             font-size: 0.9rem;
             transition: all 0.3s ease;
             box-shadow: 0 2px 8px rgba(85, 118, 153, 0.3);
-            white-space: nowrap;
         }
 
         .back-link:hover {
@@ -73,12 +81,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .btn {
-            padding: 0.5rem 1.2rem;
+            padding: 0.5rem 1rem;
             background: linear-gradient(135deg, #6b8e99 0%, #557699 100%);
             color: white;
             border: none;
@@ -98,60 +105,109 @@
         .btn:disabled {
             background: #ccc;
             cursor: not-allowed;
-            transform: none;
         }
 
-        .font-controls {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.5rem 1rem;
-            background: #f8f9fa;
-            border-radius: 6px;
+        .btn-secondary {
+            background: #6c757d;
         }
 
-        .font-controls span {
-            font-size: 0.9rem;
-            color: #555;
-            font-weight: 600;
-        }
-
-        .font-btn {
-            padding: 0.4rem 0.9rem;
-            font-size: 0.95rem;
-            min-width: 45px;
-            font-weight: 600;
+        .btn-secondary:hover:not(:disabled) {
+            background: #545b62;
         }
 
         .location-info {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #666;
-            min-width: 60px;
-            text-align: center;
-            font-weight: 500;
-        }
-
-        #viewer-container {
-            flex: 1;
-            overflow: auto;
-            background: #e9ecef;
-            display: flex;
-            justify-content: center;
         }
 
         #viewer {
+            flex: 1;
             background: white;
-            max-width: 850px;
-            width: 100%;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            margin: 20px 0;
+            margin: 1rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .toc-panel {
+            position: fixed;
+            left: -300px;
+            top: 0;
+            width: 300px;
+            height: 100vh;
+            background: white;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+            transition: left 0.3s;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .toc-panel.open {
+            left: 0;
+        }
+
+        .toc-header {
+            padding: 1rem;
+            background: #007bff;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toc-header h2 {
+            font-size: 1.2rem;
+        }
+
+        .close-toc {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+        }
+
+        .toc-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .toc-item {
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            transition: background 0.2s;
+        }
+
+        .toc-item:hover {
+            background: #f0f0f0;
+        }
+
+        .toc-item.level-1 {
+            font-weight: bold;
+        }
+
+        .toc-item.level-2 {
+            padding-left: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .toc-item.level-3 {
+            padding-left: 2.5rem;
+            font-size: 0.85rem;
         }
 
         .welcome {
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 400px;
+            height: 100%;
             color: #999;
             font-size: 1.2rem;
             flex-direction: column;
@@ -166,145 +222,134 @@
             color: #007bff;
         }
 
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
-            }
-            
-            .header h1 {
-                font-size: 1.2rem;
-            }
-            
-            .header-center {
-                order: 3;
-                width: 100%;
-            }
-            
-            #viewer {
-                max-width: 100%;
-                margin: 10px 0;
-            }
-            
-            .controls {
-                gap: 0.5rem;
-            }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        .overlay.show {
+            display: block;
         }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>Dave's eReader</h1>
-        <div class="header-center">
-            <span class="book-title" id="bookTitle"></span>
+        <span class="book-title" id="bookTitle"></span>
+        <div class="header-right">
+            <a href="#" class="back-link" id="backLink" style="display: none;">← Back to Summary</a>
         </div>
-        <a href="#" class="back-link" id="backLink" style="display: none;">← Back</a>
     </div>
 
-    <div id="viewer-container">
-        <div id="viewer">
-            <div class="welcome" id="welcomeMsg">
-                <div class="loading">Loading book...</div>
-            </div>
+    <div id="viewer">
+        <div class="welcome" id="welcomeMsg">
+            <div class="loading">Loading book...</div>
         </div>
     </div>
 
     <div class="controls">
         <button class="btn" id="prevBtn" disabled>Previous</button>
         <span class="location-info" id="locationInfo"></span>
-        <button class="btn" id="nextBtn" disabled>Next</button>
-        <div class="font-controls">
-            <span>Text Size:</span>
-            <button class="btn font-btn" id="decreaseFont" disabled>A-</button>
-            <button class="btn font-btn" id="increaseFont" disabled>A+</button>
+        <button class="btn" id="nextBtn" disabled>&nbsp;&nbsp;&nbsp;Next&nbsp;&nbsp;&nbsp;</button>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="toc-panel" id="tocPanel">
+        <div class="toc-header">
+            <h2>Contents</h2>
+            <button class="close-toc" id="closeToc">&times;</button>
         </div>
+        <div class="toc-content" id="tocContent"></div>
     </div>
 
     <script>
         let book;
         let rendition;
-        let currentFontSize = 130; // Start at 130%
 
-        const viewerContainer = document.getElementById('viewer-container');
         const viewer = document.getElementById('viewer');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const bookTitle = document.getElementById('bookTitle');
         const locationInfo = document.getElementById('locationInfo');
+        const tocPanel = document.getElementById('tocPanel');
+        const tocContent = document.getElementById('tocContent');
+        const closeToc = document.getElementById('closeToc');
+        const overlay = document.getElementById('overlay');
         const welcomeMsg = document.getElementById('welcomeMsg');
         const backLink = document.getElementById('backLink');
-        const increaseFontBtn = document.getElementById('increaseFont');
-        const decreaseFontBtn = document.getElementById('decreaseFont');
 
         // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const bookParam = urlParams.get('book');
         const returnUrl = urlParams.get('return');
 
-        // Setup back link
+        // Setup back link if return URL is provided
         if (returnUrl) {
             backLink.href = decodeURIComponent(returnUrl);
             backLink.style.display = 'inline-block';
         }
 
-        // Auto-load book
+        // Auto-load book if specified in URL
         if (bookParam) {
             loadBook(bookParam);
         } else {
-            welcomeMsg.innerHTML = '<div class="error">No book specified</div>';
+            welcomeMsg.innerHTML = '<div class="error">No book specified</div><div style="font-size: 0.9rem; color: #666; margin-top: 10px;">Please return to the chapter summary page</div>';
         }
 
         async function loadBook(bookPath) {
             try {
+                welcomeMsg.innerHTML = '<div class="loading">Loading book...</div>';
+                
                 const response = await fetch(bookPath);
-                if (!response.ok) throw new Error('Failed to load');
+                if (!response.ok) {
+                    throw new Error(`Could not load book: ${response.statusText}`);
+                }
                 
                 const arrayBuffer = await response.arrayBuffer();
                 await initializeBook(arrayBuffer);
             } catch (error) {
-                console.error('Error:', error);
-                welcomeMsg.innerHTML = `<div class="error">Error loading book</div>`;
+                console.error('Error loading book:', error);
+                welcomeMsg.innerHTML = `
+                    <div class="error">Error loading book</div>
+                    <div style="font-size: 0.9rem; color: #666;">Could not find or load: ${bookPath}</div>
+                    <div style="font-size: 0.9rem; color: #666; margin-top: 10px;">Please upload a book manually</div>
+                `;
             }
         }
 
         async function initializeBook(arrayBuffer) {
             viewer.innerHTML = '';
+            tocContent.innerHTML = '';
             
             book = ePub(arrayBuffer);
             
-            // Use scrolled-doc mode for better control
             rendition = book.renderTo(viewer, {
                 width: '100%',
                 height: '100%',
-                flow: 'scrolled-doc',
-                manager: 'continuous',
                 spread: 'none'
             });
 
-            // Register and apply theme
-            rendition.themes.register('readable', {
-                'html': {
-                    'font-size': `${currentFontSize}% !important`
-                },
+            // Set larger font size for better laptop readability
+            rendition.themes.default({
                 'body': {
-                    'font-family': 'Georgia, serif !important',
-                    'line-height': '1.8 !important',
-                    'padding': '40px 60px !important',
-                    'color': '#333 !important'
+                    'font-size': '1.4em !important',
+                    'line-height': '1.6 !important'
                 },
                 'p': {
-                    'margin-bottom': '1.3em !important',
-                    'text-align': 'justify !important'
+                    'font-size': '1.4em !important',
+                    'line-height': '1.6 !important'
                 },
-                'h1, h2, h3, h4, h5, h6': {
-                    'margin-top': '1.5em !important',
-                    'margin-bottom': '0.8em !important',
-                    'line-height': '1.3 !important'
+                'div': {
+                    'font-size': '1.4em !important',
+                    'line-height': '1.6 !important'
                 }
             });
-
-            rendition.themes.select('readable');
 
             await rendition.display();
 
@@ -313,34 +358,15 @@
 
             prevBtn.disabled = false;
             nextBtn.disabled = false;
-            increaseFontBtn.disabled = false;
-            decreaseFontBtn.disabled = false;
+
+            const navigation = await book.loaded.navigation;
+            displayTOC(navigation.toc);
 
             rendition.on('relocated', (location) => {
                 const percent = Math.round(location.start.percentage * 100);
                 locationInfo.textContent = `${percent}%`;
-                viewerContainer.scrollTop = 0;
             });
         }
-
-        function updateFontSize(newSize) {
-            currentFontSize = newSize;
-            if (rendition) {
-                rendition.themes.fontSize(`${currentFontSize}%`);
-            }
-        }
-
-        increaseFontBtn.addEventListener('click', () => {
-            if (currentFontSize < 200) {
-                updateFontSize(currentFontSize + 10);
-            }
-        });
-
-        decreaseFontBtn.addEventListener('click', () => {
-            if (currentFontSize > 80) {
-                updateFontSize(currentFontSize - 10);
-            }
-        });
 
         prevBtn.addEventListener('click', () => {
             if (rendition) rendition.prev();
@@ -350,21 +376,38 @@
             if (rendition) rendition.next();
         });
 
+        closeToc.addEventListener('click', closeTOCPanel);
+        overlay.addEventListener('click', closeTOCPanel);
+
+        function closeTOCPanel() {
+            tocPanel.classList.remove('open');
+            overlay.classList.remove('show');
+        }
+
+        function displayTOC(toc, level = 1) {
+            toc.forEach(item => {
+                const div = document.createElement('div');
+                div.className = `toc-item level-${level}`;
+                div.textContent = item.label;
+                div.addEventListener('click', () => {
+                    rendition.display(item.href);
+                    closeTOCPanel();
+                });
+                tocContent.appendChild(div);
+
+                if (item.subitems && item.subitems.length > 0) {
+                    displayTOC(item.subitems, level + 1);
+                }
+            });
+        }
+
         document.addEventListener('keydown', (e) => {
             if (!rendition) return;
             
-            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+            if (e.key === 'ArrowLeft') {
                 rendition.prev();
-            } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+            } else if (e.key === 'ArrowRight') {
                 rendition.next();
-            } else if (e.key === '+' || e.key === '=') {
-                if (currentFontSize < 200) {
-                    updateFontSize(currentFontSize + 10);
-                }
-            } else if (e.key === '-' || e.key === '_') {
-                if (currentFontSize > 80) {
-                    updateFontSize(currentFontSize - 10);
-                }
             }
         });
     </script>
