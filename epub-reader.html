@@ -82,6 +82,7 @@
             align-items: center;
             justify-content: center;
             gap: 1rem;
+            flex-wrap: wrap;
         }
 
         .btn {
@@ -115,6 +116,23 @@
             background: #545b62;
         }
 
+        .font-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .font-controls span {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .font-btn {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.9rem;
+            min-width: 40px;
+        }
+
         .location-info {
             font-size: 0.9rem;
             color: #666;
@@ -123,10 +141,12 @@
         #viewer {
             flex: 1;
             background: white;
-            margin: 1rem 2rem;
+            margin: 1.5rem auto;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             border-radius: 4px;
             overflow: hidden;
+            max-width: 900px;
+            width: 95%;
         }
 
         .toc-panel {
@@ -236,6 +256,27 @@
         .overlay.show {
             display: block;
         }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                position: static;
+                font-size: 1.2rem;
+            }
+            
+            .header-right {
+                position: static;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            #viewer {
+                width: 98%;
+                margin: 1rem auto;
+            }
+        }
     </style>
 </head>
 <body>
@@ -257,6 +298,12 @@
         <button class="btn" id="prevBtn" disabled>Previous</button>
         <span class="location-info" id="locationInfo"></span>
         <button class="btn" id="nextBtn" disabled>&nbsp;&nbsp;&nbsp;Next&nbsp;&nbsp;&nbsp;</button>
+        <div class="font-controls">
+            <span>Text Size:</span>
+            <button class="btn font-btn" id="decreaseFont" disabled>A-</button>
+            <button class="btn font-btn" id="increaseFont" disabled>A+</button>
+            <button class="btn btn-secondary font-btn" id="resetFont" disabled>Reset</button>
+        </div>
     </div>
 
     <div class="overlay" id="overlay"></div>
@@ -271,6 +318,7 @@
     <script>
         let book;
         let rendition;
+        let currentFontSize = 120; // Start at 120% for better readability
 
         const viewer = document.getElementById('viewer');
         const prevBtn = document.getElementById('prevBtn');
@@ -283,6 +331,9 @@
         const overlay = document.getElementById('overlay');
         const welcomeMsg = document.getElementById('welcomeMsg');
         const backLink = document.getElementById('backLink');
+        const increaseFontBtn = document.getElementById('increaseFont');
+        const decreaseFontBtn = document.getElementById('decreaseFont');
+        const resetFontBtn = document.getElementById('resetFont');
 
         // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
@@ -335,6 +386,18 @@
                 spread: 'none'
             });
 
+            // Apply initial font size and styling
+            rendition.themes.default({
+                'body': {
+                    'font-size': `${currentFontSize}%`,
+                    'line-height': '1.6',
+                    'padding': '20px 40px'
+                },
+                'p': {
+                    'margin-bottom': '1em'
+                }
+            });
+
             await rendition.display();
 
             const metadata = await book.loaded.metadata;
@@ -342,6 +405,9 @@
 
             prevBtn.disabled = false;
             nextBtn.disabled = false;
+            increaseFontBtn.disabled = false;
+            decreaseFontBtn.disabled = false;
+            resetFontBtn.disabled = false;
 
             const navigation = await book.loaded.navigation;
             displayTOC(navigation.toc);
@@ -351,6 +417,29 @@
                 locationInfo.textContent = `${percent}%`;
             });
         }
+
+        function updateFontSize(newSize) {
+            currentFontSize = newSize;
+            if (rendition) {
+                rendition.themes.fontSize(`${currentFontSize}%`);
+            }
+        }
+
+        increaseFontBtn.addEventListener('click', () => {
+            if (currentFontSize < 200) {
+                updateFontSize(currentFontSize + 10);
+            }
+        });
+
+        decreaseFontBtn.addEventListener('click', () => {
+            if (currentFontSize > 80) {
+                updateFontSize(currentFontSize - 10);
+            }
+        });
+
+        resetFontBtn.addEventListener('click', () => {
+            updateFontSize(120);
+        });
 
         prevBtn.addEventListener('click', () => {
             if (rendition) rendition.prev();
@@ -392,6 +481,14 @@
                 rendition.prev();
             } else if (e.key === 'ArrowRight') {
                 rendition.next();
+            } else if (e.key === '+' || e.key === '=') {
+                if (currentFontSize < 200) {
+                    updateFontSize(currentFontSize + 10);
+                }
+            } else if (e.key === '-') {
+                if (currentFontSize > 80) {
+                    updateFontSize(currentFontSize - 10);
+                }
             }
         });
     </script>
