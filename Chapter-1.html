@@ -307,8 +307,8 @@
                 <a href="Chapter-2.html">
                     📖 Summary of Chapter 2 →
                 </a>
-   <a href="epub-reader.html?book=Chapter-1-Fixed-Layout.epub" target="_blank">📖 Read Full Chapter ↻</a>
-              
+                <a href="#" onclick="openEpubReader('Chapter1.epub'); return false;">
+                    📖 Read Full Chapter ↻
                 </a>
             </div>
 
@@ -320,5 +320,14 @@
 		    
         </div>
     </div>
+
+    <script>
+        function openEpubReader(bookPath) {
+            // Get the current page URL to use as return URL
+            const returnUrl = encodeURIComponent(window.location.href);
+            // Navigate to epub reader with book path and return URL
+            window.location.href = `epub-reader.html?book=${bookPath}&return=${returnUrl}`;
+        }
+    </script>
 </body>
 </html>

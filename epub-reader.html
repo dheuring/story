@@ -291,11 +291,16 @@
             backLink.href = decodeURIComponent(returnUrl);
             backLink.style.display = 'inline-block';
         } else {
-            // If no return URL, go back in browser history
+            // If no return URL, try to close window or go back
             backLink.style.display = 'inline-block';
             backLink.addEventListener('click', (e) => {
                 e.preventDefault();
-                window.history.back();
+                // Try to close the window first (works if opened via window.open)
+                window.close();
+                // If that doesn't work (window wasn't opened by script), go back in history
+                setTimeout(() => {
+                    window.history.back();
+                }, 100);
             });
         }
 
