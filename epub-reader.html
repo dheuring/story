@@ -197,9 +197,9 @@
     <div class="controls">
         <button class="btn btn-secondary" id="fontSmaller">A-</button>
         <button class="btn btn-secondary" id="fontLarger">A+</button>
-        <button class="btn" id="prevBtn" disabled>Previous Chapter</button>
+        <button class="btn" id="prevBtn" disabled>Previous Page</button>
         <span class="location-info" id="locationInfo"></span>
-        <button class="btn" id="nextBtn" disabled>Next Chapter</button>
+        <button class="btn" id="nextBtn" disabled>Next Page</button>
     </div>
 
     <script>
@@ -296,15 +296,22 @@
             currentChapter = index;
             const chapterPath = spine[index];
             
+            console.log('Displaying chapter:', index, 'Path:', chapterPath);
+            
             try {
                 let html = await zip.file(chapterPath).async('text');
+                console.log('HTML loaded, length:', html.length);
                 
                 // Extract body content
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
                 const body = doc.querySelector('body');
                 
+                console.log('Body found:', !!body);
+                
                 if (body) {
+                    console.log('Body innerHTML length:', body.innerHTML.length);
+                    
                     // Fix image paths
                     const basePath = chapterPath.substring(0, chapterPath.lastIndexOf('/') + 1);
                     const images = body.querySelectorAll('img');
@@ -327,15 +334,21 @@
                     content.innerHTML = body.innerHTML;
                     content.style.fontSize = fontSize + 'px';
                     
+                    console.log('Content set, fontSize:', fontSize + 'px');
+                    console.log('Content display before:', content.style.display);
+                    
                     // Make sure content is visible
                     welcomeMsg.style.display = 'none';
                     content.style.display = 'block';
+                    
+                    console.log('Content display after:', content.style.display);
+                    console.log('Content innerHTML preview:', content.innerHTML.substring(0, 200));
                 }
                 
                 // Update controls
                 prevBtn.disabled = (index === 0);
                 nextBtn.disabled = (index === spine.length - 1);
-                locationInfo.textContent = `Chapter ${index + 1} of ${spine.length}`;
+                locationInfo.textContent = `Page ${index + 1} of ${spine.length}`;
                 
                 // Scroll to top
                 viewer.scrollTop = 0;
