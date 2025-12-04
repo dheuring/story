@@ -326,6 +326,10 @@
                     
                     content.innerHTML = body.innerHTML;
                     content.style.fontSize = fontSize + 'px';
+                    
+                    // Make sure content is visible
+                    welcomeMsg.style.display = 'none';
+                    content.style.display = 'block';
                 }
                 
                 // Update controls
