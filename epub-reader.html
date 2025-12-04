@@ -273,7 +273,7 @@
     <script>
         let book;
         let rendition;
-        let currentFontSize = 100; // Start at 100% (normal size)
+        let currentFontSize = 18; // Start at 18px (reasonable readable size)
 
         const viewer = document.getElementById('viewer');
         const prevBtn = document.getElementById('prevBtn');
@@ -343,6 +343,11 @@
 
             await rendition.display();
 
+            // Apply initial font size
+            setTimeout(() => {
+                applyFontSize();
+            }, 500);
+
             const metadata = await book.loaded.metadata;
             bookTitle.textContent = metadata.title || 'Untitled Book';
 
@@ -368,18 +373,18 @@
 
         fontSmaller.addEventListener('click', () => {
             if (rendition) {
-                currentFontSize -= 10;
-                if (currentFontSize < 50) currentFontSize = 50;
-                console.log('Setting font size to:', currentFontSize + '%');
+                currentFontSize -= 2;
+                if (currentFontSize < 10) currentFontSize = 10;
+                console.log('Setting font size to:', currentFontSize + 'px');
                 applyFontSize();
             }
         });
 
         fontLarger.addEventListener('click', () => {
             if (rendition) {
-                currentFontSize += 10;
-                if (currentFontSize > 300) currentFontSize = 300;
-                console.log('Setting font size to:', currentFontSize + '%');
+                currentFontSize += 2;
+                if (currentFontSize > 40) currentFontSize = 40;
+                console.log('Setting font size to:', currentFontSize + 'px');
                 applyFontSize();
             }
         });
@@ -395,12 +400,13 @@
                     const oldStyle = iframeDoc.getElementById('custom-font-size');
                     if (oldStyle) oldStyle.remove();
                     
-                    // Add new style
+                    // Add new style with absolute pixel values
                     const style = iframeDoc.createElement('style');
                     style.id = 'custom-font-size';
                     style.textContent = `
-                        body, p, div, span, td, th, li {
-                            font-size: ${currentFontSize}% !important;
+                        body, p, div, span, td, th, li, a {
+                            font-size: ${currentFontSize}px !important;
+                            line-height: 1.6 !important;
                         }
                     `;
                     iframeDoc.head.appendChild(style);
