@@ -27,30 +27,25 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
             gap: 1rem;
-            position: relative;
         }
 
         .header h1 {
             font-size: 1.5rem;
             color: #333;
-            position: absolute;
-            left: 2rem;
         }
 
         .header-right {
             display: flex;
             align-items: center;
             gap: 1rem;
-            position: absolute;
-            right: 2rem;
         }
 
         .book-title {
-            font-size: 1.1rem;
-            color: #333;
-            max-width: 400px;
+            font-size: 0.9rem;
+            color: #666;
+            max-width: 300px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -235,8 +230,8 @@
 <body>
     <div class="header">
         <h1>Dave's eReader</h1>
-        <span class="book-title" id="bookTitle"></span>
         <div class="header-right">
+            <span class="book-title" id="bookTitle"></span>
             <a href="#" class="back-link" id="backLink" style="display: none;">← Back to Summary</a>
         </div>
     </div>
@@ -269,6 +264,7 @@
         const viewer = document.getElementById('viewer');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
+        const tocBtn = document.getElementById('tocBtn');
         const bookTitle = document.getElementById('bookTitle');
         const locationInfo = document.getElementById('locationInfo');
         const tocPanel = document.getElementById('tocPanel');
@@ -285,7 +281,7 @@
 
         // Setup back link if return URL is provided
         if (returnUrl) {
-            backLink.href = decodeURIComponent(returnUrl);
+            backLink.href = returnUrl;
             backLink.style.display = 'inline-block';
         }
 
@@ -336,6 +332,7 @@
 
             prevBtn.disabled = false;
             nextBtn.disabled = false;
+            tocBtn.disabled = false;
 
             const navigation = await book.loaded.navigation;
             displayTOC(navigation.toc);
@@ -352,6 +349,11 @@
 
         nextBtn.addEventListener('click', () => {
             if (rendition) rendition.next();
+        });
+
+        tocBtn.addEventListener('click', () => {
+            tocPanel.classList.add('open');
+            overlay.classList.add('show');
         });
 
         closeToc.addEventListener('click', closeTOCPanel);
