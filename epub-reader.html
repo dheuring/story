@@ -134,21 +134,38 @@
             margin: 0 auto;
             font-size: 20px;
             line-height: 1.8;
-            color: #333;
+            color: #333 !important;
         }
 
-        /* Override Adobe InDesign absolute positioning */
-        #content div {
+        /* Override Adobe InDesign absolute positioning - FORCE normal flow */
+        #content * {
             position: static !important;
             width: auto !important;
             height: auto !important;
             transform: none !important;
             -webkit-transform: none !important;
+            left: auto !important;
+            right: auto !important;
+            top: auto !important;
+            bottom: auto !important;
+            float: none !important;
+            color: #000 !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            background: transparent !important;
         }
 
-        #content p {
-            margin-bottom: 1.2em;
-            position: static !important;
+        #content p,
+        #content div {
+            display: block !important;
+            margin-bottom: 0.5em;
+        }
+
+        #content img {
+            max-width: 100%;
+            height: auto !important;
+            display: block !important;
+            margin: 1.5em auto;
         }
 
         #content h1, #content h2, #content h3, #content h4, #content h5, #content h6 {
@@ -374,9 +391,17 @@
                 console.log('Body content length:', bodyContent.length);
                 
                 if (bodyContent) {
-                    // Create a temporary div to fix image paths
+                    // Create a temporary div to fix image paths and remove InDesign CSS
                     const tempDiv = document.createElement('div');
                     tempDiv.innerHTML = bodyContent;
+                    
+                    // Remove all link tags (CSS references)
+                    const links = tempDiv.querySelectorAll('link');
+                    links.forEach(link => link.remove());
+                    
+                    // Remove all style tags
+                    const styles = tempDiv.querySelectorAll('style');
+                    styles.forEach(style => style.remove());
                     
                     // Fix image paths
                     const basePath = chapterPath.substring(0, chapterPath.lastIndexOf('/') + 1);
