@@ -332,38 +332,11 @@
             rendition = book.renderTo(viewer, {
                 width: '100%',
                 height: '100%',
-                spread: 'none',
-                allowScriptedContent: true
+                spread: 'none'
             });
 
-            // Apply styles to every page as it loads
-            rendition.hooks.content.register((contents) => {
-                const doc = contents.document;
-                const style = doc.createElement('style');
-                style.textContent = `
-                    * {
-                        font-size: 22px !important;
-                        line-height: 1.8 !important;
-                    }
-                    body {
-                        font-size: 22px !important;
-                    }
-                    p {
-                        font-size: 22px !important;
-                        margin-bottom: 1em !important;
-                    }
-                    div {
-                        font-size: 22px !important;
-                    }
-                    span {
-                        font-size: 22px !important;
-                    }
-                    h1 { font-size: 32px !important; }
-                    h2 { font-size: 28px !important; }
-                    h3 { font-size: 24px !important; }
-                `;
-                doc.head.appendChild(style);
-            });
+            // Simple font size increase using the documented method
+            rendition.themes.fontSize('200%');
 
             await rendition.display();
 
