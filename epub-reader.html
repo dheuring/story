@@ -351,15 +351,23 @@
         });
 
         fontSmaller.addEventListener('click', () => {
-            fontSize = Math.max(12, fontSize - 2);
-            content.style.fontSize = fontSize + 'px';
-            console.log('Font size:', fontSize + 'px');
+            if (content.innerHTML && content.innerHTML.trim() !== '') {
+                fontSize = Math.max(12, fontSize - 2);
+                content.style.fontSize = fontSize + 'px';
+                content.style.display = 'block';
+                welcomeMsg.style.display = 'none';
+                console.log('Font size:', fontSize + 'px');
+            }
         });
 
         fontLarger.addEventListener('click', () => {
-            fontSize = Math.min(40, fontSize + 2);
-            content.style.fontSize = fontSize + 'px';
-            console.log('Font size:', fontSize + 'px');
+            if (content.innerHTML && content.innerHTML.trim() !== '') {
+                fontSize = Math.min(40, fontSize + 2);
+                content.style.fontSize = fontSize + 'px';
+                content.style.display = 'block';
+                welcomeMsg.style.display = 'none';
+                console.log('Font size:', fontSize + 'px');
+            }
         });
 
         // Keyboard navigation
