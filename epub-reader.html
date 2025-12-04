@@ -391,21 +391,23 @@
                 console.log('Body content length:', bodyContent.length);
                 
                 if (bodyContent) {
-                    // Create a temporary div to fix image paths and remove InDesign CSS
+                    // Create a temporary div
                     const tempDiv = document.createElement('div');
                     tempDiv.innerHTML = bodyContent;
                     
-                    // Remove all link tags (CSS references)
-                    const links = tempDiv.querySelectorAll('link');
-                    links.forEach(link => link.remove());
+                    // Remove all link tags (CSS references) and style tags
+                    tempDiv.querySelectorAll('link, style').forEach(el => el.remove());
                     
-                    // Remove all style tags
-                    const styles = tempDiv.querySelectorAll('style');
-                    styles.forEach(style => style.remove());
+                    // Extract ONLY the text content, ignoring all structure
+                    const textContent = tempDiv.textContent || tempDiv.innerText;
                     
-                    // Fix image paths
+                    console.log('Extracted text length:', textContent.length);
+                    console.log('First 500 chars:', textContent.substring(0, 500));
+                    
+                    // Handle images separately
                     const basePath = chapterPath.substring(0, chapterPath.lastIndexOf('/') + 1);
                     const images = tempDiv.querySelectorAll('img');
+                    const imageElements = [];
                     
                     console.log('Found', images.length, 'images');
                     
@@ -417,7 +419,13 @@
                                 const imgFile = await zip.file(imgPath).async('base64');
                                 const ext = imgPath.split('.').pop().toLowerCase();
                                 const mimeType = ext === 'png' ? 'image/png' : 'image/jpeg';
-                                img.src = `data:${mimeType};base64,${imgFile}`;
+                                const newImg = document.createElement('img');
+                                newImg.src = `data:${mimeType};base64,${imgFile}`;
+                                newImg.style.maxWidth = '100%';
+                                newImg.style.height = 'auto';
+                                newImg.style.display = 'block';
+                                newImg.style.margin = '1.5em auto';
+                                imageElements.push(newImg);
                                 console.log('Loaded image:', imgPath);
                             } catch (e) {
                                 console.error('Could not load image:', imgPath, e);
@@ -425,18 +433,31 @@
                         }
                     }
                     
-                    content.innerHTML = tempDiv.innerHTML;
+                    // Create clean HTML with just text paragraphs
+                    content.innerHTML = '';
+                    
+                    // Add images first
+                    imageElements.forEach(img => content.appendChild(img));
+                    
+                    // Add text as paragraphs
+                    const paragraphs = textContent.split('\n').filter(p => p.trim().length > 0);
+                    paragraphs.forEach(para => {
+                        const p = document.createElement('p');
+                        p.textContent = para.trim();
+                        p.style.marginBottom = '1em';
+                        p.style.color = '#000';
+                        content.appendChild(p);
+                    });
+                    
                     content.style.fontSize = fontSize + 'px';
                     
-                    console.log('Content set, fontSize:', fontSize + 'px');
-                    console.log('Content has', content.children.length, 'child elements');
+                    console.log('Content set with', paragraphs.length, 'paragraphs, fontSize:', fontSize + 'px');
                     
                     // Make sure content is visible
                     welcomeMsg.style.display = 'none';
                     content.style.display = 'block';
                     
                     console.log('Content display:', content.style.display);
-                    console.log('First 200 chars of content:', content.textContent.substring(0, 200));
                 } else {
                     console.error('No content found!');
                     content.innerHTML = '<p style="color: red;">No content could be extracted from this page.</p>';
