@@ -127,6 +127,18 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             border-radius: 4px;
             overflow: hidden;
+            font-size: 20px;
+        }
+
+        /* Force larger text in epub content */
+        #viewer iframe html,
+        #viewer iframe body {
+            font-size: 20px !important;
+        }
+
+        #viewer iframe body * {
+            font-size: 20px !important;
+            line-height: 1.8 !important;
         }
 
         .toc-panel {
@@ -335,19 +347,13 @@
                 spread: 'none'
             });
 
-            // Set larger font size for better laptop readability
+            // Set much larger font size for better laptop readability
+            rendition.themes.fontSize('140%');
+            
             rendition.themes.default({
-                'body': {
-                    'font-size': '1.4em !important',
-                    'line-height': '1.6 !important'
-                },
-                'p': {
-                    'font-size': '1.4em !important',
-                    'line-height': '1.6 !important'
-                },
-                'div': {
-                    'font-size': '1.4em !important',
-                    'line-height': '1.6 !important'
+                '*': {
+                    'font-size': '1.5em !important',
+                    'line-height': '1.8 !important'
                 }
             });
 
