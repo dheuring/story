@@ -31,12 +31,16 @@
             padding: 15px 20px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
+            position: relative;
         }
 
         .header h1 {
             font-size: 20px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .back-link {
@@ -49,6 +53,9 @@
             font-weight: 600;
             transition: all 0.3s;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 10;
+            margin-left: auto;
         }
 
         .back-link:hover {
@@ -85,7 +92,7 @@
         }
 
         .controls button {
-            background: #3498db;
+            background: #6b8e99;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -97,7 +104,7 @@
         }
 
         .controls button:hover {
-            background: #2980b9;
+            background: #7a9da8;
             transform: translateY(-2px);
         }
 
@@ -120,7 +127,7 @@
         }
 
         .zoom-controls button {
-            background: #3498db;
+            background: #6b8e99;
             color: white;
             border: none;
             padding: 8px 15px;
@@ -134,7 +141,7 @@
         }
 
         .zoom-controls button:hover {
-            background: #2980b9;
+            background: #7a9da8;
         }
 
         .loading {
@@ -191,7 +198,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>📚 EPUB Reader</h1>
+            <h1>📚 Dave's e-Reader</h1>
             <a href="#" class="back-link" id="backLink" style="display: none;">Return to Summary</a>
         </div>
 
@@ -275,8 +282,8 @@
                 // Get book metadata
                 const metadata = await book.loaded.metadata;
                 
-                // Display book info
-                info.innerHTML = `<strong>${metadata.title || 'Untitled'}</strong><br>${metadata.creator || 'Unknown Author'}`;
+                // Display book title only (no author)
+                info.innerHTML = `<strong>${metadata.title || 'Untitled'}</strong>`;
                 info.style.display = 'block';
 
                 // Check if it's fixed layout
@@ -288,7 +295,13 @@
                     width: '100%',
                     height: '100%',
                     spread: isFixedLayout ? 'none' : 'auto',
-                    flow: isFixedLayout ? 'paginated' : 'auto'
+                    flow: isFixedLayout ? 'paginated' : 'auto',
+                    manager: 'continuous'
+                });
+
+                // Apply centering styles to iframe content
+                rendition.hooks.content.register(function(contents) {
+                    contents.document.body.style.textAlign = 'center';
                 });
 
                 // Display the book
