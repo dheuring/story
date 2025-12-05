@@ -5,329 +5,202 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chapter 1 – Deep Roots: My German Ancestry and Heritage</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{
+            font-family:'Georgia',serif;
+            line-height:1.6;
+            color:#2c2c2c;
+            background:linear-gradient(135deg,#f5f7fa 0%,#c3cfe2 100%);
+            min-height:100vh;
+            position:relative;
+        }
+        .header{position:relative;height:250px;background:#557699;display:flex;align-items:center;justify-content:center;overflow:visible;}
+        .header-content{text-align:center;color:white;padding:20px;max-width:900px;}
+        .header-image-wrapper{position:absolute;top:-40px;left:50%;transform:translateX(-50%);z-index:100;}
+        .header-image{width:100px;height:100px;border-radius:50%;box-shadow:0 8px 30px rgba(0,0,0,.3);border:4px solid white;background:white;object-fit:cover;cursor:pointer;}
+        .image-tooltip{position:absolute;bottom:110px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);color:white;padding:12px 20px;border-radius:8px;font-size:.95rem;white-space:nowrap;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;pointer-events:none;box-shadow:0 4px 15px rgba(0,0,0,.3);}
+        .image-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:8px solid transparent;border-top-color:rgba(0,0,0,.9);}
+        .header-image-wrapper:hover .image-tooltip{opacity:1;visibility:visible;}
+
+        .chapter-number{font-size:1.3rem;font-weight:600;margin-bottom:10px;text-shadow:1px 1px 3px rgba(0,0,0,.5);letter-spacing:1px;}
+        .chapter-title{font-size:2rem;font-weight:700;text-shadow:2px 2px 4px rgba(0,0,0,.5);letter-spacing:1px;}
+
+        .container{max-width:900px;margin:auto;padding:60px 20px 60px;position:relative;}
+        .chapter-content{background:white;padding:50px;border-left:5px solid #6b8e99;box-shadow:0 4px 15px rgba(0,0,0,.1);margin-bottom:40px;}
+        .chapter-content p{font-size:1.1rem;line-height:1.9;color:#555;margin-bottom:1.5rem;text-align:justify;}
+        .chapter-content p:last-of-type{margin-bottom:2rem;}
+
+        .link-grid{
+            display:flex;
+            gap:20px;
+            justify-content:center;
+            flex-wrap:wrap;
+            margin-top:30px;
+        }
+        .link-grid a{
+            flex:1 1 300px;
+            max-width:400px;
+            text-align:center;
+            padding:18px 25px;
+            background:linear-gradient(135deg,#6b8e99 0%,#557699 100%);
+            color:white;
+            text-decoration:none;
+            font-size:1.1rem;
+            font-weight:600;
+            border-radius:8px;
+            box-shadow:0 4px 12px rgba(107,142,153,.3);
+            transition:all .3s ease;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:10px;
+        }
+        .link-grid a:hover{
+            transform:translateY(-3px);
+            box-shadow:0 8px 20px rgba(107,142,153,.4);
+            background:linear-gradient(135deg,#557699 0%,#6b8e99 100%);
+        }
+        .link-grid a:active{transform:translateY(-1px);}
+
+        /* ----- NON‑CLICKABLE READ FULL CHAPTER ----- */
+        .non-clickable{
+            cursor:default;
+            pointer-events:none;
+            background:linear-gradient(135deg,#6b8e99 0%,#557699 100%);
         }
 
-        body {
-            font-family: 'Georgia', serif;
-            line-height: 1.6;
-            color: #2c2c2c;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            position: relative;
+        /* ----- KEEP THE THREE BUTTONS TOGETHER ----- */
+        .button-group{
+            display:flex;
+            gap:0;                 /* no gap between the three buttons */
         }
-
-        .header {
-            position: relative;
-            height: 250px;
-            background: #557699;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: visible;
+        .button-group a{
+            flex:0 0 auto;         /* keep natural width (they’ll all be equal because of shared padding) */
+            margin:0;
+            border-radius:0;       /* remove individual rounding */
         }
+        /* round only the outer corners of the whole group */
+        .button-group a:first-child{border-top-left-radius:8px;border-bottom-left-radius:8px;}
+        .button-group a:last-child{border-top-right-radius:8px;border-bottom-right-radius:8px;}
 
-        .header-content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            color: white;
-            padding: 20px;
-            max-width: 900px;
+        .back-button{
+            display:inline-block;
+            background:linear-gradient(135deg,#6b8e99 0%,#557699 100%);
+            color:white;
+            padding:18px 40px;
+            border-radius:8px;
+            text-decoration:none;
+            font-size:1.2rem;
+            font-weight:600;
+            box-shadow:0 6px 20px rgba(107,142,153,.3);
+            transition:all .3s ease;
+            text-align:center;
         }
-
-        .header-image-wrapper {
-            position: absolute;
-            top: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
+        .back-button:hover{
+            transform:translateY(-3px);
+            box-shadow:0 10px 30px rgba(107,142,153,.4);
+            background:linear-gradient(135deg,#557699 0%,#6b8e99 100%);
         }
+        .button-container{text-align:center;margin-top:40px;}
 
-        .header-image {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-            border: 4px solid white;
-            background: white;
-            object-fit: cover;
-            cursor: pointer;
-        }
-
-        .image-tooltip {
-            position: absolute;
-            bottom: 110px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.9);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            pointer-events: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        .image-tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 8px solid transparent;
-            border-top-color: rgba(0, 0, 0, 0.9);
-        }
-
-        .header-image-wrapper:hover .image-tooltip {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .chapter-number {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-            letter-spacing: 1px;
-        }
-
-        .chapter-title {
-            font-size: 2rem;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            letter-spacing: 1px;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 60px 20px 60px;
-            position: relative;
-        }
-
-        .chapter-content {
-            background: white;
-            padding: 50px;
-            border-radius: 0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 40px;
-            border-left: 5px solid #6b8e99;
-        }
-
-        .chapter-content p {
-            font-size: 1.1rem;
-            line-height: 1.9;
-            color: #555;
-            margin-bottom: 1.5rem;
-            text-align: justify;
-        }
-
-        .chapter-content p:last-of-type {
-            margin-bottom: 2rem;
-        }
-
-        .link-grid {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 30px;
-        }
-
-        .link-grid a {
-            flex: 1 1 300px;
-            max-width: 400px;
-            text-align: center;
-            padding: 18px 25px;
-            background: linear-gradient(135deg, #6b8e99 0%, #557699 100%);
-            color: white;
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(107, 142, 153, 0.3);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .link-grid a:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(107, 142, 153, 0.4);
-            background: linear-gradient(135deg, #557699 0%, #6b8e99 100%);
-        }
-
-        .link-grid a:active {
-            transform: translateY(-1px);
-        }
-
-        .back-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #6b8e99 0%, #557699 100%);
-            color: white;
-            padding: 18px 40px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 1.2rem;
-            font-weight: 600;
-            box-shadow: 0 6px 20px rgba(107, 142, 153, 0.3);
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .back-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(107, 142, 153, 0.4);
-            background: linear-gradient(135deg, #557699 0%, #6b8e99 100%);
-        }
-
-        .button-container {
-            text-align: center;
-            margin-top: 40px;
-        }
-
-        @media (max-width: 768px) {
-            .header {
-                height: 220px;
-            }
-
-            .chapter-number {
-                font-size: 1.1rem;
-            }
-
-            .chapter-title {
-                font-size: 1.5rem;
-            }
-
-            .header-image-wrapper {
-                top: -35px;
-            }
-
-            .header-image {
-                width: 70px;
-                height: 70px;
-            }
-
-            .image-tooltip {
-                bottom: 80px;
-                font-size: 0.85rem;
-                padding: 10px 16px;
-            }
-
-            .chapter-content {
-                padding: 30px 25px;
-            }
-
-            .chapter-content p {
-                font-size: 1rem;
-            }
-
-            .link-grid {
-                flex-direction: column;
-            }
-
-            .link-grid a {
-                flex: 1 1 auto;
-                max-width: 100%;
-            }
+        @media (max-width:768px){
+            .header{height:220px;}
+            .chapter-number{font-size:1.1rem;}
+            .chapter-title{font-size:1.5rem;}
+            .header-image-wrapper{top:-35px;}
+            .header-image{width:70px;height:70px;}
+            .image-tooltip{bottom:80px;font-size:.85rem;padding:10px 16px;}
+            .chapter-content{padding:30px 25px;}
+            .chapter-content p{font-size:1rem;}
+            .link-grid{flex-direction:column;}
+            .link-grid a{flex:1 1 auto;max-width:100%;}
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <div class="chapter-number">CHAPTER 1</div>
-            <div class="chapter-title">Deep Roots: My German Ancestry and Heritage</div>
-        </div>
-    </header>
+<header class="header">
+    <div class="header-content">
+        <div class="chapter-number">CHAPTER 1</div>
+        <div class="chapter-title">Deep Roots: My German Ancestry and Heritage</div>
+    </div>
+</header>
 
-    <div style="position: relative; height: 0;">
-        <div class="header-image-wrapper">
-            <div class="image-tooltip">Great-grandparents George David and Mary Heuring: my namesake</div>
-            <img src="https://audio.heuring.us/george_mary.png" alt="Great-grandparents George and Mary Heuring" class="header-image">
+<div style="position:relative;height:0;">
+    <div class="header-image-wrapper">
+        <div class="image-tooltip">Great-grandparents George David and Mary Heuring: my namesake</div>
+        <img src="https://audio.heuring.us/george_mary.png" alt="Great-grandparents George and Mary Heuring" class="header-image">
+    </div>
+</div>
+
+<div class="container">
+    <div class="chapter-content">
+        <p>
+            In the opening chapter of my story, I explore the roots that shaped my identity.
+            Growing up, I was always aware of my German ancestry. My parents came from
+            German‑American families who had spoken the language at home until World II
+            prompted them to stop to avoid suspicion. Yet our heritage persisted through family
+            stories, surnames, and the older generation's occasional switch to German when they
+            wanted privacy from young ears. Years later, DNA tests confirmed my predominantly
+            European roots while revealing a surprising 1.7 % Bedouin ancestry—an intriguing
+            connection given my decades working with Arab communities.
+        </p>
+
+        <p>
+            I once viewed my heritage simply as half Heuring and half Becker, but ancestry
+            research uncovered a more complex legacy of sixteen distinct family lines, each
+            contributing equally to who I am. This discovery highlighted the often‑overlooked
+            importance of one's maternal lineage. Heuring (herdsman) and Becker (baker) weren't
+            just names but reflections of ancestral trades, with agriculture forming a common
+            thread on both sides. My great‑great‑grandfather Andreas Heuring left Bavaria,
+            Germany in 1867, settling in Otsego Township to establish his farm. Though his
+            original house is gone, the one built by his son, my great‑grandfather George
+            David, still stands amid modern developments. Similarly, my great‑grandfather
+            Pius Becker immigrated from Baden in 1887, also drawn by Homestead Act promises,
+            eventually owning two farms in Hassan Township near the Crow River dam.
+        </p>
+
+        <p>
+            Though I grew up in town, my childhood was enriched by time on my uncles' farms—
+            baling hay, riding a Shetland pony, and playing hide‑and‑seek among the sheds.
+            These experiences fostered values of hard work, family bonds, and connection to
+            the land deeply rooted in generations of agricultural life. St. Michael wasn't
+            just my hometown but a pocket of faith, German tradition, and shared values,
+            with the church, convent, and Catholic school at its centre.
+        </p>
+
+        <p>
+            This heritage formed my foundation, remaining steady as I journeyed beyond
+            Minnesota. Decades abroad, immersed in diverse cultures, never diminished my
+            connection to that small‑town grounding. The values shaped by rural life—family
+            farms, close‑knit community, and enduring German traditions—remained my anchor.
+            No matter how far I traveled or how many years passed, my roots in German
+            heritage and rural Minnesota remained an unshakable part of my identity.
+        </p>
+
+        <div class="link-grid">
+            <!-- Summary link (unchanged) -->
+            <a href="Chapter-2.html">📖 Summary of Chapter 2 →</a>
+
+            <!-- Group containing Read Full Chapter (non‑clickable) + PDF + eReader -->
+            <div class="button-group">
+                <a class="non-clickable">📖 Read Full Chapter  →</a>
+                <a href="https://audio.heuring.us/Chapter-1.pdf">PDF</a>
+                <a href="https://audio.heuring.us/Chapter-1.epub">eReader</a>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <a href="Table-of-Contents.html" class="back-button">← Back to Table of Contents</a>
         </div>
     </div>
+</div>
 
-    <div class="container">
-        <div class="chapter-content">
-            <p>
-                In the opening chapter of my story, I explore the roots that shaped my identity.
-                Growing up, I was always aware of my German ancestry. My parents came from
-                German-American families who had spoken the language at home until World War II
-                prompted them to stop to avoid suspicion. Yet our heritage persisted through family
-                stories, surnames, and the older generation's occasional switch to German when they
-                wanted privacy from young ears. Years later, DNA tests confirmed my predominantly
-                European roots while revealing a surprising 1.7% Bedouin ancestry—an intriguing
-                connection given my decades working with Arab communities.
-            </p>
-
-            <p>
-                I once viewed my heritage simply as half Heuring and half Becker, but ancestry
-                research uncovered a more complex legacy of sixteen distinct family lines, each
-                contributing equally to who I am. This discovery highlighted the often-overlooked
-                importance of one's maternal lineage. Heuring (herdsman) and Becker (baker) weren't
-                just names but reflections of ancestral trades, with agriculture forming a common
-                thread on both sides. My great-great-grandfather Andreas Heuring left Bavaria,
-                Germany in 1867, settling in Otsego Township to establish his farm. Though his
-                original house is gone, the one built by his son, my great-grandfather George
-                David, still stands amid modern developments. Similarly, my great-grandfather
-                Pius Becker immigrated from Baden in 1887, also drawn by Homestead Act promises,
-                eventually owning two farms in Hassan Township near the Crow River dam.
-            </p>
-
-            <p>
-                Though I grew up in town, my childhood was enriched by time on my uncles' farms—
-                baling hay, riding a Shetland pony, and playing hide-and-seek among the sheds.
-                These experiences fostered values of hard work, family bonds, and connection to
-                the land deeply rooted in generations of agricultural life. St. Michael wasn't
-                just my hometown but a pocket of faith, German tradition, and shared values,
-                with the church, convent, and Catholic school at its centre.
-            </p>
-
-            <p>
-                This heritage formed my foundation, remaining steady as I journeyed beyond
-                Minnesota. Decades abroad, immersed in diverse cultures, never diminished my
-                connection to that small-town grounding. The values shaped by rural life—family
-                farms, close-knit community, and enduring German traditions—remained my anchor.
-                No matter how far I traveled or how many years passed, my roots in German
-                heritage and rural Minnesota remained an unshakable part of my identity.
-            </p>
-
-            <div class="link-grid">
-                <a href="Chapter-2.html">
-                    📖 Summary of Chapter 2 →
-                </a>
-                <a href="#" onclick="openEpubReader('https://audio.heuring.us/Chapter-1.epub'); return false;">
-                    📖 Read Full Chapter ↻
-                </a>
-            </div>
-
-            <div class="button-container">
-                <a href="Table-of-Contents.html" class="back-button">
-                    ← Back to Table of Contents
-                </a>
-            </div>
-		    
-        </div>
-    </div>
-
-    <script>
-        function openEpubReader(bookPath) {
-            // Get the current page URL to use as return URL
-            const returnUrl = encodeURIComponent(window.location.href);
-            // Navigate to epub reader with book path and return URL
-            window.location.href = `epub-reader.html?book=${bookPath}&return=${returnUrl}`;
-        }
-    </script>
+<script>
+    // Function retained for possible future use – not bound to any button now.
+    function openEpubReader(bookPath) {
+        const returnUrl = encodeURIComponent(window.location.href);
+        window.location.href = `epub-reader.html?book=${bookPath}&return=${returnUrl}`;
+    }
+</script>
 </body>
 </html>
