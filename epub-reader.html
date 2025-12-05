@@ -31,16 +31,17 @@
             padding: 15px 20px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             position: relative;
         }
 
-        .header h1 {
-            font-size: 20px;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
+        .header-title {
+            font-size: 18px;
+            color: white;
+            flex: 1;
+            text-align: center;
+            padding: 0 20px;
         }
 
         .back-link {
@@ -53,9 +54,7 @@
             font-weight: 600;
             transition: all 0.3s;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            position: relative;
-            z-index: 10;
-            margin-left: auto;
+            white-space: nowrap;
         }
 
         .back-link:hover {
@@ -192,13 +191,15 @@
             font-size: 14px;
             display: none;
             color: white;
+            visibility: hidden;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>📚 Dave's e-Reader</h1>
+            <div style="width: 180px;"></div>
+            <div class="header-title" id="headerTitle">Loading...</div>
             <a href="#" class="back-link" id="backLink" style="display: none;">Return to Summary</a>
         </div>
 
@@ -241,6 +242,7 @@
         const zoomOutBtn = document.getElementById('zoomOut');
         const zoomResetBtn = document.getElementById('zoomReset');
         const backLink = document.getElementById('backLink');
+        const headerTitle = document.getElementById('headerTitle');
 
         // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
@@ -282,9 +284,11 @@
                 // Get book metadata
                 const metadata = await book.loaded.metadata;
                 
-                // Display book title only (no author)
-                info.innerHTML = `<strong>${metadata.title || 'Untitled'}</strong>`;
-                info.style.display = 'block';
+                // Update header title with book title
+                headerTitle.textContent = metadata.title || 'EPUB Reader';
+                
+                // Don't show the info overlay anymore
+                info.style.display = 'none';
 
                 // Check if it's fixed layout
                 const spine = await book.loaded.spine;
@@ -295,13 +299,7 @@
                     width: '100%',
                     height: '100%',
                     spread: isFixedLayout ? 'none' : 'auto',
-                    flow: isFixedLayout ? 'paginated' : 'auto',
-                    manager: 'continuous'
-                });
-
-                // Apply centering styles to iframe content
-                rendition.hooks.content.register(function(contents) {
-                    contents.document.body.style.textAlign = 'center';
+                    flow: isFixedLayout ? 'paginated' : 'auto'
                 });
 
                 // Display the book
