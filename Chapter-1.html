@@ -75,7 +75,7 @@
             gap:0;                 /* no gap between the three buttons */
         }
         .button-group a{
-            flex:0 0 auto;         /* keep natural width (they’ll all be equal because of shared padding) */
+            flex:0 0 auto;         /* keep natural width (shared padding ensures equal height) */
             margin:0;
             border-radius:0;       /* remove individual rounding */
         }
@@ -181,11 +181,11 @@
             <!-- Summary link (unchanged) -->
             <a href="Chapter-2.html">📖 Summary of Chapter 2 →</a>
 
-            <!-- Group containing Read Full Chapter (non‑clickable) + PDF + eReader -->
+            <!-- Group: Read Full Chapter (non‑clickable) + PDF + eReader -->
             <div class="button-group">
-                <a class="non-clickable">📖 Read Full Chapter  →</a>
+                <a class="non-clickable">Read Full Chapter</a>
                 <a href="https://audio.heuring.us/Chapter-1.pdf">PDF</a>
-                <a href="https://audio.heuring.us/Chapter-1.epub">eReader</a>
+                <a href="javascript:void(0);" onclick="openEpubReader('https://audio.heuring.us/Chapter-1.epub'); return false;">eReader</a>
             </div>
         </div>
 
@@ -196,7 +196,7 @@
 </div>
 
 <script>
-    // Function retained for possible future use – not bound to any button now.
+    // Opens the built‑in EPUB reader, preserving the return‑URL logic.
     function openEpubReader(bookPath) {
         const returnUrl = encodeURIComponent(window.location.href);
         window.location.href = `epub-reader.html?book=${bookPath}&return=${returnUrl}`;
