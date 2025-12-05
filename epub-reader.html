@@ -299,7 +299,17 @@
                     width: '100%',
                     height: '100%',
                     spread: isFixedLayout ? 'none' : 'auto',
-                    flow: isFixedLayout ? 'paginated' : 'auto'
+                    flow: isFixedLayout ? 'paginated' : 'auto',
+                    allowScriptedContent: true
+                });
+
+                // Wait for rendition to be ready
+                rendition.on('rendered', () => {
+                    console.log('Page rendered');
+                });
+
+                rendition.on('relocated', (location) => {
+                    console.log('Page location:', location);
                 });
 
                 // Display the book
@@ -325,19 +335,27 @@
 
         function setupNavigation() {
             prevBtn.addEventListener('click', () => {
-                rendition.prev();
+                console.log('Previous button clicked');
+                if (rendition) {
+                    rendition.prev();
+                }
             });
 
             nextBtn.addEventListener('click', () => {
-                rendition.next();
+                console.log('Next button clicked');
+                if (rendition) {
+                    rendition.next();
+                }
             });
 
             // Keyboard navigation
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'ArrowLeft') {
-                    rendition.prev();
+                    console.log('Left arrow pressed');
+                    if (rendition) rendition.prev();
                 } else if (e.key === 'ArrowRight') {
-                    rendition.next();
+                    console.log('Right arrow pressed');
+                    if (rendition) rendition.next();
                 }
             });
 
