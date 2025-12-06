@@ -3,290 +3,315 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Overview - My Life's Journey</title>
-	<link rel="icon" href="favicon.ico" type="image/x-icon">
+    <meta name="description" content="Beyond the Childhood Bubble: My Unconventional Life Story by Dave Heuring - A memoir spanning seven decades and multiple continents">
+    <title>Beyond the Childhood Bubble — My Unconventional Life Story</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
+        :root {
+            /* Color Palette */
+            --primary-blue: #557699;
+            --secondary-blue: #6b8e99;
+            --text-dark: #2c2c2c;
+            --text-light: #555;
+            --text-lighter: #666;
+            --bg-gradient-start: #f5f7fa;
+            --bg-gradient-end: #e8eef3;
+            --white: #ffffff;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,.08);
+            --shadow-md: 0 4px 15px rgba(0,0,0,.1);
+            --shadow-lg: 0 8px 25px rgba(0,0,0,.15);
+            --shadow-xl: 0 10px 40px rgba(0,0,0,.2);
+            --border-accent: #6b8e99;
+            
+            /* Spacing */
+            --spacing-xs: 8px;
+            --spacing-sm: 16px;
+            --spacing-md: 24px;
+            --spacing-lg: 40px;
+            --spacing-xl: 60px;
+            
+            /* Typography */
+            --font-body: 'Georgia', serif;
+            --line-height: 1.8;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
-            font-family: 'Georgia', serif;
-            line-height: 1.6;
-            color: #2c2c2c;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: var(--font-body);
+            line-height: var(--line-height);
+            color: var(--text-dark);
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
             min-height: 100vh;
         }
-
+        
+        /* Header Styles */
         .header {
             position: relative;
-            height: 300px;
-            background: #557699;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: visible;
-        }
-
-        .header-content {
-            position: relative;
-            z-index: 2;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            padding: var(--spacing-xl) var(--spacing-md) 100px;
             text-align: center;
-            color: white;
-            padding: 20px;
+            box-shadow: var(--shadow-md);
         }
-
+        
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            color: var(--white);
+        }
+        
         .book-title {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             font-weight: 700;
-            margin-bottom: 8px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 12px;
             letter-spacing: 1px;
+            line-height: 1.2;
         }
-
+        
         .book-subtitle {
             font-size: 1.5rem;
             font-weight: 400;
             font-style: italic;
-            margin-bottom: 8px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            margin-bottom: 12px;
+            opacity: 0.95;
         }
-
+        
         .book-author {
             font-size: 1.3rem;
             font-weight: 500;
-            margin-bottom: 0;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            opacity: 0.95;
         }
-
-        .header-image-wrapper {
-            position: absolute;
-            bottom: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 3;
+        
+        /* Profile Image */
+        .profile-wrapper {
+            max-width: 1200px;
+            margin: -60px auto 0;
+            padding: 0 var(--spacing-md);
+            position: relative;
+            z-index: 10;
         }
-
-        .header-image {
+        
+        .profile-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: var(--spacing-md);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+        
+        .profile-image {
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-            border: 4px solid white;
-            cursor: pointer;
+            object-fit: cover;
+            border: 4px solid var(--white);
+            box-shadow: var(--shadow-md);
+            flex-shrink: 0;
         }
-
-        .image-tooltip {
-            position: absolute;
-            bottom: 110px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.9);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
+        
+        .profile-caption {
+            color: var(--text-light);
             font-size: 0.95rem;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            pointer-events: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            line-height: 1.5;
+            font-style: italic;
         }
-
-        .image-tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 8px solid transparent;
-            border-top-color: rgba(0, 0, 0, 0.9);
-        }
-
-        .header-image-wrapper:hover .image-tooltip {
-            opacity: 1;
-            visibility: visible;
-        }
-
+        
+        /* Main Container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px 60px;
-            position: relative;
-            z-index: 1;
-            margin-top: 60px;
+            padding: var(--spacing-xl) var(--spacing-md);
         }
-
-        .overview-content {
-            background: white;
-            padding: 50px;
-            border-radius: 0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 40px;
-            border-left: 5px solid #6b8e99;
+        
+        /* Overview Section */
+        .overview-section {
+            background: var(--white);
+            padding: var(--spacing-xl);
+            border-radius: 8px;
+            border-left: 5px solid var(--border-accent);
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--spacing-xl);
         }
-
-        .overview-content p {
+        
+        .overview-section p {
             font-size: 1.15rem;
-            line-height: 1.9;
-            color: #555;
+            line-height: var(--line-height);
+            color: var(--text-light);
             margin-bottom: 1.5rem;
         }
-
-        .overview-content p:last-of-type {
-            margin-bottom: 2rem;
+        
+        .overview-section p:last-of-type {
+            margin-bottom: 0;
         }
-
-        .toc-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #6b8e99 0%, #557699 100%);
-            color: white;
+        
+        /* CTA Button */
+        .cta-container {
+            text-align: center;
+            margin-top: var(--spacing-lg);
+        }
+        
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
             padding: 18px 40px;
-            border-radius: 8px;
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            color: var(--white);
             text-decoration: none;
             font-size: 1.2rem;
             font-weight: 600;
-            box-shadow: 0 6px 20px rgba(107, 142, 153, 0.3);
+            border-radius: 8px;
+            box-shadow: var(--shadow-md);
             transition: all 0.3s ease;
-            margin-top: 10px;
         }
-
-        .toc-button:hover {
+        
+        .cta-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(107, 142, 153, 0.4);
-            background: linear-gradient(135deg, #557699 0%, #6b8e99 100%);
+            box-shadow: var(--shadow-lg);
         }
-
+        
+        .cta-button:active {
+            transform: translateY(-1px);
+        }
+        
+        /* Transformation Section */
         .transformation-section {
-            background: white;
-            padding: 50px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background: var(--white);
+            padding: var(--spacing-xl);
+            border-radius: 8px;
+            box-shadow: var(--shadow-md);
+            border-left: 5px solid var(--border-accent);
         }
-
+        
         .section-title {
             font-size: 2rem;
-            color: #6b8e99;
-            margin-bottom: 40px;
+            color: var(--secondary-blue);
+            margin-bottom: var(--spacing-lg);
             text-align: center;
             font-weight: 600;
             position: relative;
         }
-
+        
         .section-title::after {
             content: '';
             display: block;
             width: 80px;
             height: 3px;
-            background: #6b8e99;
+            background: var(--secondary-blue);
             margin: 15px auto 0;
         }
-
-        .image-pair {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-            margin: 0;
-            flex-wrap: wrap;
+        
+        /* Image Comparison */
+        .image-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-lg);
         }
-
-        .image-pair figure {
-            margin: 0;
-            text-align: center;
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
+        
+        .comparison-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: var(--spacing-md);
+            border-radius: 12px;
             border: 2px solid #e0e0e0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             transition: all 0.3s ease;
-            flex: 0 1 280px;
+            text-align: center;
         }
-
-        .image-pair figure:hover {
+        
+        .comparison-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            border-color: #6b8e99;
+            box-shadow: var(--shadow-md);
+            border-color: var(--secondary-blue);
         }
-
-        .image-pair a {
-            display: block;
-            margin-bottom: 15px;
-        }
-
-        .image-pair img {
-            width: 240px;
+        
+        .comparison-card img {
+            width: 100%;
+            max-width: 240px;
             height: 280px;
             object-fit: cover;
             object-position: top;
-            border-radius: 4px;
-            display: block;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: var(--spacing-sm);
         }
-
-        .image-pair figcaption {
-            margin-top: 0;
+        
+        .comparison-caption {
             font-weight: 600;
             font-size: 1rem;
-            color: #6b8e99;
+            color: var(--secondary-blue);
+            margin-top: var(--spacing-sm);
         }
-
+        
+        /* Responsive Design */
         @media (max-width: 768px) {
             .header {
-                height: 280px;
+                padding: var(--spacing-lg) var(--spacing-sm) 80px;
             }
-
+            
             .book-title {
-                font-size: 1.6rem;
-                margin-bottom: 6px;
+                font-size: 1.8rem;
+                margin-bottom: 10px;
             }
-
+            
             .book-subtitle {
-                font-size: 1.1rem;
-                margin-bottom: 6px;
+                font-size: 1.2rem;
+                margin-bottom: 10px;
             }
-
+            
             .book-author {
                 font-size: 1rem;
             }
-
-            .header-image-wrapper {
-                bottom: -35px;
+            
+            .profile-wrapper {
+                margin-top: -50px;
             }
-
-            .header-image {
+            
+            .profile-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-image {
                 width: 70px;
                 height: 70px;
             }
-
-            .image-tooltip {
-                bottom: 80px;
-                font-size: 0.85rem;
-                padding: 10px 16px;
+            
+            .overview-section {
+                padding: var(--spacing-lg) var(--spacing-md);
             }
-
-            .container {
-                margin-top: 50px;
+            
+            .overview-section p {
+                font-size: 1rem;
             }
-
-            .overview-content {
-                padding: 30px;
-            }
-
+            
             .transformation-section {
-                padding: 30px;
+                padding: var(--spacing-lg) var(--spacing-md);
             }
-
-            .image-pair {
-                gap: 30px;
+            
+            .cta-button {
+                width: 100%;
+                justify-content: center;
             }
-
-            .image-pair figure {
-                flex: 1 1 100%;
+            
+            .image-comparison {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+            }
+        }
+        
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .book-title {
+                font-size: 2.2rem;
+            }
+            
+            .book-subtitle {
+                font-size: 1.4rem;
             }
         }
     </style>
@@ -294,52 +319,71 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <div class="book-title">Beyond the Childhood Bubble</div>
-            <div class="book-subtitle">My Unconventional Life Story</div>
-            <div class="book-author">By Dave Heuring</div>
-        </div>
-        <div class="header-image-wrapper">
-            <div class="image-tooltip">Three-year-old Gukky peering into the future and wondering what it might hold.</div>
-            <img src="https://audio.heuring.us/gukky.png" alt="Book Cover" class="header-image">
+            <h1 class="book-title">Beyond the Childhood Bubble</h1>
+            <p class="book-subtitle">My Unconventional Life Story</p>
+            <p class="book-author">By Dave Heuring</p>
         </div>
     </header>
 
-    <div class="container">
-        <div class="overview-content">
-            <p>This is the story of an unconventional life—a journey that carried me far beyond the childhood bubble of St. Michael, Minnesota, and across seven transformative decades from 1952 to the present. My narrative unfolds through carefully crafted chapters that trace my evolution through different life stages: from innocent childhood discoveries to transformative years abroad that laid the foundation for a distinguished professional career marked by determination and achievement.</p>
+    <div class="profile-wrapper">
+        <div class="profile-card">
+            <img 
+                src="https://audio.heuring.us/gukky.png" 
+                alt="Three-year-old Dave" 
+                class="profile-image"
+            >
+            <p class="profile-caption">
+                Three-year-old Gukky peering into the future and wondering what it might hold.
+            </p>
+        </div>
+    </div>
 
-            <p>Much of my story transpires overseas, offering intimate insights into the expatriate experience—both the challenges and profound rewards of immersing oneself in cultures vastly different from one's origins. Throughout these pages, I explore the complexities of cross-cultural understanding and the perspective it brings.</p>
+    <main class="container">
+        <section class="overview-section">
+            <p>
+                This is the story of an unconventional life—a journey that carried me far beyond the childhood bubble of St. Michael, Minnesota, and across seven transformative decades from 1952 to the present. My narrative unfolds through carefully crafted chapters that trace my evolution through different life stages: from innocent childhood discoveries to transformative years abroad that laid the foundation for a distinguished professional career marked by determination and achievement.
+            </p>
 
-            <p>Two parallel threads weave through this memoir: my professional journey with its pivotal career-defining moments, and my personal growth shaped by extraordinary experiences across continents. The book concludes with reflective insights on the lessons learned and the lasting legacy of a life lived beyond conventional boundaries.</p>
+            <p>
+                Much of my story transpires overseas, offering intimate insights into the expatriate experience—both the challenges and profound rewards of immersing oneself in cultures vastly different from one's origins. Throughout these pages, I explore the complexities of cross-cultural understanding and the perspective it brings.
+            </p>
 
-            <p>The link below to the Table of Contents provides chapter summaries that offer glimpses into each stage of my journey.</p>
+            <p>
+                Two parallel threads weave through this memoir: my professional journey with its pivotal career-defining moments, and my personal growth shaped by extraordinary experiences across continents. The book concludes with reflective insights on the lessons learned and the lasting legacy of a life lived beyond conventional boundaries.
+            </p>
 
-            <div style="text-align: center;">
-                <a href="Table-of-Contents.html" class="toc-button">
+            <p>
+                The link below to the Table of Contents provides chapter summaries that offer glimpses into each stage of my journey.
+            </p>
+
+            <div class="cta-container">
+                <a href="Table-of-Contents.html" class="cta-button">
                     📖 Explore the Table of Contents
                 </a>
             </div>
-        </div>
+        </section>
 
-        <div class="transformation-section">
+        <section class="transformation-section">
             <h2 class="section-title">A Journey of Transformation</h2>
             
-            <div class="image-pair">
-                <figure>
-                    <a href="dave1.png">
-                        <img src="https://audio.heuring.us/dave1.png" alt="1974">
-                    </a>
-                    <figcaption>From a carefree hippie in 1974</figcaption>
-                </figure>
+            <div class="image-comparison">
+                <div class="comparison-card">
+                    <img 
+                        src="https://audio.heuring.us/dave1.png" 
+                        alt="Dave in 1974 - Carefree hippie"
+                    >
+                    <p class="comparison-caption">From a carefree hippie in 1974</p>
+                </div>
                 
-                <figure>
-                    <a href="dave2.png">
-                        <img src="https://audio.heuring.us/dave2.png" alt="1994">
-                    </a>
-                    <figcaption>To an educational manager in 1994</figcaption>
-                </figure>
+                <div class="comparison-card">
+                    <img 
+                        src="https://audio.heuring.us/dave2.png" 
+                        alt="Dave in 1994 - Educational manager"
+                    >
+                    <p class="comparison-caption">To an educational manager in 1994</p>
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 </body>
 </html>
