@@ -3,255 +3,318 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chapter 3 – Navigating Two Worlds: Catholic and Public School Life (1966-1970)</title>
+    <meta name="description" content="Chapter 3: Navigating Two Worlds - Catholic and Public School Life (1966-1970)">
+    <title>Chapter 3 — Navigating Two Worlds: Catholic and Public School Life (1966-1970)</title>
     <style>
+        :root {
+            /* Color Palette */
+            --primary-blue: #557699;
+            --secondary-blue: #6b8e99;
+            --text-dark: #2c2c2c;
+            --text-light: #555;
+            --bg-gradient-start: #f5f7fa;
+            --bg-gradient-end: #e8eef3;
+            --white: #ffffff;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,.08);
+            --shadow-md: 0 4px 15px rgba(0,0,0,.1);
+            --shadow-lg: 0 8px 25px rgba(0,0,0,.15);
+            --border-accent: #6b8e99;
+            
+            /* Spacing */
+            --spacing-xs: 8px;
+            --spacing-sm: 16px;
+            --spacing-md: 24px;
+            --spacing-lg: 40px;
+            --spacing-xl: 60px;
+            
+            /* Typography */
+            --font-body: 'Georgia', serif;
+            --line-height: 1.8;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
-            font-family: 'Georgia', serif;
-            line-height: 1.6;
-            color: #2c2c2c;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: var(--font-body);
+            line-height: var(--line-height);
+            color: var(--text-dark);
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
             min-height: 100vh;
-            position: relative;
         }
-
+        
+        /* Header Styles */
         .header {
             position: relative;
-            height: 250px;
-            background: #557699;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: visible;
-        }
-
-        .header-content {
-            position: relative;
-            z-index: 2;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            padding: var(--spacing-xl) var(--spacing-md) 100px;
             text-align: center;
-            color: white;
-            padding: 20px;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .header-content {
             max-width: 900px;
+            margin: 0 auto;
+            color: var(--white);
         }
-
-        .header-image-wrapper {
-            position: absolute;
-            top: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-        }
-
-        .header-image {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-            border: 4px solid white;
-            background: white;
-            object-fit: cover;
-            cursor: pointer;
-        }
-
-        .image-tooltip {
-            position: absolute;
-            bottom: 110px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.9);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            pointer-events: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        .image-tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 8px solid transparent;
-            border-top-color: rgba(0, 0, 0, 0.9);
-        }
-
-        .header-image-wrapper:hover .image-tooltip {
-            opacity: 1;
-            visibility: visible;
-        }
-
+        
         .chapter-number {
-            font-size: 1.3rem;
+            font-size: 1rem;
             font-weight: 600;
-            margin-bottom: 10px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: var(--spacing-sm);
+            opacity: 0.95;
         }
-
+        
         .chapter-title {
-            font-size: 2rem;
+            font-size: 2.25rem;
             font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            letter-spacing: 1px;
             line-height: 1.3;
+            letter-spacing: 0.5px;
         }
-
+        
         .chapter-dates {
             font-size: 1.3rem;
             font-weight: 500;
-            margin-top: 8px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            margin-top: var(--spacing-xs);
+            font-style: italic;
+            opacity: 0.95;
+        }
+        
+        /* Profile Image */
+        .profile-wrapper {
+            max-width: 900px;
+            margin: -60px auto 0;
+            padding: 0 var(--spacing-md);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .profile-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: var(--spacing-md);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+        
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--white);
+            box-shadow: var(--shadow-md);
+            flex-shrink: 0;
+        }
+        
+        .profile-caption {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.5;
             font-style: italic;
         }
-
+        
+        /* Main Content */
         .container {
             max-width: 900px;
             margin: 0 auto;
-            padding: 60px 20px 60px;
-            position: relative;
+            padding: var(--spacing-xl) var(--spacing-md);
         }
-
+        
         .chapter-content {
-            background: white;
-            padding: 50px;
-            border-radius: 0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 40px;
-            border-left: 5px solid #6b8e99;
+            background: var(--white);
+            padding: var(--spacing-xl);
+            border-radius: 8px;
+            border-left: 5px solid var(--border-accent);
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--spacing-lg);
         }
-
+        
         .chapter-content p {
             font-size: 1.1rem;
-            line-height: 1.9;
-            color: #555;
+            line-height: var(--line-height);
+            color: var(--text-light);
             margin-bottom: 1.5rem;
-            text-align: justify;
         }
-
+        
         .chapter-content p:last-of-type {
-            margin-bottom: 2rem;
+            margin-bottom: 0;
         }
-
-        .link-grid {
-            display: flex;
-            gap: 20px;
+        
+        /* Action Sections */
+        .actions-section {
+            margin-top: var(--spacing-xl);
+            padding-top: var(--spacing-lg);
+            border-top: 2px solid #f0f0f0;
+        }
+        
+        .section-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        /* Navigation Buttons */
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
             justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 30px;
-        }
-
-        .link-grid a {
-            flex: 1 1 300px;
-            max-width: 400px;
-            text-align: center;
-            padding: 18px 25px;
-            background: linear-gradient(135deg, #6b8e99 0%, #557699 100%);
-            color: white;
+            gap: var(--spacing-xs);
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            color: var(--white);
             text-decoration: none;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 600;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(107, 142, 153, 0.3);
+            box-shadow: var(--shadow-sm);
             transition: all 0.3s ease;
+        }
+        
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .nav-button:active {
+            transform: translateY(0);
+        }
+        
+        /* Format Buttons */
+        .formats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .format-button {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-        }
-
-        .link-grid a:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(107, 142, 153, 0.4);
-            background: linear-gradient(135deg, #557699 0%, #6b8e99 100%);
-        }
-
-        .link-grid a:active {
-            transform: translateY(-1px);
-        }
-
-        .back-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #6b8e99 0%, #557699 100%);
-            color: white;
-            padding: 18px 40px;
-            border-radius: 8px;
+            gap: var(--spacing-xs);
+            padding: 14px 20px;
+            background: var(--white);
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
             text-decoration: none;
-            font-size: 1.2rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            box-shadow: 0 6px 20px rgba(107, 142, 153, 0.3);
+            border-radius: 6px;
             transition: all 0.3s ease;
-            text-align: center;
         }
-
+        
+        .format-button:hover {
+            background: var(--primary-blue);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .format-button:active {
+            transform: translateY(0);
+        }
+        
+        /* Back Button */
+        .back-container {
+            text-align: center;
+            margin-top: var(--spacing-lg);
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: 16px 40px;
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+        
         .back-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(107, 142, 153, 0.4);
-            background: linear-gradient(135deg, #557699 0%, #6b8e99 100%);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
-
-        .button-container {
-            text-align: center;
-            margin-top: 40px;
-        }
-
-        @media (max-width: 768px) {
+        
+        /* Responsive Design */
+        @media (max-width: 640px) {
+            :root {
+                --spacing-lg: 32px;
+                --spacing-xl: 40px;
+            }
+            
             .header {
-                height: 220px;
+                padding: var(--spacing-lg) var(--spacing-sm) 80px;
             }
-
+            
             .chapter-number {
-                font-size: 1.1rem;
+                font-size: 0.9rem;
             }
-
+            
             .chapter-title {
-                font-size: 1.4rem;
+                font-size: 1.75rem;
             }
-
+            
             .chapter-dates {
                 font-size: 1.1rem;
             }
-
-            .header-image-wrapper {
-                top: -35px;
+            
+            .profile-wrapper {
+                margin-top: -50px;
             }
-
-            .header-image {
-                width: 70px;
-                height: 70px;
+            
+            .profile-card {
+                flex-direction: column;
+                text-align: center;
+                padding: var(--spacing-md);
             }
-
-            .image-tooltip {
-                bottom: 80px;
-                font-size: 0.85rem;
-                padding: 10px 16px;
+            
+            .profile-image {
+                width: 80px;
+                height: 80px;
             }
-
+            
             .chapter-content {
-                padding: 30px 25px;
+                padding: var(--spacing-lg) var(--spacing-md);
             }
-
+            
             .chapter-content p {
                 font-size: 1rem;
             }
-
-            .link-grid {
-                flex-direction: column;
+            
+            .formats-grid {
+                grid-template-columns: 1fr;
             }
-
-            .link-grid a {
-                flex: 1 1 auto;
-                max-width: 100%;
+            
+            .nav-button,
+            .back-button {
+                width: 100%;
+            }
+        }
+        
+        @media (min-width: 641px) and (max-width: 900px) {
+            .chapter-title {
+                font-size: 2rem;
+            }
+            
+            .formats-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
         }
     </style>
@@ -259,44 +322,79 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <div class="chapter-number">CHAPTER 3</div>
-            <div class="chapter-title">Navigating Two Worlds: Catholic and Public School Life</div>
+            <div class="chapter-number">Chapter 3</div>
+            <h1 class="chapter-title">Navigating Two Worlds: Catholic and Public School Life</h1>
             <div class="chapter-dates">(1966-1970)</div>
         </div>
     </header>
-    
-    <div style="position: relative; height: 0;">
-        <div class="header-image-wrapper">
-            <div class="image-tooltip">High school: Those formative maturation years and early cracks in my faith</div>
-            <img src="https://audio.heuring.us/schoolboydave.png" alt="School portrait" class="header-image">
+
+    <div class="profile-wrapper">
+        <div class="profile-card">
+            <img 
+                src="https://audio.heuring.us/schoolboydave.png" 
+                alt="School portrait" 
+                class="profile-image"
+            >
+            <p class="profile-caption">
+                High school: Those formative maturation years and early cracks in my faith
+            </p>
         </div>
     </div>
 
-    <div class="container">
-        <div class="chapter-content">
-            <p>My adolescent years marked a transition from the sheltered world of Catholic school to the unpredictable environment of public high school. During my first two years at St. Michael Catholic High School, I thrived within the structured routines rooted in faith and tradition. Still devout, I studied Latin with hopes of one day entering the priesthood, even as I witnessed the Church being reshaped by the reforms of Vatican II. As my religious world shifted, so did my daily life. I began embracing typical high school experiences—sports, cafeteria lunches, rotating classrooms, and a growing sense of independence. Academically, I performed adequately, with a stronger inclination toward history than math, while increasingly gravitating toward athletics, which offered both connection with my peers and common ground with my sports-enthusiast father.</p>
+    <main class="container">
+        <article class="chapter-content">
+            <p>
+                My adolescent years marked a transition from the sheltered world of Catholic school to the unpredictable environment of public high school. During my first two years at St. Michael Catholic High School, I thrived within the structured routines rooted in faith and tradition. Still devout, I studied Latin with hopes of one day entering the priesthood, even as I witnessed the Church being reshaped by the reforms of Vatican II. As my religious world shifted, so did my daily life. I began embracing typical high school experiences—sports, cafeteria lunches, rotating classrooms, and a growing sense of independence. Academically, I performed adequately, with a stronger inclination toward history than math, while increasingly gravitating toward athletics, which offered both connection with my peers and common ground with my sports-enthusiast father.
+            </p>
 
-            <p>Then came the pivotal moment: the Catholic high school closed. My classmates and I transferred to the new public school, STMA, and the transition proved challenging. The familiar structure vanished, replaced by freedoms I wasn't prepared to handle. My performance declined, I faced disciplinary issues, and lost some direction. The new environment triggered more reactive than positive changes. At home, our growing family enjoyed improved financial stability, even as space tightened with each new sibling. The contrast between home stability and school disruption created an interesting tension in my development.</p>
+            <p>
+                Then came the pivotal moment: the Catholic high school closed. My classmates and I transferred to the new public school, STMA, and the transition proved challenging. The familiar structure vanished, replaced by freedoms I wasn't prepared to handle. My performance declined, I faced disciplinary issues, and lost some direction. The new environment triggered more reactive than positive changes. At home, our growing family enjoyed improved financial stability, even as space tightened with each new sibling. The contrast between home stability and school disruption created an interesting tension in my development.
+            </p>
 
-            <p>Nevertheless, public school brought valuable new relationships and lessons. Being demoted to the basketball B team humbled me but prompted reassessment. I learned that talent alone wasn't sufficient—dedication and attitude mattered more. By senior year, I had regained my footing. I excelled athletically, participated in drama, and joined the popular social circle—while also engaging in the typical senior-year social drinking and occasional mischief.</p>
+            <p>
+                Nevertheless, public school brought valuable new relationships and lessons. Being demoted to the basketball B team humbled me but prompted reassessment. I learned that talent alone wasn't sufficient—dedication and attitude mattered more. By senior year, I had regained my footing. I excelled athletically, participated in drama, and joined the popular social circle—while also engaging in the typical senior-year social drinking and occasional mischief.
+            </p>
 
-            <p>This transition represents more than just changing schools—it reveals how two contrasting environments shaped my developing identity. One offered structure and tradition; the other presented freedom and unfamiliar challenges. This latter period forced me to stumble, rebel, adapt, and grow—a formative time when I began discovering my authentic self, unaware of the many transformations still ahead. The lessons learned during this time would serve as a foundation for navigating future changes and challenges throughout my life.</p>
+            <p>
+                This transition represents more than just changing schools—it reveals how two contrasting environments shaped my developing identity. One offered structure and tradition; the other presented freedom and unfamiliar challenges. This latter period forced me to stumble, rebel, adapt, and grow—a formative time when I began discovering my authentic self, unaware of the many transformations still ahead. The lessons learned during this time would serve as a foundation for navigating future changes and challenges throughout my life.
+            </p>
 
-            <div class="link-grid">
-                <a href="Chapter-4.html">
+            <div class="actions-section">
+                <div class="section-label">Continue Reading</div>
+                <a href="Chapter-4.html" class="nav-button">
                     📖 Summary of Chapter 4 →
                 </a>
-                <a href="https://drive.google.com/file/d/1CUvO-iI5aOYmDcZ9fkBWTw08ZNzO_Vgb/view?usp=drive_link" target="_blank">
-                    📄 Read Full Chapter ↻
-                </a>
+                
+                <div class="section-label" style="margin-top: 32px;">Read Full Chapter</div>
+                <div class="formats-grid">
+                    <a href="https://audio.heuring.us/Chapter-3.pdf" class="format-button" target="_blank" rel="noopener noreferrer">
+                        📄 PDF
+                    </a>
+                    <a href="#" class="format-button" id="epubButton">
+                        📱 eReader
+                    </a>
+                    <a href="https://audio.heuring.us/Chapter_3_audio.mp3" class="format-button" target="_blank" rel="noopener noreferrer">
+                        🎧 Audio
+                    </a>
+                </div>
             </div>
+        </article>
 
-            <div class="button-container">
-                <a href="Table-of-Contents.html" class="back-button">
-                    ← Back to Table of Contents
-                </a>
-            </div>
+        <div class="back-container">
+            <a href="Table-of-Contents.html" class="back-button">
+                ← Back to Table of Contents
+            </a>
         </div>
-    </div>
+    </main>
+
+    <script>
+        // EPUB reader functionality
+        document.getElementById('epubButton').addEventListener('click', function(e) {
+            e.preventDefault();
+            const bookPath = 'https://audio.heuring.us/Chapter-3.epub';
+            const returnUrl = encodeURIComponent(window.location.href);
+            window.location.href = `epub-reader.html?book=${bookPath}&return=${returnUrl}`;
+        });
+    </script>
 </body>
 </html>
