@@ -11,7 +11,7 @@
             --primary-blue: #557699;
             --secondary-blue: #6b8e99;
             --text-dark: #2c2c2c;
-            --text-light: #444; /* Improved contrast for body text (was #555) */
+            --text-light: #444; /* Improved contrast for body text */
             --text-lighter: #666;
             --text-muted: #888;
             --bg-gradient-start: #f5f7fa;
@@ -32,7 +32,7 @@
             
             /* Typography */
             --font-body: 'Georgia', serif;
-            --font-heading: 'Avenir Next', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* Added Heading Font */
+            --font-heading: 'Avenir Next', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             --line-height: 1.8;
         }
         
@@ -74,6 +74,15 @@
             font-weight: 700;
             margin-bottom: 10px;
             line-height: 1.2;
+        }
+
+        /* REVISED CAPTION */
+        .book-caption {
+            font-size: 1.5rem;
+            font-weight: 400;
+            font-style: italic;
+            margin-bottom: 12px;
+            opacity: 0.95;
         }
         
         .author-name {
@@ -144,7 +153,7 @@
         }
         
         .chapter-content h3 {
-            font-family: var(--font-heading); /* Applied Heading Font */
+            font-family: var(--font-heading);
             font-size: 1.15rem;
             font-weight: 600;
             margin-bottom: 4px;
@@ -262,6 +271,11 @@
             .book-title {
                 font-size: 2rem;
             }
+
+            .book-caption {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
             
             .author-name {
                 font-size: 1.1rem;
@@ -307,13 +321,49 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <h1 class="book-title">The Plan: A Life Built on Contingency</h1>
+            <h1 class="book-title">Beyond the Childhood Bubble – My Unconventional Life Story</h1>
+            <p class="book-caption">A memoir spanning seven decades and multiple continents</p>
             <p class="author-name">Dave Heuring</p>
         </div>
     </header>
+	    <div class="profile-wrapper">
+        <div class="profile-card">
+            <img 
+                src="https://audio.heuring.us/book.png" 
+                alt="Book Cover" 
+                class="profile-image"
+            >
+            <p class="profile-caption">
+                This hardcover represents a true father-son collaboration—my stories brought to life through Joey's expert design, illustration, and formatting.
+            </p>
+        </div>
+    </div>
 
     <main class="container">
         <h2>Table of Contents</h2>
+		
+        <section class="intro-section">
+            <p>The chapters below trace the arc of my life's journey. Here are your options for exploring this memoir:</p>
+            
+            <div class="options-grid">
+                <div class="option-card">
+                    <h3>📖 Chapter Summaries</h3>
+                    <p>Click any chapter to read a summary of a pivotal period in my life. Navigate chronologically for a complete overview of my journey.</p>
+                </div>
+                
+                <div class="option-card">
+                    <h3>📄 Book Chapters</h3>
+                    <p>Read or listen to the full chapters via PDF, eReader, or audio at the bottom of each summary. You can also access the complete audiobook in the section below.</p>
+                </div>
+                
+                <div class="option-card">
+                    <h3>🎖️ Bonus Story</h3>
+                    <p>Discover the untold heroism of my father, Norman Heuring, during the Korean War in the bonus content below. We didn't learn about the terrible battle he survived until after he was gone.</p>
+                </div>
+            </div>
+        </section>
+		
+		 <h2 class="section-title">The Chapters</h2>
         
         <div class="chapter-list">
             <a href="Chapter-1.html" class="chapter-card">
@@ -323,7 +373,7 @@
                     <div class="chapter-content">
                         <h3>Deep Roots: My German Ancestry and Heritage</h3>
                         <div class="chapter-dates">1952 – 1960</div>
-                        <div class="chapter-teaser">The story begins with my family’s move from Germany to America and the enduring legacy of a traditional German upbringing in rural Minnesota.</div>
+                        <div class="chapter-teaser">Tracing sixteen family lines and discovering how German immigrant farmers shaped my foundation.</div>
                     </div>
                 </div>
                 <div class="chapter-arrow">→</div>
@@ -349,7 +399,7 @@
                     <div class="chapter-content">
                         <h3>Navigating Two Worlds: Catholic and Public School Life</h3>
                         <div class="chapter-dates">1966 – 1970</div>
-                        <div class="chapter-teaser">The transition from a strict parochial school to the culture shock of public high school, leading to my first independent decision: enlisting.</div>
+                        <div class="chapter-teaser">When my Catholic high school closed, I faced freedom I wasn't ready for—and early cracks in my faith.</div>
                     </div>
                 </div>
                 <div class="chapter-arrow">→</div>
@@ -362,7 +412,7 @@
                     <div class="chapter-content">
                         <h3>Wake-up Call: The Air Force Years</h3>
                         <div class="chapter-dates">1970 – 1973</div>
-                        <div class="chapter-teaser">The military provided a fast-track education in life, professionalism, and global awareness, setting the stage for the future.</div>
+                        <div class="chapter-teaser">Military service in Thailand opened my eyes to the world and challenged everything I'd been taught..</div>
                     </div>
                 </div>
                 <div class="chapter-arrow">→</div>
@@ -371,11 +421,11 @@
             <a href="Chapter-5.html" class="chapter-card">
                 <div class="chapter-number">5</div>
                 <div class="chapter-header">
-                    <div class="chapter-icon">🎓</div>
+                    <div class="chapter-icon">🧭</div>
                     <div class="chapter-content">
                         <h3>From Collapse to Clarity: The Path That Found Me</h3>
                         <div class="chapter-dates">1974 – 1979</div>
-                        <div class="chapter-teaser">The tumultuous post-military years of self-discovery, leading to a focused pursuit of higher education in Anthropology.</div>
+                        <div class="chapter-teaser">From broke and aimless in Bangkok to finding my calling—a job posting changed everything.</div>
                     </div>
                 </div>
                 <div class="chapter-arrow">→</div>
@@ -384,11 +434,11 @@
             <a href="Chapter-6.html" class="chapter-card">
                 <div class="chapter-number">6</div>
                 <div class="chapter-header">
-                    <div class="chapter-icon">💼</div>
+                    <div class="chapter-icon">🎓</div>
                     <div class="chapter-content">
                         <h3>First Step of the Plan: Building the Foundation</h3>
                         <div class="chapter-dates">1979 – 1984</div>
-                        <div class="chapter-teaser">Starting a professional career in the Minnesota public sector, marking the beginning of my deliberate long-term career strategy.</div>
+                        <div class="chapter-teaser">Returning to Minnesota and Hawaii to earn the credentials that would launch my international career.</div>
                     </div>
                 </div>
                 <div class="chapter-arrow">→</div>
@@ -401,7 +451,7 @@
                     <div class="chapter-content">
                         <h3>Life as an Expat: Adjusting to a Muslim Country</h3>
                         <div class="chapter-dates">1984 – 1987</div>
-                        <div class="chapter-teaser">A pivotal three-year experience in Saudi Arabia, running a major training program and adapting to a completely foreign culture.</div>
+                        <div class="chapter-teaser">Three years in Saudi Arabia's contradictions—generous pay, strict rules, and compound life.</div>
                     </div>
                 </div>
                 <div class="chapter-arrow">→</div>
@@ -414,7 +464,7 @@
                     <div class="chapter-content">
                         <h3>Career Leap: Opportunity and Challenges</h3>
                         <div class="chapter-dates">1987 – 1997</div>
-                        <div class="chapter-teaser">Returning to Minnesota with a global perspective, leading to roles in administration and management within the state government.</div>
+                        <div class="chapter-teaser">A decade in Egypt transformed me from university lecturer to confident educational leader.</div>
                     </div>
                 </div>
                 <div class="chapter-arrow">→</div>
@@ -427,7 +477,7 @@
                     <div class="chapter-content">
                         <h3>Running the Show: Two Large Training Projects</h3>
                         <div class="chapter-dates">1997 – 2009</div>
-                        <div class="chapter-teaser">Spearheading massive, multi-faceted training programs across the state, showcasing leadership under pressure.</div>
+                        <div class="chapter-teaser">Leading multi-million dollar programs in the UAE—and finding Alisa during those twelve years.</div>
                     </div>
                 </div>
                 <div class="chapter-arrow">→</div>
@@ -440,7 +490,7 @@
                     <div class="chapter-content">
                         <h3>Capstone Years: At the Top of My Game</h3>
                         <div class="chapter-dates">2009 – 2021</div>
-                        <div class="chapter-teaser">The final phase of my career, focused on senior policy, management, and preparing for the next chapter.</div>
+                        <div class="chapter-teaser">From D.C. to Jordan to remote work in Thailand—building e-learning platforms and becoming a father again at 68.</div>
                     </div>
                 </div>
                 <div class="chapter-arrow">→</div>
