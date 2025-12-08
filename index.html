@@ -12,7 +12,7 @@
             --primary-blue: #557699;
             --secondary-blue: #6b8e99;
             --text-dark: #2c2c2c;
-            --text-light: #555;
+            --text-light: #444; /* Improved contrast for body text (was #555) */
             --text-lighter: #666;
             --bg-gradient-start: #f5f7fa;
             --bg-gradient-end: #e8eef3;
@@ -32,6 +32,7 @@
             
             /* Typography */
             --font-body: 'Georgia', serif;
+            --font-heading: 'Avenir Next', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* Added Heading Font */
             --line-height: 1.8;
         }
         
@@ -62,6 +63,11 @@
             max-width: 900px;
             margin: 0 auto;
             color: var(--white);
+        }
+
+        /* Applied Heading Font */
+        .header-content * {
+            font-family: var(--font-heading);
         }
         
         .book-title {
@@ -113,6 +119,23 @@
             border: 4px solid var(--white);
             box-shadow: var(--shadow-md);
             flex-shrink: 0;
+        }
+
+        /* Added structure for separator and caption */
+        .profile-caption-wrapper {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            width: 100%;
+        }
+
+        .separator {
+            width: 1px;
+            height: 50px;
+            background-color: #ddd;
+            flex-shrink: 0;
+            align-self: center;
+            display: none; /* Hidden by default for small screens */
         }
         
         .profile-caption {
@@ -174,6 +197,8 @@
         .cta-button:hover {
             transform: translateY(-3px);
             box-shadow: var(--shadow-lg);
+            /* Refined Hover */
+            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
         
         .cta-button:active {
@@ -249,7 +274,12 @@
         }
         
         /* Responsive Design */
-        @media (max-width: 768px) {
+        @media (max-width: 640px) { /* Standardized breakpoint for mobile consistency */
+            :root {
+                --spacing-lg: 32px;
+                --spacing-xl: 40px;
+            }
+            
             .header {
                 padding: var(--spacing-lg) var(--spacing-sm) 70px;
             }
@@ -275,6 +305,7 @@
             .profile-card {
                 flex-direction: column;
                 text-align: center;
+                padding: var(--spacing-md);
             }
             
             .profile-image {
@@ -305,13 +336,14 @@
             }
         }
         
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .book-title {
-                font-size: 2.2rem;
+        @media (min-width: 641px) {
+            /* Show separator on larger screens */
+            .separator {
+                display: block;
             }
-            
-            .book-subtitle {
-                font-size: 1.4rem;
+
+            .book-title {
+                font-size: 2.5rem; 
             }
         }
     </style>
@@ -332,9 +364,12 @@
                 alt="Three-year-old Dave" 
                 class="profile-image"
             >
-            <p class="profile-caption">
-                With his trusty Davy Crockett coonskin cap perched firmly atop his head, three-year-old Gukky gazed ahead, eyes wide with wonder at the mysteries the future might hold.
-            </p>
+            <div class="profile-caption-wrapper">
+                <div class="separator"></div> 
+                <p class="profile-caption">
+                    With his trusty Davy Crockett coonskin cap perched firmly atop his head, three-year-old Gukky gazed ahead, eyes wide with wonder at the mysteries the future might hold.
+                </p>
+            </div>
         </div>
     </div>
 

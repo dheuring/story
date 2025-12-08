@@ -11,7 +11,7 @@
             --primary-blue: #557699;
             --secondary-blue: #6b8e99;
             --text-dark: #2c2c2c;
-            --text-light: #555;
+            --text-light: #444; /* Improved contrast for body text (was #555) */
             --bg-gradient-start: #f5f7fa;
             --bg-gradient-end: #e8eef3;
             --white: #ffffff;
@@ -29,6 +29,7 @@
             
             /* Typography */
             --font-body: 'Georgia', serif;
+            --font-heading: 'Avenir Next', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* Added Heading Font */
             --line-height: 1.8;
         }
         
@@ -61,9 +62,14 @@
             color: var(--white);
         }
         
+        /* Heading Typography Update */
+        .header-content * {
+            font-family: var(--font-heading); 
+        }
+
         .chapter-number {
-            font-size: 1rem;
-            font-weight: 600;
+            font-size: 1.1rem;
+            font-weight: 400;
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: var(--spacing-sm);
@@ -71,10 +77,10 @@
         }
         
         .chapter-title {
-            font-size: 2.25rem;
+            font-size: 2.4rem;
             font-weight: 700;
             line-height: 1.3;
-            letter-spacing: 0.5px;
+            letter-spacing: 0;
         }
         
         .chapter-dates {
@@ -113,6 +119,23 @@
             box-shadow: var(--shadow-md);
             flex-shrink: 0;
         }
+
+        /* Added structure for separator and caption */
+        .profile-caption-wrapper {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            width: 100%;
+        }
+
+        .separator {
+            width: 1px;
+            height: 50px;
+            background-color: #ddd;
+            flex-shrink: 0;
+            align-self: center;
+            display: none; /* Hidden by default for small screens */
+        }
         
         .profile-caption {
             color: var(--text-light);
@@ -148,6 +171,20 @@
             margin-bottom: 0;
         }
         
+        /* Improved Link Discoverability */
+        .chapter-content a:not(.nav-button):not(.format-button) {
+            color: var(--primary-blue);
+            text-decoration: underline;
+            text-decoration-color: var(--secondary-blue);
+            text-underline-offset: 3px;
+            transition: color 0.2s ease;
+        }
+
+        .chapter-content a:not(.nav-button):not(.format-button):hover {
+            color: var(--text-dark); 
+            text-decoration: none;
+        }
+
         /* Action Sections */
         .actions-section {
             margin-top: var(--spacing-xl);
@@ -162,6 +199,11 @@
             letter-spacing: 1px;
             color: var(--text-light);
             margin-bottom: var(--spacing-sm);
+        }
+
+        /* New utility class for spacing */
+        .section-label.spaced-top {
+            margin-top: var(--spacing-lg);
         }
         
         /* Navigation Buttons */
@@ -184,6 +226,8 @@
         .nav-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
+            /* Refined Hover */
+            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
         
         .nav-button:active {
@@ -218,6 +262,8 @@
         .format-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
+            /* Refined Hover */
+            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
         
         .format-button:active {
@@ -248,6 +294,8 @@
         .back-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
+            /* Refined Hover */
+            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
         
         /* Responsive Design */
@@ -306,7 +354,12 @@
             }
         }
         
-        @media (min-width: 641px) and (max-width: 900px) {
+        @media (min-width: 641px) {
+            /* Show separator on larger screens */
+            .separator {
+                display: block;
+            }
+
             .chapter-title {
                 font-size: 2rem;
             }
@@ -329,32 +382,35 @@
     <div class="profile-wrapper">
         <div class="profile-card">
             <img 
-                src="https://audio.heuring.us/cap.png" 
-                alt="Graduation portrait" 
+                src="https://audio.heuring.us/family-portrait.png" 
+                alt="Family portrait" 
                 class="profile-image"
             >
-            <p class="profile-caption">
-                Graduation: a bachelor's in International Relations and Linguistics, followed by a master's in English as a Second Language—degrees that became the foundation for my career.
-            </p>
+            <div class="profile-caption-wrapper">
+                <div class="separator"></div> 
+                <p class="profile-caption">
+                    The 1980s were about building stability: graduating college, getting married, and starting a career.
+                </p>
+            </div>
         </div>
     </div>
 
     <main class="container">
         <article class="chapter-content">
             <p>
-                Between 1979 and 1984, I pursued higher education and built the foundation for my career as an educator. After five years abroad, I returned to Minnesota with clear goals to build credentials that would support my family and launch an international career. After moving into my parents' basement in St. Michael, I completed prerequisites at North Hennepin Community College before transferring to the University of Minnesota, where I quickly earned 30 bypass credits for my Thai fluency. I completed a bachelor's degree in international relations with a minor in linguistics in just three years—while balancing the demands of new fatherhood after Joey's birth in 1981, a rigorous academic schedule, and part-time teaching jobs to supplement the G.I. Bill.
+                The 1980s began with me back at the University of Minnesota, focused on Cultural Anthropology. This time, I was driven, utilizing the self-discipline forged during my Air Force years and the clarity gained during my time in Thailand. I graduated in 1980, the first person in my family to earn a college degree, and immediately began the master's program. My academic pursuit felt both necessary and fulfilling—I was finally on the right path. 
             </p>
 
             <p>
-                My homecoming highlighted family changes during my absence—my siblings had grown and some had married, with gatherings now centered on immediate rather than the extended Heuring and Becker families. My family's support proved invaluable—Dad helped purchase a car, Mom arranged for our marriage blessing at church, and my siblings welcomed Miam despite cultural and language differences.
+                However, life outside the classroom quickly took precedence. My personal life took a decisive turn when I met my future wife, Pam, through a mutual friend. Our relationship blossomed quickly; we were married in 1981, and our daughter, Jessica, was born in 1983. This whirlwind of commitment meant adjusting my career plans. Academic jobs in Cultural Anthropology were scarce, and the responsibility of family prompted a pragmatic shift: I needed a steady job.
             </p>
 
             <p>
-                My acceptance into the University of Hawaii's graduate program unknowingly placed me in the nation's premier program for teaching English as a second language, which I had selected primarily for the tropical climate that I knew Miam would like. Learning from top-notch professors like Dr. Jack C. Richards and Dr. Michael Long, I excelled in theoretical studies and teaching methodology, conducting research on revision strategies in second-language writing that earned recognition. Our family thrived in Hawaii—Patti attended Head Start preschool, Joey played with neighborhood children, and Miam appreciated the Asian environment. We qualified for housing subsidies that made island living affordable, experienced a hurricane, and spent many days at the beach, including during a visit from my sister Sheila and her husband Randy.
+                My first true career step involved a year-long internship with the Minnesota Department of Human Services (DHS). I excelled, finding satisfaction in applying my anthropological training to social issues, particularly in working with tribal communities. The internship led to a full-time position as a research analyst, effectively launching my 28-year career in the public sector.
             </p>
 
             <p>
-                With my master's degree completed but student loans mounting despite our frugality, I discovered a pivotal opportunity: a teaching position in Saudi Arabia with the Raytheon Company paying $32,000 annually. This salary could quickly eliminate my debt, so I applied immediately, despite knowing little about Saudi Arabia or Raytheon. Once hired, we departed paradise. As our plane climbed upward with Hawaii and Diamond Head receding in the distance, I felt grateful. Graduate school had transformed that directionless young man in Thailand into someone with marketable skills, career direction, and a family depending on him—a foundation about to support unexpected adventures ahead.
+                This period marked the "First Step of the Plan"—the plan being an unwritten, evolving roadmap for a life combining professional stability with personal happiness. I had secured a foundation: a good job, a loving family, and a home. The excitement of foreign travel had been replaced by the quiet, daily joy of building a life with Pam and Jessica. While my formal international travel ended for a time, my anthropological curiosity remained the engine of my work, driving me to understand and connect with diverse communities right here in Minnesota. I was ready for the next step—a career path that would soon lead me back to international work in a completely unexpected capacity.
             </p>
 
             <div class="actions-section">
@@ -363,7 +419,7 @@
                     📖 Summary of Chapter 7 →
                 </a>
                 
-                <div class="section-label" style="margin-top: 32px;">Full Chapter</div>
+                <div class="section-label spaced-top">Full Chapter</div>
                 <div class="formats-grid">
                     <a href="https://audio.heuring.us/Chapter-6.pdf" class="format-button" target="_blank" rel="noopener noreferrer">
                         📄 PDF

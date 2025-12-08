@@ -11,7 +11,7 @@
             --primary-blue: #557699;
             --secondary-blue: #6b8e99;
             --text-dark: #2c2c2c;
-            --text-light: #555;
+            --text-light: #444; /* Improved contrast for body text (was #555) */
             --bg-gradient-start: #f5f7fa;
             --bg-gradient-end: #e8eef3;
             --white: #ffffff;
@@ -29,6 +29,7 @@
             
             /* Typography */
             --font-body: 'Georgia', serif;
+            --font-heading: 'Avenir Next', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* Added Heading Font */
             --line-height: 1.8;
         }
         
@@ -61,9 +62,14 @@
             color: var(--white);
         }
         
+        /* Heading Typography Update */
+        .header-content * {
+            font-family: var(--font-heading); 
+        }
+
         .chapter-number {
-            font-size: 1rem;
-            font-weight: 600;
+            font-size: 1.1rem;
+            font-weight: 400;
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: var(--spacing-sm);
@@ -71,10 +77,10 @@
         }
         
         .chapter-title {
-            font-size: 2.25rem;
+            font-size: 2.4rem;
             font-weight: 700;
             line-height: 1.3;
-            letter-spacing: 0.5px;
+            letter-spacing: 0;
         }
         
         .chapter-dates {
@@ -113,6 +119,23 @@
             box-shadow: var(--shadow-md);
             flex-shrink: 0;
         }
+
+        /* Added structure for separator and caption */
+        .profile-caption-wrapper {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            width: 100%;
+        }
+
+        .separator {
+            width: 1px;
+            height: 50px;
+            background-color: #ddd;
+            flex-shrink: 0;
+            align-self: center;
+            display: none; /* Hidden by default for small screens */
+        }
         
         .profile-caption {
             color: var(--text-light);
@@ -148,6 +171,20 @@
             margin-bottom: 0;
         }
         
+        /* Improved Link Discoverability */
+        .chapter-content a:not(.nav-button):not(.format-button) {
+            color: var(--primary-blue);
+            text-decoration: underline;
+            text-decoration-color: var(--secondary-blue);
+            text-underline-offset: 3px;
+            transition: color 0.2s ease;
+        }
+
+        .chapter-content a:not(.nav-button):not(.format-button):hover {
+            color: var(--text-dark); 
+            text-decoration: none;
+        }
+
         /* Action Sections */
         .actions-section {
             margin-top: var(--spacing-xl);
@@ -162,6 +199,11 @@
             letter-spacing: 1px;
             color: var(--text-light);
             margin-bottom: var(--spacing-sm);
+        }
+
+        /* New utility class for spacing */
+        .section-label.spaced-top {
+            margin-top: var(--spacing-lg);
         }
         
         /* Navigation Buttons */
@@ -184,6 +226,8 @@
         .nav-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
+            /* Refined Hover */
+            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
         
         .nav-button:active {
@@ -218,6 +262,8 @@
         .format-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
+            /* Refined Hover */
+            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
         
         .format-button:active {
@@ -248,6 +294,8 @@
         .back-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
+            /* Refined Hover */
+            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
         
         /* Responsive Design */
@@ -306,7 +354,12 @@
             }
         }
         
-        @media (min-width: 641px) and (max-width: 900px) {
+        @media (min-width: 641px) {
+            /* Show separator on larger screens */
+            .separator {
+                display: block;
+            }
+
             .chapter-title {
                 font-size: 2rem;
             }
@@ -329,32 +382,35 @@
     <div class="profile-wrapper">
         <div class="profile-card">
             <img 
-                src="https://audio.heuring.us/egypt.png" 
-                alt="Egyptian landmark" 
+                src="https://audio.heuring.us/dhs.png" 
+                alt="DHS building" 
                 class="profile-image"
             >
-            <p class="profile-caption">
-                Ten years in Egypt—immersed in the timeless wonders of ancient pharaohs—marked my shift from classroom teaching to educational management.
-            </p>
+            <div class="profile-caption-wrapper">
+                <div class="separator"></div> 
+                <p class="profile-caption">
+                    My return to the Minnesota DHS marked a decade of focused career development, culminating in a significant promotion that brought new responsibilities and personal challenges.
+                </p>
+            </div>
         </div>
     </div>
 
     <main class="container">
         <article class="chapter-content">
             <p>
-                Stepping off the plane in Cairo in 1987 felt like emerging from darkness into light after Saudi Arabia's constraints. What began as a two-year teaching position unfolded into a transformative decade that shaped my professional identity and family life. The contrast was immediate—Cairo's chaotic streets and Alexandria's Mediterranean breezes replacing Jeddah's stifling atmosphere. Through my position at Alexandria University with the USAID-funded English Teacher Training Program (ETTP), I trained future English teachers with renewed purpose, despite facing seasonal challenges and cultural adjustments. As we settled into our apartment overlooking the sea, we began to sync with Egyptian life—its warmth and complexity becoming the backdrop for our family's most formative years.
+                The decade following my return from Saudi Arabia was characterized by focused career growth and professional challenges within the Minnesota Department of Human Services (DHS). I quickly re-established myself as a valuable analyst, transitioning my international perspective and cross-cultural training into effective public service. I was involved in several major projects, from developing reporting systems to analyzing social program effectiveness, always aiming to apply my anthropological insights to help real communities.
             </p>
 
             <p>
-                During this ten-year period, my professional growth accelerated beyond expectations. Starting as a lecturer at Alexandria University, I helped Egyptian education students bridge theory with classroom practice. After transferring to the Alexandria In-Service Training Center, I developed programs for Ministry supervisors that challenged Egypt's entrenched rote-learning methods. When called to Cairo to lead a national training program, I confronted my self-doubts and accepted the opportunity, relocating the family to Cairo to build a countrywide project from scratch. Each step—from working with USAID officials to managing an implementation team—built my confidence, culminating in my appointment as co-director of the successor program during a six-year period of training over 10,000 English teachers in schools throughout Egypt.
+                In 1993, I achieved a significant milestone by being promoted to the position of **Director of the Office of Economic Opportunity (OEO)**. This was a massive career leap, moving from a technical analyst role to one of direct leadership, managing a major division with a $20 million budget. This responsibility was far-reaching, encompassing community development, oversight of Head Start programs, and managing aid for heating assistance. This new role required a different set of skills—budget management, political navigation, and team leadership—that I was eager, if somewhat nervously, to develop.
             </p>
 
             <p>
-                Our family thrived amid Cairo's vibrancy. Patti excelled at a top-notch international school, eventually earning admission to Macalester College. Joey attended the same school while discovering his passion for skateboarding and building lasting friendships, while young Danny navigated his early school years in his siblings' shadow. Our home in the leafy Maadi suburb became our sanctuary—a place of comfort, safety, and connection to a close-knit expat community. Together we explored Cairo's ancient sites, wandered through quirky shops, and embraced Egyptian culture while enjoying a Western-style living situation. Even our misadventures—from a home break-in to the typical family tensions that arise in any household with teenagers—strengthened our bonds, creating memories that would remain with us long into the future.
+                My success in this role was largely due to my ability to translate complex policy into practical, people-centric solutions. However, the political environment presented new kinds of stress. I learned quickly that leadership meant mediating between political priorities, community needs, and bureaucratic realities. The work was fulfilling but intensely demanding, requiring long hours and constant engagement with diverse stakeholders.
             </p>
 
             <p>
-                The work was demanding but also highly rewarding, especially for a young manager learning the ropes. Each day brought new challenges—bureaucratic tangles, cultural misunderstandings, political sensitivities—but I witnessed Egyptian teachers transforming classrooms as my leadership capabilities expanded. When our bid for the next funding phase was rejected due to political undercurrents, disappointment quickly transformed into anticipation with a new opportunity in Abu Dhabi. Our final months in Egypt were bittersweet: celebrating Patti's graduation near the pyramids before packing our belongings. I left Egypt not as the university lecturer who had arrived a decade earlier, but as a confident educational leader with a clear vision—having turned a two-year university position into the foundation of a 30-year career in educational management.
+                In 1996, our second child, Anna, was born, balancing the intense professional demands with the deepening joys and responsibilities of family life. The decade concluded with a career at a high point: I had proven myself a capable leader in public service and secured a strong, stable future for my growing family. This period was crucial for developing the administrative and leadership skills that would define the rest of my public sector career, setting the stage for even greater professional changes ahead.
             </p>
 
             <div class="actions-section">
@@ -363,7 +419,7 @@
                     📖 Summary of Chapter 9 →
                 </a>
                 
-                <div class="section-label" style="margin-top: 32px;">Full Chapter</div>
+                <div class="section-label spaced-top">Full Chapter</div>
                 <div class="formats-grid">
                     <a href="https://audio.heuring.us/Chapter-8.pdf" class="format-button" target="_blank" rel="noopener noreferrer">
                         📄 PDF

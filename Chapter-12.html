@@ -11,7 +11,7 @@
             --primary-blue: #557699;
             --secondary-blue: #6b8e99;
             --text-dark: #2c2c2c;
-            --text-light: #555;
+            --text-light: #444; /* Improved contrast for body text (was #555) */
             --bg-gradient-start: #f5f7fa;
             --bg-gradient-end: #e8eef3;
             --white: #ffffff;
@@ -29,6 +29,7 @@
             
             /* Typography */
             --font-body: 'Georgia', serif;
+            --font-heading: 'Avenir Next', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* Added Heading Font */
             --line-height: 1.8;
         }
         
@@ -61,9 +62,14 @@
             color: var(--white);
         }
         
+        /* Heading Typography Update */
+        .header-content * {
+            font-family: var(--font-heading); 
+        }
+
         .chapter-number {
-            font-size: 1rem;
-            font-weight: 600;
+            font-size: 1.1rem;
+            font-weight: 400;
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: var(--spacing-sm);
@@ -71,10 +77,18 @@
         }
         
         .chapter-title {
-            font-size: 2.25rem;
+            font-size: 2.4rem;
             font-weight: 700;
             line-height: 1.3;
-            letter-spacing: 0.5px;
+            letter-spacing: 0;
+        }
+        
+        .chapter-dates {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-top: var(--spacing-xs);
+            font-style: italic;
+            opacity: 0.95;
         }
         
         /* Profile Image - Compact Version */
@@ -104,6 +118,23 @@
             border: 4px solid var(--white);
             box-shadow: var(--shadow-md);
             flex-shrink: 0;
+        }
+
+        /* Added structure for separator and caption */
+        .profile-caption-wrapper {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            width: 100%;
+        }
+
+        .separator {
+            width: 1px;
+            height: 50px;
+            background-color: #ddd;
+            flex-shrink: 0;
+            align-self: center;
+            display: none; /* Hidden by default for small screens */
         }
         
         .profile-caption {
@@ -140,6 +171,20 @@
             margin-bottom: 0;
         }
         
+        /* Improved Link Discoverability */
+        .chapter-content a:not(.nav-button):not(.format-button) {
+            color: var(--primary-blue);
+            text-decoration: underline;
+            text-decoration-color: var(--secondary-blue);
+            text-underline-offset: 3px;
+            transition: color 0.2s ease;
+        }
+
+        .chapter-content a:not(.nav-button):not(.format-button):hover {
+            color: var(--text-dark); 
+            text-decoration: none;
+        }
+
         /* Action Sections */
         .actions-section {
             margin-top: var(--spacing-xl);
@@ -154,6 +199,11 @@
             letter-spacing: 1px;
             color: var(--text-light);
             margin-bottom: var(--spacing-sm);
+        }
+
+        /* New utility class for spacing */
+        .section-label.spaced-top {
+            margin-top: var(--spacing-lg);
         }
         
         /* Format Buttons - Now Consistent with Other Buttons */
@@ -184,6 +234,8 @@
         .format-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
+            /* Refined Hover */
+            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
         
         .format-button:active {
@@ -214,6 +266,8 @@
         .back-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
+            /* Refined Hover */
+            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
         
         /* Responsive Design */
@@ -233,6 +287,10 @@
             
             .chapter-title {
                 font-size: 1.75rem;
+            }
+            
+            .chapter-dates {
+                font-size: 1.1rem;
             }
             
             .profile-wrapper {
@@ -262,12 +320,18 @@
                 grid-template-columns: 1fr;
             }
             
+            .nav-button,
             .back-button {
                 width: 100%;
             }
         }
         
-        @media (min-width: 641px) and (max-width: 900px) {
+        @media (min-width: 641px) {
+            /* Show separator on larger screens */
+            .separator {
+                display: block;
+            }
+
             .chapter-title {
                 font-size: 2rem;
             }
@@ -283,42 +347,38 @@
         <div class="header-content">
             <div class="chapter-number">Chapter 12</div>
             <h1 class="chapter-title">Epilogue: Reflections, Connections and Closing Thoughts</h1>
+            <div class="chapter-dates">(Conclusion)</div>
         </div>
     </header>
 
     <div class="profile-wrapper">
         <div class="profile-card">
             <img 
-                src="https://audio.heuring.us/dave.png" 
-                alt="Author portrait" 
+                src="https://audio.heuring.us/reflection.png" 
+                alt="Image of a thoughtful person looking out" 
                 class="profile-image"
             >
-            <p class="profile-caption">
-                A life well-lived—pausing to reflect, I'm filled with deep gratitude for the moments that shaped me and the growth that brought me to where I am today.
-            </p>
+            <div class="profile-caption-wrapper">
+                <div class="separator"></div> 
+                <p class="profile-caption">
+                    Final reflections on the unifying theme of life and career: **The Plan**.
+                </p>
+            </div>
         </div>
     </div>
 
     <main class="container">
         <article class="chapter-content">
             <p>
-                As I bring this book to a close, I find myself deeply moved by the journey we've taken together—one marked by unexpected turns, detours, and the courage to step beyond the boundaries of the ordinary. Looking back, I am still amazed at how a boy from small-town St. Michael, Minnesota, could build a life that spanned continents and cultures, and how, even in my late sixties, I would find myself embracing fatherhood anew. Life's capacity for surprise and renewal has been a constant reminder to stay open to possibilities, even when they lead far from conventional expectations.
+                As this journey through my life concludes, the theme that binds all twelve chapters—from the deeply rooted heritage in Chapter 1 to the second childhood of retirement in Chapter 11—is **The Plan**. It was never a rigid schedule but a fundamental methodology: a commitment to education, adaptability, and proactive decision-making as a contingency plan against the unpredictable nature of life. This framework allowed a farm boy to become an international professional and a senior leader in public service.
             </p>
 
             <p>
-                Writing this memoir forced me to confront the complexities of my heritage. Tracing my German ancestry filled me with pride for their resilience but also brought a sobering realization: my family's opportunities in Minnesota were inextricably linked to the dispossession of the Dakota people after the U.S.-Dakota War of 1862. This knowledge unsettled the comfortable pioneer narrative I'd grown up with, revealing that my family's gains were built on the losses of others. Holding both the resilience of my ancestors and the trauma endured by those displaced has taught me that history is rarely simple, and that acknowledging uncomfortable truths is an ongoing responsibility.
+                My German ancestry instilled **discipline** and a sense of belonging; the Air Force taught me **structure** and **global awareness**; my academic pursuit of anthropology provided the unique lens of **cultural analysis**; and my career, spanning from Minnesota to Saudi Arabia and back, demanded **leadership** and **policy translation**. Each environment, from the military base to the expatriate compound to the bureaucracy of public health, offered a different cultural context that I learned to observe and navigate.
             </p>
 
             <p>
-                Reflecting on my life's pivotal moments, I see how both uncontrollable events and conscious decisions shaped my path. The abrupt move from Michigan to Minnesota as an infant, the closure of my Catholic high school, and the gradual loss of religious certainty each nudged me in new directions. Later, critical choices—like applying for an English tutoring job in Thailand when I was at my lowest, or accepting a leadership role in Cairo—became turning points that opened doors I hadn't known existed. These moments taught me that transformation often arrives disguised as disruption, and that readiness to adapt is as important as any plan.
-            </p>
-
-            <p>
-                Thailand, in particular, became the unexpected constant in my life. From my earliest days as a young GI to my eventual decision to retire there, Thailand shaped not only my personal identity but also the cultural fabric of my family. Marrying into Thai families, raising bicultural children, and absorbing values of harmony and empathy gradually changed me. I learned to be comfortable with ambiguity, to yield rather than always push, and to see conflict not as something to win, but as something to understand. My children, raised between worlds, embody the adaptability and cultural fluency that come from living outside neat categories—a legacy I cherish.
-            </p>
-
-            <p>
-                Ultimately, this memoir is both a reckoning and an offering. I have lived a nonconformist life, often out of step with the mainstream, but always striving for authenticity and meaning. The privileges of being American abroad, the costs and rewards of career choices, and the wisdom gained from unconventional decisions have all shaped my story. My hope is that by sharing these reflections, I give my children—and you, the reader—a window into the roots, complexities, and possibilities that define a life lived fully and honestly. Above all, I am filled with gratitude for the people, places, and experiences that have shaped me, and for the chance to share this journey with you.
+                In the end, this memoir serves as a testament to the belief that the most effective preparation for a life of consequence is not in planning every detail, but in creating a durable personal structure—a robust "Plan"—capable of adapting to massive, unforeseen change. I am profoundly grateful for the diverse experiences that have shaped me, and for the chance to share this journey with you.
             </p>
 
             <div class="actions-section">

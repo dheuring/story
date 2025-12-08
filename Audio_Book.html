@@ -11,7 +11,7 @@
             --primary-blue: #557699;
             --secondary-blue: #6b8e99;
             --text-dark: #2c2c2c;
-            --text-light: #555;
+            --text-light: #444; /* Improved contrast for body text (was #555) */
             --text-lighter: #666;
             --bg-gradient-start: #f5f7fa;
             --bg-gradient-end: #e8eef3;
@@ -30,7 +30,8 @@
             
             /* Typography */
             --font-body: 'Georgia', serif;
-            --line-height: 1.6;
+            --font-heading: 'Avenir Next', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* Added Heading Font */
+            --line-height: 1.8;
         }
         
         * {
@@ -49,156 +50,111 @@
         
         /* Header Styles */
         .header {
-            position: relative;
             background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
-            padding: var(--spacing-xl) var(--spacing-md) 80px;
+            padding: var(--spacing-xl) var(--spacing-md);
             text-align: center;
             box-shadow: var(--shadow-md);
         }
         
-        .header-content h1 {
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            color: var(--white);
+        }
+        
+        /* Applied Heading Font */
+        .header-content * {
+            font-family: var(--font-heading);
+        }
+
+        .book-title {
             font-size: 2.5rem;
             font-weight: 700;
-            color: var(--white);
             margin-bottom: 10px;
-            letter-spacing: 2px;
+            line-height: 1.2;
         }
         
-        .header-content p {
-            font-size: 1.2rem;
+        .author-name {
+            font-size: 1.3rem;
+            font-weight: 500;
             font-style: italic;
-            color: var(--white);
             opacity: 0.95;
         }
-        
-        /* Profile Image - Compact Version */
-        .profile-wrapper {
-            max-width: 1000px;
-            margin: -50px auto 0;
-            padding: 0 var(--spacing-md);
-            position: relative;
-            z-index: 10;
-        }
-        
-        .profile-card {
-            background: var(--white);
-            border-radius: 12px;
-            padding: var(--spacing-sm) var(--spacing-md);
-            box-shadow: var(--shadow-lg);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-        }
-        
-        .profile-image {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid var(--white);
-            box-shadow: var(--shadow-md);
-            flex-shrink: 0;
-        }
-        
-        .profile-caption {
-            color: var(--text-light);
-            font-size: 0.9rem;
-            line-height: 1.5;
-            font-style: italic;
-        }
-        
+
         /* Main Container */
         .container {
-            max-width: 1000px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: var(--spacing-xl) var(--spacing-md);
+            padding: var(--spacing-lg) var(--spacing-md) var(--spacing-xl);
         }
         
-        /* Intro Section */
-        .intro-section {
-            background: var(--white);
-            padding: var(--spacing-lg);
-            border-radius: 8px;
-            border-left: 5px solid var(--border-accent);
-            box-shadow: var(--shadow-md);
-            margin-bottom: var(--spacing-xl);
-            text-align: center;
-        }
-        
-        .intro-section p {
-            font-size: 1.15rem;
-            line-height: 1.8;
-            color: var(--text-light);
-        }
-        
-        /* Audio Grid */
-        .audio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        /* Chapter List */
+        .audio-list {
+            display: flex;
+            flex-direction: column;
             gap: var(--spacing-md);
-            margin-bottom: var(--spacing-xl);
         }
         
         .audio-card {
             background: var(--white);
-            border-radius: 10px;
             padding: var(--spacing-md);
-            box-shadow: var(--shadow-md);
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
             transition: all 0.3s ease;
-            border-left: 5px solid var(--secondary-blue);
+            border-left: 5px solid transparent; /* Base color for the accent */
         }
         
         .audio-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-left: 5px solid var(--secondary-blue); /* Accent color on hover */
         }
         
         .audio-header {
             display: flex;
             align-items: center;
             gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-sm);
-        }
-        
-        .audio-icon {
-            font-size: 1.8rem;
-            color: var(--secondary-blue);
-            flex-shrink: 0;
-        }
-        
-        .audio-header h3 {
-            font-size: 1.2rem;
-            color: var(--text-dark);
-            font-weight: 600;
-            flex: 1;
-        }
-        
-        .chapter-title {
-            font-size: 0.9rem;
-            color: var(--text-lighter);
-            margin-bottom: var(--spacing-sm);
-            line-height: 1.4;
-        }
-        
-        .listen-label {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            color: var(--secondary-blue);
-            font-size: 0.95rem;
-            font-weight: 600;
             margin-bottom: var(--spacing-xs);
         }
         
-        .audio-player {
-            width: 100%;
-            border-radius: 8px;
-            outline: none;
+        .audio-icon {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            flex-shrink: 0;
         }
         
-        .audio-player::-webkit-media-controls-panel {
-            background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
-            border-radius: 8px;
+        .audio-card h3 {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+        
+        .chapter-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-light);
+            line-height: 1.4;
+            margin-bottom: var(--spacing-sm);
+            padding-left: 40px; /* Aligns with the chapter number/icon */
+        }
+
+        .listen-label {
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--secondary-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--spacing-xs);
+            padding-left: 40px; /* Aligns with the chapter number/icon */
+        }
+
+        .audio-player {
+            width: 100%;
+            margin-top: var(--spacing-xs);
+            background: #f0f0f0;
+            border-radius: 4px;
         }
         
         /* Back Button */
@@ -220,62 +176,49 @@
             border-radius: 8px;
             box-shadow: var(--shadow-md);
             transition: all 0.3s ease;
+            font-family: var(--font-heading);
         }
         
         .back-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
+            /* Refined Hover */
+            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
         
         /* Responsive Design */
-        @media (max-width: 768px) {
+        @media (max-width: 640px) {
             .header {
-                padding: var(--spacing-lg) var(--spacing-sm) 70px;
+                padding: var(--spacing-lg) var(--spacing-sm);
             }
             
-            .header-content h1 {
+            .book-title {
                 font-size: 2rem;
             }
             
-            .header-content p {
-                font-size: 1rem;
+            .author-name {
+                font-size: 1.1rem;
             }
-            
-            .profile-wrapper {
-                margin-top: -45px;
-            }
-            
-            .profile-card {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .profile-image {
-                width: 70px;
-                height: 70px;
-            }
-            
-            .intro-section {
-                padding: var(--spacing-lg) var(--spacing-md);
-            }
-            
-            .audio-grid {
-                grid-template-columns: 1fr;
-            }
-            
+
             .audio-card {
-                padding: var(--spacing-md);
+                padding: var(--spacing-sm);
             }
             
+            .audio-card h3 {
+                font-size: 1.2rem;
+            }
+
+            .audio-icon {
+                font-size: 1.2rem;
+            }
+
+            .chapter-title, .listen-label {
+                padding-left: 30px;
+            }
+
             .back-button {
                 width: 100%;
                 justify-content: center;
-            }
-        }
-        
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .audio-grid {
-                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -283,192 +226,164 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <h1>🎧 Audio Book</h1>
-            <p>Listen to My Life's Journey</p>
+            <h1 class="book-title">The Plan: Audio Book</h1>
+            <p class="author-name">Listen to Dave Heuring's Complete Memoir</p>
         </div>
     </header>
 
-    <div class="profile-wrapper">
-        <div class="profile-card">
-            <img 
-                src="https://audio.heuring.us/microphone.png" 
-                alt="Book cover illustration" 
-                class="profile-image"
-            >
-            <p class="profile-caption">
-                Some of the chapters were recorded using AI, text and my cloned voice; for others, I did the recording myself. Can you tell which is which?
-            </p>
-        </div>
-    </div>
-
     <main class="container">
-        <section class="intro-section">
-            <p>Experience the complete memoir in audio format. Each chapter is professionally narrated and available to listen or download.</p>
-        </section>
-
-        <div class="audio-grid">
-            <!-- Chapter 1 -->
+        <div class="audio-list">
+            
             <div class="audio-card">
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 1</h3>
                 </div>
-                <div class="chapter-title">Deep Roots: My German Ancestry and Heritage</div>
-                <div class="listen-label">▶️ Listen Now</div>
+                <div class="chapter-title">Deep Roots: My German Ancestry and Heritage (1952 – 1960)</div>
+                <div class="listen-label">Listen Now</div>
                 <audio controls preload="metadata" class="audio-player">
                     <source src="https://audio.heuring.us/Chapter_1_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
             </div>
 
-            <!-- Chapter 2 -->
             <div class="audio-card">
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 2</h3>
                 </div>
-                <div class="chapter-title">Early Life: An Idyllic and Sheltered Childhood (1952-1966)</div>
-                <div class="listen-label">▶️ Listen Now</div>
+                <div class="chapter-title">Early Life: An Idyllic and Sheltered Childhood (1952 – 1966)</div>
+                <div class="listen-label">Listen Now</div>
                 <audio controls preload="metadata" class="audio-player">
                     <source src="https://audio.heuring.us/Chapter_2_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
             </div>
 
-            <!-- Chapter 3 -->
             <div class="audio-card">
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 3</h3>
                 </div>
-                <div class="chapter-title">Navigating Two Worlds: Catholic and Public School Life (1966-1970)</div>
-                <div class="listen-label">▶️ Listen Now</div>
+                <div class="chapter-title">Navigating Two Worlds: Catholic and Public School Life (1966 – 1970)</div>
+                <div class="listen-label">Listen Now</div>
                 <audio controls preload="metadata" class="audio-player">
                     <source src="https://audio.heuring.us/Chapter_3_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
             </div>
 
-            <!-- Chapter 4 -->
             <div class="audio-card">
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 4</h3>
                 </div>
-                <div class="chapter-title">Wake-up Call: The Air Force Years (1970-1973)</div>
-                <div class="listen-label">▶️ Listen Now</div>
+                <div class="chapter-title">Wake-up Call: The Air Force Years (1970 – 1973)</div>
+                <div class="listen-label">Listen Now</div>
                 <audio controls preload="metadata" class="audio-player">
                     <source src="https://audio.heuring.us/Chapter_4_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
             </div>
 
-            <!-- Chapter 5 -->
             <div class="audio-card">
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 5</h3>
                 </div>
-                <div class="chapter-title">From Collapse to Clarity: The Path That Found Me (1974-1979)</div>
-                <div class="listen-label">▶️ Listen Now</div>
+                <div class="chapter-title">From Collapse to Clarity: The Path That Found Me (1974 – 1979)</div>
+                <div class="listen-label">Listen Now</div>
                 <audio controls preload="metadata" class="audio-player">
                     <source src="https://audio.heuring.us/Chapter_5_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
             </div>
 
-            <!-- Chapter 6 -->
             <div class="audio-card">
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 6</h3>
                 </div>
-                <div class="chapter-title">First Step of the Plan: Building the Foundation (1979-1984)</div>
-                <div class="listen-label">▶️ Listen Now</div>
+                <div class="chapter-title">First Step of the Plan: Building the Foundation (1979 – 1984)</div>
+                <div class="listen-label">Listen Now</div>
                 <audio controls preload="metadata" class="audio-player">
                     <source src="https://audio.heuring.us/Chapter_6_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
             </div>
 
-            <!-- Chapter 7 -->
             <div class="audio-card">
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 7</h3>
                 </div>
-                <div class="chapter-title">Life as an Expat: Adjusting to a Muslim Country (1984-1987)</div>
-                <div class="listen-label">▶️ Listen Now</div>
+                <div class="chapter-title">Life as an Expat: Adjusting to a Muslim Country (1984 – 1987)</div>
+                <div class="listen-label">Listen Now</div>
                 <audio controls preload="metadata" class="audio-player">
                     <source src="https://audio.heuring.us/Chapter_7_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
             </div>
 
-            <!-- Chapter 8 -->
             <div class="audio-card">
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 8</h3>
                 </div>
-                <div class="chapter-title">Career Leap: Opportunity and Challenges (1987-1997)</div>
-                <div class="listen-label">▶️ Listen Now</div>
+                <div class="chapter-title">Career Leap: Opportunity and Challenges (1987 – 1997)</div>
+                <div class="listen-label">Listen Now</div>
                 <audio controls preload="metadata" class="audio-player">
                     <source src="https://audio.heuring.us/Chapter_8_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
             </div>
 
-            <!-- Chapter 9 -->
             <div class="audio-card">
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 9</h3>
                 </div>
-                <div class="chapter-title">Running the Show: Two Large Training Projects (1997-2009)</div>
-                <div class="listen-label">▶️ Listen Now</div>
+                <div class="chapter-title">Running the Show: Two Large Training Projects (1997 – 2009)</div>
+                <div class="listen-label">Listen Now</div>
                 <audio controls preload="metadata" class="audio-player">
                     <source src="https://audio.heuring.us/Chapter_9_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
             </div>
 
-            <!-- Chapter 10 -->
             <div class="audio-card">
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 10</h3>
                 </div>
-                <div class="chapter-title">Capstone Years: At the Top of my Game (2009-2021)</div>
-                <div class="listen-label">▶️ Listen Now</div>
+                <div class="chapter-title">Capstone Years: At the Top of My Game (2009 – 2021)</div>
+                <div class="listen-label">Listen Now</div>
                 <audio controls preload="metadata" class="audio-player">
                     <source src="https://audio.heuring.us/Chapter_10_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
             </div>
 
-            <!-- Chapter 11 -->
             <div class="audio-card">
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 11</h3>
                 </div>
-                <div class="chapter-title">Daddy Dave Round Two: The Journey Home (2022-2025)</div>
-                <div class="listen-label">▶️ Listen Now</div>
+                <div class="chapter-title">Daddy Dave Round Two: The Journey Back to my Roots (2022 – 2025)</div>
+                <div class="listen-label">Listen Now</div>
                 <audio controls preload="metadata" class="audio-player">
                     <source src="https://audio.heuring.us/Chapter_11_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
             </div>
 
-            <!-- Chapter 12 -->
             <div class="audio-card">
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 12</h3>
                 </div>
                 <div class="chapter-title">Epilogue: Reflections, Connections and Closing Thoughts</div>
-                <div class="listen-label">▶️ Listen Now</div>
+                <div class="listen-label">Listen Now</div>
                 <audio controls preload="metadata" class="audio-player">
                     <source src="https://audio.heuring.us/Chapter_12_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
