@@ -11,7 +11,7 @@
             --primary-blue: #557699;
             --secondary-blue: #6b8e99;
             --text-dark: #2c2c2c;
-            --text-light: #444; /* Improved contrast for body text */
+            --text-light: #555;
             --text-lighter: #666;
             --text-muted: #888;
             --bg-gradient-start: #f5f7fa;
@@ -32,8 +32,7 @@
             
             /* Typography */
             --font-body: 'Georgia', serif;
-            --font-heading: 'Avenir Next', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            --line-height: 1.8;
+            --line-height: 1.6;
         }
         
         * {
@@ -52,96 +51,69 @@
         
         /* Header Styles */
         .header {
+            position: relative;
             background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
-            padding: var(--spacing-xl) var(--spacing-md);
+            padding: var(--spacing-xl) var(--spacing-md) 80px;
             text-align: center;
             box-shadow: var(--shadow-md);
         }
         
-        .header-content {
-            max-width: 900px;
-            margin: 0 auto;
-            color: var(--white);
-        }
-        
-        /* Applied Heading Font */
-        .header-content * {
-            font-family: var(--font-heading);
-        }
-
-        .book-title {
+        .header-content h1 {
             font-size: 2.5rem;
             font-weight: 700;
+            color: var(--white);
             margin-bottom: 10px;
-            line-height: 1.2;
+            letter-spacing: 2px;
         }
-
-        /* REVISED CAPTION */
-        .book-caption {
-            font-size: 1.5rem;
-            font-weight: 400;
+        
+        .header-content p {
+            font-size: 1.1rem;
             font-style: italic;
-            margin-bottom: 12px;
+            color: var(--white);
             opacity: 0.95;
         }
         
-        .author-name {
-            font-size: 1.3rem;
-            font-weight: 500;
-            font-style: italic;
-            opacity: 0.95;
-        }
-        
-        /* Profile Card Styles */
+        /* Profile Image - Compact Version */
         .profile-wrapper {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: var(--spacing-lg) var(--spacing-md) 0;
+            max-width: 1200px;
+            margin: -50px auto 0;
+            padding: 0 var(--spacing-md);
+            position: relative;
+            z-index: 10;
         }
-
+        
         .profile-card {
             background: var(--white);
-            padding: var(--spacing-lg);
-            border-radius: 8px;
-            box-shadow: var(--shadow-md);
-            text-align: center;
+            border-radius: 12px;
+            padding: var(--spacing-sm) var(--spacing-md);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
         }
-
+        
         .profile-image {
-            max-width: 200px;
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: var(--shadow-sm);
-            margin-bottom: var(--spacing-sm);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--white);
+            box-shadow: var(--shadow-md);
+            flex-shrink: 0;
         }
-
+        
         .profile-caption {
-            font-size: 0.85rem;
-            line-height: 1.5;
             color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.5;
             font-style: italic;
-            max-width: 500px;
-            margin: 0 auto;
         }
         
         /* Main Container */
         .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: var(--spacing-lg) var(--spacing-md) var(--spacing-xl);
-        }
-
-        h2 {
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-blue);
-            text-align: center;
-            margin-bottom: var(--spacing-lg);
-            padding-bottom: var(--spacing-sm);
-            border-bottom: 3px solid var(--border-accent);
-            letter-spacing: 0.5px;
+            padding: var(--spacing-xl) var(--spacing-md);
         }
         
         /* Intro Section */
@@ -149,270 +121,310 @@
             background: var(--white);
             padding: var(--spacing-lg);
             border-radius: 8px;
+            border-left: 5px solid var(--border-accent);
             box-shadow: var(--shadow-md);
             margin-bottom: var(--spacing-xl);
         }
-
-        .intro-section > p {
-            font-size: 1.05rem;
-            line-height: 1.7;
+        
+        .intro-section > p:first-child {
+            font-size: 1.1rem;
             color: var(--text-light);
             margin-bottom: var(--spacing-lg);
-            text-align: center;
         }
-
+        
         .options-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: var(--spacing-md);
             margin-top: var(--spacing-md);
         }
-
+        
         .option-card {
             padding: var(--spacing-md);
-            border: 2px solid var(--bg-gradient-end);
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
-
-        .option-card:hover {
-            border-color: var(--secondary-blue);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .option-card h3 {
-            font-family: var(--font-heading);
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary-blue);
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .option-card p {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: var(--text-light);
-        }
-
-        .section-title {
-            margin-top: var(--spacing-xl);
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary-blue);
         }
         
-        /* Chapter List */
-        .chapter-list {
+        .option-card h3 {
+            font-size: 1.1rem;
+            color: var(--secondary-blue);
+            margin-bottom: var(--spacing-xs);
             display: flex;
-            flex-direction: column;
-            gap: var(--spacing-sm);
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+        
+        .option-card p {
+            font-size: 0.95rem;
+            color: var(--text-lighter);
+            line-height: 1.6;
+        }
+        
+        /* Section Title */
+        .section-title {
+            font-size: 2rem;
+            color: var(--secondary-blue);
+            margin: var(--spacing-xl) 0 var(--spacing-lg);
+            text-align: center;
+            font-weight: 600;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: var(--secondary-blue);
+            margin: 15px auto 0;
+        }
+        
+        /* Chapters Grid */
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
         }
         
         .chapter-card {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
             background: var(--white);
-            padding: var(--spacing-md);
-            border-radius: 8px;
-            box-shadow: var(--shadow-sm);
-            text-decoration: none;
-            color: var(--text-dark);
+            border-radius: 12px;
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
             transition: all 0.3s ease;
-            border-left: 5px solid transparent;
+            border-left: 5px solid var(--secondary-blue);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chapter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(107,142,153,0.05), transparent);
+            transition: width 0.3s ease;
         }
         
         .chapter-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
-            border-left: 5px solid var(--secondary-blue);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .chapter-card:hover::before {
+            width: 100%;
+        }
+        
+        .chapter-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--secondary-blue);
+            opacity: 0.2;
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            line-height: 1;
         }
         
         .chapter-header {
             display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            flex-grow: 1;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-sm);
+            position: relative;
+            z-index: 1;
         }
         
         .chapter-icon {
-            font-size: 2.5rem;
-            line-height: 1;
+            font-size: 1.8rem;
+            margin-right: var(--spacing-sm);
             flex-shrink: 0;
-            color: var(--primary-blue);
         }
         
         .chapter-content h3 {
-            font-family: var(--font-heading);
-            font-size: 1.15rem;
-            font-weight: 600;
-            margin-bottom: 4px;
+            font-size: 1.3rem;
             color: var(--text-dark);
+            margin-bottom: var(--spacing-xs);
+            font-weight: 600;
+            line-height: 1.3;
         }
         
         .chapter-dates {
             font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--secondary-blue);
-            margin-bottom: 4px;
-            font-family: var(--font-heading);
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: var(--spacing-sm);
         }
         
         .chapter-teaser {
             font-size: 0.95rem;
-            line-height: 1.5;
-            color: var(--text-light);
+            color: var(--text-lighter);
+            line-height: 1.6;
+            margin-top: var(--spacing-sm);
         }
         
-        .chapter-number {
-            font-family: var(--font-heading);
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--primary-blue);
-            margin-right: var(--spacing-sm);
-            flex-shrink: 0;
-            width: 30px;
-            text-align: left;
-        }
-
         .chapter-arrow {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
             font-size: 1.5rem;
             color: var(--secondary-blue);
-            font-weight: 800;
-            margin-left: var(--spacing-sm);
-            flex-shrink: 0;
+            opacity: 0;
+            transition: all 0.3s ease;
         }
         
-        /* Special Sections */
-        .audio-book-section,
-        .bonus-section {
-            background: var(--white);
+        .chapter-card:hover .chapter-arrow {
+            opacity: 1;
+            transform: translateX(5px);
+        }
+        
+        /* Audio Book Section */
+        .audio-book-section {
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            border-radius: 12px;
             padding: var(--spacing-lg);
-            border-radius: 8px;
-            box-shadow: var(--shadow-md);
-            margin-top: var(--spacing-xl);
             text-align: center;
-            border-top: 5px solid var(--primary-blue);
+            margin-bottom: var(--spacing-xl);
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
         }
-
-        .audio-book-section h2,
-        .bonus-section h2 {
-            font-family: var(--font-heading);
-            color: var(--primary-blue);
-            border-bottom: none;
+        
+        .audio-book-section:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .audio-book-section h2 {
+            color: var(--white);
+            font-size: 1.8rem;
             margin-bottom: var(--spacing-sm);
-            padding-bottom: 0;
-            font-size: 1.7rem;
         }
-
+        
         .audio-book-section p {
-            font-size: 1.1rem;
-            color: var(--text-light);
+            color: var(--white);
+            opacity: 0.9;
             margin-bottom: var(--spacing-md);
         }
-
+        
         .audio-book-section a {
-            display: inline-block;
-            font-family: var(--font-heading);
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--white);
-            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
-            padding: 12px 24px;
-            border-radius: 6px;
-            text-decoration: none;
-            transition: transform 0.2s;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .audio-book-section a:hover {
-            transform: translateY(-2px);
-            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
-        }
-
-        .bonus-card {
-            padding: var(--spacing-md);
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            margin-top: var(--spacing-md);
-        }
-
-        .bonus-card a {
-            font-family: var(--font-body);
-            font-size: 1.05rem;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: 14px 32px;
+            background: var(--white);
             color: var(--primary-blue);
             text-decoration: none;
-            font-weight: 500;
-            line-height: 1.5;
-            transition: color 0.2s ease;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
         }
-
+        
+        .audio-book-section a:hover {
+            background: rgba(255,255,255,0.95);
+            transform: translateY(-2px);
+        }
+        
+        /* Bonus Section */
+        .bonus-section {
+            background: var(--white);
+            border-radius: 12px;
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
+            border-left: 5px solid var(--secondary-blue);
+        }
+        
+        .bonus-section h2 {
+            color: var(--secondary-blue);
+            font-size: 1.8rem;
+            margin-bottom: var(--spacing-md);
+            text-align: center;
+        }
+        
+        .bonus-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            padding: var(--spacing-md);
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .bonus-card:hover {
+            transform: scale(1.02);
+            border-color: var(--secondary-blue);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .bonus-card a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+        }
+        
         .bonus-card a:hover {
-            text-decoration: underline;
-            color: var(--text-dark);
+            color: var(--secondary-blue);
         }
         
         /* Responsive Design */
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .header {
-                padding: var(--spacing-lg) var(--spacing-sm);
+                height: auto;
+                padding: var(--spacing-lg) var(--spacing-sm) 70px;
             }
             
-            .book-title {
+            .header-content h1 {
                 font-size: 2rem;
             }
-
-            .book-caption {
-                font-size: 1.2rem;
-                margin-bottom: 10px;
+            
+            .header-content p {
+                font-size: 1rem;
             }
             
-            .author-name {
-                font-size: 1.1rem;
+            .profile-wrapper {
+                margin-top: -45px;
             }
-
+            
+            .profile-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
             .profile-image {
-                max-width: 150px;
+                width: 70px;
+                height: 70px;
             }
             
-            .profile-caption {
-                font-size: 0.8rem;
+            .chapters-grid {
+                grid-template-columns: 1fr;
             }
-
+            
             .options-grid {
                 grid-template-columns: 1fr;
             }
             
-            h2 {
-                font-size: 1.3rem;
-            }
-            
-            .chapter-card {
-                padding: var(--spacing-sm);
-            }
-
             .chapter-number {
-                font-size: 1.5rem;
-                margin-right: var(--spacing-xs);
+                font-size: 2rem;
+                right: 15px;
+                top: 15px;
             }
-
-            .chapter-header {
-                gap: var(--spacing-sm);
-            }
-            
-            .chapter-icon {
-                font-size: 1.8rem;
-            }
-            
-            .chapter-content h3 {
-                font-size: 1rem;
-            }
-            
-            .chapter-dates,
-            .chapter-teaser {
-                font-size: 0.85rem;
-                line-height: 1.4;
-            }
-
-            .chapter-arrow {
-                font-size: 1.2rem;
+        }
+        
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .chapters-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -420,12 +432,11 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <h1 class="book-title">Beyond the Childhood Bubble — My Unconventional Life Story</h1>
-            <p class="book-caption">A memoir spanning seven decades and multiple continents</p>
-            <p class="author-name">Dave Heuring</p>
+            <h1>Table of Contents</h1>
+            <p>A Journey Through Time</p>
         </div>
     </header>
-    
+
     <div class="profile-wrapper">
         <div class="profile-card">
             <img 
@@ -440,8 +451,6 @@
     </div>
 
     <main class="container">
-        <h2>Table of Contents</h2>
-        
         <section class="intro-section">
             <p>The chapters below trace the arc of my life's journey. Here are your options for exploring this memoir:</p>
             
@@ -462,17 +471,17 @@
                 </div>
             </div>
         </section>
-        
+
         <h2 class="section-title">The Chapters</h2>
-        
-        <div class="chapter-list">
+
+        <div class="chapters-grid">
             <a href="Chapter-1.html" class="chapter-card">
-                <div class="chapter-number">1</div>
+                <div class="chapter-number">01</div>
                 <div class="chapter-header">
-                    <div class="chapter-icon">🏡</div>
+                    <div class="chapter-icon">🌳</div>
                     <div class="chapter-content">
                         <h3>Deep Roots: My German Ancestry and Heritage</h3>
-                        <div class="chapter-dates">1952 — 1960</div>
+                        <div class="chapter-dates">Origins</div>
                         <div class="chapter-teaser">Tracing sixteen family lines and discovering how German immigrant farmers shaped my foundation.</div>
                     </div>
                 </div>
@@ -480,25 +489,25 @@
             </a>
 
             <a href="Chapter-2.html" class="chapter-card">
-                <div class="chapter-number">2</div>
+                <div class="chapter-number">02</div>
                 <div class="chapter-header">
-                    <div class="chapter-icon">🧒</div>
+                    <div class="chapter-icon">🏡</div>
                     <div class="chapter-content">
                         <h3>Early Life: An Idyllic and Sheltered Childhood</h3>
-                        <div class="chapter-dates">1952 — 1966</div>
-                        <div class="chapter-teaser">A look inside the highly structured and protected world of St. Michael, Minnesota, and the early years that instilled discipline and routine.</div>
+                        <div class="chapter-dates">1952-1966</div>
+                        <div class="chapter-teaser">Growing up in 1950s St. Michael—a small German Catholic town built on faith, family, and farming.</div>
                     </div>
                 </div>
                 <div class="chapter-arrow">→</div>
             </a>
 
             <a href="Chapter-3.html" class="chapter-card">
-                <div class="chapter-number">3</div>
+                <div class="chapter-number">03</div>
                 <div class="chapter-header">
-                    <div class="chapter-icon">🎒</div>
+                    <div class="chapter-icon">📚</div>
                     <div class="chapter-content">
                         <h3>Navigating Two Worlds: Catholic and Public School Life</h3>
-                        <div class="chapter-dates">1966 — 1970</div>
+                        <div class="chapter-dates">1966-1970</div>
                         <div class="chapter-teaser">When my Catholic high school closed, I faced freedom I wasn't ready for—and early cracks in my faith.</div>
                     </div>
                 </div>
@@ -506,25 +515,25 @@
             </a>
 
             <a href="Chapter-4.html" class="chapter-card">
-                <div class="chapter-number">4</div>
+                <div class="chapter-number">04</div>
                 <div class="chapter-header">
                     <div class="chapter-icon">✈️</div>
                     <div class="chapter-content">
                         <h3>Wake-up Call: The Air Force Years</h3>
-                        <div class="chapter-dates">1970 — 1973</div>
-                        <div class="chapter-teaser">Military service in Thailand opened my eyes to the world and challenged everything I'd been taught..</div>
+                        <div class="chapter-dates">1970-1973</div>
+                        <div class="chapter-teaser">Military service in Thailand opened my eyes to the world and challenged everything I'd been taught.</div>
                     </div>
                 </div>
                 <div class="chapter-arrow">→</div>
             </a>
 
             <a href="Chapter-5.html" class="chapter-card">
-                <div class="chapter-number">5</div>
+                <div class="chapter-number">05</div>
                 <div class="chapter-header">
-                    <div class="chapter-icon">🧭</div>
+                    <div class="chapter-icon">🌅</div>
                     <div class="chapter-content">
                         <h3>From Collapse to Clarity: The Path That Found Me</h3>
-                        <div class="chapter-dates">1974 — 1979</div>
+                        <div class="chapter-dates">1974-1979</div>
                         <div class="chapter-teaser">From broke and aimless in Bangkok to finding my calling—a job posting changed everything.</div>
                     </div>
                 </div>
@@ -532,12 +541,12 @@
             </a>
 
             <a href="Chapter-6.html" class="chapter-card">
-                <div class="chapter-number">6</div>
+                <div class="chapter-number">06</div>
                 <div class="chapter-header">
                     <div class="chapter-icon">🎓</div>
                     <div class="chapter-content">
                         <h3>First Step of the Plan: Building the Foundation</h3>
-                        <div class="chapter-dates">1979 — 1984</div>
+                        <div class="chapter-dates">1979-1984</div>
                         <div class="chapter-teaser">Returning to Minnesota and Hawaii to earn the credentials that would launch my international career.</div>
                     </div>
                 </div>
@@ -545,12 +554,12 @@
             </a>
 
             <a href="Chapter-7.html" class="chapter-card">
-                <div class="chapter-number">7</div>
+                <div class="chapter-number">07</div>
                 <div class="chapter-header">
-                    <div class="chapter-icon">🕌</div>
+                    <div class="chapter-icon">🌍</div>
                     <div class="chapter-content">
                         <h3>Life as an Expat: Adjusting to a Muslim Country</h3>
-                        <div class="chapter-dates">1984 — 1987</div>
+                        <div class="chapter-dates">1984-1987</div>
                         <div class="chapter-teaser">Three years in Saudi Arabia's contradictions—generous pay, strict rules, and compound life.</div>
                     </div>
                 </div>
@@ -558,12 +567,12 @@
             </a>
 
             <a href="Chapter-8.html" class="chapter-card">
-                <div class="chapter-number">8</div>
+                <div class="chapter-number">08</div>
                 <div class="chapter-header">
-                    <div class="chapter-icon">📈</div>
+                    <div class="chapter-icon">🚀</div>
                     <div class="chapter-content">
                         <h3>Career Leap: Opportunity and Challenges</h3>
-                        <div class="chapter-dates">1987 — 1997</div>
+                        <div class="chapter-dates">1987-1997</div>
                         <div class="chapter-teaser">A decade in Egypt transformed me from university lecturer to confident educational leader.</div>
                     </div>
                 </div>
@@ -571,12 +580,12 @@
             </a>
 
             <a href="Chapter-9.html" class="chapter-card">
-                <div class="chapter-number">9</div>
+                <div class="chapter-number">09</div>
                 <div class="chapter-header">
-                    <div class="chapter-icon">🗝️</div>
+                    <div class="chapter-icon">💼</div>
                     <div class="chapter-content">
                         <h3>Running the Show: Two Large Training Projects</h3>
-                        <div class="chapter-dates">1997 — 2009</div>
+                        <div class="chapter-dates">1997-2009</div>
                         <div class="chapter-teaser">Leading multi-million dollar programs in the UAE—and finding Alisa during those twelve years.</div>
                     </div>
                 </div>
@@ -586,10 +595,10 @@
             <a href="Chapter-10.html" class="chapter-card">
                 <div class="chapter-number">10</div>
                 <div class="chapter-header">
-                    <div class="chapter-icon">👑</div>
+                    <div class="chapter-icon">⭐</div>
                     <div class="chapter-content">
-                        <h3>Capstone Years: At the Top of My Game</h3>
-                        <div class="chapter-dates">2009 — 2021</div>
+                        <h3>Capstone Years: At the Top of my Game</h3>
+                        <div class="chapter-dates">2009-2021</div>
                         <div class="chapter-teaser">From D.C. to Jordan to remote work in Thailand—building e-learning platforms and becoming a father again at 68.</div>
                     </div>
                 </div>
@@ -599,11 +608,11 @@
             <a href="Chapter-11.html" class="chapter-card">
                 <div class="chapter-number">11</div>
                 <div class="chapter-header">
-                    <div class="chapter-icon">👨‍👦‍👦</div>
+                    <div class="chapter-icon">🏠</div>
                     <div class="chapter-content">
                         <h3>Daddy Dave Round Two: The Journey Back to my Roots</h3>
-                        <div class="chapter-dates">2022 — 2025</div>
-                        <div class="chapter-teaser">Retirement, family, and leveraging a life's worth of experience for new, personal projects.</div>
+                        <div class="chapter-dates">2022-2025</div>
+                        <div class="chapter-teaser">Retirement in Thailand became a return to Minnesota—reconnecting with family and raising Anya.</div>
                     </div>
                 </div>
                 <div class="chapter-arrow">→</div>
@@ -634,7 +643,7 @@
         <section class="bonus-section">
             <h2>Bonus Content</h2>
             <div class="bonus-card">
-                <a href="https://audio.heuring.us/My%20Dad%20--%20One%20of%20the%20Chosin%20Few.pdf" target="_blank" rel="noopener noreferrer">
+                <a href="https://audio.heuring.us/My%20Dad%20--%20One%20of%20the%20Chosin%20Few.pdf" target="_blank">
                     🎖️ My Dad: One of the Chosin Few — The unforgettable story of Norm Heuring's Korean War Experience
                 </a>
             </div>
