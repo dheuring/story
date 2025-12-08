@@ -11,7 +11,7 @@
             --primary-blue: #557699;
             --secondary-blue: #6b8e99;
             --text-dark: #2c2c2c;
-            --text-light: #555;
+            --text-light: #444; /* Improved contrast for body text (was #555) */
             --bg-gradient-start: #f5f7fa;
             --bg-gradient-end: #e8eef3;
             --white: #ffffff;
@@ -29,6 +29,7 @@
             
             /* Typography */
             --font-body: 'Georgia', serif;
+            --font-heading: 'Avenir Next', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* Added Heading Font */
             --line-height: 1.8;
         }
         
@@ -61,9 +62,14 @@
             color: var(--white);
         }
         
+        /* Heading Typography Update */
+        .header-content * {
+            font-family: var(--font-heading); 
+        }
+
         .chapter-number {
-            font-size: 1rem;
-            font-weight: 600;
+            font-size: 1.1rem; /* Slightly adjusted */
+            font-weight: 400; /* Lighter weight */
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: var(--spacing-sm);
@@ -71,10 +77,10 @@
         }
         
         .chapter-title {
-            font-size: 2.25rem;
+            font-size: 2.4rem; /* Slightly adjusted */
             font-weight: 700;
             line-height: 1.3;
-            letter-spacing: 0.5px;
+            letter-spacing: 0; /* Reduced letter-spacing for sans-serif */
         }
         
         /* Profile Image - Compact Version */
@@ -104,6 +110,23 @@
             border: 4px solid var(--white);
             box-shadow: var(--shadow-md);
             flex-shrink: 0;
+        }
+
+        /* Added structure for separator and caption */
+        .profile-caption-wrapper {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            width: 100%;
+        }
+
+        .separator {
+            width: 1px;
+            height: 50px;
+            background-color: #ddd;
+            flex-shrink: 0;
+            align-self: center;
+            display: none; /* Hidden by default for small screens */
         }
         
         .profile-caption {
@@ -139,6 +162,21 @@
         .chapter-content p:last-of-type {
             margin-bottom: 0;
         }
+
+        /* Improved Link Discoverability */
+        .chapter-content a:not(.nav-button):not(.format-button) {
+            color: var(--primary-blue);
+            text-decoration: underline;
+            text-decoration-color: var(--secondary-blue);
+            text-underline-offset: 3px;
+            transition: color 0.2s ease;
+        }
+
+        .chapter-content a:not(.nav-button):not(.format-button):hover {
+            color: var(--text-dark); 
+            text-decoration: none;
+        }
+
         
         /* Action Sections */
         .actions-section {
@@ -156,6 +194,11 @@
             margin-bottom: var(--spacing-sm);
         }
         
+        /* New utility class for spacing */
+        .section-label.spaced-top {
+            margin-top: var(--spacing-lg);
+        }
+
         /* Navigation Buttons */
         .nav-button {
             display: inline-flex;
@@ -176,6 +219,8 @@
         .nav-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
+             /* Refined Hover */
+            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
         
         .nav-button:active {
@@ -210,6 +255,8 @@
         .format-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
+            /* Refined Hover */
+            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
         
         .format-button:active {
@@ -240,6 +287,8 @@
         .back-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
+            /* Refined Hover */
+            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
         
         /* Responsive Design */
@@ -294,7 +343,12 @@
             }
         }
         
-        @media (min-width: 641px) and (max-width: 900px) {
+        @media (min-width: 641px) {
+            /* Show separator on larger screens */
+            .separator {
+                display: block;
+            }
+
             .chapter-title {
                 font-size: 2rem;
             }
@@ -320,9 +374,12 @@
                 alt="Great-grandparents George David and Mary Heuring" 
                 class="profile-image"
             >
-            <p class="profile-caption">
-                Great-grandparents George David and Mary Heuring—my namesake, as I'm named after George David, who went by "David".
-            </p>
+            <div class="profile-caption-wrapper">
+                <div class="separator"></div> 
+                <p class="profile-caption">
+                    Great-grandparents George David and Mary Heuring—my namesake, as I'm named after George David, who went by "David".
+                </p>
+            </div>
         </div>
     </div>
 
@@ -377,7 +434,7 @@
                     📖 Summary of Chapter 2 →
                 </a>
                 
-                <div class="section-label" style="margin-top: 32px;">Full Chapter</div>
+                <div class="section-label spaced-top">Full Chapter</div>
                 <div class="formats-grid">
                     <a href="https://audio.heuring.us/Chapter-1.pdf" class="format-button" target="_blank" rel="noopener noreferrer">
                         📄 PDF
