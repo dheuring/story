@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Table of Contents - My Life's Journey: A memoir spanning continents and cultures">
-    <title>Table of Contents — My Life's Journey</title>
+    <title>Table of Contents – My Life's Journey</title>
     <style>
         :root {
             /* Color Palette */
@@ -22,25 +22,25 @@
             --shadow-lg: 0 8px 25px rgba(0,0,0,.15);
             --shadow-xl: 0 10px 40px rgba(0,0,0,.2);
             --border-accent: #6b8e99;
-            
+
             /* Spacing */
             --spacing-xs: 8px;
             --spacing-sm: 16px;
             --spacing-md: 24px;
             --spacing-lg: 40px;
             --spacing-xl: 60px;
-            
+
             /* Typography */
             --font-body: 'Georgia', serif;
             --line-height: 1.6;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: var(--font-body);
             line-height: var(--line-height);
@@ -48,7 +48,77 @@
             background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
             min-height: 100vh;
         }
-        
+
+        /* Disclaimer Overlay */
+        .disclaimer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: var(--spacing-md);
+        }
+
+        .disclaimer-overlay.hidden {
+            display: none;
+        }
+
+        .disclaimer-content {
+            background: var(--white);
+            max-width: 600px;
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: var(--shadow-xl);
+            padding: var(--spacing-xl);
+            text-align: left;
+            border: 3px solid var(--secondary-blue);
+        }
+
+        .disclaimer-content h2 {
+            color: var(--secondary-blue);
+            font-size: 1.8rem;
+            margin-bottom: var(--spacing-md);
+            text-align: center;
+        }
+
+        .disclaimer-content p {
+            color: var(--text-light);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .disclaimer-button {
+            padding: 14px 36px;
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            font-family: var(--font-body);
+            display: block;
+            margin: var(--spacing-md) auto 0;
+        }
+
+        .disclaimer-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
+        }
+
+        .disclaimer-button:active {
+            transform: translateY(0);
+        }
+
         /* Header Styles */
         .header {
             position: relative;
@@ -57,7 +127,7 @@
             text-align: center;
             box-shadow: var(--shadow-md);
         }
-        
+
         .header-content h1 {
             font-size: 2.5rem;
             font-weight: 700;
@@ -65,14 +135,14 @@
             margin-bottom: 10px;
             letter-spacing: 2px;
         }
-        
+
         .header-content p {
             font-size: 1.1rem;
             font-style: italic;
             color: var(--white);
             opacity: 0.95;
         }
-        
+
         /* Profile Image - Compact Version */
         .profile-wrapper {
             max-width: 1200px;
@@ -81,7 +151,7 @@
             position: relative;
             z-index: 10;
         }
-        
+
         .profile-card {
             background: var(--white);
             border-radius: 12px;
@@ -91,7 +161,7 @@
             align-items: center;
             gap: var(--spacing-md);
         }
-        
+
         .profile-image {
             width: 80px;
             height: 80px;
@@ -101,21 +171,21 @@
             box-shadow: var(--shadow-md);
             flex-shrink: 0;
         }
-        
+
         .profile-caption {
             color: var(--text-light);
             font-size: 0.9rem;
             line-height: 1.5;
             font-style: italic;
         }
-        
+
         /* Main Container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: var(--spacing-xl) var(--spacing-md);
         }
-        
+
         /* Intro Section */
         .intro-section {
             background: var(--white);
@@ -125,27 +195,27 @@
             box-shadow: var(--shadow-md);
             margin-bottom: var(--spacing-xl);
         }
-        
+
         .intro-section > p:first-child {
             font-size: 1.1rem;
             color: var(--text-light);
             margin-bottom: var(--spacing-lg);
         }
-        
+
         .options-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: var(--spacing-md);
             margin-top: var(--spacing-md);
         }
-        
+
         .option-card {
             padding: var(--spacing-md);
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             border-radius: 8px;
             border-left: 4px solid var(--secondary-blue);
         }
-        
+
         .option-card h3 {
             font-size: 1.1rem;
             color: var(--secondary-blue);
@@ -154,13 +224,13 @@
             align-items: center;
             gap: var(--spacing-xs);
         }
-        
+
         .option-card p {
             font-size: 0.95rem;
             color: var(--text-lighter);
             line-height: 1.6;
         }
-        
+
         /* Section Title */
         .section-title {
             font-size: 2rem;
@@ -170,7 +240,7 @@
             font-weight: 600;
             position: relative;
         }
-        
+
         .section-title::after {
             content: '';
             display: block;
@@ -179,7 +249,7 @@
             background: var(--secondary-blue);
             margin: 15px auto 0;
         }
-        
+
         /* Chapters Grid */
         .chapters-grid {
             display: grid;
@@ -187,7 +257,7 @@
             gap: var(--spacing-lg);
             margin-bottom: var(--spacing-xl);
         }
-        
+
         .chapter-card {
             background: var(--white);
             border-radius: 12px;
@@ -202,7 +272,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .chapter-card::before {
             content: '';
             position: absolute;
@@ -213,16 +283,16 @@
             background: linear-gradient(90deg, rgba(107,142,153,0.05), transparent);
             transition: width 0.3s ease;
         }
-        
+
         .chapter-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-lg);
         }
-        
+
         .chapter-card:hover::before {
             width: 100%;
         }
-        
+
         .chapter-number {
             font-size: 2.5rem;
             font-weight: bold;
@@ -233,7 +303,7 @@
             top: 20px;
             line-height: 1;
         }
-        
+
         .chapter-header {
             display: flex;
             align-items: flex-start;
@@ -241,13 +311,13 @@
             position: relative;
             z-index: 1;
         }
-        
+
         .chapter-icon {
             font-size: 1.8rem;
             margin-right: var(--spacing-sm);
             flex-shrink: 0;
         }
-        
+
         .chapter-content h3 {
             font-size: 1.3rem;
             color: var(--text-dark);
@@ -255,21 +325,21 @@
             font-weight: 600;
             line-height: 1.3;
         }
-        
+
         .chapter-dates {
             font-size: 0.9rem;
             color: var(--text-muted);
             font-style: italic;
             margin-bottom: var(--spacing-sm);
         }
-        
+
         .chapter-teaser {
             font-size: 0.95rem;
             color: var(--text-lighter);
             line-height: 1.6;
             margin-top: var(--spacing-sm);
         }
-        
+
         .chapter-arrow {
             position: absolute;
             bottom: 20px;
@@ -279,12 +349,12 @@
             opacity: 0;
             transition: all 0.3s ease;
         }
-        
+
         .chapter-card:hover .chapter-arrow {
             opacity: 1;
             transform: translateX(5px);
         }
-        
+
         /* Audio Book Section */
         .audio-book-section {
             background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
@@ -295,24 +365,24 @@
             box-shadow: var(--shadow-lg);
             transition: all 0.3s ease;
         }
-        
+
         .audio-book-section:hover {
             transform: scale(1.02);
             box-shadow: var(--shadow-xl);
         }
-        
+
         .audio-book-section h2 {
             color: var(--white);
             font-size: 1.8rem;
             margin-bottom: var(--spacing-sm);
         }
-        
+
         .audio-book-section p {
             color: var(--white);
             opacity: 0.9;
             margin-bottom: var(--spacing-md);
         }
-        
+
         .audio-book-section a {
             display: inline-flex;
             align-items: center;
@@ -326,12 +396,12 @@
             border-radius: 8px;
             transition: all 0.3s ease;
         }
-        
+
         .audio-book-section a:hover {
             background: rgba(255,255,255,0.95);
             transform: translateY(-2px);
         }
-        
+
         /* Bonus Section */
         .bonus-section {
             background: var(--white);
@@ -340,14 +410,14 @@
             box-shadow: var(--shadow-md);
             border-left: 5px solid var(--secondary-blue);
         }
-        
+
         .bonus-section h2 {
             color: var(--secondary-blue);
             font-size: 1.8rem;
             margin-bottom: var(--spacing-md);
             text-align: center;
         }
-        
+
         .bonus-card {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             border-radius: 10px;
@@ -356,13 +426,13 @@
             transition: all 0.3s ease;
             border: 2px solid transparent;
         }
-        
+
         .bonus-card:hover {
             transform: scale(1.02);
             border-color: var(--secondary-blue);
             box-shadow: var(--shadow-sm);
         }
-        
+
         .bonus-card a {
             color: var(--primary-blue);
             text-decoration: none;
@@ -373,55 +443,67 @@
             justify-content: center;
             gap: var(--spacing-sm);
         }
-        
+
         .bonus-card a:hover {
             color: var(--secondary-blue);
         }
-        
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .header {
                 height: auto;
                 padding: var(--spacing-lg) var(--spacing-sm) 70px;
             }
-            
+
             .header-content h1 {
                 font-size: 2rem;
             }
-            
+
             .header-content p {
                 font-size: 1rem;
             }
-            
+
             .profile-wrapper {
                 margin-top: -45px;
             }
-            
+
             .profile-card {
                 flex-direction: column;
                 text-align: center;
             }
-            
+
             .profile-image {
                 width: 70px;
                 height: 70px;
             }
-            
+
             .chapters-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .options-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .chapter-number {
                 font-size: 2rem;
                 right: 15px;
                 top: 15px;
             }
+
+            .disclaimer-content {
+                padding: var(--spacing-lg) var(--spacing-md);
+            }
+
+            .disclaimer-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .disclaimer-content p {
+                font-size: 0.95rem;
+            }
         }
-        
+
         @media (min-width: 769px) and (max-width: 1024px) {
             .chapters-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -430,6 +512,19 @@
     </style>
 </head>
 <body>
+    <!-- Disclaimer Overlay -->
+    <div class="disclaimer-overlay hidden" id="disclaimerOverlay">
+        <div class="disclaimer-content">
+            <h2>Important Notice</h2>
+            <p>This is a work of nonfiction based on the author's recollections of real experiences spanning seven decades. Dialogue and certain narrative elements have been reconstructed for clarity and readability. Any resemblance to individuals not explicitly identified by name is purely coincidental.</p>
+
+            <p>This memoir contains personal reflections, mature themes, and perspectives shaped by diverse cultural contexts across multiple continents. The views expressed reflect the author's individual experiences and may not align with all readers' perspectives.</p>
+
+            <p>By continuing, you acknowledge that you understand the personal nature of this narrative and accept these terms.</p>
+            <button class="disclaimer-button" onclick="closeDisclaimer()">I Understand – Continue</button>
+        </div>
+    </div>
+
     <header class="header">
         <div class="header-content">
             <h1>Table of Contents</h1>
@@ -439,9 +534,9 @@
 
     <div class="profile-wrapper">
         <div class="profile-card">
-            <img 
-                src="https://audio.heuring.us/book3.png" 
-                alt="Book Cover" 
+            <img
+                src="https://audio.heuring.us/book3.png"
+                alt="Book Cover"
                 class="profile-image"
             >
             <p class="profile-caption">
@@ -453,18 +548,18 @@
     <main class="container">
         <section class="intro-section">
             <p>The chapters below trace the arc of my life's journey. Here are your options for exploring this memoir:</p>
-            
+
             <div class="options-grid">
                 <div class="option-card">
                     <h3>📖 Chapter Summaries</h3>
                     <p>Click any chapter to read a summary of a pivotal period in my life. Navigate chronologically for a complete overview of my journey.</p>
                 </div>
-                
+
                 <div class="option-card">
                     <h3>📄 Book Chapters</h3>
                     <p>Read or listen to the full chapters via PDF, eReader, or audio at the bottom of each summary. You can also access the complete audiobook in the section below.</p>
                 </div>
-                
+
                 <div class="option-card">
                     <h3>🎖️ Bonus Story</h3>
                     <p>Discover the untold heroism of my father, Norman Heuring, during the Korean War in the bonus content below. We didn't learn about the terrible battle he survived until after he was gone.</p>
@@ -644,10 +739,27 @@
             <h2>Bonus Content</h2>
             <div class="bonus-card">
                 <a href="https://audio.heuring.us/My%20Dad%20--%20One%20of%20the%20Chosin%20Few.pdf" target="_blank">
-                    🎖️ My Dad: One of the Chosin Few — The unforgettable story of Norm Heuring's Korean War Experience
+                    🎖️ My Dad: One of the Chosin Few – The unforgettable story of Norm Heuring's Korean War Experience
                 </a>
             </div>
         </section>
     </main>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            // Changed from sessionStorage to localStorage
+            const hasSeenDisclaimer = localStorage.getItem('disclaimerSeen');
+
+            if (!hasSeenDisclaimer) {
+                document.getElementById('disclaimerOverlay').classList.remove('hidden');
+            }
+        });
+
+        function closeDisclaimer() {
+            // Changed from sessionStorage to localStorage
+            localStorage.setItem('disclaimerSeen', 'true');
+            document.getElementById('disclaimerOverlay').classList.add('hidden');
+        }
+    </script>
 </body>
 </html>
