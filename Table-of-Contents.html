@@ -1,297 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Table of Contents - My Life's Journey: A memoir spanning continents and cultures">
-    <title>Table of Contents – My Life's Journey</title>
-    <style>
-        :root {
-            /* Color Palette */
-            --primary-blue: #557699;
-            --secondary-blue: #6b8e99;
-            --text-dark: #2c2c2c;
-            --text-light: #555;
-            --text-lighter: #666;
-            --text-muted: #888;
-            --bg-gradient-start: #f5f7fa;
-            --bg-gradient-end: #e8eef3;
-            --white: #ffffff;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,.08);
-            --shadow-md: 0 4px 15px rgba(0,0,0,.1);
-            --shadow-lg: 0 8px 25px rgba(0,0,0,.15);
-            --shadow-xl: 0 10px 40px rgba(0,0,0,.2);
-            --border-accent: #6b8e99;
-            
-            /* Spacing */
-            --spacing-xs: 8px;
-            --spacing-sm: 16px;
-            --spacing-md: 24px;
-            --spacing-lg: 40px;
-            --spacing-xl: 60px;
-            
-            /* Typography */
-            --font-body: 'Georgia', serif;
-            --line-height: 1.6;
+    ...
+</head>
+<body>
+    <!-- Disclaimer Overlay -->
+    <div class="disclaimer-overlay hidden" id="disclaimerOverlay">
+        <div class="disclaimer-content">
+            <h2>Important Notice</h2>
+            <p>This is a work of nonfiction based on the author's recollections of real experiences spanning seven decades. Dialogue and certain narrative elements have been reconstructed for clarity and readability. Any resemblance to individuals not explicitly identified by name is purely coincidental.</p>
+
+            <p>This memoir contains personal reflections, mature themes, and perspectives shaped by diverse cultural contexts across multiple continents. The views expressed reflect the author's individual experiences and may not align with all readers' perspectives.</p>
+
+            <p>By continuing, you acknowledge that you understand the personal nature of this narrative and accept these terms.</p>
+            <button class="disclaimer-button" onclick="closeDisclaimer()">I Understand – Continue</button>
+        </div>
+    </div>
+
+    <header class="header">
+        ...
+    </header>
+
+    ...
+    ...
+    (all your original HTML unchanged)
+    ...
+    ...
+
+    <script>
+        // Check if user has already seen the disclaimer in this session
+        window.addEventListener('DOMContentLoaded', function() {
+            const hasSeenDisclaimer = sessionStorage.getItem('disclaimerSeen');
+            const referrer = document.referrer ? document.referrer.split('/').pop() : '';
+
+            // Only show if coming from index.html AND hasn't been seen yet
+            if (!hasSeenDisclaimer && referrer === 'index.html') {
+                document.getElementById('disclaimerOverlay').classList.remove('hidden');
+            }
+        });
+
+        function closeDisclaimer() {
+            sessionStorage.setItem('disclaimerSeen', 'true');
+            document.getElementById('disclaimerOverlay').classList.add('hidden');
         }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: var(--font-body);
-            line-height: var(--line-height);
-            color: var(--text-dark);
-            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
-            min-height: 100vh;
-        }
-        
-        /* Disclaimer Overlay */
-        .disclaimer-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.75);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            padding: var(--spacing-md);
-        }
-        
-        .disclaimer-overlay.hidden {
-            display: none;
-        }
-        
-        .disclaimer-content {
-            background: var(--white);
-            max-width: 600px;
-            width: 100%;
-            border-radius: 12px;
-            box-shadow: var(--shadow-xl);
-            padding: var(--spacing-xl);
-            text-align: center;
-            border: 3px solid var(--secondary-blue);
-        }
-        
-        .disclaimer-content h2 {
-            color: var(--secondary-blue);
-            font-size: 1.8rem;
-            margin-bottom: var(--spacing-md);
-        }
-        
-        .disclaimer-content p {
-            color: var(--text-light);
-            font-size: 1.05rem;
-            line-height: 1.7;
-            margin-bottom: var(--spacing-lg);
-        }
-        
-        .disclaimer-button {
-            padding: 14px 36px;
-            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
-            color: var(--white);
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s ease;
-            font-family: var(--font-body);
-        }
-        
-        .disclaimer-button:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
-        }
-        
-        .disclaimer-button:active {
-            transform: translateY(0);
-        }
-        
-        /* Header Styles */
-        .header {
-            position: relative;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
-            padding: var(--spacing-xl) var(--spacing-md) 80px;
-            text-align: center;
-            box-shadow: var(--shadow-md);
-        }
-        
-        .header-content h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--white);
-            margin-bottom: 10px;
-            letter-spacing: 2px;
-        }
-        
-        .header-content p {
-            font-size: 1.1rem;
-            font-style: italic;
-            color: var(--white);
-            opacity: 0.95;
-        }
-        
-        /* Profile Image - Compact Version */
-        .profile-wrapper {
-            max-width: 1200px;
-            margin: -50px auto 0;
-            padding: 0 var(--spacing-md);
-            position: relative;
-            z-index: 10;
-        }
-        
-        .profile-card {
-            background: var(--white);
-            border-radius: 12px;
-            padding: var(--spacing-sm) var(--spacing-md);
-            box-shadow: var(--shadow-lg);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-        }
-        
-        .profile-image {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid var(--white);
-            box-shadow: var(--shadow-md);
-            flex-shrink: 0;
-        }
-        
-        .profile-caption {
-            color: var(--text-light);
-            font-size: 0.9rem;
-            line-height: 1.5;
-            font-style: italic;
-        }
-        
-        /* Main Container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: var(--spacing-xl) var(--spacing-md);
-        }
-        
-        /* Intro Section */
-        .intro-section {
-            background: var(--white);
-            padding: var(--spacing-lg);
-            border-radius: 8px;
-            border-left: 5px solid var(--border-accent);
-            box-shadow: var(--shadow-md);
-            margin-bottom: var(--spacing-xl);
-        }
-        
-        .intro-section > p:first-child {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            margin-bottom: var(--spacing-lg);
-        }
-        
-        .options-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-md);
-        }
-        
-        .option-card {
-            padding: var(--spacing-md);
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 8px;
-            border-left: 4px solid var(--secondary-blue);
-        }
-        
-        .option-card h3 {
-            font-size: 1.1rem;
-            color: var(--secondary-blue);
-            margin-bottom: var(--spacing-xs);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-        }
-        
-        .option-card p {
-            font-size: 0.95rem;
-            color: var(--text-lighter);
-            line-height: 1.6;
-        }
-        
-        /* Section Title */
-        .section-title {
-            font-size: 2rem;
-            color: var(--secondary-blue);
-            margin: var(--spacing-xl) 0 var(--spacing-lg);
-            text-align: center;
-            font-weight: 600;
-            position: relative;
-        }
-        
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 3px;
-            background: var(--secondary-blue);
-            margin: 15px auto 0;
-        }
-        
-        /* Chapters Grid */
-        .chapters-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: var(--spacing-lg);
-            margin-bottom: var(--spacing-xl);
-        }
-        
-        .chapter-card {
-            background: var(--white);
-            border-radius: 12px;
-            padding: var(--spacing-lg);
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s ease;
-            border-left: 5px solid var(--secondary-blue);
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .chapter-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 100%;
-            background: linear-gradient(90deg, rgba(107,142,153,0.05), transparent);
-            transition: width 0.3s ease;
-        }
-        
-        .chapter-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .chapter-card:hover::before {
-            width: 100%;
-        }
-        
-        .chapter-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--secondary-blue);
-            opacity
+    </script>
+
+</body>
+</html>
