@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Table of Contents - My Life's Journey: A memoir spanning continents and cultures">
-    <title>Table of Contents — My Life's Journey</title>
+    <title>Table of Contents – My Life's Journey</title>
     <style>
         :root {
             /* Color Palette */
@@ -47,6 +47,73 @@
             color: var(--text-dark);
             background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
             min-height: 100vh;
+        }
+        
+        /* Disclaimer Overlay */
+        .disclaimer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: var(--spacing-md);
+        }
+        
+        .disclaimer-overlay.hidden {
+            display: none;
+        }
+        
+        .disclaimer-content {
+            background: var(--white);
+            max-width: 600px;
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: var(--shadow-xl);
+            padding: var(--spacing-xl);
+            text-align: center;
+            border: 3px solid var(--secondary-blue);
+        }
+        
+        .disclaimer-content h2 {
+            color: var(--secondary-blue);
+            font-size: 1.8rem;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .disclaimer-content p {
+            color: var(--text-light);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .disclaimer-button {
+            padding: 14px 36px;
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            font-family: var(--font-body);
+        }
+        
+        .disclaimer-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
+        }
+        
+        .disclaimer-button:active {
+            transform: translateY(0);
         }
         
         /* Header Styles */
@@ -420,6 +487,18 @@
                 right: 15px;
                 top: 15px;
             }
+            
+            .disclaimer-content {
+                padding: var(--spacing-lg) var(--spacing-md);
+            }
+            
+            .disclaimer-content h2 {
+                font-size: 1.5rem;
+            }
+            
+            .disclaimer-content p {
+                font-size: 0.95rem;
+            }
         }
         
         @media (min-width: 769px) and (max-width: 1024px) {
@@ -430,6 +509,19 @@
     </style>
 </head>
 <body>
+    <!-- Disclaimer Overlay -->
+    <div class="disclaimer-overlay" id="disclaimerOverlay">
+        <div class="disclaimer-content">
+            <h2>Important Notice</h2>
+           <p>This is a work of nonfiction based on the author's recollections of real experiences spanning seven decades. Dialogue and certain narrative elements have been reconstructed for clarity and readability. Any resemblance to individuals not explicitly identified by name is purely coincidental.</p>
+
+			<p>This memoir contains personal reflections, mature themes, and perspectives shaped by diverse cultural contexts across multiple continents. The views expressed reflect the author's individual experiences and may not align with all readers' perspectives.</p>
+
+			<p>By continuing, you acknowledge that you understand the personal nature of this narrative and accept these terms.</p>
+            <button class="disclaimer-button" onclick="closeDisclaimer()">I Understand – Continue</button>
+        </div>
+    </div>
+
     <header class="header">
         <div class="header-content">
             <h1>Table of Contents</h1>
@@ -644,10 +736,16 @@
             <h2>Bonus Content</h2>
             <div class="bonus-card">
                 <a href="https://audio.heuring.us/My%20Dad%20--%20One%20of%20the%20Chosin%20Few.pdf" target="_blank">
-                    🎖️ My Dad: One of the Chosin Few — The unforgettable story of Norm Heuring's Korean War Experience
+                    🎖️ My Dad: One of the Chosin Few – The unforgettable story of Norm Heuring's Korean War Experience
                 </a>
             </div>
         </section>
     </main>
+
+    <script>
+        function closeDisclaimer() {
+            document.getElementById('disclaimerOverlay').classList.add('hidden');
+        }
+    </script>
 </body>
 </html>
