@@ -33,7 +33,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 15px;
             position: relative;
+        }
+
+        .header-spacer {
+            width: 180px;
+            flex-shrink: 0;
         }
 
         .header-title {
@@ -42,6 +48,7 @@
             flex: 1;
             text-align: center;
             padding: 0 20px;
+            min-width: 0; /* Allow text to shrink */
         }
 
         .back-link {
@@ -55,6 +62,7 @@
             transition: all 0.3s;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
             white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .back-link:hover {
@@ -74,32 +82,36 @@
         #viewer {
             flex: 1;
             position: relative;
+            /* Add bottom padding on mobile to prevent content from being hidden behind controls */
+            padding-bottom: 80px;
         }
 
         .controls {
             position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: 0;
+            left: 0;
+            right: 0;
             display: flex;
             gap: 10px;
-            background: rgba(44, 62, 80, 0.9);
-            padding: 10px 20px;
-            border-radius: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            background: rgba(44, 62, 80, 0.95);
+            padding: 12px;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.3);
             z-index: 1000;
+            justify-content: center;
         }
 
         .controls button {
             background: #6b8e99;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
+            padding: 12px 24px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             transition: all 0.3s;
+            flex: 1;
+            max-width: 200px;
         }
 
         .controls button:hover {
@@ -111,6 +123,11 @@
             background: #95a5a6;
             cursor: not-allowed;
             transform: none;
+            opacity: 0.6;
+        }
+
+        .controls button:active {
+            transform: translateY(0);
         }
 
         .zoom-controls {
@@ -193,12 +210,109 @@
             color: white;
             visibility: hidden;
         }
+
+        /* Mobile-specific adjustments */
+        @media (max-width: 768px) {
+            .header {
+                padding: 12px 10px;
+                gap: 10px;
+            }
+
+            .header-spacer {
+                display: none; /* Hide spacer on mobile */
+            }
+
+            .header-title {
+                font-size: 15px;
+                padding: 0 8px;
+                text-align: left; /* Left-align on mobile for better space usage */
+            }
+
+            .back-link {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+
+            #viewer {
+                padding-bottom: 70px;
+            }
+
+            .controls {
+                padding: 10px 8px;
+                gap: 8px;
+            }
+
+            .controls button {
+                padding: 14px 20px;
+                font-size: 14px;
+                border-radius: 8px;
+            }
+
+            .zoom-controls {
+                top: 10px;
+                right: 10px;
+                padding: 8px;
+            }
+
+            .zoom-controls button {
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
+            }
+        }
+
+        /* Extra small screens (phones in portrait) */
+        @media (max-width: 480px) {
+            .header {
+                padding: 10px 8px;
+            }
+
+            .header-title {
+                font-size: 13px;
+                padding: 0 6px;
+            }
+
+            .back-link {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            #viewer {
+                padding-bottom: 65px;
+            }
+
+            .controls {
+                padding: 8px 6px;
+            }
+
+            .controls button {
+                padding: 12px 16px;
+                font-size: 13px;
+                min-width: 90px;
+            }
+        }
+
+        /* Landscape mobile adjustments */
+        @media (max-width: 768px) and (orientation: landscape) {
+            #viewer {
+                padding-bottom: 60px;
+            }
+
+            .controls {
+                padding: 8px;
+            }
+
+            .controls button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div style="width: 180px;"></div>
+            <div class="header-spacer"></div>
             <div class="header-title" id="headerTitle">Loading...</div>
             <a href="#" class="back-link" id="backLink" style="display: none;">Return to Summary</a>
         </div>
@@ -221,7 +335,7 @@
 
             <div class="controls" id="controls" style="display: none;">
                 <button id="prev">← Previous</button>
-                <button id="next">&nbsp;&nbsp;&nbsp;Next →&nbsp;&nbsp;&nbsp;</button>
+                <button id="next">Next →</button>
             </div>
         </div>
     </div>
