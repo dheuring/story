@@ -11,7 +11,7 @@
             --primary-blue: #557699;
             --secondary-blue: #6b8e99;
             --text-dark: #2c2c2c;
-            --text-light: #444; /* Improved contrast for body text (was #555) */
+            --text-light: #555;
             --bg-gradient-start: #f5f7fa;
             --bg-gradient-end: #e8eef3;
             --white: #ffffff;
@@ -29,7 +29,6 @@
             
             /* Typography */
             --font-body: 'Georgia', serif;
-            --font-heading: 'Avenir Next', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* Added Heading Font */
             --line-height: 1.8;
         }
         
@@ -62,14 +61,9 @@
             color: var(--white);
         }
         
-        /* Heading Typography Update */
-        .header-content * {
-            font-family: var(--font-heading); 
-        }
-
         .chapter-number {
-            font-size: 1.1rem;
-            font-weight: 400;
+            font-size: 1rem;
+            font-weight: 600;
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: var(--spacing-sm);
@@ -77,10 +71,10 @@
         }
         
         .chapter-title {
-            font-size: 2.4rem;
+            font-size: 2.25rem;
             font-weight: 700;
             line-height: 1.3;
-            letter-spacing: 0;
+            letter-spacing: 0.5px;
         }
         
         .chapter-dates {
@@ -120,23 +114,6 @@
             flex-shrink: 0;
         }
         
-        /* Added structure for separator and caption */
-        .profile-caption-wrapper {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            width: 100%;
-        }
-
-        .separator {
-            width: 1px;
-            height: 50px;
-            background-color: #ddd;
-            flex-shrink: 0;
-            align-self: center;
-            display: none; /* Hidden by default for small screens */
-        }
-
         .profile-caption {
             color: var(--text-light);
             font-size: 0.9rem;
@@ -171,20 +148,6 @@
             margin-bottom: 0;
         }
         
-        /* Improved Link Discoverability */
-        .chapter-content a:not(.nav-button):not(.format-button) {
-            color: var(--primary-blue);
-            text-decoration: underline;
-            text-decoration-color: var(--secondary-blue);
-            text-underline-offset: 3px;
-            transition: color 0.2s ease;
-        }
-
-        .chapter-content a:not(.nav-button):not(.format-button):hover {
-            color: var(--text-dark); 
-            text-decoration: none;
-        }
-
         /* Action Sections */
         .actions-section {
             margin-top: var(--spacing-xl);
@@ -199,11 +162,6 @@
             letter-spacing: 1px;
             color: var(--text-light);
             margin-bottom: var(--spacing-sm);
-        }
-
-        /* New utility class for spacing */
-        .section-label.spaced-top {
-            margin-top: var(--spacing-lg);
         }
         
         /* Navigation Buttons */
@@ -226,8 +184,6 @@
         .nav-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
-            /* Refined Hover */
-            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
         
         .nav-button:active {
@@ -262,8 +218,6 @@
         .format-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
-            /* Refined Hover */
-            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
         
         .format-button:active {
@@ -294,8 +248,6 @@
         .back-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
-            /* Refined Hover */
-            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
         
         /* Responsive Design */
@@ -354,12 +306,7 @@
             }
         }
         
-        @media (min-width: 641px) {
-            /* Show separator on larger screens */
-            .separator {
-                display: block;
-            }
-
+        @media (min-width: 641px) and (max-width: 900px) {
             .chapter-title {
                 font-size: 2rem;
             }
@@ -383,34 +330,31 @@
         <div class="profile-card">
             <img 
                 src="https://audio.heuring.us/arun.png" 
-                alt="Thai temple" 
+                alt="Wat Arun Temple, Bangkok" 
                 class="profile-image"
             >
-            <div class="profile-caption-wrapper">
-                <div class="separator"></div> 
-                <p class="profile-caption">
-                    Across more than 16 years, on several separate stays, I called Thailand home—regularly crossing the river at Wat Arun—its pull stayed with me wherever I lived, and it continues today.
-                </p>
-            </div>
+            <p class="profile-caption">
+                Across more than 16 years, on several separate stays, I called Thailand home—regularly crossing the river at Wat Arun—its pull stayed with me wherever I lived, and it continues today.
+            </p>
         </div>
     </div>
 
     <main class="container">
         <article class="chapter-content">
             <p>
-                My return to Minnesota after the Air Force was intended to be a conventional transition: attend college on the G.I. Bill. However, the experience of overseas service had dramatically changed my perspective, and the confines of the college classroom and my old environment felt stifling. My attempt at university life ended in academic collapse after just two quarters. Feeling rudderless, my only clear impulse was to return to Thailand, the place that had stirred my soul.
+                After my Air Force discharge in December 1973, I returned to Minnesota planning to save money for Thailand. That year balanced work and freedom—I bartended in St. Michael, made concrete rings for sewer lids, and black-topped driveways during the summer. My new group of friends were adventure-seekers, and together we enjoyed good times and occasional risky behavior. Young and confident, I believed I could shape my future however I wanted. Once I'd saved enough for airfare, I flew to Thailand in January 1975, planning to live on unemployment checks before turning to questionable means to fund my extended stay.
             </p>
 
             <p>
-                I purchased a one-way ticket to Bangkok, initiating two years of deep cultural immersion. I settled near a small village, forging a profound connection with the local community that went far beyond typical tourism. I found peace in the rhythm of daily life and discovered a spiritual anchor in Buddhism. The simplicity and genuine hospitality of the Thai people offered a stark contrast to the competitive, complex environment I had left behind. This experience was not a retreat; it was an active self-reconstruction. I spent time teaching English, embracing the local customs, and genuinely connecting with a culture far older than my own.
+                My Thailand dream quickly dissolved into aimlessness. I fell into constant partying and smoking pot from morning to night, drifting between cheap bungalows without purpose. While the Vietnam War concluded, reshaping Southeast Asia's political landscape, I remained oblivious, lost in escapism. A failed smuggling attempt and narrow escape from Thai police exposed the flaws in my financial plan. When my friend Mike Auger arrived, we continued this reckless path until an arrest landed us in a local jail and then overnight in a Thai prison for one terrifying night. Even this wake-up call couldn't break my attachment to this unsustainable lifestyle. In December 1975, my brother Randy arrived, and six months later, Miam—a young Thai woman—became part of our carefree world. But gradually, reality crept in: what had once felt like exhilarating freedom began to reveal itself as a reckless gamble with dwindling options.
             </p>
 
             <p>
-                Upon returning to the States, I carried that clarity with me. I enrolled at the University of Minnesota, this time with a focused major in Cultural Anthropology. My passion for global cultures was now defined, fueled by my experience in Thailand. The rest of the 70s were marked by focused academic effort and a deepening desire to understand the world's diverse societies. I studied the nuances of culture, communication, and human behavior, knowledge that would later become the core of my professional life. This time was instrumental in moving from youthful restlessness to mature purpose, realizing that my path lay in cultural exploration and connection.
+                The carefree high collapsed when money ran out, leaving us broke and hungry in Bangkok. Our lowest moment came when we resorted to selling old magazines just to buy rice with scrambled eggs. Then fate intervened—a job posting for English conversation teachers appeared outside a government building. Despite having no qualifications, our desperation drove us to apply, and surprisingly, we were hired. This job became our lifeline, evolving from mere survival to a way to make money. Randy eventually returned home but came back when I secured a teaching position at a Thai military academy with a crucial one-year visa. We later joined the American University Alumni binational language center, receiving formal teacher training and working alongside experienced educators. What began in desperation launched us into legitimate careers.
             </p>
 
             <p>
-                My time in Thailand taught me the valuable lesson that true direction is often found by abandoning the prescribed route. My passion for cultural anthropology—the path that truly found me—originated not in a classroom, but in a small village far from home. This chapter details my shift from academic failure to finding my intellectual and professional destiny.
+                My personal and professional lives evolved together naturally. My sister Linda joined Randy and me in Bangkok as a teacher, while Miam and I married after learning of her pregnancy. In February 1979, our parents visited Bangkok, and shortly thereafter we welcomed our first child, Patti. By August 1979, the three of us flew to Minnesota where I intended to pursue academic credentials to strengthen my career as an expatriate English teacher. What began during my lowest point became the foundation for an unimagined life when a single job listing transformed my directionless wandering into a purposeful journey.
             </p>
 
             <div class="actions-section">
@@ -419,7 +363,7 @@
                     📖 Summary of Chapter 6 →
                 </a>
                 
-                <div class="section-label spaced-top">Full Chapter</div>
+                <div class="section-label" style="margin-top: 32px;">Full Chapter</div>
                 <div class="formats-grid">
                     <a href="https://audio.heuring.us/Chapter-5.pdf" class="format-button" target="_blank" rel="noopener noreferrer">
                         📄 PDF
