@@ -11,7 +11,7 @@
             --primary-blue: #557699;
             --secondary-blue: #6b8e99;
             --text-dark: #2c2c2c;
-            --text-light: #444; /* Improved contrast for body text (was #555) */
+            --text-light: #444;
             --bg-gradient-start: #f5f7fa;
             --bg-gradient-end: #e8eef3;
             --white: #ffffff;
@@ -29,7 +29,7 @@
             
             /* Typography */
             --font-body: 'Georgia', serif;
-            --font-heading: 'Avenir Next', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* Added Heading Font */
+            --font-heading: 'Avenir Next', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             --line-height: 1.8;
         }
         
@@ -62,7 +62,6 @@
             color: var(--white);
         }
 
-        /* Heading Typography Update */
         .header-content * {
             font-family: var(--font-heading); 
         }
@@ -120,7 +119,6 @@
             flex-shrink: 0;
         }
 
-        /* Added structure for separator and caption */
         .profile-caption-wrapper {
             display: flex;
             align-items: center;
@@ -134,7 +132,7 @@
             background-color: #ddd;
             flex-shrink: 0;
             align-self: center;
-            display: none; /* Hidden by default for small screens */
+            display: none;
         }
         
         .profile-caption {
@@ -171,7 +169,6 @@
             margin-bottom: 0;
         }
 
-        /* Improved Link Discoverability */
         .chapter-content a:not(.nav-button):not(.format-button) {
             color: var(--primary-blue);
             text-decoration: underline;
@@ -201,7 +198,6 @@
             margin-bottom: var(--spacing-sm);
         }
 
-         /* New utility class for spacing */
         .section-label.spaced-top {
             margin-top: var(--spacing-lg);
         }
@@ -226,7 +222,6 @@
         .nav-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
-            /* Refined Hover */
             background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
         
@@ -234,7 +229,7 @@
             transform: translateY(0);
         }
         
-        /* Format Buttons - Now Consistent with Other Buttons */
+        /* Format Buttons */
         .formats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -257,12 +252,13 @@
             border-radius: 6px;
             box-shadow: var(--shadow-sm);
             transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
         }
         
         .format-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
-            /* Refined Hover */
             background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
         
@@ -294,8 +290,88 @@
         .back-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
-            /* Refined Hover */
             background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: var(--white);
+            margin: 2% auto;
+            padding: 0;
+            width: 95%;
+            max-width: 1200px;
+            height: 90vh;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: var(--spacing-md);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: var(--white);
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .close {
+            color: var(--white);
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+            transition: transform 0.2s ease;
+        }
+
+        .close:hover {
+            transform: scale(1.2);
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow: hidden;
+            padding: 0;
+        }
+
+        .modal-body iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .audio-player-container {
+            padding: var(--spacing-md);
+        }
+
+        .audio-player-container audio {
+            width: 100%;
         }
         
         /* Responsive Design */
@@ -352,10 +428,15 @@
             .back-button {
                 width: 100%;
             }
+
+            .modal-content {
+                width: 98%;
+                height: 95vh;
+                margin: 1% auto;
+            }
         }
         
         @media (min-width: 641px) {
-            /* Show separator on larger screens */
             .separator {
                 display: block;
             }
@@ -421,15 +502,15 @@
                 
                 <div class="section-label spaced-top">Full Chapter</div>
                 <div class="formats-grid">
-                    <a href="https://audio.heuring.us/Chapter-2.pdf" class="format-button" target="_blank" rel="noopener noreferrer">
+                    <button class="format-button" id="pdfButton">
                         📄 PDF
-                    </a>
-                    <a href="#" class="format-button" id="epubButton">
+                    </button>
+                    <button class="format-button" id="epubButton">
                         📱 eReader
-                    </a>
-                    <a href="https://audio.heuring.us/Chapter_2_audio.mp3" class="format-button" target="_blank" rel="noopener noreferrer">
+                    </button>
+                    <button class="format-button" id="audioButton">
                         🎧 Audio
-                    </a>
+                    </button>
                 </div>
             </div>
         </article>
@@ -441,13 +522,106 @@
         </div>
     </main>
 
+    <!-- PDF Modal -->
+    <div id="pdfModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">Chapter 2 - PDF View</span>
+                <span class="close" id="closePdf">&times;</span>
+            </div>
+            <div class="modal-body">
+                <iframe id="pdfFrame" src=""></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Modal -->
+    <div id="audioModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">Chapter 2 - Audio</span>
+                <span class="close" id="closeAudio">&times;</span>
+            </div>
+            <div class="modal-body audio-player-container">
+                <audio controls controlslist="nodownload" preload="metadata" style="width: 100%;">
+                    <source src="https://audio.heuring.us/Chapter_2_audio.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // EPUB reader functionality
-        document.getElementById('epubButton').addEventListener('click', function(e) {
-            e.preventDefault();
+        // Get modal elements
+        const pdfModal = document.getElementById('pdfModal');
+        const audioModal = document.getElementById('audioModal');
+        const pdfButton = document.getElementById('pdfButton');
+        const audioButton = document.getElementById('audioButton');
+        const epubButton = document.getElementById('epubButton');
+        const closePdf = document.getElementById('closePdf');
+        const closeAudio = document.getElementById('closeAudio');
+        const pdfFrame = document.getElementById('pdfFrame');
+
+        // PDF button click
+        pdfButton.addEventListener('click', function() {
+            pdfFrame.src = 'https://audio.heuring.us/Chapter-2.pdf#toolbar=0&navpanes=0';
+            pdfModal.style.display = 'block';
+        });
+
+        // Audio button click
+        audioButton.addEventListener('click', function() {
+            audioModal.style.display = 'block';
+        });
+
+        // EPUB button
+        epubButton.addEventListener('click', function() {
             const bookPath = 'https://audio.heuring.us/Chapter-2.epub';
             const returnUrl = encodeURIComponent(window.location.href);
             window.location.href = `epub-reader.html?book=${bookPath}&return=${returnUrl}`;
+        });
+
+        // Close PDF modal
+        closePdf.addEventListener('click', function() {
+            pdfModal.style.display = 'none';
+            pdfFrame.src = '';
+        });
+
+        // Close audio modal
+        closeAudio.addEventListener('click', function() {
+            audioModal.style.display = 'none';
+            const audio = audioModal.querySelector('audio');
+            audio.pause();
+            audio.currentTime = 0;
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === pdfModal) {
+                pdfModal.style.display = 'none';
+                pdfFrame.src = '';
+            }
+            if (event.target === audioModal) {
+                audioModal.style.display = 'none';
+                const audio = audioModal.querySelector('audio');
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        });
+
+        // Close modals with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                if (pdfModal.style.display === 'block') {
+                    pdfModal.style.display = 'none';
+                    pdfFrame.src = '';
+                }
+                if (audioModal.style.display === 'block') {
+                    audioModal.style.display = 'none';
+                    const audio = audioModal.querySelector('audio');
+                    audio.pause();
+                    audio.currentTime = 0;
+                }
+            }
         });
     </script>
 </body>
