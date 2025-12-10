@@ -84,13 +84,21 @@
             position: relative;
             /* Add bottom padding on mobile to prevent content from being hidden behind controls */
             padding-bottom: 80px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        }
+
+        #viewer > div {
+            width: 100% !important;
+            height: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
         }
 
         #viewer iframe {
-            margin: 0 auto;
+            position: relative !important;
+            left: auto !important;
+            right: auto !important;
+            margin: 0 auto !important;
         }
 
         .controls {
