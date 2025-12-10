@@ -46,6 +46,39 @@
             background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
             min-height: 100vh;
         }
+
+        /* Tooltip Styling (Option A — above button) */
+        .format-button {
+            position: relative;
+        }
+
+        .format-button[data-tip]:hover::after {
+            content: attr(data-tip);
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-blue);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            box-shadow: var(--shadow-md);
+            z-index: 200;
+        }
+
+        .format-button[data-tip]:hover::before {
+            content: "";
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: var(--primary-blue) transparent transparent transparent;
+            z-index: 201;
+        }
         
         /* Header Styles */
         .header {
@@ -81,8 +114,8 @@
             line-height: 1.3;
             letter-spacing: 0;
         }
-        
-        /* Profile Image - Compact Version */
+
+        /* Profile */
         .profile-wrapper {
             max-width: 900px;
             margin: -50px auto 0;
@@ -133,7 +166,7 @@
             line-height: 1.5;
             font-style: italic;
         }
-        
+
         /* Main Content */
         .container {
             max-width: 900px;
@@ -156,72 +189,8 @@
             color: var(--text-light);
             margin-bottom: 1.5rem;
         }
-        
-        .chapter-content p:last-of-type {
-            margin-bottom: 0;
-        }
 
-        .chapter-content a:not(.nav-button):not(.format-button) {
-            color: var(--primary-blue);
-            text-decoration: underline;
-            text-decoration-color: var(--secondary-blue);
-            text-underline-offset: 3px;
-            transition: color 0.2s ease;
-        }
-
-        .chapter-content a:not(.nav-button):not(.format-button):hover {
-            color: var(--text-dark); 
-            text-decoration: none;
-        }
-
-        /* Action Sections */
-        .actions-section {
-            margin-top: var(--spacing-xl);
-            padding-top: var(--spacing-lg);
-            border-top: 2px solid #f0f0f0;
-        }
-        
-        .section-label {
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-light);
-            margin-bottom: var(--spacing-sm);
-        }
-        
-        .section-label.spaced-top {
-            margin-top: var(--spacing-lg);
-        }
-
-        /* Navigation Buttons */
-        .nav-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-xs);
-            padding: 16px 32px;
-            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
-            color: var(--white);
-            text-decoration: none;
-            font-size: 1.05rem;
-            font-weight: 600;
-            border-radius: 8px;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s ease;
-        }
-        
-        .nav-button:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
-        }
-        
-        .nav-button:active {
-            transform: translateY(0);
-        }
-        
-        /* Format Buttons */
+        /* Buttons */
         .formats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -253,189 +222,15 @@
             box-shadow: var(--shadow-md);
             background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
-        
-        .format-button:active {
-            transform: translateY(0);
-        }
-        
-        /* Back Button */
-        .back-container {
-            text-align: center;
-            margin-top: var(--spacing-lg);
-        }
-        
-        .back-button {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            padding: 16px 40px;
-            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
-            color: var(--white);
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 8px;
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s ease;
-        }
-        
-        .back-button:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
-        }
 
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            position: relative;
-            background-color: var(--white);
-            margin: 2% auto;
-            padding: 0;
-            width: 95%;
-            max-width: 1200px;
-            height: 90vh;
-            border-radius: 8px;
-            box-shadow: var(--shadow-lg);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            padding: var(--spacing-md);
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
-            color: var(--white);
-            border-radius: 8px 8px 0 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-title {
-            font-family: var(--font-heading);
-            font-size: 1.3rem;
-            font-weight: 600;
-        }
-
-        .close {
-            color: var(--white);
-            font-size: 32px;
-            font-weight: bold;
-            cursor: pointer;
-            line-height: 1;
-            transition: transform 0.2s ease;
-        }
-
-        .close:hover {
-            transform: scale(1.2);
-        }
-
-        .modal-body {
-            flex: 1;
-            overflow: hidden;
-            padding: 0;
-        }
-
-        .modal-body iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .audio-player-container {
-            padding: var(--spacing-md);
-        }
-
-        .audio-player-container audio {
-            width: 100%;
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 640px) {
-            :root {
-                --spacing-lg: 32px;
-                --spacing-xl: 40px;
-            }
-            
-            .header {
-                padding: var(--spacing-lg) var(--spacing-sm) 70px;
-            }
-            
-            .chapter-number {
-                font-size: 0.9rem;
-            }
-            
-            .chapter-title {
-                font-size: 1.75rem;
-            }
-            
-            .profile-wrapper {
-                margin-top: -45px;
-            }
-            
-            .profile-card {
-                flex-direction: column;
-                text-align: center;
-                padding: var(--spacing-md);
-            }
-            
-            .profile-image {
-                width: 70px;
-                height: 70px;
-            }
-            
-            .chapter-content {
-                padding: var(--spacing-lg) var(--spacing-md);
-            }
-            
-            .chapter-content p {
-                font-size: 1rem;
-            }
-            
-            .formats-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .nav-button,
-            .back-button {
-                width: 100%;
-            }
-
-            .modal-content {
-                width: 98%;
-                height: 95vh;
-                margin: 1% auto;
-            }
-        }
-        
+        /* Responsive tweaks */
         @media (min-width: 641px) {
-            .separator {
-                display: block;
-            }
+            .separator { display: block; }
+        }
 
-            .chapter-title {
-                font-size: 2rem;
-            }
-            
-            .formats-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
+        @media (max-width: 640px) {
+            .chapter-title { font-size: 1.75rem; }
+            .formats-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -465,6 +260,7 @@
 
     <main class="container">
         <article class="chapter-content">
+
             <p>
                 In the opening chapter of my story, I explore the roots that shaped my identity.
                 Growing up, I was always aware of my German ancestry. My parents came from
@@ -505,8 +301,7 @@
                 connection to that small-town grounding. The values shaped by rural life—family
                 farms, close-knit community, and enduring German traditions—remained my anchor.
                 No matter how far I traveled or how many years passed, my roots in German
-                heritage and rural Minnesota remained an unshakable part of my identity.
-            </p>
+                heritage and rural Minnesota remained an unshakable part of my identity.</p>
 
             <div class="actions-section">
                 <div class="section-label">Continue Reading</div>
@@ -516,15 +311,25 @@
                 
                 <div class="section-label spaced-top">Full Chapter</div>
                 <div class="formats-grid">
-                    <button class="format-button" id="pdfButton">
+
+                    <!-- PDF button with tooltip -->
+                    <button class="format-button" id="pdfButton"
+                        data-tip="Best viewed using a laptop or device with a large screen.">
                         📄 PDF
                     </button>
-                    <button class="format-button" id="epubButton">
+
+                    <!-- EPUB button with tooltip -->
+                    <button class="format-button" id="epubButton"
+                        data-tip="Best view using a tablet or smartfphone.">
                         📱 eReader
                     </button>
-                    <button class="format-button" id="audioButton">
+
+                    <!-- Audio button with tooltip -->
+                    <button class="format-button" id="audioButton"
+                        data-tip="Works on all devices.">
                         🎧 Audio
                     </button>
+
                 </div>
             </div>
         </article>
@@ -559,14 +364,12 @@
             <div class="modal-body audio-player-container">
                 <audio controls controlslist="nodownload" preload="metadata" style="width: 100%;">
                     <source src="https://audio.heuring.us/Chapter_1_audio.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
                 </audio>
             </div>
         </div>
     </div>
 
     <script>
-        // Get modal elements
         const pdfModal = document.getElementById('pdfModal');
         const audioModal = document.getElementById('audioModal');
         const pdfButton = document.getElementById('pdfButton');
@@ -576,40 +379,34 @@
         const closeAudio = document.getElementById('closeAudio');
         const pdfFrame = document.getElementById('pdfFrame');
 
-        // PDF button click - opens in modal with embedded viewer
-        pdfButton.addEventListener('click', function() {
+        pdfButton.addEventListener('click', () => {
             pdfFrame.src = 'https://audio.heuring.us/Chapter-1.pdf#toolbar=0&navpanes=0';
             pdfModal.style.display = 'block';
         });
 
-        // Audio button click - opens in modal with player
-        audioButton.addEventListener('click', function() {
+        audioButton.addEventListener('click', () => {
             audioModal.style.display = 'block';
         });
 
-        // EPUB button - opens in epub reader
-        epubButton.addEventListener('click', function() {
+        epubButton.addEventListener('click', () => {
             const bookPath = 'https://audio.heuring.us/Chapter-1.epub';
             const returnUrl = encodeURIComponent(window.location.href);
             window.location.href = `epub-reader.html?book=${bookPath}&return=${returnUrl}`;
         });
 
-        // Close PDF modal
-        closePdf.addEventListener('click', function() {
+        closePdf.addEventListener('click', () => {
             pdfModal.style.display = 'none';
             pdfFrame.src = '';
         });
 
-        // Close audio modal
-        closeAudio.addEventListener('click', function() {
+        closeAudio.addEventListener('click', () => {
             audioModal.style.display = 'none';
             const audio = audioModal.querySelector('audio');
             audio.pause();
             audio.currentTime = 0;
         });
 
-        // Close modals when clicking outside
-        window.addEventListener('click', function(event) {
+        window.addEventListener('click', event => {
             if (event.target === pdfModal) {
                 pdfModal.style.display = 'none';
                 pdfFrame.src = '';
@@ -621,22 +418,7 @@
                 audio.currentTime = 0;
             }
         });
-
-        // Close modals with Escape key
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                if (pdfModal.style.display === 'block') {
-                    pdfModal.style.display = 'none';
-                    pdfFrame.src = '';
-                }
-                if (audioModal.style.display === 'block') {
-                    audioModal.style.display = 'none';
-                    const audio = audioModal.querySelector('audio');
-                    audio.pause();
-                    audio.currentTime = 0;
-                }
-            }
-        });
     </script>
+
 </body>
 </html>
