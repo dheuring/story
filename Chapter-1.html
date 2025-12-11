@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Chapter 1: Deep Roots - My German Ancestry and Heritage">
     <title>Chapter 1 – Deep Roots: My German Ancestry and Heritage</title>
     <style>
         :root {
-            /* Color Palette */
             --primary-blue: #557699;
             --secondary-blue: #6b8e99;
             --text-dark: #2c2c2c;
@@ -19,15 +18,11 @@
             --shadow-md: 0 4px 15px rgba(0,0,0,.1);
             --shadow-lg: 0 8px 25px rgba(0,0,0,.15);
             --border-accent: #6b8e99;
-            
-            /* Spacing */
             --spacing-xs: 8px;
             --spacing-sm: 16px;
             --spacing-md: 24px;
             --spacing-lg: 40px;
             --spacing-xl: 60px;
-            
-            /* Typography */
             --font-body: 'Georgia', serif;
             --font-heading: 'Avenir Next', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             --line-height: 1.8;
@@ -46,54 +41,7 @@
             background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
             min-height: 100vh;
         }
-
-        /* Tooltip Styling (Animated fade + scale) */
-        .format-button {
-            position: relative;
-        }
-
-        .format-button[data-tip]::after,
-        .format-button[data-tip]::before {
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity .18s ease, transform .18s ease;
-        }
-
-        /* Bubble */
-        .format-button[data-tip]:hover::after {
-            content: attr(data-tip);
-            position: absolute;
-            bottom: 110%;
-            left: 50%;
-            background: var(--primary-blue);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            white-space: nowrap;
-            box-shadow: var(--shadow-md);
-            z-index: 200;
-
-            opacity: 1;
-            transform: translateX(-50%) scale(1);
-        }
-
-        /* Arrow */
-        .format-button[data-tip]:hover::before {
-            content: "";
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            border-width: 6px;
-            border-style: solid;
-            border-color: var(--primary-blue) transparent transparent transparent;
-            z-index: 201;
-
-            opacity: 1;
-            transform: translateX(-50%) scale(1);
-        }
-
-        /* Header Styles */
+        
         .header {
             position: relative;
             background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
@@ -127,8 +75,7 @@
             line-height: 1.3;
             letter-spacing: 0;
         }
-
-        /* Profile */
+        
         .profile-wrapper {
             max-width: 900px;
             margin: -50px auto 0;
@@ -169,6 +116,7 @@
             height: 50px;
             background-color: #ddd;
             flex-shrink: 0;
+            align-self: center;
             display: none;
         }
         
@@ -178,8 +126,7 @@
             line-height: 1.5;
             font-style: italic;
         }
-
-        /* Main Content */
+        
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -189,19 +136,36 @@
         .chapter-content {
             background: var(--white);
             padding: var(--spacing-xl);
-            border-left: 5px solid var(--border-accent);
             border-radius: 8px;
+            border-left: 5px solid var(--border-accent);
             box-shadow: var(--shadow-md);
             margin-bottom: var(--spacing-lg);
         }
         
         .chapter-content p {
             font-size: 1.1rem;
+            line-height: var(--line-height);
             color: var(--text-light);
             margin-bottom: 1.5rem;
         }
+        
+        .chapter-content p:last-of-type {
+            margin-bottom: 0;
+        }
 
-        /* Section Labels */
+        .chapter-content a:not(.nav-button):not(.format-button) {
+            color: var(--primary-blue);
+            text-decoration: underline;
+            text-decoration-color: var(--secondary-blue);
+            text-underline-offset: 3px;
+            transition: color 0.2s ease;
+        }
+
+        .chapter-content a:not(.nav-button):not(.format-button):hover {
+            color: var(--text-dark); 
+            text-decoration: none;
+        }
+
         .actions-section {
             margin-top: var(--spacing-xl);
             padding-top: var(--spacing-lg);
@@ -216,8 +180,11 @@
             color: var(--text-light);
             margin-bottom: var(--spacing-sm);
         }
+        
+        .section-label.spaced-top {
+            margin-top: var(--spacing-lg);
+        }
 
-        /* Navigation Buttons */
         .nav-button {
             display: inline-flex;
             align-items: center;
@@ -239,8 +206,11 @@
             box-shadow: var(--shadow-md);
             background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
-
-        /* Format Buttons */
+        
+        .nav-button:active {
+            transform: translateY(0);
+        }
+        
         .formats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -248,7 +218,13 @@
             margin-top: var(--spacing-sm);
             margin-bottom: var(--spacing-lg);
         }
-
+        
+        /* Tooltip container */
+        .format-button-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        
         .format-button {
             display: flex;
             align-items: center;
@@ -257,26 +233,69 @@
             padding: 14px 20px;
             background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
             color: var(--white);
-            border-radius: 6px;
-            box-shadow: var(--shadow-sm);
+            text-decoration: none;
             font-size: 0.95rem;
             font-weight: 600;
+            border-radius: 6px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
             cursor: pointer;
             border: none;
-            transition: all .3s ease;
+            width: 100%;
         }
-
+        
         .format-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
+            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
+        }
+        
+        .format-button:active {
+            transform: translateY(0);
         }
 
-        /* Back Button */
+        /* Tooltip styling */
+        .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-8px);
+            background-color: rgba(44, 62, 80, 0.95);
+            color: white;
+            text-align: center;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            z-index: 1000;
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.3s;
+            font-family: var(--font-heading);
+        }
+
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: rgba(44, 62, 80, 0.95);
+        }
+
+        .format-button-wrapper:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(-4px);
+        }
+        
         .back-container {
             text-align: center;
             margin-top: var(--spacing-lg);
         }
-
+        
         .back-button {
             display: inline-flex;
             align-items: center;
@@ -284,19 +303,20 @@
             padding: 16px 40px;
             background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
             color: var(--white);
-            font-weight: 600;
             text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
             border-radius: 8px;
             box-shadow: var(--shadow-md);
-            transition: all .3s ease;
+            transition: all 0.3s ease;
         }
         
         .back-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
 
-        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -306,19 +326,26 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .modal-content {
             position: relative;
-            background: var(--white);
+            background-color: var(--white);
             margin: 2% auto;
+            padding: 0;
             width: 95%;
             max-width: 1200px;
             height: 90vh;
             border-radius: 8px;
+            box-shadow: var(--shadow-lg);
             display: flex;
             flex-direction: column;
-            box-shadow: var(--shadow-lg);
         }
 
         .modal-header {
@@ -329,26 +356,141 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-shrink: 0;
         }
 
         .modal-title {
             font-family: var(--font-heading);
             font-size: 1.3rem;
+            font-weight: 600;
         }
 
         .close {
+            color: var(--white);
             font-size: 32px;
+            font-weight: bold;
             cursor: pointer;
+            line-height: 1;
+            transition: transform 0.2s ease;
+        }
+
+        .close:hover {
+            transform: scale(1.2);
         }
 
         .modal-body {
             flex: 1;
+            overflow: auto;
+            padding: 0;
+            position: relative;
+            -webkit-overflow-scrolling: touch;
         }
 
+        .modal-body iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        .audio-player-container {
+            padding: var(--spacing-md);
+        }
+
+        .audio-player-container audio {
+            width: 100%;
+        }
+        
+        @media (max-width: 640px) {
+            :root {
+                --spacing-lg: 32px;
+                --spacing-xl: 40px;
+            }
+            
+            .header {
+                padding: var(--spacing-lg) var(--spacing-sm) 70px;
+            }
+            
+            .chapter-number {
+                font-size: 0.9rem;
+            }
+            
+            .chapter-title {
+                font-size: 1.75rem;
+            }
+            
+            .profile-wrapper {
+                margin-top: -45px;
+            }
+            
+            .profile-card {
+                flex-direction: column;
+                text-align: center;
+                padding: var(--spacing-md);
+            }
+            
+            .profile-image {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .chapter-content {
+                padding: var(--spacing-lg) var(--spacing-md);
+            }
+            
+            .chapter-content p {
+                font-size: 1rem;
+            }
+            
+            .formats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tooltip {
+                font-size: 0.75rem;
+                padding: 6px 10px;
+                white-space: normal;
+                max-width: 200px;
+            }
+            
+            .nav-button,
+            .back-button {
+                width: 100%;
+            }
+
+            .modal-content {
+                width: 98%;
+                height: 95vh;
+                margin: 1% auto;
+            }
+
+            .modal-body {
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+
+            .modal-body iframe {
+                min-height: 100%;
+                height: auto;
+            }
+        }
+        
+        @media (min-width: 641px) {
+            .separator {
+                display: block;
+            }
+
+            .chapter-title {
+                font-size: 2rem;
+            }
+            
+            .formats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
     </style>
 </head>
 <body>
-
     <header class="header">
         <div class="header-content">
             <div class="chapter-number">Chapter 1</div>
@@ -358,9 +500,13 @@
 
     <div class="profile-wrapper">
         <div class="profile-card">
-            <img src="https://audio.heuring.us/george_mary1.png" class="profile-image">
+            <img 
+                src="https://audio.heuring.us/george_mary1.png" 
+                alt="Great-grandparents George David and Mary Heuring" 
+                class="profile-image"
+            >
             <div class="profile-caption-wrapper">
-                <div class="separator"></div>
+                <div class="separator"></div> 
                 <p class="profile-caption">
                     Great-grandparents George David and Mary Heuring—my namesake, as I'm named after George David, who went by "David".
                 </p>
@@ -370,7 +516,6 @@
 
     <main class="container">
         <article class="chapter-content">
-
             <p>
                 In the opening chapter of my story, I explore the roots that shaped my identity.
                 Growing up, I was always aware of my German ancestry. My parents came from
@@ -411,33 +556,35 @@
                 connection to that small-town grounding. The values shaped by rural life—family
                 farms, close-knit community, and enduring German traditions—remained my anchor.
                 No matter how far I traveled or how many years passed, my roots in German
-                heritage and rural Minnesota remained an unshakable part of my identity.</p>
-
+                heritage and rural Minnesota remained an unshakable part of my identity.
+            </p>
 
             <div class="actions-section">
                 <div class="section-label">Continue Reading</div>
-
                 <a href="Chapter-2.html" class="nav-button">
                     📖 Summary of Chapter 2 →
                 </a>
-
+                
                 <div class="section-label spaced-top">Full Chapter</div>
-
                 <div class="formats-grid">
-                    <button class="format-button" id="pdfButton"
-                        data-tip="View or download the full PDF of this chapter.">
-                        📄 PDF
-                    </button>
-
-                    <button class="format-button" id="epubButton"
-                        data-tip="Open the e-reader version for mobile-friendly reading.">
-                        📱 eReader
-                    </button>
-
-                    <button class="format-button" id="audioButton"
-                        data-tip="Listen to the narrated audio version of this chapter.">
-                        🎧 Audio
-                    </button>
+                    <div class="format-button-wrapper">
+                        <button class="format-button" id="pdfButton">
+                            📄 PDF
+                        </button>
+                        <span class="tooltip">View the PDF on any device</span>
+                    </div>
+                    <div class="format-button-wrapper">
+                        <button class="format-button" id="epubButton">
+                            📱 eReader
+                        </button>
+                        <span class="tooltip">Open the e-reader version for mobile-friendly reading</span>
+                    </div>
+                    <div class="format-button-wrapper">
+                        <button class="format-button" id="audioButton">
+                            🎧 Audio
+                        </button>
+                        <span class="tooltip">Listen to the audio version on any device</span>
+                    </div>
                 </div>
             </div>
         </article>
@@ -449,7 +596,6 @@
         </div>
     </main>
 
-    <!-- PDF Modal -->
     <div id="pdfModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -457,21 +603,21 @@
                 <span class="close" id="closePdf">&times;</span>
             </div>
             <div class="modal-body">
-                <iframe id="pdfFrame" style="width:100%;height:100%;border:none;"></iframe>
+                <iframe id="pdfFrame" src=""></iframe>
             </div>
         </div>
     </div>
 
-    <!-- Audio Modal -->
     <div id="audioModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <span class="modal-title">Chapter 1 - Audio</span>
                 <span class="close" id="closeAudio">&times;</span>
             </div>
-            <div class="modal-body" style="padding:20px;">
-                <audio controls style="width:100%;">
-                    <source src="https://audio.heuring.us/Chapter_1_audio.mp3">
+            <div class="modal-body audio-player-container">
+                <audio controls controlslist="nodownload" preload="metadata" style="width: 100%;">
+                    <source src="https://audio.heuring.us/Chapter_1_audio.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
                 </audio>
             </div>
         </div>
@@ -487,502 +633,60 @@
         const closeAudio = document.getElementById('closeAudio');
         const pdfFrame = document.getElementById('pdfFrame');
 
-        pdfButton.onclick = () => {
+        pdfButton.addEventListener('click', function() {
             pdfFrame.src = 'https://audio.heuring.us/Chapter-1.pdf#toolbar=0&navpanes=0';
             pdfModal.style.display = 'block';
-        };
+        });
 
-        audioButton.onclick = () => {
+        audioButton.addEventListener('click', function() {
             audioModal.style.display = 'block';
-        };
+        });
 
-        epubButton.onclick = () => {
+        epubButton.addEventListener('click', function() {
             const bookPath = 'https://audio.heuring.us/Chapter-1.epub';
             const returnUrl = encodeURIComponent(window.location.href);
             window.location.href = `epub-reader.html?book=${bookPath}&return=${returnUrl}`;
-        };
+        });
 
-        closePdf.onclick = () => {
+        closePdf.addEventListener('click', function() {
             pdfModal.style.display = 'none';
             pdfFrame.src = '';
-        };
+        });
 
-        closeAudio.onclick = () => {
+        closeAudio.addEventListener('click', function() {
             audioModal.style.display = 'none';
             const audio = audioModal.querySelector('audio');
             audio.pause();
             audio.currentTime = 0;
-        };
+        });
 
-        window.onclick = e => {
-            if (e.target === pdfModal) {
+        window.addEventListener('click', function(event) {
+            if (event.target === pdfModal) {
                 pdfModal.style.display = 'none';
                 pdfFrame.src = '';
             }
-            if (e.target === audioModal) {
+            if (event.target === audioModal) {
                 audioModal.style.display = 'none';
                 const audio = audioModal.querySelector('audio');
                 audio.pause();
                 audio.currentTime = 0;
             }
-        };
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                if (pdfModal.style.display === 'block') {
+                    pdfModal.style.display = 'none';
+                    pdfFrame.src = '';
+                }
+                if (audioModal.style.display === 'block') {
+                    audioModal.style.display = 'none';
+                    const audio = audioModal.querySelector('audio');
+                    audio.pause();
+                    audio.currentTime = 0;
+                }
+            }
+        });
     </script>
-</body>
-</html>
-
-
-
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Chapter 1: Deep Roots - My German Ancestry and Heritage">
-    <title>Chapter 1 – Deep Roots: My German Ancestry and Heritage</title>
-
-    <style>
-        :root {
-            /* Color Palette */
-            --primary-blue: #557699;
-            --secondary-blue: #6b8e99;
-            --text-dark: #2c2c2c;
-            --text-light: #444;
-            --bg-gradient-start: #f5f7fa;
-            --bg-gradient-end: #e8eef3;
-            --white: #ffffff;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,.08);
-            --shadow-md: 0 4px 15px rgba(0,0,0,.1);
-            --shadow-lg: 0 8px 25px rgba(0,0,0,.15);
-            --border-accent: #6b8e99;
-
-            /* Spacing */
-            --spacing-xs: 8px;
-            --spacing-sm: 16px;
-            --spacing-md: 24px;
-            --spacing-lg: 40px;
-            --spacing-xl: 60px;
-
-            /* Typography (RESTORED EXACTLY) */
-            --font-body: 'Georgia', serif;
-            --font-heading: 'Avenir Next', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            --line-height: 1.8;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: var(--font-body);
-            line-height: var(--line-height);
-            color: var(--text-dark);
-            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
-        }
-
-        /* ====================================================== */
-        /* ANIMATED TOOLTIP — ONLY NEW CODE YOU ASKED FOR        */
-        /* ====================================================== */
-        .format-button {
-            position: relative;
-        }
-
-        .format-button[data-tip]::after,
-        .format-button[data-tip]::before {
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity .18s ease, transform .18s ease;
-        }
-
-        .format-button[data-tip]:hover::after {
-            content: attr(data-tip);
-            position: absolute;
-            bottom: 110%;
-            left: 50%;
-            transform: translateX(-50%) scale(.95);
-            background: var(--primary-blue);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: .85rem;
-            white-space: nowrap;
-            z-index: 200;
-            opacity: 1;
-            transform: translateX(-50%) scale(1);
-        }
-
-        .format-button[data-tip]:hover::before {
-            content: "";
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%) scale(.95);
-            border-width: 6px;
-            border-style: solid;
-            border-color: var(--primary-blue) transparent transparent transparent;
-            z-index: 201;
-            opacity: 1;
-            transform: translateX(-50%) scale(1);
-        }
-
-        /* ====================================================== */
-        /* YOUR ORIGINAL STYLING — RESTORED EXACTLY AS UPLOADED  */
-        /* ====================================================== */
-
-        .header {
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-            padding: var(--spacing-xl) var(--spacing-md) 80px;
-            text-align: center;
-            box-shadow: var(--shadow-md);
-            color: var(--white);
-        }
-
-        .header-content * { font-family: var(--font-heading); }
-
-        .chapter-number {
-            font-size: 1.1rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .chapter-title {
-            font-size: 2.4rem;
-            font-weight: 700;
-            line-height: 1.3;
-        }
-
-        .profile-wrapper {
-            max-width: 900px;
-            margin: -50px auto 0;
-            padding: 0 var(--spacing-md);
-            position: relative;
-            z-index: 10;
-        }
-
-        .profile-card {
-            background: var(--white);
-            border-radius: 12px;
-            padding: var(--spacing-sm) var(--spacing-md);
-            display: flex;
-            gap: var(--spacing-md);
-            align-items: center;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .profile-image {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid var(--white);
-            box-shadow: var(--shadow-md);
-        }
-
-        .profile-caption-wrapper { display: flex; gap: var(--spacing-md); }
-
-        .separator {
-            width: 1px;
-            height: 50px;
-            background: #ddd;
-            display: none;
-        }
-
-        .profile-caption {
-            color: var(--text-light);
-            font-size: .9rem;
-            line-height: 1.5;
-            font-style: italic;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: var(--spacing-xl) var(--spacing-md);
-        }
-
-        .chapter-content {
-            background: var(--white);
-            padding: var(--spacing-xl);
-            border-left: 5px solid var(--border-accent);
-            border-radius: 8px;
-            box-shadow: var(--shadow-md);
-        }
-
-        .chapter-content p {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            margin-bottom: 1.5rem;
-        }
-
-        .actions-section {
-            margin-top: var(--spacing-xl);
-            padding-top: var(--spacing-lg);
-            border-top: 2px solid #f0f0f0;
-        }
-
-        .section-label {
-            font-size: .9rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: var(--text-light);
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .nav-button,
-        .back-button {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            padding: 16px 32px;
-            background: linear-gradient(135deg, var(--secondary-blue), var(--primary-blue));
-            color: var(--white);
-            font-size: 1.05rem;
-            font-weight: 600;
-            border-radius: 8px;
-            text-decoration: none;
-            box-shadow: var(--shadow-sm);
-            transition: all .3s ease;
-        }
-
-        .nav-button:hover,
-        .back-button:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .formats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px,1fr));
-            gap: var(--spacing-sm);
-        }
-
-        .format-button {
-            padding: 14px 20px;
-            background: linear-gradient(135deg, var(--secondary-blue), var(--primary-blue));
-            color: white;
-            font-size: .95rem;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            box-shadow: var(--shadow-sm);
-            transition: all .3s ease;
-        }
-
-        .format-button:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .back-container { text-align: center; margin-top: var(--spacing-lg); }
-
-        /* MODALS (unchanged) */
-        .modal {
-            display: none;
-            position: fixed;
-            left: 0; top: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,.8);
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: var(--white);
-            width: 95%;
-            max-width: 1200px;
-            height: 90vh;
-            margin: 2% auto;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .modal-header {
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-            color: white;
-            padding: var(--spacing-md);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-radius: 8px 8px 0 0;
-        }
-
-        .close {
-            font-size: 32px;
-            cursor: pointer;
-        }
-
-        iframe { width: 100%; height: 100%; border: none; }
-    </style>
-</head>
-
-<body>
-
-<header class="header">
-    <div class="header-content">
-        <div class="chapter-number">Chapter 1</div>
-        <h1 class="chapter-title">Deep Roots: My German Ancestry and Heritage</h1>
-    </div>
-</header>
-
-<div class="profile-wrapper">
-    <div class="profile-card">
-        <img src="https://audio.heuring.us/george_mary1.png" class="profile-image">
-        <div class="profile-caption-wrapper">
-            <div class="separator"></div>
-            <p class="profile-caption">
-                Great-grandparents George David and Mary Heuring—my namesake.
-            </p>
-        </div>
-    </div>
-</div>
-
-<main class="container">
-
-    <article class="chapter-content">
-       <p>
-                In the opening chapter of my story, I explore the roots that shaped my identity.
-                Growing up, I was always aware of my German ancestry. My parents came from
-                German-American families who had spoken the language at home until World War II
-                prompted them to stop to avoid suspicion. Yet our heritage persisted through family
-                stories, surnames, and the older generation's occasional switch to German when they
-                wanted privacy from young ears. Years later, DNA tests confirmed my predominantly
-                European roots while revealing a surprising 1.7% Bedouin ancestry—an intriguing
-                connection given my decades working with Arab communities.
-            </p>
-
-            <p>
-                I once viewed my heritage simply as half Heuring and half Becker, but ancestry
-                research uncovered a more complex legacy of sixteen distinct family lines, each
-                contributing equally to who I am. This discovery highlighted the often-overlooked
-                importance of one's maternal lineage. Heuring (herdsman) and Becker (baker) weren't
-                just names but reflections of ancestral trades, with agriculture forming a common
-                thread on both sides. My great-great-grandfather Andreas Heuring left Bavaria,
-                Germany in 1867, settling in Otsego Township to establish his farm. Though his
-                original house is gone, the one built by his son, my great-grandfather George
-                David, still stands amid modern developments. Similarly, my great-grandfather
-                Pius Becker immigrated from Baden in 1887, also drawn by Homestead Act promises,
-                eventually owning two farms in Hassan Township near the Crow River dam.
-            </p>
-
-            <p>
-                Though I grew up in town, my childhood was enriched by time on my uncles' farms—
-                baling hay, riding a Shetland pony, and playing hide-and-seek among the sheds.
-                These experiences fostered values of hard work, family bonds, and connection to
-                the land deeply rooted in generations of agricultural life. St. Michael wasn't
-                just my hometown but a pocket of faith, German tradition, and shared values,
-                with the church, convent, and Catholic school at its centre.
-            </p>
-
-            <p>
-                This heritage formed my foundation, remaining steady as I journeyed beyond
-                Minnesota. Decades abroad, immersed in diverse cultures, never diminished my
-                connection to that small-town grounding. The values shaped by rural life—family
-                farms, close-knit community, and enduring German traditions—remained my anchor.
-                No matter how far I traveled or how many years passed, my roots in German
-                heritage and rural Minnesota remained an unshakable part of my identity.</p>
-
-
-        <div class="actions-section">
-            <div class="section-label">Continue Reading</div>
-            <a href="Chapter-2.html" class="nav-button">
-                📖 Summary of Chapter 2 →
-            </a>
-
-            <div class="section-label spaced-top">Full Chapter</div>
-
-            <div class="formats-grid">
-                <button class="format-button" id="pdfButton"
-                    data-tip="View the full PDF on any device.">
-                    📄 PDF
-                </button>
-
-                <button class="format-button" id="epubButton"
-                    data-tip="Open the e-reader version for mobile-friendly reading.">
-                    📱 eReader
-                </button>
-
-                <button class="format-button" id="audioButton"
-                    data-tip="Listen to the audio version on any device.">
-                    🎧 Audio
-                </button>
-            </div>
-        </div>
-    </article>
-
-    <div class="back-container">
-        <a href="Table-of-Contents.html" class="back-button">
-            ← Back to Table of Contents
-        </a>
-    </div>
-
-</main>
-
-<!-- PDF MODAL -->
-<div id="pdfModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <span class="modal-title">Chapter 1 - PDF View</span>
-            <span class="close" id="closePdf">&times;</span>
-        </div>
-        <iframe id="pdfFrame"></iframe>
-    </div>
-</div>
-
-<!-- AUDIO MODAL -->
-<div id="audioModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <span class="modal-title">Chapter 1 - Audio</span>
-            <span class="close" id="closeAudio">&times;</span>
-        </div>
-        <div style="padding:20px;">
-            <audio controls style="width:100%;">
-                <source src="https://audio.heuring.us/Chapter_1_audio.mp3">
-            </audio>
-        </div>
-    </div>
-</div>
-
-<script>
-    const pdfModal = document.getElementById('pdfModal');
-    const audioModal = document.getElementById('audioModal');
-    const pdfButton = document.getElementById('pdfButton');
-    const audioButton = document.getElementById('audioButton');
-    const epubButton = document.getElementById('epubButton');
-    const closePdf = document.getElementById('closePdf');
-    const closeAudio = document.getElementById('closeAudio');
-    const pdfFrame = document.getElementById('pdfFrame');
-
-    pdfButton.onclick = () => {
-        pdfFrame.src = 'https://audio.heuring.us/Chapter-1.pdf#toolbar=0&navpanes=0';
-        pdfModal.style.display = 'block';
-    };
-
-    audioButton.onclick = () => audioModal.style.display = 'block';
-
-    epubButton.onclick = () => {
-        const returnUrl = encodeURIComponent(window.location.href);
-        window.location.href = `epub-reader.html?book=https://audio.heuring.us/Chapter-1.epub&return=${returnUrl}`;
-    };
-
-    closePdf.onclick = () => {
-        pdfModal.style.display = 'none';
-        pdfFrame.src = '';
-    };
-
-    closeAudio.onclick = () => {
-        audioModal.style.display = 'none';
-        const a = audioModal.querySelector('audio');
-        a.pause(); a.currentTime = 0;
-    };
-
-    window.onclick = e => {
-        if (e.target === pdfModal) closePdf.onclick();
-        if (e.target === audioModal) closeAudio.onclick();
-    };
-</script>
-
 </body>
 </html>
