@@ -7,7 +7,6 @@
     <title>Chapter 2 – Early Life: An Idyllic and Sheltered Childhood (1952-1966)</title>
     <style>
         :root {
-            /* Color Palette */
             --primary-blue: #557699;
             --secondary-blue: #6b8e99;
             --text-dark: #2c2c2c;
@@ -19,15 +18,11 @@
             --shadow-md: 0 4px 15px rgba(0,0,0,.1);
             --shadow-lg: 0 8px 25px rgba(0,0,0,.15);
             --border-accent: #6b8e99;
-            
-            /* Spacing */
             --spacing-xs: 8px;
             --spacing-sm: 16px;
             --spacing-md: 24px;
             --spacing-lg: 40px;
             --spacing-xl: 60px;
-            
-            /* Typography */
             --font-body: 'Georgia', serif;
             --font-heading: 'Avenir Next', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             --line-height: 1.8;
@@ -47,7 +42,6 @@
             min-height: 100vh;
         }
         
-        /* Header Styles */
         .header {
             position: relative;
             background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
@@ -90,7 +84,6 @@
             opacity: 0.95;
         }
         
-        /* Profile Image - Compact Version */
         .profile-wrapper {
             max-width: 900px;
             margin: -50px auto 0;
@@ -142,7 +135,6 @@
             font-style: italic;
         }
         
-        /* Main Content */
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -182,7 +174,6 @@
             text-decoration: none;
         }
         
-        /* Action Sections */
         .actions-section {
             margin-top: var(--spacing-xl);
             padding-top: var(--spacing-lg);
@@ -202,7 +193,6 @@
             margin-top: var(--spacing-lg);
         }
         
-        /* Navigation Buttons */
         .nav-button {
             display: inline-flex;
             align-items: center;
@@ -229,13 +219,17 @@
             transform: translateY(0);
         }
         
-        /* Format Buttons */
         .formats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: var(--spacing-sm);
             margin-top: var(--spacing-sm);
             margin-bottom: var(--spacing-lg);
+        }
+        
+        .format-button-wrapper {
+            position: relative;
+            display: inline-block;
         }
         
         .format-button {
@@ -254,6 +248,7 @@
             transition: all 0.3s ease;
             cursor: pointer;
             border: none;
+            width: 100%;
         }
         
         .format-button:hover {
@@ -265,8 +260,43 @@
         .format-button:active {
             transform: translateY(0);
         }
+
+        .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-8px);
+            background-color: rgba(44, 62, 80, 0.95);
+            color: white;
+            text-align: center;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            z-index: 1000;
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.3s;
+            font-family: var(--font-heading);
+        }
+
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: rgba(44, 62, 80, 0.95);
+        }
+
+        .format-button-wrapper:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(-4px);
+        }
         
-        /* Back Button */
         .back-container {
             text-align: center;
             margin-top: var(--spacing-lg);
@@ -293,7 +323,6 @@
             background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
 
-        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -333,6 +362,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-shrink: 0;
         }
 
         .modal-title {
@@ -356,14 +386,17 @@
 
         .modal-body {
             flex: 1;
-            overflow: hidden;
+            overflow: auto;
             padding: 0;
+            position: relative;
+            -webkit-overflow-scrolling: touch;
         }
 
         .modal-body iframe {
             width: 100%;
             height: 100%;
             border: none;
+            display: block;
         }
 
         .audio-player-container {
@@ -374,7 +407,6 @@
             width: 100%;
         }
         
-        /* Responsive Design */
         @media (max-width: 640px) {
             :root {
                 --spacing-lg: 32px;
@@ -423,6 +455,13 @@
             .formats-grid {
                 grid-template-columns: 1fr;
             }
+
+            .tooltip {
+                font-size: 0.75rem;
+                padding: 6px 10px;
+                white-space: normal;
+                max-width: 200px;
+            }
             
             .nav-button,
             .back-button {
@@ -433,6 +472,16 @@
                 width: 98%;
                 height: 95vh;
                 margin: 1% auto;
+            }
+
+            .modal-body {
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+
+            .modal-body iframe {
+                min-height: 100%;
+                height: auto;
             }
         }
         
@@ -502,15 +551,24 @@
                 
                 <div class="section-label spaced-top">Full Chapter</div>
                 <div class="formats-grid">
-                    <button class="format-button" id="pdfButton">
-                        📄 PDF
-                    </button>
-                    <button class="format-button" id="epubButton">
-                        📱 eReader
-                    </button>
-                    <button class="format-button" id="audioButton">
-                        🎧 Audio
-                    </button>
+                    <div class="format-button-wrapper">
+                        <button class="format-button" id="pdfButton">
+                            📄 PDF
+                        </button>
+                        <span class="tooltip">View the PDF on any device</span>
+                    </div>
+                    <div class="format-button-wrapper">
+                        <button class="format-button" id="epubButton">
+                            📱 eReader
+                        </button>
+                        <span class="tooltip">Open the e-reader version for mobile-friendly reading</span>
+                    </div>
+                    <div class="format-button-wrapper">
+                        <button class="format-button" id="audioButton">
+                            🎧 Audio
+                        </button>
+                        <span class="tooltip">Listen to the audio version on any device</span>
+                    </div>
                 </div>
             </div>
         </article>
@@ -522,7 +580,6 @@
         </div>
     </main>
 
-    <!-- PDF Modal -->
     <div id="pdfModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -535,7 +592,6 @@
         </div>
     </div>
 
-    <!-- Audio Modal -->
     <div id="audioModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -552,7 +608,6 @@
     </div>
 
     <script>
-        // Get modal elements
         const pdfModal = document.getElementById('pdfModal');
         const audioModal = document.getElementById('audioModal');
         const pdfButton = document.getElementById('pdfButton');
@@ -562,31 +617,26 @@
         const closeAudio = document.getElementById('closeAudio');
         const pdfFrame = document.getElementById('pdfFrame');
 
-        // PDF button click
         pdfButton.addEventListener('click', function() {
             pdfFrame.src = 'https://audio.heuring.us/Chapter-2.pdf#toolbar=0&navpanes=0';
             pdfModal.style.display = 'block';
         });
 
-        // Audio button click
         audioButton.addEventListener('click', function() {
             audioModal.style.display = 'block';
         });
 
-        // EPUB button
         epubButton.addEventListener('click', function() {
             const bookPath = 'https://audio.heuring.us/Chapter-2.epub';
             const returnUrl = encodeURIComponent(window.location.href);
             window.location.href = `epub-reader.html?book=${bookPath}&return=${returnUrl}`;
         });
 
-        // Close PDF modal
         closePdf.addEventListener('click', function() {
             pdfModal.style.display = 'none';
             pdfFrame.src = '';
         });
 
-        // Close audio modal
         closeAudio.addEventListener('click', function() {
             audioModal.style.display = 'none';
             const audio = audioModal.querySelector('audio');
@@ -594,7 +644,6 @@
             audio.currentTime = 0;
         });
 
-        // Close modals when clicking outside
         window.addEventListener('click', function(event) {
             if (event.target === pdfModal) {
                 pdfModal.style.display = 'none';
@@ -608,7 +657,6 @@
             }
         });
 
-        // Close modals with Escape key
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 if (pdfModal.style.display === 'block') {
