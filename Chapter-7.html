@@ -372,31 +372,47 @@
             display: block;
         }
 
-        .mobile-pdf-fallback {
-            display: none;
+        .audio-player-container {
+            padding: var(--spacing-md);
+        }
+
+        .audio-player-container audio {
+            width: 100%;
+        }
+
+        /* Mobile Download Prompt Styles */
+        .mobile-download-prompt {
             padding: var(--spacing-lg);
             text-align: center;
         }
 
-        .mobile-pdf-fallback h3 {
+        .mobile-download-prompt h3 {
             font-family: var(--font-heading);
-            font-size: 1.3rem;
             color: var(--text-dark);
+            font-size: 1.4rem;
             margin-bottom: var(--spacing-md);
         }
 
-        .mobile-pdf-fallback p {
-            font-size: 1rem;
+        .mobile-download-prompt p {
             color: var(--text-light);
+            font-size: 1rem;
             line-height: 1.6;
             margin-bottom: var(--spacing-md);
         }
 
-        .mobile-pdf-fallback .download-button {
-            display: inline-flex;
+        .download-options {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-lg);
+        }
+
+        .download-btn {
+            display: flex;
             align-items: center;
+            justify-content: center;
             gap: var(--spacing-xs);
-            padding: 16px 32px;
+            padding: 16px 24px;
             background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
             color: var(--white);
             text-decoration: none;
@@ -405,20 +421,32 @@
             border-radius: 8px;
             box-shadow: var(--shadow-sm);
             transition: all 0.3s ease;
-            margin-top: var(--spacing-sm);
+            border: none;
+            cursor: pointer;
+            width: 100%;
         }
 
-        .mobile-pdf-fallback .download-button:hover {
+        .download-btn:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
         }
 
-        .audio-player-container {
-            padding: var(--spacing-md);
+        .download-btn.secondary {
+            background: linear-gradient(135deg, #7a9aa3 0%, #658fa0 100%);
         }
 
-        .audio-player-container audio {
-            width: 100%;
+        .recommendation-box {
+            background: #f0f7fa;
+            border-left: 4px solid var(--primary-blue);
+            padding: var(--spacing-md);
+            border-radius: 6px;
+            margin-top: var(--spacing-lg);
+            text-align: left;
+        }
+
+        .recommendation-box strong {
+            color: var(--primary-blue);
+            font-size: 1.05rem;
         }
         
         @media (max-width: 640px) {
@@ -486,12 +514,12 @@
                 overflow-x: hidden;
             }
 
-            .modal-body iframe {
-                display: none;
+            .mobile-download-prompt {
+                padding: var(--spacing-md);
             }
 
-            .mobile-pdf-fallback {
-                display: block;
+            .mobile-download-prompt h3 {
+                font-size: 1.2rem;
             }
         }
         
@@ -530,6 +558,7 @@
                 <div class="separator"></div> 
                 <p class="profile-caption">
                     Three years in the 'magic' kingdom—a land of countless contradictions—where Mecca, a holy sanctuary, is reserved exclusively for Muslim worshippers
+                </p>
             </div>
         </div>
     </div>
@@ -589,28 +618,47 @@
         </div>
     </main>
 
+    <!-- PDF Modal (Desktop) -->
     <div id="pdfModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <span class="modal-title">Chapter 7 - PDF View</span>
                 <span class="close" id="closePdf">&times;</span>
             </div>
+            <div class="modal-body"><iframe id="pdfFrame" src=""></iframe></div>
+        </div>
+    </div>
+
+    <!-- Mobile Download Prompt Modal -->
+    <div id="mobileDownloadModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">📄 View Chapter 7</span>
+                <span class="close" id="closeMobileDownload">&times;</span>
+            </div>
             <div class="modal-body">
-                <iframe id="pdfFrame" src=""></iframe>
-                <div class="mobile-pdf-fallback">
-                    <h3>📱 Mobile PDF Viewing</h3>
-                    <p>For the best reading experience on mobile devices, we recommend downloading the PDF to view in your device's native PDF reader.</p>
-                    <a href="https://audio.heuring.us/Chapter-7.pdf" download class="download-button">
-                        📥 Download PDF
-                    </a>
-                    <p style="margin-top: 24px; font-size: 0.9rem; color: #666;">
-                        Or try the <strong>eReader</strong> format, which is optimized for mobile viewing.
-                    </p>
+                <div class="mobile-download-prompt">
+                    <h3>PDF on Mobile</h3>
+                    <p>PDFs work best on larger screens. On mobile devices, you can download the PDF to view in your preferred app, or try our mobile-optimized eReader format.</p>
+                    
+                    <div class="download-options">
+                        <a href="https://audio.heuring.us/Chapter-7.pdf" download class="download-btn" id="mobileDownloadBtn">
+                            📥 Download PDF
+                        </a>
+                        <button class="download-btn secondary" id="switchToEpub">
+                            📱 Try eReader Format
+                        </button>
+                    </div>
+
+                    <div class="recommendation-box">
+                        <strong>💡 Recommended:</strong> The eReader format automatically adjusts to your screen size and offers a better reading experience on phones and tablets.
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Audio Modal -->
     <div id="audioModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -627,41 +675,77 @@
     </div>
 
     <script>
+        // Detect if user is on mobile
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+                || window.innerWidth <= 768;
+        }
+
+        // Modal elements
         const pdfModal = document.getElementById('pdfModal');
+        const mobileDownloadModal = document.getElementById('mobileDownloadModal');
         const audioModal = document.getElementById('audioModal');
+        
+        // Buttons
         const pdfButton = document.getElementById('pdfButton');
         const audioButton = document.getElementById('audioButton');
         const epubButton = document.getElementById('epubButton');
+        
+        // Close buttons
         const closePdf = document.getElementById('closePdf');
+        const closeMobileDownload = document.getElementById('closeMobileDownload');
         const closeAudio = document.getElementById('closeAudio');
+        
+        // Other elements
         const pdfFrame = document.getElementById('pdfFrame');
+        const switchToEpub = document.getElementById('switchToEpub');
+        const mobileDownloadBtn = document.getElementById('mobileDownloadBtn');
 
-        function isMobile() {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 640;
-        }
-
+        // PDF Button Handler - Different behavior for mobile vs desktop
         pdfButton.addEventListener('click', function() {
             if (isMobile()) {
-                pdfModal.style.display = 'block';
+                // Show mobile download prompt
+                mobileDownloadModal.style.display = 'block';
             } else {
+                // Show PDF in iframe for desktop
                 pdfFrame.src = 'https://audio.heuring.us/Chapter-7.pdf#toolbar=0&navpanes=0';
                 pdfModal.style.display = 'block';
             }
         });
 
+        // Switch to EPUB from mobile download prompt
+        switchToEpub.addEventListener('click', function() {
+            mobileDownloadModal.style.display = 'none';
+            const bookPath = 'https://audio.heuring.us/Chapter-7.epub';
+            const returnUrl = encodeURIComponent(window.location.href);
+            window.location.href = `epub-reader.html?book=${bookPath}&return=${returnUrl}`;
+        });
+
+        // Track download click
+        mobileDownloadBtn.addEventListener('click', function() {
+            console.log('PDF download initiated on mobile');
+        });
+
+        // Audio Button Handler
         audioButton.addEventListener('click', function() {
             audioModal.style.display = 'block';
         });
 
+        // EPUB Button Handler
         epubButton.addEventListener('click', function() {
             const bookPath = 'https://audio.heuring.us/Chapter-7.epub';
             const returnUrl = encodeURIComponent(window.location.href);
             window.location.href = `epub-reader.html?book=${bookPath}&return=${returnUrl}`;
         });
 
+        // Close button handlers
         closePdf.addEventListener('click', function() {
             pdfModal.style.display = 'none';
             pdfFrame.src = '';
+        });
+
+        closeMobileDownload.addEventListener('click', function() {
+            mobileDownloadModal.style.display = 'none';
         });
 
         closeAudio.addEventListener('click', function() {
@@ -671,10 +755,14 @@
             audio.currentTime = 0;
         });
 
+        // Click outside modal to close
         window.addEventListener('click', function(event) {
             if (event.target === pdfModal) {
                 pdfModal.style.display = 'none';
                 pdfFrame.src = '';
+            }
+            if (event.target === mobileDownloadModal) {
+                mobileDownloadModal.style.display = 'none';
             }
             if (event.target === audioModal) {
                 audioModal.style.display = 'none';
@@ -684,11 +772,15 @@
             }
         });
 
+        // Escape key to close modals
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 if (pdfModal.style.display === 'block') {
                     pdfModal.style.display = 'none';
                     pdfFrame.src = '';
+                }
+                if (mobileDownloadModal.style.display === 'block') {
+                    mobileDownloadModal.style.display = 'none';
                 }
                 if (audioModal.style.display === 'block') {
                     audioModal.style.display = 'none';
