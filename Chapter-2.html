@@ -590,41 +590,23 @@
         </div>
     </main>
 
-  <!-- PDF Modal (Desktop) -->
     <div id="pdfModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <span class="modal-title">Chapter 2 - PDF View</span>
                 <span class="close" id="closePdf">&times;</span>
             </div>
-            <div class="modal-body"><iframe id="pdfFrame" src=""></iframe></div>
-        </div>
-    </div>
-
-    <!-- Mobile Download Prompt Modal -->
-    <div id="mobileDownloadModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="modal-title">📄 View Chapter 2</span>
-                <span class="close" id="closeMobileDownload">&times;</span>
-            </div>
             <div class="modal-body">
-                <div class="mobile-download-prompt">
-                    <h3>PDF on Mobile</h3>
-                    <p>PDFs work best on larger screens. On mobile devices, you can download the PDF to view in your preferred app, or try our mobile-optimized eReader format.</p>
-                    
-                    <div class="download-options">
-                        <a href="https://audio.heuring.us/Chapter-2.pdf" download class="download-btn" id="mobileDownloadBtn">
-                            📥 Download PDF
-                        </a>
-                        <button class="download-btn secondary" id="switchToEpub">
-                            📱 Try eReader Format
-                        </button>
-                    </div>
-
-                    <div class="recommendation-box">
-                        <strong>💡 Recommended:</strong> The eReader format automatically adjusts to your screen size and offers a better reading experience on phones and tablets.
-                    </div>
+                <iframe id="pdfFrame" src=""></iframe>
+                <div class="mobile-pdf-fallback">
+                    <h3>📱 Mobile PDF Viewing</h3>
+                    <p>For the best reading experience on mobile devices, we recommend downloading the PDF to view in your device's native PDF reader.</p>
+                    <a href="https://audio.heuring.us/Chapter-2.pdf" download class="download-button">
+                        📥 Download PDF
+                    </a>
+                    <p style="margin-top: 24px; font-size: 0.9rem; color: #666;">
+                        Or try the <strong>eReader</strong> format, which is optimized for mobile viewing.
+                    </p>
                 </div>
             </div>
         </div>
