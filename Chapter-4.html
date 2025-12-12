@@ -7,7 +7,6 @@
     <title>Chapter 4 – Wake-up Call: The Air Force Years (1970-1973)</title>
     <style>
         :root {
-            /* Color Palette */
             --primary-blue: #557699;
             --secondary-blue: #6b8e99;
             --text-dark: #2c2c2c;
@@ -19,15 +18,11 @@
             --shadow-md: 0 4px 15px rgba(0,0,0,.1);
             --shadow-lg: 0 8px 25px rgba(0,0,0,.15);
             --border-accent: #6b8e99;
-            
-            /* Spacing */
             --spacing-xs: 8px;
             --spacing-sm: 16px;
             --spacing-md: 24px;
             --spacing-lg: 40px;
             --spacing-xl: 60px;
-            
-            /* Typography */
             --font-body: 'Georgia', serif;
             --font-heading: 'Avenir Next', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             --line-height: 1.8;
@@ -47,7 +42,6 @@
             min-height: 100vh;
         }
         
-        /* Header Styles */
         .header {
             position: relative;
             background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
@@ -90,7 +84,6 @@
             opacity: 0.95;
         }
         
-        /* Profile Image - Compact Version */
         .profile-wrapper {
             max-width: 900px;
             margin: -50px auto 0;
@@ -142,7 +135,6 @@
             font-style: italic;
         }
         
-        /* Main Content */
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -182,7 +174,6 @@
             text-decoration: none;
         }
         
-        /* Action Sections */
         .actions-section {
             margin-top: var(--spacing-xl);
             padding-top: var(--spacing-lg);
@@ -202,7 +193,6 @@
             margin-top: var(--spacing-lg);
         }
         
-        /* Navigation Buttons */
         .nav-button {
             display: inline-flex;
             align-items: center;
@@ -229,7 +219,6 @@
             transform: translateY(0);
         }
         
-        /* Format Buttons */
         .formats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -281,7 +270,6 @@
             font-style: italic;
         }
         
-        /* Back Button */
         .back-container {
             text-align: center;
             margin-top: var(--spacing-lg);
@@ -308,7 +296,6 @@
             background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
 
-        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -385,6 +372,47 @@
             display: block;
         }
 
+        .mobile-pdf-fallback {
+            display: none;
+            padding: var(--spacing-lg);
+            text-align: center;
+        }
+
+        .mobile-pdf-fallback h3 {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .mobile-pdf-fallback p {
+            font-size: 1rem;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .mobile-pdf-fallback .download-button {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            margin-top: var(--spacing-sm);
+        }
+
+        .mobile-pdf-fallback .download-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
         .audio-player-container {
             padding: var(--spacing-md);
         }
@@ -393,7 +421,6 @@
             width: 100%;
         }
         
-        /* Responsive Design */
         @media (max-width: 640px) {
             :root {
                 --spacing-lg: 32px;
@@ -460,8 +487,11 @@
             }
 
             .modal-body iframe {
-                min-height: 100%;
-                height: auto;
+                display: none;
+            }
+
+            .mobile-pdf-fallback {
+                display: block;
             }
         }
         
@@ -560,7 +590,6 @@
         </div>
     </main>
 
-    <!-- PDF Modal -->
     <div id="pdfModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -569,11 +598,20 @@
             </div>
             <div class="modal-body">
                 <iframe id="pdfFrame" src=""></iframe>
+                <div class="mobile-pdf-fallback">
+                    <h3>📱 Mobile PDF Viewing</h3>
+                    <p>For the best reading experience on mobile devices, we recommend downloading the PDF to view in your device's native PDF reader.</p>
+                    <a href="https://audio.heuring.us/Chapter-4.pdf" download class="download-button">
+                        📥 Download PDF
+                    </a>
+                    <p style="margin-top: 24px; font-size: 0.9rem; color: #666;">
+                        Or try the <strong>eReader</strong> format, which is optimized for mobile viewing.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Audio Modal -->
     <div id="audioModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -590,7 +628,6 @@
     </div>
 
     <script>
-        // Get modal elements
         const pdfModal = document.getElementById('pdfModal');
         const audioModal = document.getElementById('audioModal');
         const pdfButton = document.getElementById('pdfButton');
@@ -600,31 +637,34 @@
         const closeAudio = document.getElementById('closeAudio');
         const pdfFrame = document.getElementById('pdfFrame');
 
-        // PDF button click
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 640;
+        }
+
         pdfButton.addEventListener('click', function() {
-            pdfFrame.src = 'https://audio.heuring.us/Chapter-4.pdf#toolbar=0&navpanes=0';
-            pdfModal.style.display = 'block';
+            if (isMobile()) {
+                pdfModal.style.display = 'block';
+            } else {
+                pdfFrame.src = 'https://audio.heuring.us/Chapter-4.pdf#toolbar=0&navpanes=0';
+                pdfModal.style.display = 'block';
+            }
         });
 
-        // Audio button click
         audioButton.addEventListener('click', function() {
             audioModal.style.display = 'block';
         });
 
-        // EPUB button
         epubButton.addEventListener('click', function() {
             const bookPath = 'https://audio.heuring.us/Chapter-4.epub';
             const returnUrl = encodeURIComponent(window.location.href);
             window.location.href = `epub-reader.html?book=${bookPath}&return=${returnUrl}`;
         });
 
-        // Close PDF modal
         closePdf.addEventListener('click', function() {
             pdfModal.style.display = 'none';
             pdfFrame.src = '';
         });
 
-        // Close audio modal
         closeAudio.addEventListener('click', function() {
             audioModal.style.display = 'none';
             const audio = audioModal.querySelector('audio');
@@ -632,7 +672,6 @@
             audio.currentTime = 0;
         });
 
-        // Close modals when clicking outside
         window.addEventListener('click', function(event) {
             if (event.target === pdfModal) {
                 pdfModal.style.display = 'none';
@@ -646,7 +685,6 @@
             }
         });
 
-        // Close modals with Escape key
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 if (pdfModal.style.display === 'block') {
