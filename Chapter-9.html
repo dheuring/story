@@ -372,6 +372,47 @@
             display: block;
         }
 
+        .mobile-pdf-fallback {
+            display: none;
+            padding: var(--spacing-lg);
+            text-align: center;
+        }
+
+        .mobile-pdf-fallback h3 {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .mobile-pdf-fallback p {
+            font-size: 1rem;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .mobile-pdf-fallback .download-button {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            margin-top: var(--spacing-sm);
+        }
+
+        .mobile-pdf-fallback .download-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
         .audio-player-container {
             padding: var(--spacing-md);
         }
@@ -446,8 +487,11 @@
             }
 
             .modal-body iframe {
-                min-height: 100%;
-                height: auto;
+                display: none;
+            }
+
+            .mobile-pdf-fallback {
+                display: block;
             }
         }
         
@@ -554,6 +598,16 @@
             </div>
             <div class="modal-body">
                 <iframe id="pdfFrame" src=""></iframe>
+                <div class="mobile-pdf-fallback">
+                    <h3>📱 Mobile PDF Viewing</h3>
+                    <p>For the best reading experience on mobile devices, we recommend downloading the PDF to view in your device's native PDF reader.</p>
+                    <a href="https://audio.heuring.us/Chapter-9.pdf" download class="download-button">
+                        📥 Download PDF
+                    </a>
+                    <p style="margin-top: 24px; font-size: 0.9rem; color: #666;">
+                        Or try the <strong>eReader</strong> format, which is optimized for mobile viewing.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -583,9 +637,17 @@
         const closeAudio = document.getElementById('closeAudio');
         const pdfFrame = document.getElementById('pdfFrame');
 
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 640;
+        }
+
         pdfButton.addEventListener('click', function() {
-            pdfFrame.src = 'https://audio.heuring.us/Chapter-9.pdf#toolbar=0&navpanes=0';
-            pdfModal.style.display = 'block';
+            if (isMobile()) {
+                pdfModal.style.display = 'block';
+            } else {
+                pdfFrame.src = 'https://audio.heuring.us/Chapter-9.pdf#toolbar=0&navpanes=0';
+                pdfModal.style.display = 'block';
+            }
         });
 
         audioButton.addEventListener('click', function() {
