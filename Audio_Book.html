@@ -17,6 +17,7 @@
             --bg-gradient-start: #f5f7fa;
             --bg-gradient-end: #e8eef3;
             --white: #ffffff;
+            --success-green: #4caf50;
             --shadow-sm: 0 2px 8px rgba(0,0,0,.08);
             --shadow-md: 0 4px 15px rgba(0,0,0,.1);
             --shadow-lg: 0 8px 25px rgba(0,0,0,.15);
@@ -123,6 +124,74 @@
             margin: 0 auto;
             padding: var(--spacing-lg) var(--spacing-md) var(--spacing-xl);
         }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: var(--white);
+            border-radius: 8px;
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Play All Button */
+        .play-all-container {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .play-all-button {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: 16px 40px;
+            background: linear-gradient(135deg, var(--success-green) 0%, #45a049 100%);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            font-family: var(--font-heading);
+        }
+
+        .play-all-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+        }
+
+        .play-all-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
         
         /* Chapter List */
         .audio-list {
@@ -138,12 +207,40 @@
             box-shadow: var(--shadow-sm);
             transition: all 0.3s ease;
             border-left: 5px solid transparent;
+            position: relative;
+        }
+
+        .audio-card.completed {
+            border-left: 5px solid var(--success-green);
+        }
+
+        .audio-card.playing {
+            border-left: 5px solid var(--primary-blue);
+            box-shadow: var(--shadow-md);
         }
         
         .audio-card:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
-            border-left: 5px solid var(--secondary-blue);
+        }
+
+        .completed-badge {
+            position: absolute;
+            top: var(--spacing-sm);
+            right: var(--spacing-sm);
+            background: var(--success-green);
+            color: var(--white);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: none;
+        }
+
+        .audio-card.completed .completed-badge {
+            display: block;
         }
         
         .audio-header {
@@ -171,8 +268,16 @@
             font-weight: 500;
             color: var(--text-light);
             line-height: 1.4;
-            margin-bottom: var(--spacing-sm);
+            margin-bottom: var(--spacing-xs);
             padding-left: 40px;
+        }
+
+        .chapter-duration {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: italic;
+            padding-left: 40px;
+            margin-bottom: var(--spacing-sm);
         }
 
         .listen-label {
@@ -191,6 +296,14 @@
             margin-top: var(--spacing-xs);
             background: #f0f0f0;
             border-radius: 4px;
+        }
+
+        /* Progress Bar */
+        .progress-info {
+            padding-left: 40px;
+            margin-top: var(--spacing-xs);
+            font-size: 0.85rem;
+            color: var(--text-muted);
         }
         
         /* Back Button */
@@ -249,6 +362,15 @@
                 height: 70px;
             }
 
+            .stats-bar {
+                flex-direction: column;
+                gap: var(--spacing-sm);
+            }
+
+            .stat-item {
+                width: 100%;
+            }
+
             .audio-card {
                 padding: var(--spacing-sm);
             }
@@ -261,13 +383,18 @@
                 font-size: 1.2rem;
             }
 
-            .chapter-title, .listen-label {
+            .chapter-title, .listen-label, .chapter-duration, .progress-info {
                 padding-left: 30px;
             }
 
-            .back-button {
+            .play-all-button, .back-button {
                 width: 100%;
                 justify-content: center;
+            }
+
+            .completed-badge {
+                font-size: 0.7rem;
+                padding: 3px 10px;
             }
         }
     </style>
@@ -288,168 +415,227 @@
                 class="profile-image"
             >
             <p class="profile-caption">
-                Some of these recordings were generated with AI text‑to‑speech using my voice clone, while the rest were recorded by me.
+                Experience the complete memoir in audio format, narrated with authenticity and brought to life through Joey's professional audio production.
             </p>
         </div>
     </div>
 
     <main class="container">
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-value" id="totalChapters">12</span>
+                <span class="stat-label">Total Chapters</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="completedCount">0</span>
+                <span class="stat-label">Completed</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="totalDuration">--:--</span>
+                <span class="stat-label">Total Duration</span>
+            </div>
+        </div>
+
+        <!-- Play All Button -->
+        <div class="play-all-container">
+            <button class="play-all-button" id="playAllButton">
+                ▶️ Play All Chapters
+            </button>
+        </div>
+
         <div class="audio-list">
             
-            <div class="audio-card">
+            <div class="audio-card" data-chapter="1">
+                <div class="completed-badge">✓ Completed</div>
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 1</h3>
                 </div>
                 <div class="chapter-title">Deep Roots: My German Ancestry and Heritage (1952 – 1960)</div>
+                <div class="chapter-duration">Duration: Loading...</div>
                 <div class="listen-label">Listen Now</div>
-                <audio controls controlslist="nodownload" preload="metadata" class="audio-player">
+                <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="1">
                     <source src="https://audio.heuring.us/Chapter_1_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
+                <div class="progress-info"></div>
             </div>
 
-            <div class="audio-card">
+            <div class="audio-card" data-chapter="2">
+                <div class="completed-badge">✓ Completed</div>
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 2</h3>
                 </div>
                 <div class="chapter-title">Early Life: An Idyllic and Sheltered Childhood (1952 – 1966)</div>
+                <div class="chapter-duration">Duration: Loading...</div>
                 <div class="listen-label">Listen Now</div>
-                <audio controls controlslist="nodownload" preload="metadata" class="audio-player">
+                <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="2">
                     <source src="https://audio.heuring.us/Chapter_2_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
+                <div class="progress-info"></div>
             </div>
 
-            <div class="audio-card">
+            <div class="audio-card" data-chapter="3">
+                <div class="completed-badge">✓ Completed</div>
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 3</h3>
                 </div>
                 <div class="chapter-title">Navigating Two Worlds: Catholic and Public School Life (1966 – 1970)</div>
+                <div class="chapter-duration">Duration: Loading...</div>
                 <div class="listen-label">Listen Now</div>
-                <audio controls controlslist="nodownload" preload="metadata" class="audio-player">
+                <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="3">
                     <source src="https://audio.heuring.us/Chapter_3_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
+                <div class="progress-info"></div>
             </div>
 
-            <div class="audio-card">
+            <div class="audio-card" data-chapter="4">
+                <div class="completed-badge">✓ Completed</div>
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 4</h3>
                 </div>
                 <div class="chapter-title">Wake-up Call: The Air Force Years (1970 – 1973)</div>
+                <div class="chapter-duration">Duration: Loading...</div>
                 <div class="listen-label">Listen Now</div>
-                <audio controls controlslist="nodownload" preload="metadata" class="audio-player">
+                <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="4">
                     <source src="https://audio.heuring.us/Chapter_4_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
+                <div class="progress-info"></div>
             </div>
 
-            <div class="audio-card">
+            <div class="audio-card" data-chapter="5">
+                <div class="completed-badge">✓ Completed</div>
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 5</h3>
                 </div>
                 <div class="chapter-title">From Collapse to Clarity: The Path That Found Me (1974 – 1979)</div>
+                <div class="chapter-duration">Duration: Loading...</div>
                 <div class="listen-label">Listen Now</div>
-                <audio controls controlslist="nodownload" preload="metadata" class="audio-player">
+                <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="5">
                     <source src="https://audio.heuring.us/Chapter_5_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
+                <div class="progress-info"></div>
             </div>
 
-            <div class="audio-card">
+            <div class="audio-card" data-chapter="6">
+                <div class="completed-badge">✓ Completed</div>
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 6</h3>
                 </div>
                 <div class="chapter-title">First Step of the Plan: Building the Foundation (1979 – 1984)</div>
+                <div class="chapter-duration">Duration: Loading...</div>
                 <div class="listen-label">Listen Now</div>
-                <audio controls controlslist="nodownload" preload="metadata" class="audio-player">
+                <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="6">
                     <source src="https://audio.heuring.us/Chapter_6_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
+                <div class="progress-info"></div>
             </div>
 
-            <div class="audio-card">
+            <div class="audio-card" data-chapter="7">
+                <div class="completed-badge">✓ Completed</div>
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 7</h3>
                 </div>
                 <div class="chapter-title">Life as an Expat: Adjusting to a Muslim Country (1984 – 1987)</div>
+                <div class="chapter-duration">Duration: Loading...</div>
                 <div class="listen-label">Listen Now</div>
-                <audio controls controlslist="nodownload" preload="metadata" class="audio-player">
+                <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="7">
                     <source src="https://audio.heuring.us/Chapter_7_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
+                <div class="progress-info"></div>
             </div>
 
-            <div class="audio-card">
+            <div class="audio-card" data-chapter="8">
+                <div class="completed-badge">✓ Completed</div>
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 8</h3>
                 </div>
                 <div class="chapter-title">Career Leap: Opportunity and Challenges (1987 – 1997)</div>
+                <div class="chapter-duration">Duration: Loading...</div>
                 <div class="listen-label">Listen Now</div>
-                <audio controls controlslist="nodownload" preload="metadata" class="audio-player">
+                <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="8">
                     <source src="https://audio.heuring.us/Chapter_8_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
+                <div class="progress-info"></div>
             </div>
 
-            <div class="audio-card">
+            <div class="audio-card" data-chapter="9">
+                <div class="completed-badge">✓ Completed</div>
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 9</h3>
                 </div>
                 <div class="chapter-title">Running the Show: Two Large Training Projects (1997 – 2009)</div>
+                <div class="chapter-duration">Duration: Loading...</div>
                 <div class="listen-label">Listen Now</div>
-                <audio controls controlslist="nodownload" preload="metadata" class="audio-player">
+                <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="9">
                     <source src="https://audio.heuring.us/Chapter_9_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
+                <div class="progress-info"></div>
             </div>
 
-            <div class="audio-card">
+            <div class="audio-card" data-chapter="10">
+                <div class="completed-badge">✓ Completed</div>
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 10</h3>
                 </div>
                 <div class="chapter-title">Capstone Years: At the Top of My Game (2009 – 2021)</div>
+                <div class="chapter-duration">Duration: Loading...</div>
                 <div class="listen-label">Listen Now</div>
-                <audio controls controlslist="nodownload" preload="metadata" class="audio-player">
+                <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="10">
                     <source src="https://audio.heuring.us/Chapter_10_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
+                <div class="progress-info"></div>
             </div>
 
-            <div class="audio-card">
+            <div class="audio-card" data-chapter="11">
+                <div class="completed-badge">✓ Completed</div>
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 11</h3>
                 </div>
                 <div class="chapter-title">Daddy Dave Round Two: The Journey Back to my Roots (2022 – 2025)</div>
+                <div class="chapter-duration">Duration: Loading...</div>
                 <div class="listen-label">Listen Now</div>
-                <audio controls controlslist="nodownload" preload="metadata" class="audio-player">
+                <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="11">
                     <source src="https://audio.heuring.us/Chapter_11_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
+                <div class="progress-info"></div>
             </div>
 
-            <div class="audio-card">
+            <div class="audio-card" data-chapter="12">
+                <div class="completed-badge">✓ Completed</div>
                 <div class="audio-header">
                     <div class="audio-icon">🎧</div>
                     <h3>Chapter 12</h3>
                 </div>
                 <div class="chapter-title">Epilogue: Reflections, Connections and Closing Thoughts</div>
+                <div class="chapter-duration">Duration: Loading...</div>
                 <div class="listen-label">Listen Now</div>
-                <audio controls controlslist="nodownload" preload="metadata" class="audio-player">
+                <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="12">
                     <source src="https://audio.heuring.us/Chapter_12_audio.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
+                <div class="progress-info"></div>
             </div>
         </div>
 
@@ -459,5 +645,148 @@
             </a>
         </div>
     </main>
-</body>
-</html>
+
+    <script>
+        // Progress tracking using memory storage
+        let completedChapters = new Set();
+        let currentlyPlaying = null;
+        let playAllMode = false;
+        let playAllIndex = 0;
+
+        const audioPlayers = document.querySelectorAll('.audio-player');
+        const audioCards = document.querySelectorAll('.audio-card');
+        const playAllButton = document.getElementById('playAllButton');
+
+        // Format time helper
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '--:--';
+            const hours = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            const secs = Math.floor(seconds % 60);
+            
+            if (hours > 0) {
+                return `${hours}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Update stats
+        function updateStats() {
+            document.getElementById('completedCount').textContent = completedChapters.size;
+            
+            // Calculate total duration
+            let totalSeconds = 0;
+            audioPlayers.forEach(player => {
+                if (player.duration && !isNaN(player.duration)) {
+                    totalSeconds += player.duration;
+                }
+            });
+            
+            if (totalSeconds > 0) {
+                const hours = Math.floor(totalSeconds / 3600);
+                const mins = Math.floor((totalSeconds % 3600) / 60);
+                document.getElementById('totalDuration').textContent = `${hours}h ${mins}m`;
+            }
+        }
+
+        // Mark chapter as completed
+        function markCompleted(chapterNum) {
+            completedChapters.add(chapterNum);
+            const card = document.querySelector(`[data-chapter="${chapterNum}"]`);
+            if (card) {
+                card.classList.add('completed');
+            }
+            updateStats();
+        }
+
+        // Set up audio players
+        audioPlayers.forEach((player, index) => {
+            const chapterNum = player.dataset.chapterNum;
+            const card = player.closest('.audio-card');
+            const durationEl = card.querySelector('.chapter-duration');
+            const progressEl = card.querySelector('.progress-info');
+
+            // Load duration when metadata is loaded
+            player.addEventListener('loadedmetadata', () => {
+                durationEl.textContent = `Duration: ${formatTime(player.duration)}`;
+                updateStats();
+            });
+
+            // Track when chapter starts playing
+            player.addEventListener('play', () => {
+                // Remove playing class from all cards
+                audioCards.forEach(c => c.classList.remove('playing'));
+                // Add to current card
+                card.classList.add('playing');
+                currentlyPlaying = chapterNum;
+
+                // Pause other players
+                audioPlayers.forEach((otherPlayer) => {
+                    if (otherPlayer !== player && !otherPlayer.paused) {
+                        otherPlayer.pause();
+                    }
+                });
+            });
+
+            // Track progress
+            player.addEventListener('timeupdate', () => {
+                const progress = (player.currentTime / player.duration) * 100;
+                if (progress > 90 && !completedChapters.has(chapterNum)) {
+                    markCompleted(chapterNum);
+                }
+            });
+
+            // Handle chapter end
+            player.addEventListener('ended', () => {
+                markCompleted(chapterNum);
+                card.classList.remove('playing');
+                
+                // If in play all mode, move to next chapter
+                if (playAllMode && playAllIndex < audioPlayers.length - 1) {
+                    playAllIndex++;
+                    setTimeout(() => {
+                        audioPlayers[playAllIndex].play();
+                        audioPlayers[playAllIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 1000);
+                } else if (playAllMode && playAllIndex >= audioPlayers.length - 1) {
+                    // Finished all chapters
+                    playAllMode = false;
+                    playAllButton.textContent = '▶️ Play All Chapters';
+                    playAllButton.disabled = false;
+                }
+            });
+
+            // Remove playing class when paused
+            player.addEventListener('pause', () => {
+                if (!playAllMode) {
+                    card.classList.remove('playing');
+                }
+            });
+        });
+
+        // Play All functionality
+        playAllButton.addEventListener('click', () => {
+            if (!playAllMode) {
+                playAllMode = true;
+                playAllIndex = 0;
+                playAllButton.textContent = '⏸️ Stop Play All';
+                audioPlayers[0].play();
+                audioPlayers[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                // Stop play all
+                playAllMode = false;
+                playAllButton.textContent = '▶️ Play All Chapters';
+                audioPlayers.forEach(player => player.pause());
+                audioCards.forEach(card => card.classList.remove('playing'));
+            }
+        });
+
+        // Initial stats update
+        updateStats();
+
+        // Try to load durations after a delay if metadata hasn't loaded
+        setTimeout(() => {
+            audioPlayers.forEach(player => {
+                const card = player.closest('.audio-card');
+                const durationEl = card.querySelector('.chapter-duration');
+                if (player.duration && !isNaN(player.duration)) {
