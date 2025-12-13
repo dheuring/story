@@ -169,7 +169,7 @@
             align-items: center;
             gap: var(--spacing-sm);
             padding: 16px 40px;
-            background: linear-gradient(135deg, var(--success-green) 0%, #45a049 100%);
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
             color: var(--white);
             border: none;
             border-radius: 8px;
@@ -184,7 +184,7 @@
         .play-all-button:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
-            background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+            background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
 
         .play-all-button:disabled {
@@ -415,7 +415,7 @@
                 class="profile-image"
             >
             <p class="profile-caption">
-                Enjoy the full memoir in audio form—some chapters were rendered with AI‑generated text‑to‑speech using my voice clone, while the remaining were recorded by me.
+                Experience the complete memoir in audio format, narrated with authenticity and brought to life through Joey's professional audio production.
             </p>
         </div>
     </div>
@@ -678,7 +678,14 @@
             let totalSeconds = 0;
             audioPlayers.forEach(player => {
                 if (player.duration && !isNaN(player.duration)) {
-                    totalSeconds += player.duration;
+                    durationEl.textContent = `Duration: ${formatTime(player.duration)}`;
+                }
+            });
+            updateStats();
+        }, 2000);
+    </script>
+</body>
+</html>totalSeconds += player.duration;
                 }
             });
             
@@ -790,3 +797,8 @@
                 const card = player.closest('.audio-card');
                 const durationEl = card.querySelector('.chapter-duration');
                 if (player.duration && !isNaN(player.duration)) {
+                    durationEl.textContent = `Duration: ${formatTime(player.duration)}`;
+                }
+            });
+            updateStats();
+        }, 2000);
