@@ -7,7 +7,6 @@
     <title>Audio Book – Beyond the Childhood Bubble</title>
     <style>
         :root {
-            /* Color Palette */
             --primary-blue: #557699;
             --secondary-blue: #6b8e99;
             --text-dark: #2c2c2c;
@@ -22,15 +21,11 @@
             --shadow-md: 0 4px 15px rgba(0,0,0,.1);
             --shadow-lg: 0 8px 25px rgba(0,0,0,.15);
             --border-accent: #6b8e99;
-            
-            /* Spacing */
             --spacing-xs: 8px;
             --spacing-sm: 16px;
             --spacing-md: 24px;
             --spacing-lg: 40px;
             --spacing-xl: 60px;
-            
-            /* Typography */
             --font-body: 'Georgia', serif;
             --font-heading: 'Avenir Next', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             --line-height: 1.8;
@@ -50,7 +45,6 @@
             min-height: 100vh;
         }
         
-        /* Header Styles */
         .header {
             background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
             padding: var(--spacing-xl) var(--spacing-md) 80px;
@@ -82,7 +76,6 @@
             opacity: 0.95;
         }
 
-        /* Profile Image - Compact Version */
         .profile-wrapper {
             max-width: 800px;
             margin: -50px auto 0;
@@ -118,14 +111,12 @@
             font-style: italic;
         }
 
-        /* Main Container */
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: var(--spacing-lg) var(--spacing-md) var(--spacing-xl);
         }
 
-        /* Stats Bar */
         .stats-bar {
             background: var(--white);
             border-radius: 8px;
@@ -158,7 +149,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* Play All Button */
         .play-all-container {
             text-align: center;
             margin-bottom: var(--spacing-lg);
@@ -193,7 +183,6 @@
             transform: none;
         }
         
-        /* Chapter List */
         .audio-list {
             display: flex;
             flex-direction: column;
@@ -297,16 +286,7 @@
             background: #f0f0f0;
             border-radius: 4px;
         }
-
-        /* Progress Bar */
-        .progress-info {
-            padding-left: 40px;
-            margin-top: var(--spacing-xs);
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
         
-        /* Back Button */
         .back-container {
             text-align: center;
             margin-top: var(--spacing-lg);
@@ -334,7 +314,6 @@
             background: linear-gradient(135deg, #5e808a 0%, #4a6c8e 100%);
         }
         
-        /* Responsive Design */
         @media (max-width: 640px) {
             .header {
                 padding: var(--spacing-lg) var(--spacing-sm) 70px;
@@ -383,7 +362,7 @@
                 font-size: 1.2rem;
             }
 
-            .chapter-title, .listen-label, .chapter-duration, .progress-info {
+            .chapter-title, .listen-label, .chapter-duration {
                 padding-left: 30px;
             }
 
@@ -409,11 +388,7 @@
 
     <div class="profile-wrapper">
         <div class="profile-card">
-            <img
-                src="https://audio.heuring.us/microphone.png"
-                alt="Microphone"
-                class="profile-image"
-            >
+            <img src="https://audio.heuring.us/microphone.png" alt="Microphone" class="profile-image">
             <p class="profile-caption">
                 [Your caption text here - placeholder for audio book description]
             </p>
@@ -421,7 +396,6 @@
     </div>
 
     <main class="container">
-        <!-- Stats Bar -->
         <div class="stats-bar">
             <div class="stat-item">
                 <span class="stat-value" id="totalChapters">12</span>
@@ -437,15 +411,11 @@
             </div>
         </div>
 
-        <!-- Play All Button -->
         <div class="play-all-container">
-            <button class="play-all-button" id="playAllButton">
-                🎧 Play All Chapters
-            </button>
+            <button class="play-all-button" id="playAllButton">🎧 Play All Chapters</button>
         </div>
 
         <div class="audio-list">
-            
             <div class="audio-card" data-chapter="1">
                 <div class="completed-badge">✓ Completed</div>
                 <div class="audio-header">
@@ -457,9 +427,7 @@
                 <div class="listen-label">Listen Now</div>
                 <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="1">
                     <source src="https://audio.heuring.us/Chapter_1_audio.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
                 </audio>
-                <div class="progress-info"></div>
             </div>
 
             <div class="audio-card" data-chapter="2">
@@ -473,9 +441,7 @@
                 <div class="listen-label">Listen Now</div>
                 <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="2">
                     <source src="https://audio.heuring.us/Chapter_2_audio.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
                 </audio>
-                <div class="progress-info"></div>
             </div>
 
             <div class="audio-card" data-chapter="3">
@@ -489,9 +455,7 @@
                 <div class="listen-label">Listen Now</div>
                 <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="3">
                     <source src="https://audio.heuring.us/Chapter_3_audio.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
                 </audio>
-                <div class="progress-info"></div>
             </div>
 
             <div class="audio-card" data-chapter="4">
@@ -505,9 +469,7 @@
                 <div class="listen-label">Listen Now</div>
                 <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="4">
                     <source src="https://audio.heuring.us/Chapter_4_audio.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
                 </audio>
-                <div class="progress-info"></div>
             </div>
 
             <div class="audio-card" data-chapter="5">
@@ -521,9 +483,7 @@
                 <div class="listen-label">Listen Now</div>
                 <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="5">
                     <source src="https://audio.heuring.us/Chapter_5_audio.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
                 </audio>
-                <div class="progress-info"></div>
             </div>
 
             <div class="audio-card" data-chapter="6">
@@ -537,9 +497,7 @@
                 <div class="listen-label">Listen Now</div>
                 <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="6">
                     <source src="https://audio.heuring.us/Chapter_6_audio.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
                 </audio>
-                <div class="progress-info"></div>
             </div>
 
             <div class="audio-card" data-chapter="7">
@@ -553,9 +511,7 @@
                 <div class="listen-label">Listen Now</div>
                 <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="7">
                     <source src="https://audio.heuring.us/Chapter_7_audio.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
                 </audio>
-                <div class="progress-info"></div>
             </div>
 
             <div class="audio-card" data-chapter="8">
@@ -569,9 +525,7 @@
                 <div class="listen-label">Listen Now</div>
                 <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="8">
                     <source src="https://audio.heuring.us/Chapter_8_audio.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
                 </audio>
-                <div class="progress-info"></div>
             </div>
 
             <div class="audio-card" data-chapter="9">
@@ -585,9 +539,7 @@
                 <div class="listen-label">Listen Now</div>
                 <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="9">
                     <source src="https://audio.heuring.us/Chapter_9_audio.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
                 </audio>
-                <div class="progress-info"></div>
             </div>
 
             <div class="audio-card" data-chapter="10">
@@ -601,9 +553,7 @@
                 <div class="listen-label">Listen Now</div>
                 <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="10">
                     <source src="https://audio.heuring.us/Chapter_10_audio.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
                 </audio>
-                <div class="progress-info"></div>
             </div>
 
             <div class="audio-card" data-chapter="11">
@@ -617,9 +567,7 @@
                 <div class="listen-label">Listen Now</div>
                 <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="11">
                     <source src="https://audio.heuring.us/Chapter_11_audio.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
                 </audio>
-                <div class="progress-info"></div>
             </div>
 
             <div class="audio-card" data-chapter="12">
@@ -633,59 +581,120 @@
                 <div class="listen-label">Listen Now</div>
                 <audio controls controlslist="nodownload" preload="metadata" class="audio-player" data-chapter-num="12">
                     <source src="https://audio.heuring.us/Chapter_12_audio.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
                 </audio>
-                <div class="progress-info"></div>
             </div>
         </div>
 
         <div class="back-container">
-            <a href="Table-of-Contents.html" class="back-button">
-                ← Back to Table of Contents
-            </a>
+            <a href="Table-of-Contents.html" class="back-button">← Back to Table of Contents</a>
         </div>
     </main>
 
     <script>
-        // Progress tracking using memory storage
         let completedChapters = new Set();
-        let currentlyPlaying = null;
         let playAllMode = false;
         let playAllIndex = 0;
-
         const audioPlayers = document.querySelectorAll('.audio-player');
         const audioCards = document.querySelectorAll('.audio-card');
         const playAllButton = document.getElementById('playAllButton');
 
-        // Format time helper
         function formatTime(seconds) {
             if (isNaN(seconds)) return '--:--';
             const hours = Math.floor(seconds / 3600);
             const mins = Math.floor((seconds % 3600) / 60);
-            const secs = Math.floor(seconds % 60);
-            
-            if (hours > 0) {
-                return `${hours}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            }
-            return `${mins}:${secs.toString().padStart(2, '0')}`;
+            if (hours > 0) return `${hours}:${mins.toString().padStart(2, '0')}:00`;
+            return `${mins}:00`;
         }
 
-        // Update stats
         function updateStats() {
             document.getElementById('completedCount').textContent = completedChapters.size;
-            
-            // Calculate total duration
             let totalSeconds = 0;
-            audioPlayers.forEach(player => {
-                if (player.duration && !isNaN(player.duration)) {
-                    totalSeconds += player.duration;
+            audioPlayers.forEach(p => {
+                if (p.duration && !isNaN(p.duration)) totalSeconds += p.duration;
+            });
+            if (totalSeconds > 0) {
+                const h = Math.floor(totalSeconds / 3600);
+                const m = Math.floor((totalSeconds % 3600) / 60);
+                document.getElementById('totalDuration').textContent = `${h}h ${m}m`;
+            }
+        }
+
+        function markCompleted(chapterNum) {
+            completedChapters.add(chapterNum);
+            const card = document.querySelector(`[data-chapter="${chapterNum}"]`);
+            if (card) card.classList.add('completed');
+            updateStats();
+        }
+
+        audioPlayers.forEach((player, index) => {
+            const chapterNum = player.dataset.chapterNum;
+            const card = player.closest('.audio-card');
+            const durationEl = card.querySelector('.chapter-duration');
+
+            player.addEventListener('loadedmetadata', () => {
+                durationEl.textContent = `Duration: ${formatTime(player.duration)}`;
+                updateStats();
+            });
+
+            player.addEventListener('play', () => {
+                audioCards.forEach(c => c.classList.remove('playing'));
+                card.classList.add('playing');
+                audioPlayers.forEach(p => {
+                    if (p !== player && !p.paused) p.pause();
+                });
+            });
+
+            player.addEventListener('timeupdate', () => {
+                const progress = (player.currentTime / player.duration) * 100;
+                if (progress > 90 && !completedChapters.has(chapterNum)) {
+                    markCompleted(chapterNum);
                 }
             });
 
-        // Initial stats update
-        updateStats();
+            player.addEventListener('ended', () => {
+                markCompleted(chapterNum);
+                card.classList.remove('playing');
+                if (playAllMode && playAllIndex < audioPlayers.length - 1) {
+                    playAllIndex++;
+                    setTimeout(() => {
+                        audioPlayers[playAllIndex].play();
+                        audioPlayers[playAllIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 1000);
+                } else if (playAllMode) {
+                    playAllMode = false;
+                    playAllButton.textContent = '🎧 Play All Chapters';
+                }
+            });
 
-        // Try to load durations after a delay if metadata hasn't loaded
+            player.addEventListener('pause', () => {
+                if (!playAllMode) card.classList.remove('playing');
+            });
+        });
+
+        playAllButton.addEventListener('click', () => {
+            if (!playAllMode) {
+                playAllMode = true;
+                playAllIndex = 0;
+                playAllButton.textContent = '⏸️ Stop Play All';
+                const playPromise = audioPlayers[0].play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        audioPlayers[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }).catch(() => {
+                        playAllMode = false;
+                        playAllButton.textContent = '🎧 Play All Chapters';
+                        alert('Please click play on the first chapter to start.');
+                    });
+                }
+            } else {
+                playAllMode = false;
+                playAllButton.textContent = '🎧 Play All Chapters';
+                audioPlayers.forEach(p => p.pause());
+                audioCards.forEach(c => c.classList.remove('playing'));
+            }
+        });
+
+        updateStats();
         setTimeout(() => {
             audioPlayers.forEach(player => {
                 const card = player.closest('.audio-card');
@@ -699,115 +708,3 @@
     </script>
 </body>
 </html>
-            
-            if (totalSeconds > 0) {
-                const hours = Math.floor(totalSeconds / 3600);
-                const mins = Math.floor((totalSeconds % 3600) / 60);
-                document.getElementById('totalDuration').textContent = `${hours}h ${mins}m`;
-            }
-        }
-
-        // Mark chapter as completed
-        function markCompleted(chapterNum) {
-            completedChapters.add(chapterNum);
-            const card = document.querySelector(`[data-chapter="${chapterNum}"]`);
-            if (card) {
-                card.classList.add('completed');
-            }
-            updateStats();
-        }
-
-        // Set up audio players
-        audioPlayers.forEach((player, index) => {
-            const chapterNum = player.dataset.chapterNum;
-            const card = player.closest('.audio-card');
-            const durationEl = card.querySelector('.chapter-duration');
-
-            // Load duration when metadata is loaded
-            player.addEventListener('loadedmetadata', () => {
-                durationEl.textContent = `Duration: ${formatTime(player.duration)}`;
-                updateStats();
-            });
-
-            // Track when chapter starts playing
-            player.addEventListener('play', () => {
-                // Remove playing class from all cards
-                audioCards.forEach(c => c.classList.remove('playing'));
-                // Add to current card
-                card.classList.add('playing');
-                currentlyPlaying = chapterNum;
-
-                // Pause other players
-                audioPlayers.forEach((otherPlayer) => {
-                    if (otherPlayer !== player && !otherPlayer.paused) {
-                        otherPlayer.pause();
-                    }
-                });
-            });
-
-            // Track progress
-            player.addEventListener('timeupdate', () => {
-                const progress = (player.currentTime / player.duration) * 100;
-                if (progress > 90 && !completedChapters.has(chapterNum)) {
-                    markCompleted(chapterNum);
-                }
-            });
-
-            // Handle chapter end
-            player.addEventListener('ended', () => {
-                markCompleted(chapterNum);
-                card.classList.remove('playing');
-                
-                // If in play all mode, move to next chapter
-                if (playAllMode && playAllIndex < audioPlayers.length - 1) {
-                    playAllIndex++;
-                    setTimeout(() => {
-                        audioPlayers[playAllIndex].play();
-                        audioPlayers[playAllIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }, 1000);
-                } else if (playAllMode && playAllIndex >= audioPlayers.length - 1) {
-                    // Finished all chapters
-                    playAllMode = false;
-                    playAllButton.textContent = '🎧 Play All Chapters';
-                    playAllButton.disabled = false;
-                }
-            });
-
-            // Remove playing class when paused
-            player.addEventListener('pause', () => {
-                if (!playAllMode) {
-                    card.classList.remove('playing');
-                }
-            });
-        });
-
-        // Play All functionality
-        playAllButton.addEventListener('click', () => {
-            if (!playAllMode) {
-                playAllMode = true;
-                playAllIndex = 0;
-                playAllButton.textContent = '⏸️ Stop Play All';
-                
-                // Use a promise to handle autoplay restrictions
-                const playPromise = audioPlayers[0].play();
-                
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        // Autoplay started successfully
-                        audioPlayers[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }).catch(error => {
-                        // Autoplay was prevented
-                        console.log('Autoplay prevented:', error);
-                        playAllMode = false;
-                        playAllButton.textContent = '🎧 Play All Chapters';
-                        alert('Please click the play button on the first chapter to start playback.');
-                    });
-                }
-            } else {
-                // Stop play all
-                playAllMode = false;
-                playAllButton.textContent = '🎧 Play All Chapters';
-                audioPlayers.forEach(player => player.pause());
-                audioCards.forEach(card => card.classList.remove('playing'));
-            }
-        });
