@@ -415,7 +415,7 @@
                 class="profile-image"
             >
             <p class="profile-caption">
-                Experience the complete memoir in audio format, narrated with authenticity and brought to life through Joey's professional audio production.
+                [Your caption text here - placeholder for audio book description]
             </p>
         </div>
     </div>
@@ -440,7 +440,7 @@
         <!-- Play All Button -->
         <div class="play-all-container">
             <button class="play-all-button" id="playAllButton">
-                ▶️ Play All Chapters
+                🎧 Play All Chapters
             </button>
         </div>
 
@@ -678,6 +678,19 @@
             let totalSeconds = 0;
             audioPlayers.forEach(player => {
                 if (player.duration && !isNaN(player.duration)) {
+                    totalSeconds += player.duration;
+                }
+            });
+
+        // Initial stats update
+        updateStats();
+
+        // Try to load durations after a delay if metadata hasn't loaded
+        setTimeout(() => {
+            audioPlayers.forEach(player => {
+                const card = player.closest('.audio-card');
+                const durationEl = card.querySelector('.chapter-duration');
+                if (player.duration && !isNaN(player.duration)) {
                     durationEl.textContent = `Duration: ${formatTime(player.duration)}`;
                 }
             });
@@ -685,9 +698,7 @@
         }, 2000);
     </script>
 </body>
-</html>totalSeconds += player.duration;
-                }
-            });
+</html>
             
             if (totalSeconds > 0) {
                 const hours = Math.floor(totalSeconds / 3600);
@@ -711,7 +722,6 @@
             const chapterNum = player.dataset.chapterNum;
             const card = player.closest('.audio-card');
             const durationEl = card.querySelector('.chapter-duration');
-            const progressEl = card.querySelector('.progress-info');
 
             // Load duration when metadata is loaded
             player.addEventListener('loadedmetadata', () => {
@@ -758,7 +768,7 @@
                 } else if (playAllMode && playAllIndex >= audioPlayers.length - 1) {
                     // Finished all chapters
                     playAllMode = false;
-                    playAllButton.textContent = '▶️ Play All Chapters';
+                    playAllButton.textContent = '🎧 Play All Chapters';
                     playAllButton.disabled = false;
                 }
             });
@@ -777,28 +787,27 @@
                 playAllMode = true;
                 playAllIndex = 0;
                 playAllButton.textContent = '⏸️ Stop Play All';
-                audioPlayers[0].play();
-                audioPlayers[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // Use a promise to handle autoplay restrictions
+                const playPromise = audioPlayers[0].play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        // Autoplay started successfully
+                        audioPlayers[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }).catch(error => {
+                        // Autoplay was prevented
+                        console.log('Autoplay prevented:', error);
+                        playAllMode = false;
+                        playAllButton.textContent = '🎧 Play All Chapters';
+                        alert('Please click the play button on the first chapter to start playback.');
+                    });
+                }
             } else {
                 // Stop play all
                 playAllMode = false;
-                playAllButton.textContent = '▶️ Play All Chapters';
+                playAllButton.textContent = '🎧 Play All Chapters';
                 audioPlayers.forEach(player => player.pause());
                 audioCards.forEach(card => card.classList.remove('playing'));
             }
         });
-
-        // Initial stats update
-        updateStats();
-
-        // Try to load durations after a delay if metadata hasn't loaded
-        setTimeout(() => {
-            audioPlayers.forEach(player => {
-                const card = player.closest('.audio-card');
-                const durationEl = card.querySelector('.chapter-duration');
-                if (player.duration && !isNaN(player.duration)) {
-                    durationEl.textContent = `Duration: ${formatTime(player.duration)}`;
-                }
-            });
-            updateStats();
-        }, 2000);
