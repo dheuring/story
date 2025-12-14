@@ -85,39 +85,54 @@
             border-bottom: 2px solid var(--accent-gold);
         }
 
-        nav {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+  nav {
+    background: var(--primary-dark);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 3px solid var(--accent-gold);
+}
 
-        .nav-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 15px 20px;
-            display: flex;
-            gap: 30px;
-            overflow-x: auto;
-            justify-content: center;
-        }
+.nav-header {
+    text-align: center;
+    padding: 12px 20px 8px;
+    background: rgba(0,0,0,0.2);
+    color: var(--accent-gold);
+    font-size: 0.85em;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
 
-        .nav-content a {
-            color: var(--text-dark);
-            text-decoration: none;
-            font-size: 0.95em;
-            white-space: nowrap;
-            padding: 5px 10px;
-            border-bottom: 2px solid transparent;
-            transition: all 0.3s;
-        }
+.nav-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 20px;
+    display: flex;
+    gap: 30px;
+    overflow-x: auto;
+    justify-content: center;
+}
 
-        .nav-content a:hover {
-            color: var(--accent-gold);
-            border-bottom-color: var(--accent-gold);
-        }
+.nav-content a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 0.95em;
+    white-space: nowrap;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    transition: all 0.3s;
+    font-weight: 500;
+}
 
+.nav-content a:hover {
+    color: var(--accent-gold);
+    border-color: var(--accent-gold);
+    background: rgba(212, 175, 55, 0.1);
+    transform: translateY(-2px);
+}
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -390,17 +405,18 @@
         </div>
     </div>
 
-    <nav>
-        <div class="nav-content">
-            <a href="#motivation">Honoring Memory</a>
-            <a href="#origins">Korean War Origins</a>
-            <a href="#battle">Battle of Chosin</a>
-            <a href="#task-force">Task Force MacLean</a>
-            <a href="#company-k">Company K</a>
-            <a href="#aftermath">Aftermath</a>
-            <a href="#closing">Closing Thoughts</a>
-        </div>
-    </nav>
+<nav>
+    <div class="nav-header">Navigation Menu</div>
+    <div class="nav-content">
+        <a href="#motivation">Honoring Memory</a>
+        <a href="#origins">Korean War Origins</a>
+        <a href="#battle">Battle of Chosin</a>
+        <a href="#task-force">Task Force MacLean</a>
+        <a href="company-k.html">Company K Story</a>
+        <a href="#aftermath">Aftermath</a>
+        <a href="#closing">Closing Thoughts</a>
+    </div>
+</nav>
 
     <div class="container">
         <section id="motivation" class="section">
@@ -762,82 +778,7 @@
             <p>Historians now largely agree that this effort prevented the Chinese 80th and 81st Divisions from seizing Hagaru-ri—a critical Marine base and airstrip—before Marine units could concentrate sufficient defensive forces. RCT-31's presence may well have prevented the encirclement and annihilation of the Marines, while the task force's actions resulted in the effective destruction of the Chinese 80th Division.</p>
         </section>
 
-        <section id="company-k" class="section">
-            <h2>Company K, 3rd Battalion, 31st Infantry Regiment</h2>
-
-            <h3>Historical Context and Unit Assignment</h3>
-
-            <p>Company K served as an integral component of the 31st Regimental Combat Team (RCT-31), which was also known first as Task Force MacLean and then as Task Force Faith. Positioned on the eastern shore of the Chosin Reservoir, the battalion faced the dual mission of advancing northward toward the Yalu River while simultaneously protecting the exposed eastern flank of the 1st Marine Division.</p>
-
-            <p>The east side of the reservoir presented unique strategic and environmental challenges. RCT-31 was spread thin across a single narrow road network, with units often separated by miles of rugged, mountainous terrain. Temperatures plunged below zero, creating a logistical and operational nightmare that compounded the dangers of an already risky deployment.</p>
-
-            <p>Given Dad's activation date, travel to the west coast, and then a six-week trip on a ship to Korea, he likely joined the RCT 31st about the same time it began its move to the east side of the Chosin Reservoir on November 25th. After relocating, Company K and its sister units were not fully concentrated or dug in when the Chinese struck, leaving them vulnerable to what would become a devastating assault during the night of November 27, 1950.</p>
-
-            <h3>Captain Robert J. Kitz: Company Commander</h3>
-
-            <p>Captain Robert J. Kitz, commanding Company K of the 31st Infantry Regiment during the infamous Battle of Chosin Reservoir, played a pivotal role in maintaining unit cohesion and morale under some of the most harrowing conditions faced by U.S. forces in the Korean War. As his company endured relentless attacks by overwhelming Chinese forces, Captain Kitz was tasked not only with coordinating defensive tactics but also with adapting to rapidly shifting battlefield realities.</p>
-
-            <p>One of Captain Kitz's greatest challenges was sustaining his company with ever-dwindling resources. Food, ammunition, and medical supplies were critically scarce. The subzero temperatures at Chosin were so severe that weapons and vehicles frequently froze, adding another layer of hardship to an already desperate situation.</p>
-
-            <p>After four nights of continuous attacks, Company K's static defense became unsustainable. On December 1, 1950, as part of the larger breakout attempt toward Hagaru-ri, Captain Kitz's company faced a desperate march through deep snow and hostile territory. As the rear guard, Kitz was responsible for coordinating Company K's movement with other units, maintaining combat effectiveness under constant threat of ambush and attack.</p>
-
-            <div class="pullquote">
-                "During the breakout, the convoy came to a devastating halt as enemy fire intensified and vehicles became trapped in the snow and ice. In that moment of crisis, each soldier faced an impossible choice that would define the rest of his life: stay with the disabled convoy and almost certainly die defending it, or abandon their positions and equipment to flee on foot through the frozen wilderness."
-            </div>
-
-            <div class="captain-statement">
-                <h3>Personal Statement of Captain Robert J. Kitz</h3>
-                <p style="font-style: italic; text-align: center; margin-bottom: 20px;">The following is a seven-page personal statement from Dad's company commander, retrieved from the National Archives, detailing what Company K encountered during the five-day battle.</p>
-
-                <p>My name is Robert J. Kitz. My rank is Captain, and my serial number is 1287898. I am the Company Commander of Company A, 3rd Battalion 31st Regimental Infantry. I was present as commander of Company "K" on the night of 27 November 1950. We arrived at the Chosin Reservoir at approximately 1600 hours on that date.</p>
-
-                <p>The disposition of my troops was as follows: About two miles up the trail to the east, I had two squads of the 1st Platoon commanded by Lt. McFarland. On the ridge, I had my 3rd Platoon. Further down the ridge, tied in with the 3rd Platoon, was the 2nd Platoon. The 2nd Platoon tied in with "I" Company. My weapons squad was at the base of the ridge with one machine gun, and I had a section of machine guns from Company I in the draw, covering the draw.</p>
-
-                <p>At approximately 1900 hours of the 27th, I went to the 3/31 Battalion CP and received an order from Colonel Riley. The order stated that we would attack to the north the following morning. My company was to attack along the ridge line, while Company I was to move north along the road, with Company L as the reserve company.</p>
-
-                <p>About one o'clock in the morning (28/0100), I heard some firing and called Lt. McFarland to ask if he knew who was firing. Between 0130 and 0200 in the morning, there was a considerable amount of firing just about where my machine gun section was set up. I put my shoes back on and got out to check, and about that time I heard a lot of shooting up close, and it was coming in.</p>
-
-                <p>The cooks, of course, got up and ran out of the tents, and quite a few of the ROKs working in the kitchen ran out and started to run. So, I ran about 50 yards back and stopped them. About this time, a lot of people came over the rise, and there were a lot of ROKs, and they were running also. I attempted to stop them and finally did. I tried to get them to fire back, but by this time, the situation had become so confused that I couldn't tell who were ROKs and who were Chinese.</p>
-
-                <p>In the meantime, the 57th Battery opened fire on us, so we were caught in crossfire. I got my people back with the assistance of Lt. Sicafus of the Artillery and stopped the Battery from firing on us. We got into "A" Battery's defensive positions, and shortly afterward the cooks followed us in. There was quite a firefight in there.</p>
-
-                <p>While this was going on, of course, time passed, and we had about an hour to sweat before daylight. When daylight came, the Gooks pulled back and, except for an occasional sniper, they had more or less withdrawn. We did not know what had happened to the rest of the outfit. Not knowing what else to do, I assumed that since I was the senior captain, I took over and sent two of the vehicles of the 15th AAA and a platoon from Company "I" and a patrol out toward the Battalion CP.</p>
-
-                <p>We got up to the Battalion CP and found the battalion, and although there had been some fighting, they were still in operation. My platoon up on the hill and one of "I" Company's platoons up on the hill had been overrun. We saw Colonel Riley, who had been shot, and quite a few people around there had been wounded, and our orders then were to tighten up our perimeter.</p>
-
-                <p>It wasn't even dark yet when the second night started. When they came in, they took a machine gun right on the perimeter, so I didn't have any communications by that time. They knocked out my commo, and I only had 60 men left in the company. The 40mms did a hell of a fine job. I could see that they killed quite a few Gooks around the house by the light of the fire. They hit us every place you could think of. That went on all night.</p>
-
-                <p>The following morning (29 Nov), we were told the 32nd was withdrawing just north of us and would be coming in as they were pulling back to our positions. We felt that the more people we had, the merrier it would be. However, it was either the second or third morning—I think it was the third morning (29 Nov)—the 32nd joined us, and they came across the ice. I guess this was the day that Colonel MacLean got it.</p>
-
-                <p>It seemed that the Gooks had decided to reorganize the next day (30 Nov). We got a little small arms fire from them and a few mortar rounds thrown in. But it was the next night (30 Nov-1 Dec) that all hell broke loose—the attack started early in the evening and kept on going all night. There were plenty of mortars: 120s, big ones, small ones, middle-sized ones, and medium-sized ones. We even had some artillery on the thing, and our artillery battery was almost out of ammunition.</p>
-
-                <p>That fourth night (30 Nov-1 Dec), the attack lasted all night. They threw a lot of mortars at us. It kept on going until the morning, and this time, instead of withdrawing in the morning as they had been doing, they stayed right down there in the low ground with us. We had a lot of our people get hit. Our Aid Station was in tough shape. We got a lot of wounded—I don't know how many, but a hell of a lot.</p>
-
-                <p>About 11 o'clock (01/1100), I was told that we were going to withdraw with support of Marine air strikes. So, we prepared for the withdrawal. We took what equipment we had. What we couldn't take, we put in holes and started to burn it. Destroyed what we could, and when the planes finally got overhead, we started to withdraw.</p>
-
-                <p>The Gooks were right down about 50 to 75 yards from the perimeter, shooting into us as we were pulling out. As a result, the withdrawal was a little bit disorganized, as it was awfully hard to form units under that fire. So, the 1/32nd which was to lead out, got on the road, and they weren't out 50 to 75 yards when they got hit from everywhere.</p>
-
-                <p>Anyhow, we got going (01/1300 Dec), got the column moving, and from then on it was a matter of moving, and every time you hit a nose in the road, the enemy was shooting at you. So, we used the ice to move out on. The ice broke through in a couple of places—people fell in the water. Some got out and some didn't. I broke in the water and was lucky to get out.</p>
-
-                <p>After we got to the place where the big roadblock was—I'm not sure how far it was, but it was about three miles from our position—the terrain was ideal for a roadblock. The vehicles got caught on the road on the side of this hill. We couldn't move because of this roadblock. The enemy was on top shooting down, and the enemy was at the bottom shooting up, and we were caught in the middle.</p>
-
-                <p>The men were hard to handle. You couldn't get them to move. Maybe it was the four days they had been caught under fire that caused it, but you couldn't control them. They didn't go up to the high ground. They were tired and wanted to huddle together, thinking there was more protection in numbers, and very few of them would listen to reason.</p>
-
-                <p>Anyhow, myself, Lt. Bore, Lt. Bernard, and a couple or three other officers from the Artillery all grabbed small groups of men that were available and pushed them up this hill. We banzai-charged the hill, the ridge, and took it, knocking out the roadblocks along the way. I think there were three of them. We crossed the ridge and sent someone back to haul the rest of them up and get the vehicles moving.</p>
-
-                <p>By this time, it was almost dark (01/1800 Dec). The convoy of trucks was surrounded and trapped, so the only thing left to do was to take off across country, which we did. I noticed that some of the wounded got out and were coming along with us. We couldn't carry the others because the enemy was right behind us. The trucks couldn't move. I sent two men back to tell the trucks to come around that bend and follow us through. They never did come, so we struck out across the lake. I had almost 210 men with me. We got into the Marine area around midnight (01/2400 Dec) and spent a couple of days there.</p>
-
-                <p>Our BARs (M-1 Browning Automatic Rifle) were not worth much. Of nine BARs in the company, I did not have one that would fire automatically. The machine guns were alright. The most serious shortage, of course, was the shortage of grenades. The enemy had plenty of them.</p>
-
-                <p>The tactics they used: they would crawl up at night and lay there for almost two hours waiting until they made a charge. And when they made the charge, they were too close to us—you couldn't do anything about it. They were right up to you before you knew it. They were pretty good night fighters.</p>
-
-                <p>Our winter clothing was alright; you didn't freeze to death, although it was extremely cold. As to the frozen feet, everyone's feet froze to a certain extent, but we couldn't change our socks as often as we should. And even if you did, you couldn't light fires to warm up. It was just impossible to have fires—they just drew mortar fire.</p>
-
-                <p>In some cases, the NCO leadership of our men was excellent. In other cases, it was not so good. I had some fine NCOs, and they did well. But the NCOs also had to prod the ROKs along, and as I said before, many of our casualties were because of the ROKs' failings. A man had to expose himself to get the ROKs to move.</p>
-            </div>
-
-            <p style="margin-top: 40px;">Following the harrowing retreat to Hungnam Harbor, the remnants of Company K were reconstituted as part of the massive rebuilding effort for the 31st Infantry Regiment. The survivors carried something invaluable forward—the institutional memory of what they had endured and overcome. They became the living bridge between the company that had been shattered on the frozen hills and the unit that would continue to serve with distinction throughout the remainder of the Korean War.</p>
-        </section>
+        
 
         <section id="closing" class="section memorial-section">
             <div class="memorial-content">
