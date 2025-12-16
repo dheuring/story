@@ -676,31 +676,58 @@
 			<span id="back-to-story"></span>
 
 			<p style="text-align: center; margin-top: 30px;">
-			<a href="company-k.html"
-				data-save-scroll
-				style=
-					   display: inline-block;
-					   padding: 12px 30px;
-					   background: var(--accent-gold);
-					   color: var(--primary-dark);
-					   text-decoration: none;
-					   border-radius: 8px;
-					   font-weight: 600;
-					   transition: all 0.3s ease;
-					   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-				   ">
+				<a href="company-k.html"
+				   class="save-scroll gold-button">
 					Read Captain Kitz’s Account
 				</a>
 			</p>
 
+			<style>
+			/* Button styles */
+			.gold-button {
+				all: revert;
+				display: inline-block;
+				padding: 12px 30px;
+				background-color: #d4af37; /* gold */
+				color: var(--primary-dark);
+				text-decoration: none;
+				border-radius: 8px;
+				font-weight: 600;
+				box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+				transition: transform 0.2s ease, box-shadow 0.2s ease;
+			}
+
+			.gold-button:hover {
+				transform: translateY(-1px);
+				box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+			}
+			</style>
+
 			<script>
-				document.addEventListener("DOMContentLoaded", () => {
-					const y = sessionStorage.getItem("returnScrollY");
+			(function () {
+				const KEY = "contentScrollTop";
+				const container = document.querySelector(".content"); // replace with your scroll container class/id
+
+				if (!container) return;
+
+				// Save scroll before leaving
+				document.querySelectorAll("a.save-scroll").forEach(link => {
+					link.addEventListener("click", () => {
+						sessionStorage.setItem(KEY, container.scrollTop);
+					});
+				});
+
+				// Restore AFTER everything is rendered
+				window.addEventListener("pageshow", () => {
+					const y = sessionStorage.getItem(KEY);
 					if (y !== null) {
-						window.scrollTo(0, parseInt(y, 10));
-						sessionStorage.removeItem("returnScrollY");
+						setTimeout(() => {
+							container.scrollTop = parseInt(y, 10);
+						}, 50);
+						sessionStorage.removeItem(KEY);
 					}
 				});
+			})();
 			</script>
 
 
@@ -1000,31 +1027,33 @@
         <p style="margin-top: 20px; font-size: 0.9em;">One of the Chosin Few</p>
         <a href="Table-of-Contents.html" style="display: inline-block; margin-top: 30px; padding: 12px 30px; background: var(--accent-gold); color: var(--primary-dark); text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.3s ease;">← Return to Table of Contents</a>
     </footer>
-	<script>
-	(function () {
-		const key = "returnScrollY";
+		<script>
+		(function () {
+			const KEY = "contentScrollTop";
+			const container = document.querySelector(".content");
 
-		// Save scroll before leaving
-		document.querySelectorAll("a[data-save-scroll]").forEach(link => {
-			link.addEventListener("click", () => {
-				sessionStorage.setItem(key, window.scrollY);
-			});
-		});
+			if (!container) return;
 
-		// Restore AFTER full paint
-		window.addEventListener("pageshow", () => {
-			const y = sessionStorage.getItem(key);
-			if (y !== null) {
-				requestAnimationFrame(() => {
-					requestAnimationFrame(() => {
-						window.scrollTo(0, parseInt(y, 10));
-					});
+			// Save scroll position before leaving
+			document.querySelectorAll("a.save-scroll").forEach(link => {
+				link.addEventListener("click", () => {
+					sessionStorage.setItem(KEY, container.scrollTop);
 				});
-				sessionStorage.removeItem(key);
-			}
-		});
-	})();
-	</script>
+			});
+
+			// Restore AFTER everything is rendered
+			window.addEventListener("pageshow", () => {
+				const y = sessionStorage.getItem(KEY);
+				if (y !== null) {
+					// Delay until layout settles
+					setTimeout(() => {
+						container.scrollTop = parseInt(y, 10);
+					}, 50);
+					sessionStorage.removeItem(KEY);
+				}
+			});
+		})();
+		</script>
 
 </body>
 </html>
