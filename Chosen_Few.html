@@ -672,13 +672,13 @@
 			<p>This timeline captures the principal events of the five-day battle. The sections that follow expand on these moments, drawing on after-action reports, survivor accounts, and historical records to convey the full scale of the fighting and the conditions endured by Task Force MacLean/Faith.</p>
 
 			<p>To deepen our insight into my father’s experience, I’ve included excerpts from Captain Richard Kitz’s seven‑page personal statement in the narrative. As my father’s company commander, Captain Kitz offers the most immediate, firsthand perspective we have of the battle. If you're interested in the verbatim account, you can access it below.</p>
-			
-
+						
 			<span id="back-to-story"></span>
 
 			<p style="text-align: center; margin-top: 30px;">
-				<a href="company-k.html#back-to-story"
-				   style="
+			<a href="company-k.html"
+				data-save-scroll
+				style=
 					   display: inline-block;
 					   padding: 12px 30px;
 					   background: var(--accent-gold);
@@ -689,9 +689,20 @@
 					   transition: all 0.3s ease;
 					   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 				   ">
-					Read Captain Kitz’s Account
+					Read Captain Kitz’s Account
 				</a>
 			</p>
+
+			<script>
+				document.addEventListener("DOMContentLoaded", () => {
+					const y = sessionStorage.getItem("returnScrollY");
+					if (y !== null) {
+						window.scrollTo(0, parseInt(y, 10));
+						sessionStorage.removeItem("returnScrollY");
+					}
+				});
+			</script>
+
 
            <h3>Initial Chinese Attacks: Night of November 27-28</h3>		
 	
@@ -989,5 +1000,31 @@
         <p style="margin-top: 20px; font-size: 0.9em;">One of the Chosin Few</p>
         <a href="Table-of-Contents.html" style="display: inline-block; margin-top: 30px; padding: 12px 30px; background: var(--accent-gold); color: var(--primary-dark); text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.3s ease;">← Return to Table of Contents</a>
     </footer>
+	<script>
+	(function () {
+		const key = "returnScrollY";
+
+		// Save scroll before leaving
+		document.querySelectorAll("a[data-save-scroll]").forEach(link => {
+			link.addEventListener("click", () => {
+				sessionStorage.setItem(key, window.scrollY);
+			});
+		});
+
+		// Restore AFTER full paint
+		window.addEventListener("pageshow", () => {
+			const y = sessionStorage.getItem(key);
+			if (y !== null) {
+				requestAnimationFrame(() => {
+					requestAnimationFrame(() => {
+						window.scrollTo(0, parseInt(y, 10));
+					});
+				});
+				sessionStorage.removeItem(key);
+			}
+		});
+	})();
+	</script>
+
 </body>
 </html>
