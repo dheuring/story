@@ -673,63 +673,55 @@
 
 			<p>To deepen our insight into my father’s experience, I’ve included excerpts from Captain Richard Kitz’s seven‑page personal statement in the narrative. As my father’s company commander, Captain Kitz offers the most immediate, firsthand perspective we have of the battle. If you're interested in the verbatim account, you can access it below.</p>
 						
-			<span id="back-to-story"></span>
-
 			<p style="text-align: center; margin-top: 30px;">
-				<a href="company-k.html"
-				   class="save-scroll gold-button">
-					Read Captain Kitz’s Account
-				</a>
-			</p>
+    <a href="company-k.html" class="save-scroll gold-button">
+        Read Captain Kitz’s Account
+    </a>
+</p>
 
-			<style>
-			/* Button styles */
-			.gold-button {
-				all: revert;
-				display: inline-block;
-				padding: 12px 30px;
-				background-color: #d4af37; /* gold */
-				color: var(--primary-dark);
-				text-decoration: none;
-				border-radius: 8px;
-				font-weight: 600;
-				box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-				transition: transform 0.2s ease, box-shadow 0.2s ease;
-			}
+<style>
+.gold-button {
+    all: revert;
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: #d4af37; /* gold */
+    color: var(--primary-dark);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
-			.gold-button:hover {
-				transform: translateY(-1px);
-				box-shadow: 0 6px 14px rgba(0,0,0,0.25);
-			}
-			</style>
+.gold-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+</style>
 
-			<script>
-			(function () {
-				const KEY = "contentScrollTop";
-				const container = document.querySelector(".content"); // replace with your scroll container class/id
+<script>
+// Save scroll position
+document.querySelectorAll("a.save-scroll").forEach(link => {
+    link.addEventListener("click", () => {
+        sessionStorage.setItem('lastScroll', window.scrollY);
+        sessionStorage.setItem('lastPage', window.location.pathname);
+    });
+});
 
-				if (!container) return;
+// Restore scroll when coming back
+window.addEventListener("pageshow", () => {
+    const lastPage = sessionStorage.getItem('lastPage');
+    const lastScroll = sessionStorage.getItem('lastScroll');
 
-				// Save scroll before leaving
-				document.querySelectorAll("a.save-scroll").forEach(link => {
-					link.addEventListener("click", () => {
-						sessionStorage.setItem(KEY, container.scrollTop);
-					});
-				});
-
-				// Restore AFTER everything is rendered
-				window.addEventListener("pageshow", () => {
-					const y = sessionStorage.getItem(KEY);
-					if (y !== null) {
-						setTimeout(() => {
-							container.scrollTop = parseInt(y, 10);
-						}, 50);
-						sessionStorage.removeItem(KEY);
-					}
-				});
-			})();
-			</script>
-
+    if (lastPage === window.location.pathname && lastScroll !== null) {
+        setTimeout(() => {
+            window.scrollTo(0, parseInt(lastScroll, 10));
+        }, 50);
+        sessionStorage.removeItem('lastScroll');
+        sessionStorage.removeItem('lastPage');
+    }
+});
+</script>
 
            <h3>Initial Chinese Attacks: Night of November 27-28</h3>		
 	
