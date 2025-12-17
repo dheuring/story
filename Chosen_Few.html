@@ -981,55 +981,22 @@
     </footer>
 
     <script>
-        // Cache DOM elements
-        const progressBar = document.getElementById('progressBar');
-        const backToTop = document.getElementById('backToTop');
-        const sections = document.querySelectorAll('.section');
-        const navLinks = document.querySelectorAll('.nav-content a');
-
-        // Optimized scroll handler - combines all scroll logic into one listener
-        let ticking = false;
-        
-        function updateOnScroll() {
-            const scrollPosition = window.pageYOffset;
+        // Reading Progress Bar
+        window.addEventListener('scroll', function() {
             const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            
-            // Update progress bar
             const scrolled = (winScroll / height) * 100;
-            progressBar.style.width = scrolled + '%';
-            
-            // Update back to top button visibility
-            if (scrollPosition > 300) {
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Back to Top Button
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
                 backToTop.classList.add('visible');
             } else {
                 backToTop.classList.remove('visible');
-            }
-            
-            // Update active navigation
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (scrollPosition >= (sectionTop - 200)) {
-                    current = section.getAttribute('id');
-                }
-            });
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === '#' + current) {
-                    link.classList.add('active');
-                }
-            });
-            
-            ticking = false;
-        }
-
-        // Use requestAnimationFrame for better performance
-        window.addEventListener('scroll', function() {
-            if (!ticking) {
-                window.requestAnimationFrame(updateOnScroll);
-                ticking = true;
             }
         });
 
@@ -1042,8 +1009,55 @@
             });
         });
 
-        // Initialize on page load
-        updateOnScroll();
+        // Active navigation highlighting
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-content a');
+
+        window.addEventListener('scroll', function() {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Save/restore scroll position (for navigation)
+        (function () {
+            const KEY = "contentScrollTop";
+            const container = document.querySelector(".content");
+
+            if (!container) return;
+
+            // Save scroll position before leaving
+            document.querySelectorAll("a.save-scroll").forEach(link => {
+                link.addEventListener("click", () => {
+                    sessionStorage.setItem(KEY, container.scrollTop);
+                });
+            });
+
+            // Restore AFTER everything is rendered
+            window.addEventListener("pageshow", () => {
+                const y = sessionStorage.getItem(KEY);
+                if (y !== null) {
+                    // Delay until layout settles
+                    setTimeout(() => {
+                        container.scrollTop = parseInt(y, 10);
+                    }, 50);
+                    sessionStorage.removeItem(KEY);
+                }
+            });
+        })();
     </script>
 
 </body>
