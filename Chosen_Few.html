@@ -11,15 +11,17 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --primary-dark: #1a2332;
-            --primary-blue: #2c3e50;
-            --accent-gold: #d4af37;
-            --text-light: #ecf0f1;
-            --text-dark: #2c3e50;
-            --bg-light: #f8f9fa;
-            --border-color: #bdc3c7;
-        }
+		:root {
+			--primary-dark: #1a2332;
+			--primary-blue: #2c3e50;
+			--accent-gold: #d4af37;
+			--text-light: #ecf0f1;
+			--text-dark: #2c3e50;
+			--bg-light: #f8f9fa;
+			--border-color: #bdc3c7;
+
+			scroll-padding-top: 120px; /* critical line */
+		}
 
         body {
             font-family: 'Georgia', serif;
@@ -620,8 +622,9 @@
 				padding: 0;
 			}
 
-			section {
-				scroll-margin-top: 120px; /* slightly larger than header */
+			.section h2 {
+				margin-top: 0;
+				padding-top: 1px; /* prevents margin collapse */
 			}
 </style>
 </head>
@@ -811,11 +814,10 @@
                 "Task Force MacLean faced significant disadvantages compared to the Marines. Many Army soldiers had little combat training, having come from occupation duty in Japan. They were ill-equipped for the extreme cold, lacking the insulated winter gear issued to the Marines. Communications were poor; there was no time to lay landlines, and radio contact was unreliable."
             </div>
         </section>
-
-        <section id="timeline" class="section">
 		
-            <h2>Timeline of the Five-Day Battle</h2>
-            <h3>November 27 – December 1, 1950</h3>
+		<section class="section">
+			<h2 id="timeline">Timeline of the Five-Day Battle</h2>
+			<h3>November 27 – December 1, 1950</h3>
 
             <p>The following timeline presents a chronological account of the key events during Task Force MacLean/Faith's five-day stand at the Chosin Reservoir. It traces the mounting pressure exerted by overwhelming Chinese forces, the steady erosion of combat power under relentless attacks and extreme cold, and the cascade of command decisions made under fire. Together, these events culminated in the December 1 breakout attempt and the near-total annihilation of Regimental Combat Team 31 (RCT-31).</p>
 
