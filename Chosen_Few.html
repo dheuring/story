@@ -289,6 +289,7 @@
             margin: 40px 0;
         }
 
+
         .timeline::before {
             content: '';
             position: absolute;
@@ -614,12 +615,15 @@
                 line-height: 1.5;
             }
 
-            .container {
-                max-width: 100%;
-                padding: 0;
-            }
-        }
-    </style>
+.container {
+    max-width: 100%;
+    padding: 0;
+}
+
+#timeline {
+    scroll-margin-top: 100px; /* adjust to header height */
+}
+</style>
 </head>
 <body>
     <!-- Reading Progress Bar -->
@@ -748,7 +752,7 @@
             <p>The temperature on November 27 dropped to minus 25 degrees Fahrenheit, with wind chill driving it even lower. These conditions affected everything—weapons froze, vehicles wouldn't start, medical supplies became unusable, and frostbite became as dangerous as enemy fire. The Chinese, better prepared for winter operations, used these conditions to their advantage, launching attacks during the coldest parts of the night when American defensive capabilities were most compromised.</p>
         </section>
 
-        <section id="task-force" class="section">
+        <section class="section">
 			<h2>Task Force MacLean (Later Task Force Faith)</h2>
 
 			<p>The Army units positioned east of the Chosin Reservoir were organized as Regimental Combat Team 31 (RCT-31), commanded by Colonel Allan D. MacLean of the 31st Infantry Regiment. The task force included elements from multiple units of the 7th Infantry Division. When Colonel MacLean was killed in action on November 29, command passed to Lieutenant Colonel Don C. Faith Jr., commander of the 1st Battalion, 32nd Infantry Regiment (1/32), and the unit became known as Task Force Faith.</p>
@@ -809,6 +813,7 @@
         </section>
 
         <section id="timeline" class="section">
+		
             <h2>Timeline of the Five-Day Battle</h2>
             <h3>November 27 – December 1, 1950</h3>
 
