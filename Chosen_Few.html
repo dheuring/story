@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Battle of Chosin Reservoir - Complete Narrative</title>
+    <title>My Dad - One of the Chosin Few</title>
     <style>
         * {
             margin: 0;
@@ -11,49 +11,205 @@
             box-sizing: border-box;
         }
 
+		:root {
+			--primary-dark: #1a2332;
+			--primary-blue: #2c3e50;
+			--accent-gold: #d4af37;
+			--text-light: #ecf0f1;
+			--text-dark: #2c3e50;
+			--bg-light: #f8f9fa;
+			--border-color: #bdc3c7;
+
+			scroll-padding-top: 120px; /* critical line */
+		}
+
         body {
             font-family: 'Georgia', serif;
+            font-size: 18px;
             line-height: 1.7;
-            color: #2c3e50;
-            background: white;
-            padding: 2rem;
-            min-height: 100vh;
+            color: var(--text-dark);
+            background: var(--bg-light);
+        }
+
+        /* Reading Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--accent-gold);
+            width: 0%;
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
+            color: var(--text-light);
+            padding: 120px 20px 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(255,255,255,0.03) 2px,
+                rgba(255,255,255,0.03) 4px
+            );
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            font-weight: normal;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            color: #f4d03f;
+            font-style: italic;
+        }
+
+        .hero-dedication {
+            font-size: 1.1em;
+            max-width: 700px;
+            margin: 30px auto 0;
+            padding: 20px;
+            border-top: 2px solid var(--accent-gold);
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
+        nav {
+            background: var(--primary-dark);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--accent-gold);
+        }
+
+        .nav-header {
+            display: none;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            gap: 30px;
+            overflow-x: auto;
+            justify-content: center;
+        }
+
+        .nav-content a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.95em;
+            white-space: nowrap;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-content a:hover {
+            color: var(--accent-gold);
+            border-color: var(--accent-gold);
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-content a:focus {
+            outline: 3px solid var(--accent-gold);
+            outline-offset: 2px;
+        }
+
+        .nav-content a.active {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: var(--accent-gold);
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 40px 20px;
         }
 
         .section {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            padding: 3rem;
+            margin-bottom: 60px;
+            padding-bottom: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s forwards;
         }
 
+        .section:first-child {
+            border-top: none;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section:nth-child(2) { animation-delay: 0.1s; }
+        .section:nth-child(3) { animation-delay: 0.2s; }
+        .section:nth-child(4) { animation-delay: 0.3s; }
+
         h2 {
-            font-size: 2.5rem;
-            color: #333;
-            margin-bottom: 0.5rem;
+            font-size: 2.2em;
+            line-height: 1.2;
+            color: var(--primary-dark);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--accent-gold);
         }
 
         h3 {
-            font-size: 1.5rem;
-            color: #333;
-            margin-bottom: 2rem;
-            font-weight: normal;
+            font-size: 1.6em;
+            line-height: 1.3;
+            color: var(--primary-blue);
+            margin: 50px 0 20px;
         }
 
         h4 {
-            font-size: 1.25rem;
-            color: #333;
+            font-size: 1.25em;
+            line-height: 1.4;
+            color: var(--primary-blue);
             margin: 30px 0 15px;
             font-style: italic;
         }
 
-        .intro {
-            margin-bottom: 3rem;
-        }
-
         p {
-            margin-bottom: 1rem;
-            text-align: justify;
+            margin-bottom: 20px;
+            text-align: left;
         }
 
         ul {
@@ -65,49 +221,120 @@
             margin-bottom: 12px;
         }
 
+        .pullquote {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 6px solid var(--accent-gold);
+            border-radius: 4px;
+            padding: 30px 40px;
+            margin: 40px 0;
+            font-size: 1.2em;
+            line-height: 1.6;
+            font-style: italic;
+            color: var(--primary-dark);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .highlight-box {
+            background: white;
+            border: 2px solid var(--accent-gold);
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--accent-gold);
+        }
+
+        .highlight-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .stat-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 50px 0;
+        }
+
+        .stat {
+            background: var(--primary-dark);
+            color: var(--text-light);
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .stat:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .stat-number {
+            font-size: 3em;
+            color: var(--accent-gold);
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+        }
+
         .timeline {
             position: relative;
-            padding-left: 2rem;
+            padding-left: 50px;
+            margin: 40px 0;
         }
+
 
         .timeline::before {
             content: '';
             position: absolute;
-            left: 0;
+            left: 20px;
             top: 0;
             bottom: 0;
             width: 3px;
-            background: #333;
+            background: var(--accent-gold);
         }
 
         .timeline-item {
             position: relative;
-            margin-bottom: 2.5rem;
-            padding-left: 2rem;
+            margin-bottom: 40px;
         }
 
         .timeline-item::before {
             content: '';
             position: absolute;
-            left: -2rem;
-            top: 0.3rem;
-            width: 12px;
-            height: 12px;
-            background: white;
-            border: 3px solid #333;
+            left: -38px;
+            top: 5px;
+            width: 15px;
+            height: 15px;
             border-radius: 50%;
-            box-shadow: 0 0 0 4px white;
+            background: var(--accent-gold);
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--accent-gold);
         }
 
         .timeline-date {
             font-weight: bold;
-            font-size: 1.1rem;
-            color: #333;
-            margin-bottom: 0.75rem;
+            color: var(--accent-gold);
+            font-size: 1.1em;
+            margin-bottom: 10px;
         }
 
-        .timeline-item p:last-child {
-            margin-bottom: 0;
+        .image-placeholder {
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+            border: 2px dashed var(--border-color);
+            padding: 60px 20px;
+            text-align: center;
+            margin: 40px 0;
+            color: #6c757d;
+            font-style: italic;
         }
 
         .map-container {
@@ -117,64 +344,476 @@
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .map-container img {
             max-width: 100%;
             height: auto;
-            border: 2px solid #bdc3c7;
+            border: 2px solid var(--border-color);
             border-radius: 4px;
         }
 
         .map-caption {
             margin-top: 20px;
             font-style: italic;
-            color: #2c3e50;
+            color: var(--primary-blue);
             font-size: 1em;
             font-weight: 600;
+            text-align: center;
         }
 
-        .pullquote {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-left: 6px solid #8B7355;
-            border-radius: 4px;
-            padding: 30px 40px;
+        .captain-statement {
+            background: #f8f9fa;
+            border: 3px double var(--primary-blue);
+            padding: 40px;
             margin: 40px 0;
-            font-size: 1.2em;
-            line-height: 1.6;
-            font-style: italic;
-            color: #1a2332;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.7;
         }
 
-        @media (max-width: 768px) {
-            body {
-                padding: 1rem;
+        .captain-statement h3 {
+            font-family: 'Georgia', serif;
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary-dark);
+        }
+
+        .memorial-section {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
+            color: var(--text-light);
+            padding: 80px 20px;
+            margin: 80px -20px 0;
+        }
+
+        .memorial-section h2 {
+            color: var(--text-light);
+            border-bottom-color: var(--accent-gold);
+            text-align: center;
+        }
+
+        .memorial-content {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .memorial-content p {
+            text-align: left;
+        }
+
+        footer {
+            background: var(--primary-dark);
+            color: var(--text-light);
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 0;
+        }
+
+        .author-credit {
+            font-style: italic;
+            color: var(--accent-gold);
+            margin-top: 10px;
+        }
+
+        .footer-link {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .footer-link:hover {
+            background: #f4d03f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+        }
+
+        .footer-link:active {
+            transform: translateY(0);
+        }
+
+        .footer-link:focus {
+            outline: 3px solid var(--accent-gold);
+            outline-offset: 2px;
+        }
+
+        /* Gold Button for Links */
+        .gold-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--accent-gold);
+            color: var(--primary-dark);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .gold-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+        }
+
+        .gold-button:focus {
+            outline: 3px solid var(--accent-gold);
+            outline-offset: 2px;
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s, transform 0.2s;
+            z-index: 99;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: #f4d03f;
+            transform: translateY(-3px);
+        }
+
+        .back-to-top:focus {
+            outline: 3px solid var(--accent-gold);
+            outline-offset: 2px;
+        }
+
+        /* Accessibility - Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            .section {
+                animation: none;
+                opacity: 1;
+                transform: none;
+            }
+            
+            .nav-content a,
+            .stat,
+            .back-to-top,
+            .footer-link {
+                transition: none;
             }
 
-            .section {
-                padding: 1.5rem;
+            .progress-bar {
+                transition: none;
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            body {
+                font-size: 16px;
+            }
+
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2em;
             }
 
             h2 {
-                font-size: 2rem;
+                font-size: 2em;
             }
 
             h3 {
-                font-size: 1.2rem;
+                font-size: 1.5em;
+            }
+
+            h4 {
+                font-size: 1.2em;
+            }
+
+            .nav-content {
+                justify-content: flex-start;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .nav-content a {
+                font-size: 0.85em;
+                padding: 6px 12px;
+            }
+
+            .pullquote {
+                padding: 20px;
+                font-size: 1.1em;
             }
 
             .timeline {
-                padding-left: 1.5rem;
+                padding-left: 40px;
             }
 
-            .timeline-item {
-                padding-left: 1.5rem;
+            .stat-label {
+                font-size: 0.95em;
+            }
+
+            .memorial-section {
+                padding: 60px 15px;
+                margin-left: -15px;
+                margin-right: -15px;
+            }
+
+            .container {
+                padding: 30px 15px;
+            }
+
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+
+            .map-container {
+                padding: 20px;
             }
         }
-    </style>
+
+        /* Print Styles */
+        @media print {
+            .hero, nav, footer, .back-to-top, .progress-bar {
+                display: none;
+            }
+
+            .section {
+                page-break-inside: avoid;
+                animation: none;
+                opacity: 1;
+                transform: none;
+            }
+
+            body {
+                font-size: 12pt;
+                line-height: 1.5;
+            }
+
+			.container {
+				max-width: 100%;
+				padding: 0;
+			}
+
+			.section h2 {
+				margin-top: 0;
+				padding-top: 1px; /* prevents margin collapse */
+			}
+</style>
 </head>
 <body>
+    <!-- Reading Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Back to Top Button -->
+    <a href="#top" class="back-to-top" id="backToTop" aria-label="Back to top">↑</a>
+
+    <div id="top"></div>
+
+    <div class="hero">
+        <div class="hero-content">
+            <h1>My Dad — One of the Chosin Few</h1>
+            <div class="hero-subtitle">A Story of Courage, Sacrifice, and the Battle of the Frozen Chosin</div>
+            <div class="hero-dedication">
+                Dedicated to Corporal Norman A. Heuring<br>
+                Company K, 3rd Battalion, 31st Regiment, 7th Infantry Division<br>
+                Korean War, 1950-1951
+            </div>
+        </div>
+    </div>
+
+    <nav>
+        <div class="nav-content">
+            <a href="#motivation">Honoring Memory</a>
+            <a href="#origins">War Origins</a>
+            <a href="#battle">Battle of Chosin</a>
+            <a href="#timeline">Timeline</a>
+            <a href="#hell">Five Days of Hell</a>
+            <a href="#aftermath">Aftermath</a>
+            <a href="#closing">Closing Thoughts</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section id="motivation" class="section">
+            <h2>Honoring Memory: My Motivation for Telling This Story</h2>
+            <p style="font-style: italic; color: var(--primary-blue); font-size: 1.1em;">By Dave Heuring</p>
+            
+            <p>When I began writing my autobiography about a year ago, one of the first questions I asked myself was why I was born in Lansing, Michigan. My parents had moved there shortly after my father returned from the Korean War, but I knew little about his service. I happened to have his DD-214 discharge document, and out of curiosity, I entered his unit designation into a Google search. What I discovered stunned me: details about the so-called "Forgotten War" and, in particular, the harrowing Battle of the Frozen Chosin—a battle my father had never spoken about.</p>
+
+            <div class="pullquote">
+                "My father rarely spoke about what he endured during those brutal days. Of the few memories he did share, three stand out: the unbearable cold, the relentless enemy attacks that came in waves throughout the night, and the terrifying moment when he pretended to be dead as enemy soldiers poked him with their rifle barrels after his position was overrun."
+            </div>
+
+            <p>Driven to learn more, I conducted extensive research on the battle, even retrieving decades-old documents from the National Archives. What I have uncovered has left me both stunned and filled with a resigned sadness for what my father experienced. Through this effort, I have compiled an account of my father, Norman Heuring's traumatic experience at the Battle of the Frozen Chosin to offer him the respect and gratitude he so deeply deserves posthumously.</p>
+
+            <p>As you will read, the battle was horrific and ended with the destruction of the task force to which he belonged. My father served in Company K, 3rd Battalion, 31st Regiment, 7th Infantry Division. His company commander, Captain Robert J. Kitz, survived and later wrote a detailed statement describing the ordeal. His account, as well as many other sources, provided me with a deeper understanding of the unimaginable hardships, acts of bravery, and the true sequence of events that unfolded during those desperate days.</p>
+
+            <div class="highlight-box">
+                <h3>The Hidden Truth</h3>
+                <p>Unfortunately, serious mistakes made by senior officers at the highest levels of command led to the aftermath being shrouded in secrecy: all records were stamped "secret" and sealed, concealing the true story of what happened during those four days and five nights of desperate fighting.</p>
+            </div>
+
+            <div class="stat-box">
+                <div class="stat">
+                    <span class="stat-number">3,200</span>
+                    <span class="stat-label">Original Task Force<br>(2,500 Americans, 700 ROK)</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">385</span>
+                    <span class="stat-label">Able-Bodied Survivors</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">12%</span>
+                    <span class="stat-label">Survival Rate</span>
+                </div>
+            </div>
+
+            <p>Of the original 3,200 men in this regimental task force—comprising 2,500 Americans and 700 Republic of Korea (ROK) soldiers—my father was one of only 385 able-bodied survivors. Yet, he and the others were unjustly labeled as having abandoned their positions and fled. I believe this accusation weighed heavily on him for the rest of his life. It is deeply regrettable that the truth of what this task force endured only emerged many years later, after historians pieced together an accurate account based on interviews with the survivors and declassified documents from the National Archives.</p>
+
+            <p>My father passed away in 1998, never knowing that the world would one day recognize the true significance of his task force's sacrifice. The four-day, five-night stand by the task force played a critical role in holding back the Chinese army, preventing them from closing the only escape route to the port at Hungnam. Without their resistance, the Chinese forces could have cut off and destroyed the 1st Marine Division and elements of the 7th Infantry Division fighting their way south from the western and eastern shores of the Chosin Reservoir.</p>
+
+            <div class="pullquote">
+                "I am therefore dedicating this research and retelling of the Battle of the Frozen Chosin to my father, Corporal Norman A. Heuring, in honor of his previously unacknowledged but extraordinary courage and sacrifice."
+            </div>
+        </section>
+
+        <section id="origins" class="section">
+            <h2>The Origins and Early Course of the Korean War</h2>
+            
+            <p>The Korean War began in the context of post-World War II tensions and the emerging Cold War. After Japan's defeat in 1945, Korea was divided at the 38th parallel: the Soviet Union occupied the north, and the United States the south. This division, intended as a temporary administrative measure, soon became permanent as both sides established rival governments—communist in the North under Kim Il Sung, and anti-communist in the South under Syngman Rhee.</p>
+
+            <h3>The Invasion: June 25, 1950</h3>
+            
+            <p>In January 1950, U.S. Secretary of State Dean Acheson delivered a speech outlining America's "defensive perimeter" in the Pacific, notably omitting South Korea from the areas the United States would automatically defend. Many historians believe this omission contributed to North Korean leader Kim Il Sung's decision to launch an invasion, under the assumption that the United States would not intervene militarily.</p>
+
+            <p>On June 25, 1950, North Korea launched a full-scale invasion of South Korea, aiming to reunify the peninsula by force. North Korean forces, well-equipped with Soviet tanks and artillery, quickly overran South Korean positions, capturing Seoul within days. The United Nations, led by the United States, responded by sending military forces to support South Korea. Despite this intervention, by August, South Korean and UN forces were driven back to a small defensive perimeter around the port city of Pusan, where they made a determined stand against further North Korean advances—an area that became known as the Pusan Perimeter.</p>
+
+            <h3>The Inchon Landing and Northern Advance</h3>
+
+            <p>In September 1950, UN forces launched a bold counteroffensive that dramatically shifted the course of the Korean War. Under the command of General Douglas MacArthur, they executed a daring amphibious landing at Inchon, striking far behind North Korean lines. This surprise operation enabled UN troops to break out from the Pusan Perimeter, swiftly recapture Seoul, and force the North Korean army into a rapid retreat.</p>
+
+            <p>Following this success, UN and South Korean forces advanced northward, crossing the 38th parallel and pushing deep into North Korea, reaching the Yalu River near the Chinese border by late October. During this advance, key units such as the 1st Marine Division and elements of the 7th Infantry Division moved into the rugged terrain around the Chosin Reservoir, setting the stage for one of the war's most intense and challenging battles.</p>
+
+            <div class="pullquote">
+                "MacArthur even went so far as to declare publicly that American troops would be home for Christmas."
+            </div>
+
+            <p>By late October, UN forces approached the Yalu River, Korea's border with China. General Douglas MacArthur and other U.S. leaders, confident in the rapid progress, assured the public that the war would soon be over. Despite warnings from Beijing, the advance continued. In late October and early November, Chinese forces entered the war, launching massive attacks against the advancing UN troops. This intervention caught the UN forces by surprise and quickly changed the momentum of the conflict.</p>
+
+            <p>By November 1950, UN troops in northeastern Korea, including those around the Chosin Reservoir, faced a new and far more dangerous enemy in the bitter cold of the Korean winter. My father had previously served two years in the U.S. Army at various camps stateside before being discharged. When the Korean War erupted, he was recalled to active duty and arrived in Korea in mid-November 1950, joining his unit, Company K, just as they prepared for a planned attack northward to reach the Chinese border.</p>
+        </section>
+
+        <section id="battle" class="section">
+            <h2>The Battle of Chosin Reservoir</h2>
+
+            <h3>The Setup</h3>
+
+            <p>By late November 1950, the stage was set for one of the most brutal confrontations of the Korean War. UN forces, confident from recent victories, were unprepared for what awaited them at the Chosin Reservoir.</p>
+
+            <h4>Strategic Context and Command Decisions</h4>
+
+            <p>In the aftermath of the successful Inchon Landing and the rapid advance northward, General Douglas MacArthur and the X Corps command remained convinced that Chinese intervention would be limited. Intelligence reports warning of large Chinese troop movements were largely dismissed or downplayed. MacArthur's headquarters maintained that any Chinese forces in Korea were merely volunteers in small numbers, not a coordinated military intervention.</p>
+
+            <p>This miscalculation had dire consequences. General Edward Almond, commanding X Corps, ordered his forces to continue their advance toward the Yalu River despite mounting evidence of massive Chinese presence. The 1st Marine Division was positioned on the western side of the Chosin Reservoir, while Regimental Combat Team 31 (RCT-31) from the 7th Infantry Division was deployed on the eastern shore. These forces were separated by the frozen reservoir and connected only by a treacherous mountain road.</p>
+
+            <p>The orders that sent RCT-31 into position reflected a fundamental misunderstanding of the tactical situation. The regiment was spread thin across multiple positions along the eastern shore, with units separated by significant distances and difficult terrain. This dispersion would prove catastrophic when the Chinese attack came.</p>
+
+            <h4>The Opposing Forces</h4>
+
+            <p>By November 27, Chinese Communist Forces had quietly maneuvered into position around the Chosin Reservoir. The 80th and 81st Divisions of the Chinese 27th Army occupied the high ground surrounding the American positions. These were experienced, battle-hardened troops who had fought in the Chinese Civil War. They were equipped for winter warfare and trained in night operations and infiltration tactics.</p>
+
+            <p>The Chinese numbered approximately 60,000 troops around the Chosin Reservoir, with additional divisions in supporting positions. Against this force, RCT-31 could field approximately 3,200 men, including 2,500 Americans and 700 Republic of Korea soldiers. The Marines on the western shore had greater strength but were also heavily outnumbered.</p>
+
+            <p>The temperature on November 27 dropped to minus 25 degrees Fahrenheit, with wind chill driving it even lower. These conditions affected everything—weapons froze, vehicles wouldn't start, medical supplies became unusable, and frostbite became as dangerous as enemy fire. The Chinese, better prepared for winter operations, used these conditions to their advantage, launching attacks during the coldest parts of the night when American defensive capabilities were most compromised.</p>
+ 
+			<h3>Task Force MacLean (Later Task Force Faith)</h3>
+
+			<p>The Army units positioned east of the Chosin Reservoir were organized as Regimental Combat Team 31 (RCT-31), commanded by Colonel Allan D. MacLean of the 31st Infantry Regiment. The task force included elements from multiple units of the 7th Infantry Division. When Colonel MacLean was killed in action on November 29, command passed to Lieutenant Colonel Don C. Faith Jr., commander of the 1st Battalion, 32nd Infantry Regiment (1/32), and the unit became known as Task Force Faith.</p>
+
+			<p>My father served in Company K, part of the 3rd Battalion, 31st Infantry Regiment (3/31), which was commanded by Lieutenant Colonel William R. Reilly. The main elements of RCT-31 included:</p>
+
+			<ul>
+				<li>1st Battalion, 32nd Infantry Regiment (1/32)</li>
+				<li>2nd Battalion, 31st Infantry Regiment (2/31)</li>
+				<li>3rd Battalion, 31st Infantry Regiment (3/31)</li>				
+				<li>57th Field Artillery Battalion</li>
+				<li>Battery D, 15th Anti-Aircraft Artillery Battalion</li>
+				<li>Company D, 10th Engineer Combat Battalion</li>
+				<li>Headquarters and Service Company elements</li>
+				<li>Republic of Korea (ROK) soldiers attached to various units</li>
+			</ul>
+			
+            <p>RCT-31 was deployed in three main perimeter positions along the eastern shore of the Chosin Reservoir, stretched across approximately seven miles. These positions, from north to south, were: the northern perimeter (held primarily by 1/32 Infantry), the 3/31 perimeter at the inlet (where Company K was positioned), and the southernmost perimeter at Hudong-ni, where the RCT-31 rear command post was located. This dispersion across difficult terrain with limited communication between positions would prove to be a critical vulnerability when the Chinese attacked.</p>
+
+            <h4>The Significance of RCT-31's Position</h4>
+
+            <p>RCT-31's deployment on the eastern shore of the Chosin Reservoir was part of X Corps' overall strategy to advance to the Yalu River. However, the regiment's position exposed it to several critical vulnerabilities:</p>
+
+            <ul>
+                <li>It was separated from the 1st Marine Division on the western shore by the frozen reservoir, making mutual support difficult.</li>
+                <li>The only route of withdrawal was a single, narrow mountain road running south through Hudong-ni to Hagaru-ri, approximately 12 miles away.</li>
+                <li>The surrounding mountains provided ideal positions for Chinese forces to observe and attack the American positions.</li>
+                <li>The dispersed nature of the three perimeters made coordinated defense challenging and prevented units from supporting one another effectively.</li>
+            </ul>
+
+            <p>Despite these vulnerabilities, RCT-31 was ordered to continue preparations for an attack northward. X Corps leadership under Major General Edward Almond, operating from Hamhung, followed orders from higher command and maintained an offensive posture even as intelligence reports suggested large-scale Chinese presence in the area. This offensive focus left the task force inadequately prepared for the massive defensive battle that was about to begin.</p>
+
+			<h3>Deployment of RCT-31's Units on November 27, 1950</h3>
+
+			<p>Colonel MacLean deployed his RCT-31 forces from north to south in the following order: 1/32 Infantry Battalion, MacLean's forward command post, the 31st Heavy Mortar Company, 3/31 Infantry Battalion, the 57th Field Artillery Battalion (FAB), and finally the RCT-31 rear command post (CP) and 31st Tank Company at Hudong-ni. The third infantry battalion assigned to RCT-31, the 2/31 Infantry Battalion, remained delayed at Pungsan and had not yet departed. This battalion would never link up with the other two infantry battalions—a failure that would significantly increase RCT-31's vulnerability in the battle ahead.</p>
+
+			<p>The map below illustrates the deployment of RCT-31's forces. On the reservoir's eastern flank, the regiment's two infantry battalions held strategic positions. Lieutenant Colonel Faith's 1/32nd Battalion secured the northern sector above an inlet that feeds into the reservoir. This battalion relieved Marine units on November 25, allowing those Marines to relocate to the reservoir's western side. Within the 1/32nd, Companies A, B, and C were entrenched in foxholes arranged in an inverted "U" shape, with the forward (CP) situated at the formation's center. When Colonel MacLean arrived on November 27 with the remainder of RCT-31's elements, he joined Lieutenant Colonel Faith at the 1/32nd's command post, consolidating the task force's leadership and control of the northern sector.</p>
+
+			<p>Arriving on November 27, the 3/31st Battalion—comprised of Companies I, K, and L—established a circular defensive perimeter on the eastern side of the inlet. My father, serving with Company K, was assigned to the sector overlooking the bridge spanning a small river at the inlet's tip. At that point, a gravel road from the 1/32nd position intersected southbound railroad tracks, which ran in front of the bridge and then followed the reservoir's shoreline south to Hill 1221. While the rifle companies formed the outer ring of the perimeter, the battalion's support elements—the 57th Field Artillery Battalion (FAB), D Company's mortar section, and medical support units—were stationed in the protected interior alongside the battalion's command post.</p>
+
+			<p>Further south beyond Hill 1221 lay the third position, located in the modest town of Hudong-ni. Here the RCT-31 rear command post was situated in a schoolhouse with other officers and approximately 100 enlisted soldiers. In addition to the rear CP, the 31st Tank Company and the Medical Company were initially positioned at Hudong-ni with orders to join the deployments further north.</p>
+
+			<p>The gravel road that ran from the northernmost position (the 1/32nd Battalion) along the shoreline past the 3/31st perimeter turned away from the parallel railroad at Hill 1221, looped around the opposite side of the hill, and entered Hudong-ni a few miles to the south. This road served as the sole means of ingress and egress for the entire area. From Hudong-ni, the road continued another five miles south to Hagaru-ri, where the 1st Marine Division established its forward headquarters and supply base beside a newly constructed airstrip. That strip accommodated Marine aircraft that provided close air support to the Marine units on the reservoir's western shore and to MacLean's RCT-31 on the eastern side. The airfield would later prove critical for evacuating thousands of wounded during the battle.</p>
+            
+            <div class="map-container">
+                <img src="https://audio.heuring.us/Chosin%20Reservoir%20Area%20showing%20November%2027%20positions%20of%20Task%20Force%20MacLean.png" 
+                     alt="Map: Chosin Reservoir Area showing November 27 positions of Task Force MacLean">
+                <p class="map-caption">Chosin Reservoir Area showing November 27 positions of Task Force MacLean</p>
+            </div>
+
+			<p>Basic defensive positions were established, but because the Americans did not anticipate immediate enemy action, they failed to create a tight perimeter, leaving sizable gaps between the three deployments. The situation deteriorated when the Chinese sent the 242nd Regiment of the 81st Division to seize Hill 1221, an undefended hill that controlled the road to and Hudong-ni. This move isolated the 31st Tank Company and rear command post at Hudong-ni from the two main infantry elements to the north—the 1/32nd and 3/31st Battalions—a development that proved decisive in the ensuing battle.</p>
+
+			<p>On November 27, the Medical Company at Hudong-ni was ordered to move north and join the 3/31st, but it was attacked at Hill 1221. It fought through the ambush and joined the 3/31st deployment. However, the following day and again on the 29th, the tank company mounted two separate attempts to in the forward units. Both efforts were repulsed by enemy forces, leaving a grim trail of charred, burned-out tanks littering the road around Hill 1221. On November 30, both the 31st Tank Company and the RCT-31 rear command post received orders to withdraw to the Marine base at Hagaru-ri. The next day, when Lieutenant Colonel Faith ordered the breakout from the Chinese encirclement in a desperate bid to reach Hagaru-ri, he was unaware of the recall order and fully expected the tank company to be at Hudong-ni to provide crucial support.</p>
+
+            <div class="pullquote">
+                "Task Force MacLean faced significant disadvantages compared to the Marines. Many Army soldiers had little combat training, having come from occupation duty in Japan. They were ill-equipped for the extreme cold, lacking the insulated winter gear issued to the Marines. Communications were poor; there was no time to lay landlines, and radio contact was unreliable."
+            </div>
+        </section>
+	
+
     <section id="timeline" class="section">
         <h2>Timeline of the Five-Day Battle</h2>
         <h3>November 27 – December 1, 1950</h3>
@@ -565,6 +1204,81 @@
         <p>I have written this account not merely to honor my father's memory, but to ensure that my children and grandchildren will always know about this man whose courage and sacrifice helped shape the world they inherited. They should know that their grandfather faced the unthinkable with quiet dignity and never spoke of his own bravery. They should know what he endured, what he survived, and what it cost him.</p>
 
         <p style="font-size: 1.3em; color: #8B7355; text-align: center; margin-top: 40px; font-weight: bold;">This is your grandfather's story. This is my father's legacy.</p>
-    </section>
+    </section>		
+		</div>
+
+    <footer>
+        <p>&copy; 2024 Dave Heuring. All rights reserved.</p>
+        <p class="author-credit">Written in honor and memory of Corporal Norman A. Heuring</p>
+        <p style="margin-top: 20px; font-size: 0.9em;">One of the Chosin Few</p>
+        <a href="Table-of-Contents.html" class="footer-link">← Return to Table of Contents</a>
+    </footer>
+
+    <script>
+        // Cache DOM elements
+        const progressBar = document.getElementById('progressBar');
+        const backToTop = document.getElementById('backToTop');
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-content a');
+
+        // Optimized scroll handler - combines all scroll logic into one listener
+        let ticking = false;
+        
+        function updateOnScroll() {
+            const scrollPosition = window.pageYOffset;
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            
+            // Update progress bar
+            const scrolled = (winScroll / height) * 100;
+            progressBar.style.width = scrolled + '%';
+            
+            // Update back to top button visibility
+            if (scrollPosition > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+            
+            // Update active navigation
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollPosition >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+            
+            ticking = false;
+        }
+
+        // Use requestAnimationFrame for better performance
+        window.addEventListener('scroll', function() {
+            if (!ticking) {
+                window.requestAnimationFrame(updateOnScroll);
+                ticking = true;
+            }
+        });
+
+        // Smooth scroll for back to top
+        backToTop.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Initialize on page load
+        updateOnScroll();
+    </script>
+
 </body>
 </html>
