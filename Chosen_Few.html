@@ -942,6 +942,64 @@
                 <p>The Chinese renewed their attacks with devastating effect. The remnants of the column never reached Hudong-ni itself—the convoy ground to a halt short of the town. With every attack, more trucks had to be abandoned. Each attack was as disheartening as it was deadly. The few remaining able-bodied soldiers could no longer maintain cohesion. The breakout attempt had failed. Individual soldiers and small groups scattered, many fleeing across the frozen reservoir toward the west, others moving along the shoreline toward Hagaru-ri. The organized fighting strength of Task Force Faith had ceased to exist. Lieutenant Colonel Faith died from his wounds in the cab of a truck during this final collapse.</p>
             </div>
         </div>
+		
+		
+            <p style="margin-top: 40px;">This timeline captures the principal events of the five-day battle. The sections that follow expand on these moments, drawing on after-action reports, survivor accounts, and historical records to convey the full scale of the fighting and the conditions endured by Task Force MacLean/Faith.</p>
+
+            <p>To deepen our understanding of my father’s experience, I have incorporated excerpts from Captain Richard Kitz’s seven-page personal statement throughout this narrative. As my father’s company commander, Captain Kitz provides the closest and most immediate firsthand account of what my father faced during the battle. Readers who wish to review Captain Kitz’s statement in its original, unedited form may access it below.</p>
+
+			<p>In addition, I obtained multiple after-action reports from the National Archives. These official records offer essential firsthand detail and context. Where they illuminate events involving Company K or add clarity to my father’s experience, their accounts have been cited and integrated into the narrative that follows.</p>
+            
+			<p style="text-align: center; margin-top: 30px;">
+			<a href="company-k.html" class="save-scroll gold-button">
+				Read Captain Kitz’s Account
+			</a>
+			</p>
+
+			<style>
+			.gold-button {
+				all: revert;
+				display: inline-block;
+				padding: 12px 30px;
+				background-color: #d4af37; /* gold */
+				color: var(--primary-dark);
+				text-decoration: none;
+				border-radius: 8px;
+				font-weight: 600;
+				box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+				transition: transform 0.2s ease, box-shadow 0.2s ease;
+			}
+
+			.gold-button:hover {
+				transform: translateY(-1px);
+				box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+			}
+			</style>
+
+			<script>
+			// Save scroll position
+			document.querySelectorAll("a.save-scroll").forEach(link => {
+				link.addEventListener("click", () => {
+					sessionStorage.setItem('lastScroll', window.scrollY);
+					sessionStorage.setItem('lastPage', window.location.pathname);
+				});
+			});
+
+			// Restore scroll when coming back
+			window.addEventListener("pageshow", () => {
+				const lastPage = sessionStorage.getItem('lastPage');
+				const lastScroll = sessionStorage.getItem('lastScroll');
+
+				if (lastPage === window.location.pathname && lastScroll !== null) {
+					setTimeout(() => {
+						window.scrollTo(0, parseInt(lastScroll, 10));
+					}, 50);
+					sessionStorage.removeItem('lastScroll');
+					sessionStorage.removeItem('lastPage');
+				}
+			});
+			</script>
+
     </section>
 
         <section id="hell" class="section">
