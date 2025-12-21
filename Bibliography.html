@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Theme Color for Mobile Browsers -->
+    <meta name="theme-color" content="#1a2332">
+    <meta name="msapplication-navbutton-color" content="#1a2332">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <title>Bibliography - My Dad: One of the Chosin Few</title>
+    <meta name="description" content="Bibliography and sources for the account of Corporal Norman A. Heuring and the Battle of Chosin Reservoir">
+    <meta name="author" content="Dave Heuring">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+
+        :root {
+            --primary-dark: #1a2332;
+            --primary-blue: #2c3e50;
+            --accent-gold: #d4af37;
+            --text-light: #ecf0f1;
+            --text-dark: #2c3e50;
+            --bg-light: #f8f9fa;
+            --border-color: #bdc3c7;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background: var(--bg-light);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
+            color: var(--text-light);
+            padding: 80px 20px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(255,255,255,0.03) 2px,
+                rgba(255,255,255,0.03) 4px
+            );
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            font-weight: normal;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3em;
+            color: #f4d03f;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .hero-dedication {
+            font-size: 1em;
+            max-width: 600px;
+            margin: 20px auto 0;
+            padding: 15px;
+            border-top: 2px solid var(--accent-gold);
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 40px;
+            padding: 12px 30px;
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: #f4d03f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+        }
+
+        h2 {
+            font-size: 2.2em;
+            line-height: 1.2;
+            color: var(--primary-dark);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--accent-gold);
+        }
+
+        h3 {
+            font-size: 1.6em;
+            line-height: 1.3;
+            color: var(--primary-blue);
+            margin: 50px 0 20px;
+        }
+
+        p {
+            margin-bottom: 20px;
+        }
+
+        .intro {
+            font-size: 1.1em;
+            color: var(--primary-blue);
+            font-style: italic;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: white;
+            border-left: 4px solid var(--accent-gold);
+        }
+
+        .source-category {
+            margin-bottom: 50px;
+        }
+
+        .source {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: white;
+            border-left: 4px solid var(--accent-gold);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .source-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+
+        .source-author {
+            color: var(--primary-blue);
+            margin-bottom: 8px;
+        }
+
+        .source-publication {
+            font-style: italic;
+            margin-bottom: 8px;
+        }
+
+        .source-details {
+            font-size: 0.95em;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .archive-note {
+            font-size: 0.9em;
+            color: #666;
+            background: #f0f0f0;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        footer {
+            background: var(--primary-dark);
+            color: var(--text-light);
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
+        .author-credit {
+            font-style: italic;
+            color: var(--accent-gold);
+            margin-top: 10px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            body {
+                font-size: 16px;
+            }
+
+            .hero h1 {
+                font-size: 2em;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1em;
+            }
+
+            .container {
+                padding: 40px 15px;
+            }
+
+            h2 {
+                font-size: 1.8em;
+            }
+
+            h3 {
+                font-size: 1.4em;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .hero, .back-link, footer {
+                display: none;
+            }
+
+            .source {
+                page-break-inside: avoid;
+            }
+
+            body {
+                font-size: 12pt;
+                color: #000;
+                background: #fff;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Bibliography</h1>
+            <div class="hero-subtitle">Sources and References</div>
+            <div class="hero-dedication">
+                For "My Dad — One of the Chosin Few"<br>
+                The Story of Corporal Norman A. Heuring
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <a href="Chosen_Few.html" class="back-link">← Return to Main Article</a>
+
+        <p class="intro">
+            This bibliography documents the primary and secondary sources used in researching and writing the account of Corporal Norman A. Heuring's service at the Battle of Chosin Reservoir. The sources include official military documents from the National Archives, scholarly historical works, personal accounts from survivors, and contemporary military records. Many of these documents were classified for fifty years and only became available to researchers in the early 2000s.
+        </p>
+
+        <h2>Primary Sources</h2>
+
+        <div class="source-category">
+            <h3>Official Military Records (National Archives)</h3>
+
+            <div class="source">
+                <div class="source-title">Operations Order O-25, RCT 31</div>
+                <div class="source-publication">Korea 1:50,000 map series</div>
+                <div class="source-details">
+                    November 27, 1950<br>
+                    Declassified under Authority NND 745074
+                </div>
+                <div class="archive-note">National Archives</div>
+            </div>
+
+            <div class="source">
+                <div class="source-title">Headquarters, 31st Infantry - Command Report: 1–4 December 1950</div>
+                <div class="source-details">
+                    Dated: March 10, 1951<br>
+                    Declassified under Authority NND 745074
+                </div>
+                <div class="archive-note">National Archives</div>
+            </div>
+
+            <div class="source">
+                <div class="source-title">31st Infantry Regimental Combat Team - Command Report: 1–11 December 1950</div>
+                <div class="source-details">
+                    Dated: March 11, 1951<br>
+                    Declassified under Authority NND 745074
+                </div>
+                <div class="archive-note">National Archives</div>
+            </div>
+
+            <div class="source">
+                <div class="source-title">31st RCT Journal (S-1 Log), Untaek, Korea</div>
+                <div class="source-details">
+                    Pages 56–59<br>
+                    November–December 1950<br>
+                    Declassified under Authority NND 745074
+                </div>
+                <div class="archive-note">National Archives</div>
+            </div>
+
+            <div class="source">
+                <div class="source-author">Drake, Robert E.</div>
+                <div class="source-title">Operations Summary, 25 November to 11 December 1950</div>
+                <div class="source-publication">Tank Company, 31st Infantry Regiment</div>
+                <div class="source-details">
+                    December 12, 1950
+                </div>
+                <div class="archive-note">National Archives</div>
+            </div>
+        </div>
+
+        <div class="source-category">
+            <h3>Personal Accounts and After-Action Reports</h3>
+
+            <div class="source">
+                <div class="source-author">Anderson, Lieutenant Colonel Berry K.</div>
+                <div class="source-title">Report on Operations, 31st Infantry</div>
+                <div class="source-details">
+                    Undated interview transcript [circa December 1950-March 1951]
+                </div>
+                <div class="archive-note">National Archives</div>
+            </div>
+
+            <div class="source">
+                <div class="source-author">Rasula, Captain George A.</div>
+                <div class="source-title">Summary of Operations in the Chosin Reservoir Area</div>
+                <div class="source-details">
+                    Undated personal account [circa 1951]
+                </div>
+                <div class="archive-note">National Archives</div>
+            </div>
+
+            <div class="source">
+                <div class="source-author">Kitz, Captain Robert J.</div>
+                <div class="source-title">Company K After-Action Statement</div>
+                <div class="source-details">
+                    Personal account describing the actions of Company K, 3rd Battalion, 31st Regiment during the Battle of Chosin Reservoir
+                </div>
+                <div class="archive-note">Referenced in multiple historical accounts of RCT-31</div>
+            </div>
+        </div>
+
+        <h2>Secondary Sources</h2>
+
+        <div class="source-category">
+            <h3>Scholarly Histories and Monographs</h3>
+
+            <div class="source">
+                <div class="source-author">Appleman, Roy E.</div>
+                <div class="source-title">East of Chosin: Entrapment and Breakout in Korea, 1950</div>
+                <div class="source-publication">College Station: Texas A&M University Press, 1987</div>
+                <div class="source-details">
+                    ISBN: 0-89096-294-4<br>
+                    The definitive scholarly work on the Army's role at Chosin Reservoir, based on extensive archival research and survivor interviews. Appleman was the official U.S. Army historian for the Korean War.
+                </div>
+            </div>
+
+            <div class="source">
+                <div class="source-author">Vallowe, Ray C.</div>
+                <div class="source-title">What History Failed to Record: A Phantom Force East of the Changjin (Chosin) Reservoir?</div>
+                <div class="source-details">
+                    Self-published, 2013<br>
+                    Personal account by a survivor who served with the 57th Field Artillery Battalion, providing critical firsthand perspective on the battle and its aftermath.
+                </div>
+            </div>
+
+            <div class="source">
+                <div class="source-author">Vogel, Steve</div>
+                <div class="source-title">A Task Force Called Faith: The Untold Story of the U.S. Army Soldiers Who Fought for Survival at Chosin Reservoir—and Honor Back Home</div>
+                <div class="source-publication">New York: Simon & Schuster, 2024</div>
+                <div class="source-details">
+                    ISBN: 978-1493092895<br>
+                    Recent comprehensive account that draws on newly declassified documents and extensive survivor interviews to restore the historical reputation of RCT-31.
+                </div>
+            </div>
+        </div>
+
+        <div class="source-category">
+            <h3>Reference Works and Historical Context</h3>
+
+            <div class="source">
+                <div class="source-author">Rasula, Colonel George A. (USA, Ret.)</div>
+                <div class="source-title">The Changjin Journal</div>
+                <div class="source-details">
+                    76 chapters, ongoing publication<br>
+                    Comprehensive compilation of documents, accounts, and analysis of the Chosin Reservoir campaign, with particular attention to the Army units east of the reservoir.
+                </div>
+            </div>
+
+            <div class="source">
+                <div class="source-title">Battle of Chosin Reservoir</div>
+                <div class="source-publication">Wikipedia</div>
+                <div class="source-details">
+                    Accessed December 2024<br>
+                    Comprehensive overview article with extensive citations to primary and secondary sources
+                </div>
+            </div>
+
+            <div class="source">
+                <div class="source-title">Task Force Faith</div>
+                <div class="source-publication">Wikipedia</div>
+                <div class="source-details">
+                    Accessed December 2024<br>
+                    Detailed article on RCT-31/Task Force Faith with casualty statistics and operational timeline
+                </div>
+            </div>
+        </div>
+
+        <h2>Archival Collections</h2>
+
+        <div class="source-category">
+            <div class="source">
+                <div class="source-title">National Archives and Records Administration (NARA)</div>
+                <div class="source-details">
+                    Record Group 407: Records of the Adjutant General's Office<br>
+                    Korean War After-Action Reports and Unit Journals<br>
+                    College Park, Maryland<br>
+                    <br>
+                    Contains the declassified official records of RCT-31, 7th Infantry Division, and X Corps operations during the Chosin Reservoir campaign. Many documents were classified "Secret" for fifty years before being released under declassification authority NND 745074.
+                </div>
+            </div>
+
+            <div class="source">
+                <div class="source-title">U.S. Army Heritage and Education Center (AHEC)</div>
+                <div class="source-details">
+                    Carlisle, Pennsylvania<br>
+                    Korean War Veterans Survey Collection<br>
+                    Personal papers and oral histories from Korean War veterans
+                </div>
+            </div>
+        </div>
+
+        <h2>Maps and Visual Materials</h2>
+
+        <div class="source-category">
+            <div class="source">
+                <div class="source-author">Appleman, Roy E.</div>
+                <div class="source-title">"31st RCT Positions, 27 November 1950" (Map 7)</div>
+                <div class="source-publication">From: East of Chosin: Entrapment and Breakout in Korea, 1950</div>
+                <div class="source-details">
+                    Texas A&M University Press, 1987<br>
+                    Detailed tactical map showing the deployment of RCT-31 units east of the Chosin Reservoir
+                </div>
+            </div>
+        </div>
+
+        <h2>Online Resources</h2>
+
+        <div class="source-category">
+            <div class="source">
+                <div class="source-title">The Army at Chosin</div>
+                <div class="source-publication">31rct.tripod.com</div>
+                <div class="source-details">
+                    Comprehensive website dedicated to preserving the history of the 31st RCT, including casualty lists, morning reports, and personal stories from survivors and their families.
+                </div>
+            </div>
+
+            <div class="source">
+                <div class="source-title">Defense POW/MIA Accounting Agency (DPAA)</div>
+                <div class="source-publication">dpaa.mil</div>
+                <div class="source-details">
+                    Official records of personnel missing in action from the Chosin Reservoir campaign, including ongoing recovery and identification efforts.
+                </div>
+            </div>
+
+            <div class="source">
+                <div class="source-title">The Chosin Few</div>
+                <div class="source-publication">chosinreservoir.com</div>
+                <div class="source-details">
+                    Official website of The Chosin Few veterans organization, preserving the history and honoring those who fought at Chosin Reservoir.
+                </div>
+            </div>
+        </div>
+
+        <h2>Acknowledgments</h2>
+
+        <div class="source-category">
+            <p>This account would not have been possible without the decades of work by military historians, archivists, and survivors who refused to let the truth about RCT-31 remain buried. Special recognition is due to:</p>
+
+            <ul style="margin: 20px 0 20px 40px; line-height: 1.9;">
+                <li>Roy E. Appleman, whose meticulous research in the 1980s laid the foundation for understanding what really happened east of the reservoir</li>
+                <li>The survivors of RCT-31 who fought for fifty years to clear their names and restore their honor</li>
+                <li>The staff of the National Archives who preserved and declassified the crucial documents</li>
+                <li>The families who kept their loved ones' stories alive and demanded historical accountability</li>
+                <li>Colonel George A. Rasula and other veterans who compiled comprehensive accounts and advocated for recognition</li>
+            </ul>
+
+            <p style="margin-top: 30px; font-style: italic; color: var(--primary-blue);">
+                The historical vindication of RCT-31, culminating in the Navy Presidential Unit Citation awarded in 2000, stands as a testament to the power of historical truth and the importance of preserving accurate military records.
+            </p>
+        </div>
+
+        <h2>Note on Sources</h2>
+
+        <div class="source-category">
+            <p class="intro">
+                The majority of official military records cited in this account remained classified as "Secret" for fifty years following the battle. The declassification of these documents beginning in the late 1990s and early 2000s fundamentally changed the historical understanding of what transpired at Chosin Reservoir. Earlier accounts, including official Marine Corps histories, were written without access to these critical Army records and thus provided an incomplete—and often inaccurate—picture of RCT-31's role in the battle.
+            </p>
+
+            <p>
+                Personal accounts from survivors, while invaluable for understanding the human experience of the battle, must be read with the understanding that these men experienced extreme trauma, sleep deprivation, and hypothermia during the events they describe. Where possible, personal accounts have been corroborated with official unit records and multiple witness testimonies.
+            </p>
+
+            <p style="margin-top: 30px; padding: 20px; background: white; border-left: 4px solid var(--accent-gold);">
+                <strong>For Researchers:</strong> Researchers interested in accessing the original documents cited in this account should contact the National Archives and Records Administration (NARA) in College Park, Maryland. Many documents are now available through NARA's online catalog. The U.S. Army Heritage and Education Center in Carlisle, Pennsylvania, also maintains relevant materials in their Korean War collections.
+            </p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Dave Heuring. All rights reserved.</p>
+        <p class="author-credit">Written in honor and memory of Corporal Norman A. Heuring</p>
+        <p style="margin-top: 20px; font-size: 0.9em;">One of the Chosin Few</p>
+    </footer>
+</body>
+</html>
