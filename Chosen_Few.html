@@ -3,12 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Theme Color for Mobile Browsers -->
+    <meta name="theme-color" content="#1a2332">
+    <meta name="msapplication-navbutton-color" content="#1a2332">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Performance Optimization - Resource Hints -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="preconnect" href="//fonts.googleapis.com" crossorigin>
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
     <title>My Dad - One of the Chosin Few</title>
+    <meta name="description" content="A tribute to Corporal Norman A. Heuring, one of the Chosin Few who survived the Battle of Chosin Reservoir in Korea, 1950.">
+    <meta name="author" content="Dave Heuring">
+    <meta name="keywords" content="Chosin Reservoir, Korean War, Task Force Faith, RCT-31, Chosin Few, Norman Heuring">
+    
+    <!-- Canonical URL - Update this to your actual domain when published -->
+    <link rel="canonical" href="https://yoursite.com/Chosen_Few.html">
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="My Dad - One of the Chosin Few">
+    <meta property="og:description" content="A tribute to Corporal Norman A. Heuring, survivor of the Battle of Chosin Reservoir">
+    <meta property="og:type" content="article">
+    <meta property="og:locale" content="en_US">
+    <meta property="article:author" content="Dave Heuring">
+    <meta property="article:published_time" content="2024-12-20">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="My Dad - One of the Chosin Few">
+    <meta name="twitter:description" content="A tribute to Corporal Norman A. Heuring, survivor of the Battle of Chosin Reservoir">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "My Dad - One of the Chosin Few",
+        "description": "A tribute to Corporal Norman A. Heuring, one of the Chosin Few who survived the Battle of Chosin Reservoir in Korea, 1950",
+        "author": {
+            "@type": "Person",
+            "name": "Dave Heuring"
+        },
+        "datePublished": "2024-12-20",
+        "about": {
+            "@type": "Person",
+            "name": "Norman A. Heuring",
+            "honorificPrefix": "Corporal",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "7th Infantry Division, United States Army"
+            },
+            "description": "Korean War veteran who served in Company K, 3rd Battalion, 31st Regiment, 7th Infantry Division and survived the Battle of Chosin Reservoir"
+        },
+        "keywords": "Chosin Reservoir, Korean War, Task Force Faith, RCT-31, Chosin Few, Norman Heuring, Battle of Chosin",
+        "articleSection": "Military History",
+        "inLanguage": "en-US"
+    }
+    </script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Respect user preference for reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
         }
 
 		:root {
@@ -29,6 +110,40 @@
             line-height: 1.7;
             color: var(--text-dark);
             background: var(--bg-light);
+        }
+
+        /* Skip Link for Accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+            padding: 8px 16px;
+            text-decoration: none;
+            z-index: 1001;
+            font-weight: bold;
+            border-radius: 0 0 4px 0;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Focus Indicators for Accessibility */
+        a:focus,
+        button:focus {
+            outline: 3px solid var(--accent-gold);
+            outline-offset: 2px;
+        }
+
+        a:focus:not(:focus-visible) {
+            outline: none;
+        }
+
+        a:focus-visible {
+            outline: 3px solid var(--accent-gold);
+            outline-offset: 2px;
         }
 
         /* Reading Progress Bar */
@@ -211,6 +326,21 @@
             margin-bottom: 20px;
             text-align: left;
         }
+        
+        /* Content Links */
+        .section a:not(.gold-button) {
+            color: var(--primary-blue);
+            text-decoration: underline;
+            text-decoration-color: var(--accent-gold);
+            text-decoration-thickness: 2px;
+            text-underline-offset: 2px;
+            transition: all 0.2s ease;
+        }
+        
+        .section a:not(.gold-button):hover {
+            color: var(--accent-gold);
+            text-decoration-color: var(--primary-blue);
+        }
 
         ul {
             margin: 20px 0 20px 40px;
@@ -279,6 +409,15 @@
             font-weight: bold;
             display: block;
             margin-bottom: 10px;
+        }
+        
+        .stat-number.counting {
+            animation: pulse 0.5s ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
 
         .stat-label {
@@ -354,6 +493,17 @@
             height: auto;
             border: 2px solid var(--border-color);
             border-radius: 4px;
+        }
+        
+        /* Image Optimization - Ready for future images */
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        img[loading="lazy"] {
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
         }
 
         .map-caption {
@@ -516,6 +666,108 @@
             outline-offset: 2px;
         }
 
+        /* Font Size Controls */
+        .font-controls {
+            position: fixed;
+            top: 120px;
+            right: 30px;
+            background: white;
+            border: 2px solid var(--accent-gold);
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 98;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .font-control-btn {
+            background: var(--primary-dark);
+            color: var(--text-light);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .font-control-btn:hover {
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .font-control-btn:focus {
+            outline: 3px solid var(--accent-gold);
+            outline-offset: 2px;
+        }
+
+        .font-control-label {
+            font-size: 0.75em;
+            text-align: center;
+            color: var(--primary-dark);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        /* Glossary Tooltips */
+        .glossary-term {
+            border-bottom: 2px dotted var(--accent-gold);
+            cursor: help;
+            position: relative;
+            color: var(--primary-blue);
+            font-weight: 500;
+        }
+
+        .glossary-term:hover {
+            color: var(--accent-gold);
+        }
+
+        .glossary-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-dark);
+            color: var(--text-light);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            line-height: 1.5;
+            width: 280px;
+            max-width: 90vw;
+            margin-bottom: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            font-weight: normal;
+        }
+
+        .glossary-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: var(--primary-dark);
+        }
+
+        .glossary-term:hover .glossary-tooltip,
+        .glossary-term:focus .glossary-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
         /* Accessibility - Reduced Motion */
         @media (prefers-reduced-motion: reduce) {
             .section {
@@ -603,6 +855,18 @@
                 height: 45px;
                 font-size: 20px;
             }
+            
+            .font-controls {
+                top: 80px;
+                right: 15px;
+                padding: 8px;
+            }
+            
+            .font-control-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 1em;
+            }
 
             .map-container {
                 padding: 20px;
@@ -620,11 +884,14 @@
                 animation: none;
                 opacity: 1;
                 transform: none;
+                border-top: none;
             }
 
             body {
                 font-size: 12pt;
                 line-height: 1.5;
+                color: #000;
+                background: #fff;
             }
 
 			.container {
@@ -635,22 +902,88 @@
 			.section h2 {
 				margin-top: 0;
 				padding-top: 1px; /* prevents margin collapse */
+				page-break-after: avoid;
+				border-bottom: 2px solid #000;
 			}
+			
+			h3, h4 {
+			    page-break-after: avoid;
+			    color: #000;
+			}
+			
+			.pullquote {
+			    background: #f0f0f0;
+			    border-left: 4px solid #000;
+			    page-break-inside: avoid;
+			}
+			
+			.highlight-box {
+			    border: 2px solid #000;
+			    page-break-inside: avoid;
+			}
+			
+			.stat-box {
+			    page-break-inside: avoid;
+			}
+			
+			.stat {
+			    background: #e0e0e0;
+			    color: #000;
+			}
+			
+			.timeline {
+			    page-break-inside: avoid;
+			}
+			
+			a {
+			    color: #000;
+			    text-decoration: underline;
+			}
+			
 			.reference {
 				font-size: 0.9em;
 				color: #555;
 				font-style: italic;
 				margin-top: 12px;
 			}
+			
+			/* Print attribution on first page */
+			.hero-content::after {
+			    content: "A tribute to Corporal Norman A. Heuring by Dave Heuring";
+			    display: block;
+			    margin-top: 20px;
+			    padding-top: 20px;
+			    border-top: 2px solid #000;
+			    font-size: 10pt;
+			    text-align: center;
+			}
 
 </style>
 </head>
 <body>
+    <!-- NoScript Fallback -->
+    <noscript>
+        <div style="background: #d4af37; color: #1a2332; padding: 15px; text-align: center; font-weight: bold;">
+            This page works best with JavaScript enabled. Some interactive features may not be available.
+        </div>
+    </noscript>
+
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <!-- Reading Progress Bar -->
     <div class="progress-bar" id="progressBar"></div>
 
     <!-- Back to Top Button -->
     <a href="#top" class="back-to-top" id="backToTop" aria-label="Back to top">↑</a>
+
+    <!-- Font Size Controls -->
+    <div class="font-controls" id="fontControls">
+        <div class="font-control-label">Text Size</div>
+        <button class="font-control-btn" id="fontIncrease" aria-label="Increase font size" title="Increase font size">A+</button>
+        <button class="font-control-btn" id="fontDecrease" aria-label="Decrease font size" title="Decrease font size">A-</button>
+        <button class="font-control-btn" id="fontReset" aria-label="Reset font size" title="Reset font size">A</button>
+    </div>
 
     <div id="top"></div>
 
@@ -658,6 +991,9 @@
         <div class="hero-content">
             <h1>My Dad — One of the Chosin Few</h1>
             <div class="hero-subtitle">A Story of Courage, Sacrifice, and the Battle of the Frozen Chosin</div>
+            <div style="color: #f4d03f; font-size: 0.95em; margin: 15px 0; font-style: italic;">
+                <span id="readingTime">📖 Estimated reading time: 80 minutes</span>
+            </div>
             <div class="hero-dedication">
                 Dedicated to Corporal Norman A. Heuring<br>
                 Company K, 3rd Battalion, 31st Regiment, 7th Infantry Division<br>
@@ -666,7 +1002,7 @@
         </div>
     </div>
 
-    <nav>
+    <nav role="navigation" aria-label="Page sections">
         <div class="nav-content">
             <a href="#motivation">Honoring Memory</a>
             <a href="#origins">War Origins</a>
@@ -678,7 +1014,8 @@
         </div>
     </nav>
 
-    <div class="container">
+    <main id="main-content">
+        <div class="container">
         <section id="motivation" class="section">
             <h2>Honoring Memory: My Motivation for Telling This Story</h2>
             <p style="font-style: italic; color: var(--primary-blue); font-size: 1.1em;">By Dave Heuring</p>
@@ -1261,7 +1598,7 @@
 
         <p>From December 2 through December 7, the provisional 31st Regimental Combat Team defended an assigned sector of the Hagaru-ri perimeter against constant Chinese Communist Forces attacks. The Marines on the western side of the reservoir had fought their way into Hagaru-ri and were preparing for a coordinated withdrawal south. During these five days, my father and his fellow soldiers—exhausted, frostbitten, and still reeling from the trauma of the previous week—held their positions and repulsed repeated enemy assaults. They had survived the destruction of Task Force Faith only to face another week of continuous combat in sub-zero temperatures.</p>
 		
-		<p>Yhe reorganization brought together a diverse mix of survivors. Captain Rasula, who commanded I Company in the provisional 3rd Battalion, noted that his entire company consisted of artillerymen from the 57th Field Artillery Battalion, with three artillery officers serving as platoon leaders—men trained as gunners now serving as riflemen. Captain Kitz commanded K Company, while Lieutenant Boyer led L Company. The provisional regiment's three field kitchens operated around the clock, with each kitchen serving over 1,000 men per meal as Marines from the western side of the reservoir joined the Army survivors in the defensive perimeter.</p>
+		<p>The reorganization brought together a diverse mix of survivors. Captain Rasula, who commanded I Company in the provisional 3rd Battalion, noted that his entire company consisted of artillerymen from the 57th Field Artillery Battalion, with three artillery officers serving as platoon leaders—men trained as gunners now serving as riflemen. Captain Kitz commanded K Company, while Lieutenant Boyer led L Company. The provisional regiment's three field kitchens operated around the clock, with each kitchen serving over 1,000 men per meal as Marines from the western side of the reservoir joined the Army survivors in the defensive perimeter.</p>
 		
 		<p class="reference">
 			<strong>Reference:</strong> Captain George A. Rasula, <emSummary of Operations in the Chosin Reservoir Area,</em>undated personal account, National Archives.
@@ -1367,12 +1704,13 @@
         <p style="font-size: 1.3em; color: #8B7355; text-align: center; margin-top: 40px; font-weight: bold;">This is your grandfather's story. This is my father's legacy.</p>
     </section>		
 		</div>
+    </main>
 
     <footer>
         <p>&copy; 2024 Dave Heuring. All rights reserved.</p>
         <p class="author-credit">Written in honor and memory of Corporal Norman A. Heuring</p>
         <p style="margin-top: 20px; font-size: 0.9em;">One of the Chosin Few</p>
-        <a href="Table-of-Contents.html" class="footer-link">← Return to Table of Contents</a>
+        <a href="Table-of-Contents.html" class="footer-link" rel="prev">← Return to Table of Contents</a>
     </footer>
 
     <script>
@@ -1381,6 +1719,11 @@
         const backToTop = document.getElementById('backToTop');
         const sections = document.querySelectorAll('.section');
         const navLinks = document.querySelectorAll('.nav-content a');
+
+        // Error handling - verify required elements exist
+        if (!progressBar || !backToTop) {
+            console.warn('Required DOM elements not found');
+        }
 
         // Optimized scroll handler - combines all scroll logic into one listener
         let ticking = false;
@@ -1391,31 +1734,37 @@
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             
             // Update progress bar
-            const scrolled = (winScroll / height) * 100;
-            progressBar.style.width = scrolled + '%';
+            if (progressBar) {
+                const scrolled = (winScroll / height) * 100;
+                progressBar.style.width = scrolled + '%';
+            }
             
             // Update back to top button visibility
-            if (scrollPosition > 300) {
-                backToTop.classList.add('visible');
-            } else {
-                backToTop.classList.remove('visible');
+            if (backToTop) {
+                if (scrollPosition > 300) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
             }
             
             // Update active navigation
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (scrollPosition >= (sectionTop - 200)) {
-                    current = section.getAttribute('id');
-                }
-            });
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === '#' + current) {
-                    link.classList.add('active');
-                }
-            });
+            if (sections.length && navLinks.length) {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (scrollPosition >= (sectionTop - 200)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
             
             ticking = false;
         }
@@ -1429,16 +1778,162 @@
         });
 
         // Smooth scroll for back to top
-        backToTop.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
+        if (backToTop) {
+            backToTop.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
             });
-        });
+        }
 
         // Initialize on page load
         updateOnScroll();
+
+        // === FONT SIZE CONTROLS ===
+        const fontIncrease = document.getElementById('fontIncrease');
+        const fontDecrease = document.getElementById('fontDecrease');
+        const fontReset = document.getElementById('fontReset');
+        const container = document.querySelector('.container');
+        let currentFontSize = 18; // Default body font size
+
+        if (fontIncrease && fontDecrease && fontReset && container) {
+            // Load saved font size from localStorage
+            const savedFontSize = localStorage.getItem('fontSize');
+            if (savedFontSize) {
+                currentFontSize = parseInt(savedFontSize);
+                document.body.style.fontSize = currentFontSize + 'px';
+            }
+
+            fontIncrease.addEventListener('click', function() {
+                if (currentFontSize < 24) {
+                    currentFontSize += 2;
+                    document.body.style.fontSize = currentFontSize + 'px';
+                    localStorage.setItem('fontSize', currentFontSize);
+                }
+            });
+
+            fontDecrease.addEventListener('click', function() {
+                if (currentFontSize > 14) {
+                    currentFontSize -= 2;
+                    document.body.style.fontSize = currentFontSize + 'px';
+                    localStorage.setItem('fontSize', currentFontSize);
+                }
+            });
+
+            fontReset.addEventListener('click', function() {
+                currentFontSize = 18;
+                document.body.style.fontSize = currentFontSize + 'px';
+                localStorage.setItem('fontSize', currentFontSize);
+            });
+        }
+
+        // === ANIMATED STATS COUNTER ===
+        function animateCounter(element, target, duration = 2000) {
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+            
+            element.classList.add('counting');
+            
+            const timer = setInterval(function() {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target.toLocaleString();
+                    clearInterval(timer);
+                    setTimeout(() => element.classList.remove('counting'), 500);
+                } else {
+                    element.textContent = Math.floor(current).toLocaleString();
+                }
+            }, 16);
+        }
+
+        // Observe stats boxes for animation when scrolled into view
+        const statNumbers = document.querySelectorAll('.stat-number');
+        const statObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting && !entry.target.dataset.animated) {
+                    entry.target.dataset.animated = 'true';
+                    const text = entry.target.textContent.replace(/,/g, '');
+                    
+                    // Check if it's a percentage
+                    if (text.includes('%')) {
+                        const num = parseInt(text);
+                        animateCounter(entry.target, num, 1500);
+                        setTimeout(() => {
+                            entry.target.textContent = num + '%';
+                        }, 1500);
+                    } else {
+                        const num = parseInt(text);
+                        if (!isNaN(num)) {
+                            animateCounter(entry.target, num, 2000);
+                        }
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        statNumbers.forEach(function(stat) {
+            statObserver.observe(stat);
+        });
+
+        // === GLOSSARY TOOLTIPS ===
+        // Add glossary terms with tooltips
+        const glossaryTerms = {
+            'RCT-31': 'Regimental Combat Team 31, a combined arms unit of the 7th Infantry Division consisting of the 31st Infantry Regiment reinforced with artillery, tank, and support units.',
+            'Task Force Faith': 'The designation given to RCT-31 after Colonel MacLean was killed and Lieutenant Colonel Don C. Faith Jr. assumed command on November 29, 1950.',
+            'Chosin Reservoir': 'A man-made reservoir in North Korea, site of one of the most brutal battles in Marine Corps and Army history, fought in temperatures as low as -35°F.',
+            '1st Marine Division': 'Elite U.S. Marine Corps division that fought on the western side of the Chosin Reservoir under Major General O.P. Smith.',
+            '7th Infantry Division': 'U.S. Army division that fought on the eastern side of the Chosin Reservoir, including RCT-31.',
+            'CCF': 'Chinese Communist Forces - the People\'s Volunteer Army that intervened in the Korean War in November 1950.',
+            'X Corps': 'U.S. military corps commanded by Major General Edward Almond, consisting of the 1st Marine Division and 7th Infantry Division.',
+            'Hagaru-ri': 'Key Marine base at the southern tip of Chosin Reservoir with the only operational airstrip, vital for evacuation and supply.',
+            'Koto-ri': 'Marine supply base south of Hagaru-ri on the route to the port of Hungnam.',
+            'Hungnam': 'Port city where UN forces evacuated from North Korea in December 1950.',
+            'ROK': 'Republic of Korea - South Korean military forces.',
+            'frostbite': 'Tissue damage caused by extreme cold, a major cause of casualties at Chosin where thousands suffered severe frostbite injuries.',
+            'perimeter defense': 'A military defensive position where forces form a continuous line around a position to defend against attacks from all directions.'
+        };
+
+        // Function to wrap glossary terms
+        function addGlossaryTooltips() {
+            const sections = document.querySelectorAll('.section');
+            
+            sections.forEach(function(section) {
+                let html = section.innerHTML;
+                
+                // Sort terms by length (longest first) to avoid partial matches
+                const sortedTerms = Object.keys(glossaryTerms).sort((a, b) => b.length - a.length);
+                
+                sortedTerms.forEach(function(term) {
+                    const definition = glossaryTerms[term];
+                    const regex = new RegExp(`\\b(${term})\\b(?![^<]*>|[^<>]*<\/)`, 'gi');
+                    let count = 0;
+                    
+                    html = html.replace(regex, function(match) {
+                        count++;
+                        // Only add tooltip to first 2 instances of each term
+                        if (count <= 2) {
+                            return `<span class="glossary-term" tabindex="0">${match}<span class="glossary-tooltip">${definition}</span></span>`;
+                        }
+                        return match;
+                    });
+                });
+                
+                section.innerHTML = html;
+            });
+        }
+
+        // Add glossary tooltips after page load
+        addGlossaryTooltips();
+
+        // Keyboard accessibility for glossary terms
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.activeElement.blur();
+            }
+        });
     </script>
 
 </body>
