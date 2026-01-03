@@ -1083,10 +1083,12 @@
             <div class="pullquote">
                 "MacArthur even went so far as to declare publicly that American troops would be home for Christmas."
             </div>
-
-            <p>By late October 1950, UN forces approached the Yalu River, Korea's border with China. General Douglas MacArthur and other U.S. leaders, confident in the rapid progress, assured the public that the war would soon be over. Despite warnings from Beijing, the advance continued. In late October and early November, Chinese forces entered the war, launching massive attacks against the advancing UN troops. This intervention caught the UN forces by surprise and quickly changed the momentum of the conflict. By November, UN troops in northeastern Korea, including those around the Chosin Reservoir, faced a new and far more dangerous enemy in the bitter cold of the Korean winter. </p>
-
-           <p>In an effort to obtain more information about our father's entire military service, I contacted the Army and requested his file. Unfortunately, I learned that a fire at the National Personnel Records Center in July 1973 had destroyed his records—a significant disappointment, as I had hoped to learn much more about his time in the service.What I did know is that Dad had previously served two years in the U.S. Army at various stateside camps before being discharged and placed on reserve status. When the Korean War erupted, he was recalled to active duty on September 18, 1950, and subsequently arrived in Korea in November 1950, joining Company K just as the unit prepared for a planned attack northward to the Chinese border. </p>
+			
+			<p>By late October 1950, UN forces approached the Yalu River, Korea's border with China. General Douglas MacArthur and other U.S. leaders, confident in the rapid progress, assured the public that the war would soon be over. Despite warnings from Beijing, the advance continued. In late October and early November, Chinese forces entered the war, launching massive attacks against the advancing UN troops. This intervention caught the UN forces by surprise and quickly shifted the momentum of the conflict. By November, UN troops in northeastern Korea, including those around the Chosin Reservoir, faced a new and far more dangerous enemy in the bitter cold of the Korean winter.</p>
+			
+			<p>Dad had previously served a year and seven months in the U.S. Army at stateside camps before being discharged and placed on reserve status. When the Korean War erupted, he was recalled to report for a physical exam on September 18, 1950, before being activated. He arrived in Korea in mid-November 1950, where he joined Company K just as his regiment prepared for a planned attack northward to the Chinese border. His unit had been ordered to relocate from the eastern side of North Korea to the Chosin Reservoir to relieve marine units that had occupied the eastern side of the reservoir.</p>
+			
+			<p>In an effort to learn more about our father's complete military service, I contacted the National Personnel Records Center and requested his file. Unfortunately, I discovered that a fire in July 1973 had destroyed his records—a significant disappointment, as I had hoped to uncover much more about both his initial service and his wartime experience.</p>
         </section>
 
         <section id="battle" class="section">
@@ -1739,7 +1741,7 @@
 		</p>
 
 		<p>The Korean Service Medal bears three bronze stars, each denoting participation in a distinct campaign during the Korean War. The three bronze stars correspond to 1) the Frozen Chosin battle andthe withdrawal to Hungnam, 2) the counteroffensive to the 38th parallel, and 3) the fighting to defend the offensive around the 38th Parallel. The Combat Infantry Badge confirms that he saw combat on the battlefield. Notably, there is no Purple Heart, confirming that he was not wounded in action.	
-		</p>
+		</p>	
 		
 		<div class="map-container">
 
@@ -1753,6 +1755,57 @@
 
 		<p><a href="medals.html">Click here for a detailed explanation of the dates and events of those bronze stars.</a>
 		</p>
+		
+			<p style="text-align: center; margin-top: 30px;">
+					
+				<a href="medals.html" class="save-scroll gold-button">
+				Click here for a detailed explanation of the dates and events of those bronze stars.
+				</a>
+			</p>
+
+		<style>
+			.gold-button {
+				all: revert;
+				display: inline-block;
+				padding: 12px 30px;
+				background-color: #d4af37; /* gold */
+				color: var(--primary-dark);
+				text-decoration: none;
+				border-radius: 8px;
+				font-weight: 600;
+				box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+				transition: transform 0.2s ease, box-shadow 0.2s ease;
+			}
+
+			.gold-button:hover {
+				transform: translateY(-1px);
+				box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+			}
+		</style>
+
+		<script>
+			// Save scroll position
+			document.querySelectorAll("a.save-scroll").forEach(link => {
+				link.addEventListener("click", () => {
+					sessionStorage.setItem('lastScroll', window.scrollY);
+					sessionStorage.setItem('lastPage', window.location.pathname);
+				});
+			});
+
+			// Restore scroll when coming back
+			window.addEventListener("pageshow", () => {
+				const lastPage = sessionStorage.getItem('lastPage');
+				const lastScroll = sessionStorage.getItem('lastScroll');
+
+				if (lastPage === window.location.pathname && lastScroll !== null) {
+					setTimeout(() => {
+						window.scrollTo(0, parseInt(lastScroll, 10));
+					}, 50);
+					sessionStorage.removeItem('lastScroll');
+					sessionStorage.removeItem('lastPage');
+				}
+			});
+		</script>
 
 		<p>It is natural to assume that someone who feels pride in his military service would speak about his experiences, display his decorations, or at least let his family know about them. In Dad's case, none of that happened—he never mentioned the medals, never put them on a mantle, and never showed them to us. Because he kept these items hidden, we have no definitive answer as to why he chose privacy. One plausible explanation is the lingering stigma associated with "Frozen Chosin" survivors; many veterans who endured that ordeal felt shame or discomfort about public acknowledgment, which may have influenced his silence. Alternatively, Dad may simply not have wanted to relive his experiences during that battle by recounting them to us.</p>
 
