@@ -1,12 +1,14 @@
 /**
  * Cloudflare Pages Middleware
  * First-time login only; remember via cookie; public assets bypassed
+ * Fully compatible with Pages Functions API
  */
 
 export async function onRequest({ request, env, params, next }) {
   const COOKIE_NAME = 'pages-auth';
   const COOKIE_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
 
+  // Use environment variables in production
   const USERNAME = env.AUTH_USER || 'gukky';
   const PASSWORD = env.AUTH_PASS || 'daaders';
   const VALID_BASIC = 'Basic ' + btoa(`${USERNAME}:${PASSWORD}`);
@@ -64,7 +66,7 @@ export async function onRequest({ request, env, params, next }) {
     });
   }
 
-  // --- Show login page ---
+  // --- Otherwise show login page ---
   const loginPage = `
     <!DOCTYPE html>
     <html lang="en">
