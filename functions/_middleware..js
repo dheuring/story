@@ -1,6 +1,11 @@
+/**
+ * Cloudflare Pages Middleware
+ * First-time login only; remember user via cookie; public assets allowed
+ */
+
 export async function onRequest({ request, env, params, next }) {
   const COOKIE_NAME = 'pages-auth';
-  const COOKIE_MAX_AGE = 60 * 30; // 30 min session
+  const COOKIE_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
 
   const USERNAME = env.AUTH_USER || 'gukky';
   const PASSWORD = env.AUTH_PASS || 'daaders';
@@ -9,13 +14,16 @@ export async function onRequest({ request, env, params, next }) {
   const url = new URL(request.url);
   const cookies = parseCookies(request.headers.get('Cookie') || '');
 
-  // --- BYPASS PUBLIC FILES ---
-  const PUBLIC_EXTENSIONS = ['.pdf', '.mp3', '.mp4', '.wav', '.ogg', '.m4a', '.epub', '.jpg', '.jpeg', '.png', '.gif'];
+  // --- Bypass public assets (PDFs, images, audio, etc.) ---
+  const PUBLIC_EXTENSIONS = [
+    '.pdf', '.mp3', '.mp4', '.wav', '.ogg', '.m4a',
+    '.epub', '.jpg', '.jpeg', '.png', '.gif', '.webp'
+  ];
   if (PUBLIC_EXTENSIONS.some(ext => url.pathname.toLowerCase().endsWith(ext))) {
     return next();
   }
 
-  // --- LOGOUT ---
+  // --- LOGOUT endpoint ---
   if (url.pathname === '/logout') {
     return new Response('Logged out', {
       status: 200,
@@ -26,7 +34,7 @@ export async function onRequest({ request, env, params, next }) {
     });
   }
 
-  // --- SESSION COOKIE VALID? ---
+  // --- Already logged in via cookie? ---
   if (cookies[COOKIE_NAME] === VALID_BASIC) {
     return next();
   }
@@ -56,7 +64,7 @@ export async function onRequest({ request, env, params, next }) {
     });
   }
 
-  // --- Otherwise show login page ---
+  // --- Show login page (first-time login) ---
   const loginPage = `
     <!DOCTYPE html>
     <html lang="en">
