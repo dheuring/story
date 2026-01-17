@@ -1,12 +1,12 @@
 /**
  * Cloudflare Pages Middleware
- * Basic Auth + fallback form + "remember me" via cookie
+ * Basic Auth + fallback form + short-lived session + logout
  */
 
 export async function onRequest(context) {
   const request = context.request;
   const COOKIE_NAME = 'pages-auth';
-  const COOKIE_MAX_AGE = 60 * 60 * 24; // 1 day in seconds
+  const COOKIE_MAX_AGE = 60 * 30; // 30 minutes session
 
   const USERNAME = 'gukky';
   const PASSWORD = 'daaders';
@@ -15,26 +15,39 @@ export async function onRequest(context) {
   const url = new URL(request.url);
   const cookies = parseCookies(request.headers.get('Cookie') || '');
 
-  // If valid cookie exists, allow access
+  // --- LOGOUT ---
+  if (url.pathname === '/logout') {
+    return new Response('Logged out', {
+      status: 200,
+      headers: {
+        'Set-Cookie': `${COOKIE_NAME}=deleted; Path=/; Max-Age=0; HttpOnly; SameSite=Lax`,
+        'Content-Type': 'text/plain'
+      }
+    });
+  }
+
+  // --- Check cookie ---
   if (cookies[COOKIE_NAME] === VALID_BASIC) {
     return context.next();
   }
 
   const authHeader = request.headers.get('Authorization');
 
-  // Check Authorization header
+  // --- Basic Auth header valid? ---
   if (authHeader === VALID_BASIC) {
-    // Set remember-me cookie
     const response = await context.next();
-    response.headers.append('Set-Cookie', `${COOKIE_NAME}=${VALID_BASIC}; Max-Age=${COOKIE_MAX_AGE}; Path=/; HttpOnly; SameSite=Lax`);
+    response.headers.append(
+      'Set-Cookie',
+      `${COOKIE_NAME}=${VALID_BASIC}; Max-Age=${COOKIE_MAX_AGE}; Path=/; HttpOnly; SameSite=Lax`
+    );
     return response;
   }
 
-  // Check form submission
+  // --- Check form submission ---
   const user = url.searchParams.get('user') || '';
   const pass = url.searchParams.get('pass') || '';
   if (btoa(`${user}:${pass}`) === btoa(`${USERNAME}:${PASSWORD}`)) {
-    const response = context.next();
+    const response = await context.next();
     return new Response(await response.text(), {
       status: response.status,
       headers: {
@@ -44,7 +57,7 @@ export async function onRequest(context) {
     });
   }
 
-  // Otherwise, show login page with 401
+  // --- Otherwise show login page ---
   const loginPage = `
     <!DOCTYPE html>
     <html lang="en">
