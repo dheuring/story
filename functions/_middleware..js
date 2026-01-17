@@ -1,6 +1,6 @@
 /**
  * Cloudflare Pages Middleware
- * First-time login only; remember user via cookie; public assets allowed
+ * First-time login only; remember via cookie; public assets bypassed
  */
 
 export async function onRequest({ request, env, params, next }) {
@@ -14,7 +14,7 @@ export async function onRequest({ request, env, params, next }) {
   const url = new URL(request.url);
   const cookies = parseCookies(request.headers.get('Cookie') || '');
 
-  // --- Bypass public assets (PDFs, images, audio, etc.) ---
+  // --- Bypass public assets ---
   const PUBLIC_EXTENSIONS = [
     '.pdf', '.mp3', '.mp4', '.wav', '.ogg', '.m4a',
     '.epub', '.jpg', '.jpeg', '.png', '.gif', '.webp'
@@ -23,7 +23,7 @@ export async function onRequest({ request, env, params, next }) {
     return next();
   }
 
-  // --- LOGOUT endpoint ---
+  // --- Logout endpoint ---
   if (url.pathname === '/logout') {
     return new Response('Logged out', {
       status: 200,
@@ -64,7 +64,7 @@ export async function onRequest({ request, env, params, next }) {
     });
   }
 
-  // --- Show login page (first-time login) ---
+  // --- Show login page ---
   const loginPage = `
     <!DOCTYPE html>
     <html lang="en">
