@@ -1,31 +1,30 @@
+/**
+ * Cloudflare Pages Middleware
+ * Require HTTP Basic Auth for all visitors
+ */
+
 export async function onRequest(context) {
   const request = context.request;
-  const url = new URL(request.url);
-  const pathname = url.pathname.toLowerCase();
 
-  console.log('Middleware hit:', url.hostname, pathname);
-
+  // Set your username and password
   const USERNAME = 'gukky';
   const PASSWORD = 'daaders';
   const VALID_BASIC = 'Basic ' + btoa(`${USERNAME}:${PASSWORD}`);
 
-  const PUBLIC_PATHS = ['/audio/', '/media/', '/public/'];
-  const PUBLIC_EXTENSIONS = ['.mp3', '.mp4', '.wav', '.ogg', '.m4a', '.epub', '.pdf'];
+  // Get the Authorization header
+  const authHeader = request.headers.get('Authorization');
 
-  const isPublicPath = PUBLIC_PATHS.some(p => pathname.startsWith(p));
-  const isPublicFile = PUBLIC_EXTENSIONS.some(e => pathname.endsWith(e));
-
-  if (!isPublicPath && !isPublicFile) {
-    const auth = request.headers.get('Authorization');
-
-    if (auth !== VALID_BASIC) {
-      return new Response('Unauthorized', {
-        status: 401,
-        headers: { 'WWW-Authenticate': 'Basic realm="Protected Area"' }
-      });
-    }
+  // If missing or incorrect, return 401
+  if (authHeader !== VALID_BASIC) {
+    return new Response('Unauthorized', {
+      status: 401,
+      headers: {
+        'WWW-Authenticate': 'Basic realm="Protected Area"'
+      }
+    });
   }
 
+  // Auth is valid, continue to Pages content
   return context.next();
 }
 
