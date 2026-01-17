@@ -2,13 +2,18 @@ export async function onRequest({ request, env, params, next }) {
   const COOKIE_NAME = 'pages-auth';
   const COOKIE_MAX_AGE = 60 * 30; // 30 min session
 
-  // Use environment variables in production
   const USERNAME = env.AUTH_USER || 'gukky';
   const PASSWORD = env.AUTH_PASS || 'daaders';
   const VALID_BASIC = 'Basic ' + btoa(`${USERNAME}:${PASSWORD}`);
 
   const url = new URL(request.url);
   const cookies = parseCookies(request.headers.get('Cookie') || '');
+
+  // --- BYPASS PUBLIC FILES ---
+  const PUBLIC_EXTENSIONS = ['.pdf', '.mp3', '.mp4', '.wav', '.ogg', '.m4a', '.epub', '.jpg', '.jpeg', '.png', '.gif'];
+  if (PUBLIC_EXTENSIONS.some(ext => url.pathname.toLowerCase().endsWith(ext))) {
+    return next();
+  }
 
   // --- LOGOUT ---
   if (url.pathname === '/logout') {
