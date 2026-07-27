@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Afternoon in Bangkok - Synchronized Read-Along</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+
+    <style>
+	.title-image {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.title-image img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    display: block;
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.9;
+            color: #2d3748;
+            background: linear-gradient(135deg, #2a1b2e 0%, #4a2545 50%, #6b3654 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #fdf4f4;
+            padding: 60px;
+            border-radius: 15px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            text-align: center;
+            color: #7c2d42;
+            margin-bottom: 8px;
+            font-size: 2.8em;
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #9c4a63;
+            margin-bottom: 40px;
+            font-style: italic;
+            font-size: 1.1em;
+        }
+
+        .audio-section {
+            background: linear-gradient(135deg, #fdf0f2 0%, #fff5f0 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            border: 2px solid #e8a5b8;
+            text-align: center;
+        }
+
+        .audio-section h3 {
+            color: #7c2d42;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        audio {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 30px;
+            margin-bottom: 15px;
+        }
+
+        .instructions {
+            color: #9c4a63;
+            font-size: 0.95em;
+            padding: 12px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .progress-container {
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f0d9df;
+            border-radius: 4px;
+            overflow: visible;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #d1477c, #a52a5a);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.1s linear;
+        }
+
+        .progress-tick {
+            position: absolute;
+            top: -3px;
+            width: 3px;
+            height: 14px;
+            background: #7c2d42;
+            border-radius: 2px;
+            pointer-events: none;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.6);
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            color: #9c4a63;
+            margin-top: 8px;
+            font-family: 'Georgia', serif;
+        }
+
+        .story-text {
+            font-size: 1.15em;
+            text-align: justify;
+            color: #2d3748;
+        }
+
+        #storyContent p:first-of-type::first-letter {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 3.6em;
+            font-weight: 600;
+            float: left;
+            line-height: 0.85;
+            padding: 6px 10px 0 2px;
+            color: #7c2d42;
+        }
+
+        .paragraph {
+            margin-bottom: 1em;
+            padding: 18px 25px;
+            border-radius: 10px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            position: relative;
+        }
+
+        .paragraph:hover {
+            background-color: #fdf0f2;
+            border-left-color: #e08bb0;
+        }
+
+        .paragraph.active {
+            background: linear-gradient(90deg, #fce8ee 0%, #fff5f7 100%);
+            border-left: 4px solid #d1477c;
+            box-shadow: 0 6px 25px rgba(209, 71, 124, 0.25);
+            transform: translateX(8px);
+        }
+
+        .paragraph.read {
+            background-color: #fdf0f2;
+            border-left-color: #d18ba0;
+            opacity: 0.75;
+        }
+
+        .paragraph.upcoming {
+            opacity: 0.6;
+        }
+
+        .paragraph.image-entry,
+        .paragraph.image-entry.upcoming,
+        .paragraph.image-entry.read,
+        .paragraph.image-entry.active {
+            opacity: 1 !important;
+            background: none !important;
+            border-left: none !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+
+        .the-end {
+            text-align: center;
+            margin-top: 50px;
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-style: italic;
+            font-size: 1.4em;
+            letter-spacing: 2px;
+            color: #7c2d42;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #d1477c 0%, #a52a5a 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(209, 71, 124, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 4px 15px rgba(113, 128, 150, 0.4);
+        }
+		#playBtn {
+            font-size: 1.1em;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #c2185b 0%, #8e1550 100%);
+            letter-spacing: 0.5px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(194, 24, 91, 0.4);
+        }
+
+        #playBtn:hover {
+            box-shadow: 0 6px 25px rgba(194, 24, 91, 0.55);
+        }
+
+        #playBtn.playing {
+            background: linear-gradient(135deg, #7c2d42 0%, #5a1f30 100%);
+            box-shadow: 0 4px 20px rgba(124, 45, 66, 0.4);
+        }
+         .status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 101;
+        }
+
+        .shortcut-hint {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            background: rgba(255,255,255,0.95);
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            font-size: 0.85em;
+            color: #4a5568;
+            z-index: 100;
+        }
+
+        .key {
+            background: #edf2f7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        /* Mobile floating menu */
+        .mobile-fab {
+            display: none;
+        }
+
+        .mobile-drawer {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+
+            .story-text {
+                text-align: left;
+            }
+
+            .paragraph {
+                padding: 14px 16px;
+            }
+
+            #storyContent p:first-of-type::first-letter {
+                font-size: 2.6em;
+                padding: 4px 6px 0 0;
+            }
+
+            .story-image {
+                width: 92%;
+                max-width: 92%;
+            }
+
+            /* Hide desktop fixed overlays on mobile */
+            .status,
+            .controls,
+            .shortcut-hint {
+                display: none !important;
+            }
+
+            /* Floating action button */
+            .mobile-fab {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 52px;
+                height: 52px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #c2185b, #8e1550);
+                color: white;
+                font-size: 1.5em;
+                border: none;
+                cursor: pointer;
+                z-index: 200;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+            }
+
+            /* Slide-up drawer */
+            .mobile-drawer {
+                display: block;
+                position: fixed;
+                bottom: -300px;
+                left: 0;
+                right: 0;
+                background: white;
+                border-radius: 18px 18px 0 0;
+                box-shadow: 0 -6px 30px rgba(0,0,0,0.25);
+                padding: 20px 24px 32px;
+                z-index: 199;
+                transition: bottom 0.3s ease;
+            }
+
+            .mobile-drawer.open {
+                bottom: 0;
+            }
+
+            .drawer-handle {
+                width: 40px;
+                height: 4px;
+                background: #cbd5e0;
+                border-radius: 2px;
+                margin: 0 auto 18px;
+            }
+
+            .drawer-status {
+                text-align: center;
+                color: #9c4a63;
+                font-size: 0.9em;
+                margin-bottom: 14px;
+                font-style: italic;
+            }
+
+            .drawer-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .mobile-overlay-bg {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.3);
+                z-index: 198;
+            }
+
+            .mobile-overlay-bg.open {
+                display: block;
+            }
+        }
+        .story-image {
+            max-width: 75%;
+            width: 75%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            margin: 12px auto 20px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="status" id="topControls">
+        <button class="btn" id="playBtn" onclick="handlePlayBtn()">▶ Play Story</button>
+        <button class="btn btn-secondary" onclick="toggleAutoScroll()" id="autoScrollBtn">Auto-Scroll: ON</button>
+    </div>
+
+    <div class="container">
+        <h1>One Afternoon in Bangkok</h1>
+		  <div class="title-image">
+            <img src="https://audio.heuring.us/added/1-Beginning-Fuji.png" alt="1-Beginning-Fuji">
+        </div>
+
+        <div class="audio-section">
+            <h3>🎧 Narration</h3>
+            <audio id="narration" controls>
+                <source src="https://audio.heuring.us/added/Beginning.m4a" type="audio/mp4">
+                <source src="https://audio.heuring.us/added/Beginning.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBarContainer">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+                <div class="time-display">
+                    <span id="currentTimeDisplay">0:00</span>
+                    <span id="durationDisplay">0:00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="story-text" id="storyContent">
+            <!-- Paragraphs generated by JavaScript -->
+        </div>
+
+        <div class="the-end">❦ The End ❦</div>
+
+        <div class="toc-link-wrapper" style="text-align: center; margin-top: 40px;">
+            <a href="toc.html" class="btn" style="text-decoration: none; display: inline-block; background: linear-gradient(135deg, #8a4a5c 0%, #5c2a38 100%);">📚 Back to Table of Contents</a>
+        </div>
+
+    <!-- Mobile floating button + drawer (hidden on desktop) -->
+    <div class="mobile-overlay-bg" id="mobileOverlay" onclick="closeMobileDrawer()"></div>
+
+    <button class="mobile-fab" id="mobileFab" onclick="toggleMobileDrawer()">☰</button>
+
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-handle"></div>
+        <div class="drawer-status" id="drawerStatus">Press Play to begin</div>
+        <div class="drawer-buttons">
+            <button class="btn" id="drawerPlayBtn" onclick="handlePlayBtn(); updateDrawerStatus()">▶ Play Story</button>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="previousParagraph()">⏮ Previous</button>
+                <button class="btn btn-secondary" style="flex: 1;" onclick="nextParagraph()">Next ⏭</button>
+            </div>
+            <button class="btn btn-secondary" onclick="toggleAutoScroll(); updateDrawerStatus()" id="drawerAutoScrollBtn">Auto-Scroll: ON</button>
+        </div>
+    </div>
+
+    <script>
+      // TODO: run this story's narration audio through timestamp.html and paste the
+      // resulting array here — it must have exactly 111 entries, one per storyText paragraph below.
+      const timestamps = [4.144211, 25.373115, 40.977512, 63.808271, 71.038770, 76.428703, 104.080093, 132.098438, 150.899744, 169.355445, 189.396140, 201.795886, 205.297974, 212.202262, 219.107485, 221.849805, 227.454118, 245.798105, 253.645416, 257.646406, 262.211471, 269.816253, 275.480622, 290.924561, 313.733614, 321.955848, 341.244482, 350.206762, 355.163405, 360.894388, 366.430214, 369.123219, 389.268297, 409.468324, 415.789644, 426.632023, 433.242356, 447.950366, 458.029375, 470.238989, 507.339216, 538.868612, 544.138203, 564.313743, 572.935255, 575.673802, 577.848516, 590.647863, 597.436895, 610.489339, 614.668779, 624.506517, 648.303534, 650.350490, 652.468272, 671.293452, 688.907796, 694.104512, 700.102570, 724.107158, 733.276910, 744.181879, 767.587274, 771.065936, 779.159302, 803.509129, 822.124077, 828.364919, 834.601927, 866.840584, 874.840923, 887.395588, 896.655357, 915.531401, 925.032155, 933.696635, 951.765750, 965.922215, 973.915483, 979.930312, 985.041141, 1000.536198, 1013.597304, 1023.846034, 1045.829225, 1051.450645, 1053.658141, 1068.024171, 1072.692777, 1088.791031, 1098.607677, 1102.991848, 1140.901177, 1158.553624, 1215.316959, 1229.431749, 1239.376340, 1247.736282, 1273.516958, 1285.658782, 1289.083090, 1295.522458, 1305.700167, 1322.551245, 1330.412243, 1340.288593, 1346.048045, 1360.256076, 1364.421095, 1367.539189, 1397.254533, 1418.906137, 1436.135938, 1446.601675, 1460.109020, 1477.713902, 1495.248912];
+
+                const storyText = [
+            "Dave was in Bangkok to attend a business conference when he and Alisa met in person for the first time on January 21, 2005, at Siam Center. After exchanging messages online for a while, they had agreed to meet in front of a Starbucks. Both arrived wondering whether the easy conversation they'd shared through screens and text would translate into real life.",
+            "It did, though at first they were both a little nervous. As they started walking without a plan, they accidentally circled the building and ended up back where they'd started. They looked at each other and burst out laughing, the tension dissolving in that single shared moment.",
+            "Alisa then pointed toward a high wall and, with a perfectly straight face, suggested they climb over it to get to a Japanese restaurant. Dave paused, actually considering the idea before catching the mischief in her eyes. They both laughed again, and any remaining awkwardness melted away.",
+            "\"So... you're even taller than I imagined,\" Alisa said with a smile as they sat down.",
+            "Dave laughed. \"And you're much easier to talk to than I expected.\"",
+            "Once seated at the restaurant, the conversation flowed without effort. They talked about university life, Dave's work in Abu Dhabi, travel, family, and the differences between growing up in Thailand and the United States. Alisa shared stories about her year as an exchange student living with a host family in Lutsen, Minnesota. Lunch stretched well beyond what either of them had planned, neither willing to end the afternoon.",
+            "There was an unmistakable attraction between them from the start. Still, both understood the realities of their situation. Dave was an American working in the United Arab Emirates, while Alisa was a university student in Bangkok. The age difference between them also meant that neither was thinking very far into the future. Instead, they simply enjoyed each other's company without placing expectations on what might come next.",
+            "Eventually, they strolled together to an overlook near a busy intersection where Alisa caught the small bus that would take her home. Dave watched as she smiled, waved goodbye, descended the stairs, and climbed aboard. He remained there until the bus disappeared into the Bangkok traffic.",
+            "As he turned to leave, he couldn't shake the feeling that something unexpected had just happened. He had come to Bangkok for a business conference, expecting nothing more than a week away from work. Instead, he had met someone who had left a surprisingly deep impression after just a single afternoon.",
+            "A few days later, they met again after one of Alisa's university football matches. She invited Dave to join her and several friends for an evening out, and the group eventually made their way to the lively RCA entertainment district. The clubs were buzzing with music, flashing lights, and wall-to-wall crowds.",
+            "At first, Dave enjoyed the energy, but before long the packed venue began to feel overwhelming. Excusing himself, he stepped outside into the warm Bangkok night to get some air.",
+            "A few minutes later, the door to the bar opened.",
+            "\"There you are,\" Alisa said with a concerned smile. \"I wondered where you disappeared to.\"",
+            "Dave laughed softly. \"I guess I'm showing my age already. I'm not used to places this crowded.\"",
+            "\"It's too much?\" Alisa asked.",
+            "\"A little,\" he admitted. \"I needed some fresh air and a little space.\"",
+            "They sat at a table outside the club, talking while the muffled beat of the music pulsed through the walls behind them. Away from the noise and the crowd, the conversation came easily again. Time seemed to slow as they discovered just how natural they felt around each other.",
+            "Eventually, Alisa glanced back toward the entrance. \"I should probably get back before my friends wonder what happened to me.\"",
+            "Dave smiled. \"Thanks for checking on me.\"",
+            "\"I just wanted to make sure you were okay,\" she said with a grin.",
+            "\"That was nice of you, Alisa. I guess I'll head back to the hotel then,\" Dave said. \"See you soon, okay?\"",
+            "\"Yuppers!\" Alisa said with a big grin as she turned back toward the bar.",
+            "By the end of the evening, both knew they wanted to see each other again. As Dave made his way back to his hotel through the warm, humid night, he realized that what had begun as simple curiosity was quickly growing into something much more meaningful.",
+            "A few days later, they met up to see a movie together. The film itself was almost beside the point. What mattered was how attuned they already felt to each other's presence. When the movie ended, they remained in their seats, chatting as the credits rolled. They waited until the rest of the audience had filed out, leaving the theater nearly empty.",
+            "Dave looked over at Alisa. For a moment, neither of them spoke. The silence held a charge that neither could ignore.",
+            "Acting on instinct, he leaned toward her and kissed her. It was their first kiss, lingering just long enough to make it clear that the attraction they'd both felt since meeting was real. He reached down, gently grasped her thigh through her jeans, and slowly massaged her leg.",
+			"<img src='https://audio.heuring.us/added/1-Beginning-First-Kiss.png' class='story-image' alt='1-Beginning-First-Kiss'>",
+            "When they finally pulled apart, they exchanged shy smiles.",
+            "\"Well...\" Dave said with a nervous laugh.",
+            "Alisa laughed too, lowering her eyes for a moment. \"That was... unexpected. We'd better go now.\"",
+            "\"Yeah,\" Dave replied.",
+            "Neither quite knew what to say next. The natural confidence they'd shared all evening suddenly gave way to a touch of awkwardness. Smiling at one another, they stood, walked quickly out of the theater together, and resumed talking as if nothing had happened, though both knew something between them had quietly shifted.",
+            "After the movie, they lingered near Alisa's school before it was time for her to return home. That was when she surprised Dave by saying, a little hesitantly, \"So... uhm... would it... uhm... be okay if I came for a sleepover at your hotel Friday night?\"",
+            "Dave's return to Abu Dhabi was quickly approaching, and neither of them knew when they would see each other again.",
+            "Dave paused, caught off guard. The word \"sleepover\" was something children used for staying overnight at a friend's place. The innocence of it made him smile.",
+            "\"Sure,\" he answered, trying to sound calmer than he felt. \"Sounds good.\"",
+            "He couldn't help but smile. He wasn't entirely sure what Alisa had in mind, but he looked forward to spending more time together before he left Thailand. At the very least, it would be one last chance to know each other better.",
+            
+            "On Friday afternoon, after finishing her university classes, Alisa arrived at the Grottino Hotel, where Dave was staying. ",
+			"<img src='https://audio.heuring.us/added/1-Beginning-Room Enter.png' class='story-image' alt='1-Beginning-Room Enter'>",
+			"After dropping off her overnight bag, they decided not to stay in the room.Instead, they walked to a nearby Korean restaurant, enjoying another relaxed meal filled with conversation, laughter, and the easy familiarity that had developed surprisingly quickly over the previous week. As they made their way back to the hotel later that evening, the Bangkok streets alive with food vendors and motorbike headlights, neither of them realized that what had begun as a casual meeting between two people from different worlds was quickly becoming the beginning of a story that would change both of their lives.",
+            "Once back in the room, Alisa showered first while Dave waited, flipping through channels without really watching. When she emerged, Dave felt his breath catch. She wore a simple set of cotton pajamas, pale blue bottoms and a matching button top. But there was something vulnerable about the way she stood in the doorway, her dark hair still damp and clinging to her shoulders, her feet bare against the tile floor, the faint scent of hotel soap trailing behind her.",
+            "\"Your turn,\" she said softly, not quite meeting his eyes.",
+            "Dave showered next. In the bathroom, he tied on his pakama, the light cotton wrap that rural Thai men often knot around their waist at home. He'd learned it from months spent among Thai families who'd welcomed him into their daily routines, absorbing the small customs that made a place feel less foreign.",
+            "Alisa was already propped against the headboard, some Thai drama playing at low volume on the television. She glanced over as he crossed the room.",
+            "\"Wait. Is that a pakama?\"",
+            "\"Don't sound so surprised.\"",
+            "\"I'm very surprised.\" She shifted over to make room, her eyes still fixed on the wrap at his waist. \"This is a village man's pakama, Dave. Where did a farang even learn to tie one of these?\"",
+            "\"I've been around a few Thai families and picked up some local culture,\" he said, mischief in his voice.",
+            "Once he'd settled beside her, she reached over and gave the fabric a playful tug, loosening the knot half a turn, clearly enjoying herself. \"I could just take this right off you, you know. It would take nothing.\"",
+            "\"Ha,\" Dave said. \"I know how to tie these so you can't.\"",
+            "<img src='https://audio.heuring.us/added/1-Beginning-Sarong.png' class='story-image' alt='1-Beginning-Sarong'>",
+            "She tried anyway, grabbing the corner and giving it a stronger yank, more mischief than intent. One side pulled aside enough to expose most of his thigh. Dave leaned forward to catch her wrist before the knot gave way, and the momentum brought her closer. The teasing look on her face flickered, then softened into something else. Neither of them moved for a moment.",
+            "Then, he let go of her wrist.",
+            "\"Dave\u2014\"",
+            "Whatever she'd meant to say dissolved before it reached him. He leaned toward her mouth, slowly enough that she could have pulled away. She didn't. His lips met hers, and the kiss was soft at first, careful, both of them still half-laughing against each other's mouths. And then it wasn't careful anymore.",
+            "Her damp hair was cool under his hand, the scent of her shampoo filling his head, and for a long moment neither of them thought about pakamas or pajamas or anything at all. When they finally broke apart, Alisa pressed her forehead to his, breathing unsteadily.",
+            "\"Well,\" she said. \"I almost got that pakama off of you.\"",
+            "Dave smiled. \"That kiss was well worth the try. Wanna do it again, maybe?\"",
+            "This time it was Alisa who leaned in, her lips brushing his with a softness that made him want more. The kiss deepened slowly, exploratory, her hand coming up to rest around his neck, her fingers curling into the curve. Dave's hand dropped to her leg, lightly squeezing her thigh, then increasing in intensity as the kiss became more passionate.",
+            "\"Is this okay?\" he murmured between kisses, his other hand caressing her breast. He could feel her nipple hardening through the cotton.",
+            "\"Mm-hm,\" she breathed, and then she was kissing him again with more urgency, her tongue tentatively meeting his. \"Don't stop.\"",
+            "They shifted positions, Dave rolling them so they lay side by side, still kissing deeply. His erection pressed into her leg while his hand explored the line of her side, her ribs, the soft swell of her breasts and her hardening nipples through the fabric. Alisa made a small sound in her throat, part whimper, part sigh, and arched into his touch.",
+            "\"Tell me if I'm going too fast,\" Dave whispered.",
+            "\"You're not,\" she gasped, her fingers threading through his hair. \"It feels... it feels good, Dave.\"",
+            "He took his time, worshipping her with his mouth and hands, mapping the curves of her body through the pajamas until she was breathless beneath him. When he finally reached for the buttons of her top, he paused, looking into her eyes for permission. Alisa nodded, quickly unbuttoning and removing it, revealing breasts that were small and perfect, her nipples already tight with arousal.",
+            "\"Oh, wow,\" he breathed, and she blushed as his gaze traveled over her. Dave pulled his pakama off, taking care to keep his movements unhurried even as his own desire pounded through him. He positioned himself between her thighs, his hands gentle on her hips.",
+            "\"Are you sure?\" he asked, his voice rough with restraint. \"We don't have to\u2014\"",
+            "\"I'm sure,\" Alisa interrupted, her eyes shining. \"I want it, Dave. Please.\"",
+            "He entered her slowly, so slowly, watching her face for any sign of discomfort. She was tight. Really tight. But she was also incredibly wet, her body preparing itself despite whatever nervousness she held. He had to fight to maintain control, to keep his thrusts shallow and measured at first. She wrapped her legs around his waist, pulling him deeper, and they found a rhythm that was tender and unhurried, the bed creaking softly beneath them.",
+            "\"Is this okay?\" Dave asked again, his forehead pressed against hers, their breath mingling. \"Am I hurting you?\"",
+            "\"No,\" she whispered, though he thought he saw a flicker of something cross her face. Concentration, perhaps. The effort to relax. \"Keep going. It feels... it's really good.\"",
+            "<img src='https://audio.heuring.us/added/1-Beginning-Missionary.png' class='story-image' alt='1-Beginning-Missionary'>",
+            "He made love to her with care, his hips rolling against hers in steady, gentle waves, his hands cradling her face, her shoulders, anywhere he could maintain contact. The tension built between them like a slow-burning fire, Alisa's nails digging into his back as she climbed toward her peak.",
+            "\"Dave,\" she moaned, her head falling back, exposing the long line of her throat. \"Dave, I'm... I'm going to\u2014\"",
+            "\"Come,\" he urged, his own release tightening at the base of his spine. \"I'm ready, too, Alisa. Just let go.\"",
+            "She came with a cry, her body contracting around him in rhythmic pulses that pushed him over the edge. Dave groaned her name, spilling into her with shuddering breaths, his movements slowing until they stilled completely, their bodies joined and trembling in the aftermath.",
+            "They lay tangled together for long minutes before Dave withdrew carefully and rolled to his side, gathering her against his chest. He stroked her hair, pressing kisses to her temple, her closed eyelids.",
+            "\"That was...\" he started, then trailed off, not knowing how to articulate the tenderness he felt.",
+            "\"It was my first time,\" Alisa said quietly, her voice muffled against his shoulder.",
+            "Dave went still, his hand pausing mid-stroke. \"What?\"",
+            "She looked up at him, her expression earnest. \"I wanted you to know. I know I didn't say anything before, but... I wanted it, Dave. I didn't want to tell you because I was afraid that you'd stop, or treat me differently.\"",
+            "\"Alisa...\" He felt a complicated rush of emotion. Honored, humbled, and slightly terrified that he might have hurt her. \"I wish I'd known. I would have been even more careful\u2014\"",
+            "\"You were great,\" she insisted, her hand coming up to touch his face. \"You were so gentle, Dave. I wouldn't change anything.\"",
+            "They rested in silence for a while, Dave's fingers tracing idle patterns along her spine, both of them drifting in the hazy space between wakefulness and sleep. He held her a little tighter, the weight of what she'd given him settling into his chest. He was just beginning to think she might have dozed off when Alisa stirred against him.",
+            "\"Dave?\" Her voice had changed. Lower. Throatier.",
+            "\"Mm?\"",
+            "She propped herself up on one elbow, looking down at him with an expression that was somehow both shy and hungry, a contradiction that made his stomach tighten with renewed interest. \"Can I... can I do something for you?\"",
+            "\"Of course,\" he said, confused. \"What do you need?\"",
+            "Alisa bit her lower lip, her gaze dropping to his chest, then lower, to where he was already half-hard again against his thigh. \"Can I... can I suck you off? I want to taste it, Dave. I want to make you feel good, too.\"",
+            "Dave stared at her, momentarily certain he'd misheard. The girl who seemed so proper was now looking at his cock with undisguised longing.",
+            "\"Alisa, you don't have to\u2014\"",
+            "\"I want to,\" she interrupted, and there was something raw and sincere in her voice. \"Please. I've been thinking about it all week. I really... I really love...\" She hesitated, then forged ahead, her cheeks flushing crimson. \"Dave, before we met, when you used to show me your cock on the cam, I would fantasize about sucking it. I really love cocks, Dave. I know I seem shy, but when I think about sucking you, about feeling you in my mouth...\" She shivered visibly. \"Please let me?\"",
+            "Dave's arousal surged at her words, at the desperate, hungry edge to her voice that he'd never heard before. He nodded, unable to speak, and watched in awe as she moved down the bed, her dark hair spilling over his thighs as she settled between his legs.",
+            "She took him into her mouth with an enthusiasm that made him groan, her tongue swirling around the head with a confidence that surprised him given her inexperience. She might have been new to intercourse, but as she hollowed her cheeks and took him deeper, bobbing her head with eager, wet sounds, Dave realized that Alisa's desires ran far deeper than her innocent appearance suggested. She pumped him with her hand while her mouth worked the tip, then took him deep again, establishing a rhythm that built steadily. He could feel the pressure mounting, his hips beginning to lift involuntarily toward her mouth, and when he finally came, it was with a groan that shook through his whole body, his hips bucking as he tangled his fingers in her hair. Alisa swallowed eagerly, prolonging his release until he shuddered and went completely still, utterly spent.",
+            "When she finally released him with a soft, satisfied sound and crawled back up his body, her lips were full and glistening, her eyes bright with pride. She had taken it all, not a drop escaping her.",
+            "<img src='https://audio.heuring.us/added/1-Beginning-Blowjob.png' class='story-image' alt='1-Beginning-Blowjob'>",
+            "\"Alisa,\" he breathed, cupping her face in his hands, his thumb brushing her lower lip. \"That was incredible.\"",
+            "She blushed, but her smile was radiant. \"I wanted to,\" she whispered. \"I wanted to taste all of you.\" He pulled her up fully then, wrapping her in his arms and kissing her deeply, tasting himself on her tongue and not caring, overwhelmed by her generosity. They held each other for long moments, Dave's hands roaming her back in slow, soothing strokes.",
+            "\"Come here,\" he murmured. Alisa nestled against him, her head on his chest, her leg thrown over his thigh. He felt her relax completely, her breath warm against his skin.",
+            "\"Happy?\" he asked, his own eyes growing heavy.",
+            "\"Mm,\" she sighed, nuzzling closer. \"So happy, Dave.\"",
+            "<img src='https://audio.heuring.us/added/1-Beginning-Cuddle.png' class='story-image' alt='1-Beginning-Cuddle'>",
+            "He kissed the top of her head, pulling her tighter against him. Her breathing slowed, becoming deep and even, and he knew she was drifting off. He let himself follow, the warmth of her body and the steady rise and fall of her chest lulling him into peaceful darkness.",
+            "They fell asleep wrapped in each other's arms, sated and content, the night wrapping around them like a blanket.",
+            "The morning after, Alisa clung to him in the narrow hotel bed, her face pressed against his chest as if she could physically prevent his departure through sheer will.",
+            "\"I don't want you to go,\" she whispered, the words hot against his skin.",
+            "Dave stroked her hair, his own throat tight with unexpected grief. \"I know. But this doesn't have to be the end, Alisa. I'll come back. Every few months. I can make it work.\"",
+            "She pulled back to look at him, her eyes hopeful. \"Promise?\"",
+            "\"I promise.\"",
+            "True to his word, Dave returned exactly ten weeks later. The humidity of Bangkok wrapped around him like a familiar embrace as he spotted Alisa waiting in the arrivals hall, her face splitting into that grin he'd been seeing in his dreams. She flew into his arms, and they spent days barely leaving his hotel room, making up for lost time with a desperate, hungry urgency that made the ten weeks of separation feel both infinite and instantly forgotten.",
+            "But it was the nights between visits that truly wove them together. Despite the five-hour time difference, Dave tired from work, Alisa fighting sleep after a day of classes, they made a ritual of their connection. Every evening at nine p.m. her time, five p.m. his, they got online and chatted with each other for hours.",
+            "At first, the conversations were simple. Recounting their days. Sharing mundane details. Building intimacy through the ordinary. But as the weeks stretched into months, their exchanges began to evolve, growing bolder, more exploratory.",
+            "\"Tell me what you're wearing,\" Dave would type, and Alisa would describe the cotton panties beneath her study clothes, the way her nipples hardened when she thought of him.",
+            "\"I want to try something,\" Dave wrote one night, three months into their separation. \"What if we wrote a story together? You and me. A naughty role play that we'll act out when I come.\"",
+            "The first fantasy came together over fevered messages. They called it \"The Professor and the University Girl.\" When Dave arrived for his second visit, Alisa was waiting in her Thammasat uniform, the script they'd crafted unfolding in breathless, practiced scenes.",
+            "Between the second and third visits, their online scripting grew more elaborate. \"The Porn Star and the Maid\" came next, followed by \"The Executive and the Slave Boy.\" Each fantasy deeper, more intricate, more uniquely theirs.",
+            "They weren't just passing time anymore. They were building something. With every script, every shared fantasy, every naughty video call, and every opportunity to act them out, they constructed a bridge across the distance. One that grew stronger with each crossing, until the space between visits felt less like absence and more like anticipation."
+        ];
+        // State — auto-scroll ON by default
+        let autoScroll = true;
+        let hasStarted = false;
+        let currentParagraph = -1;
+        let paragraphs = [];
+
+        const audio = document.getElementById('narration');
+        const progressBar = document.getElementById('progressBar');
+        const progressBarContainer = document.getElementById('progressBarContainer');
+        const playBtn = document.getElementById('playBtn');
+        const autoScrollBtn = document.getElementById('autoScrollBtn');
+        const currentTimeDisplay = document.getElementById('currentTimeDisplay');
+        const durationDisplay = document.getElementById('durationDisplay');
+
+        function formatTime(seconds) {
+            if (!isFinite(seconds) || seconds < 0) return '0:00';
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return m + ':' + String(s).padStart(2, '0');
+        }
+
+        function renderProgressTicks() {
+            if (!audio.duration || !isFinite(audio.duration)) return;
+            progressBarContainer.querySelectorAll('.progress-tick').forEach(t => t.remove());
+            storyText.forEach((text, index) => {
+                if (text.startsWith('<img') && timestamps[index] !== undefined) {
+                    const pct = (timestamps[index] / audio.duration) * 100;
+                    const tick = document.createElement('div');
+                    tick.className = 'progress-tick';
+                    tick.style.left = pct + '%';
+                    tick.title = 'Image';
+                    progressBarContainer.appendChild(tick);
+                }
+            });
+        }
+
+        audio.addEventListener('loadedmetadata', () => {
+            durationDisplay.textContent = formatTime(audio.duration);
+            renderProgressTicks();
+        });
+
+        function init() {
+            const container = document.getElementById('storyContent');
+            storyText.forEach((text, index) => {
+                const p = document.createElement('p');
+                p.className = 'paragraph upcoming';
+                p.setAttribute('data-index', index);
+                if (text.startsWith('<img')) {
+                    p.innerHTML = text;
+                    p.classList.add('image-entry');
+                    p.style.textAlign = 'center';
+                    p.style.cursor = 'default';
+                } else {
+                    p.textContent = text;
+                    p.addEventListener('click', () => seekToParagraph(index));
+                }
+                container.appendChild(p);
+                paragraphs.push(p);
+            });
+            // Update auto-scroll button to reflect default ON state
+            autoScrollBtn.textContent = 'Auto-Scroll: ON';
+        }
+
+        function handlePlayBtn() {
+            if (audio.paused) {
+                // First play: scroll to story text
+                if (!hasStarted) {
+                    hasStarted = true;
+                    document.getElementById('storyContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    setTimeout(() => audio.play(), 400);
+                } else {
+                    audio.play();
+                }
+            } else {
+                audio.pause();
+            }
+        }
+
+        audio.addEventListener('play', () => {
+            playBtn.textContent = '⏸ Pause';
+            playBtn.classList.add('playing');
+        });
+
+        audio.addEventListener('pause', () => {
+            playBtn.textContent = '▶ Play Story';
+            playBtn.classList.remove('playing');
+        });
+
+        audio.addEventListener('ended', () => {
+            playBtn.textContent = '↺ Play Again';
+            playBtn.classList.remove('playing');
+        });
+
+        document.getElementById('progressBarContainer').addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            audio.currentTime = pos * audio.duration;
+        });
+
+        // Minimum real-time (ms since epoch) to hold on the current paragraph.
+        // Used to guarantee images stay on screen for at least IMAGE_HOLD_MS,
+        // even if the audio's built-in silence is slightly shorter than expected.
+        const IMAGE_HOLD_MS = 10000;
+        let holdUntilTime = 0;
+
+        function onTimeUpdate() {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = progress + '%';
+            currentTimeDisplay.textContent = formatTime(audio.currentTime);
+
+            // Still holding on an image — skip advancing the highlight/scroll.
+            if (Date.now() < holdUntilTime) {
+                return;
+            }
+
+            let newIndex = -1;
+            for (let i = 0; i < timestamps.length; i++) {
+                if (audio.currentTime >= timestamps[i]) {
+                    newIndex = i;
+                } else {
+                    break;
+                }
+            }
+
+            if (newIndex !== currentParagraph) {
+                currentParagraph = newIndex;
+                highlightParagraph(newIndex);
+
+                if (paragraphs[newIndex] && paragraphs[newIndex].classList.contains('image-entry')) {
+                    holdUntilTime = Date.now() + IMAGE_HOLD_MS;
+                }
+            }
+        }
+
+        audio.addEventListener('timeupdate', onTimeUpdate);
+
+        function highlightParagraph(index) {
+            paragraphs.forEach((p, i) => {
+                p.classList.remove('active', 'read', 'upcoming');
+                if (i === index) {
+                    p.classList.add('active');
+                    if (autoScroll) {
+                        p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                } else if (i < index) {
+                    p.classList.add('read');
+                } else {
+                    p.classList.add('upcoming');
+                }
+            });
+        }
+
+        function seekToParagraph(index) {
+            if (index >= 0 && index < timestamps.length) {
+                holdUntilTime = 0;
+                audio.currentTime = timestamps[index];
+                audio.play();
+            }
+        }
+
+        function previousParagraph() {
+            const newIndex = Math.max(0, currentParagraph - 1);
+            seekToParagraph(newIndex);
+        }
+
+        function nextParagraph() {
+            const newIndex = Math.min(timestamps.length - 1, currentParagraph + 1);
+            seekToParagraph(newIndex);
+        }
+
+        function toggleAutoScroll() {
+            autoScroll = !autoScroll;
+            autoScrollBtn.textContent = autoScroll ? 'Auto-Scroll: ON' : 'Auto-Scroll: OFF';
+            autoScrollBtn.style.background = autoScroll
+                ? 'linear-gradient(135deg, #718096 0%, #4a5568 100%)'
+                : 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.code === 'Space' && e.target.tagName !== 'BUTTON') {
+                e.preventDefault();
+                handlePlayBtn();
+            } else if (e.code === 'ArrowRight') {
+                skip(10);
+            } else if (e.code === 'ArrowLeft') {
+                skip(-10);
+            } else if (e.code === 'ArrowUp') {
+                e.preventDefault();
+                previousParagraph();
+            } else if (e.code === 'ArrowDown') {
+                e.preventDefault();
+                nextParagraph();
+            }
+        });
+
+        function skip(seconds) {
+            audio.currentTime += seconds;
+        }
+
+        init();
+
+        // Mobile drawer controls
+        function toggleMobileDrawer() {
+            const drawer = document.getElementById('mobileDrawer');
+            const overlay = document.getElementById('mobileOverlay');
+            const isOpen = drawer.classList.contains('open');
+            if (isOpen) {
+                closeMobileDrawer();
+            } else {
+                drawer.classList.add('open');
+                overlay.classList.add('open');
+                document.getElementById('mobileFab').textContent = '✕';
+            }
+        }
+
+        function closeMobileDrawer() {
+            document.getElementById('mobileDrawer').classList.remove('open');
+            document.getElementById('mobileOverlay').classList.remove('open');
+            document.getElementById('mobileFab').textContent = '☰';
+        }
+
+        function updateDrawerStatus() {
+            // Keep drawer auto-scroll button in sync
+            const drawerBtn = document.getElementById('drawerAutoScrollBtn');
+            if (drawerBtn) {
+                drawerBtn.textContent = autoScroll ? 'Auto-Scroll: ON' : 'Auto-Scroll: OFF';
+                drawerBtn.style.background = autoScroll
+                    ? 'linear-gradient(135deg, #718096 0%, #4a5568 100%)'
+                    : 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+            }
+        }
+
+        // Keep drawer play button in sync with audio state
+        audio.addEventListener('play', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '⏸ Pause'; btn.style.background = 'linear-gradient(135deg, #7c2d42 0%, #5a1f30 100%)'; }
+            document.getElementById('drawerStatus').textContent = '▶️ Playing';
+        });
+        audio.addEventListener('pause', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '▶ Play Story'; btn.style.background = ''; }
+            document.getElementById('drawerStatus').textContent = '⏸️ Paused';
+        });
+        audio.addEventListener('ended', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '↺ Play Again'; btn.style.background = ''; }
+            document.getElementById('drawerStatus').textContent = '✅ Finished';
+        });
+    </script>
+</body>
+</html>
