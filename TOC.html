@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Table of Contents</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Georgia', serif;
+        background: linear-gradient(135deg, #2a1b2e 0%, #4a2545 50%, #6b3654 100%);
+        min-height: 100vh;
+        padding: 60px 20px;
+    }
+
+    .page {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    header {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .eyebrow {
+        font-size: 0.8em;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: #e8b8c8;
+        margin-bottom: 14px;
+    }
+
+    h1 {
+        font-family: 'Playfair Display', 'Georgia', serif;
+        font-weight: 600;
+        font-size: 2.6em;
+        color: #fdf4f4;
+        letter-spacing: 0.5px;
+    }
+
+    .rule {
+        width: 90px;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #e08bb0, transparent);
+        margin: 24px auto 0;
+    }
+
+    .contents {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+    }
+
+    .story-card {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        background: #fdf4f4;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    a.story-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .story-thumb {
+        position: relative;
+        overflow: hidden;
+        background: #1a1116;
+    }
+
+    .story-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .story-number {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: 0.95em;
+        color: #fdf4f4;
+        background: rgba(42, 27, 46, 0.65);
+        padding: 3px 11px;
+        border-radius: 20px;
+        letter-spacing: 1px;
+    }
+
+    .story-info {
+        padding: 26px 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .story-title {
+        font-family: 'Playfair Display', 'Georgia', serif;
+        font-weight: 600;
+        font-size: 1.5em;
+        color: #7c2d42;
+        margin-bottom: 10px;
+    }
+
+    .story-summary {
+        font-size: 0.95em;
+        color: #6b4a56;
+        font-style: italic;
+        line-height: 1.5;
+        margin-bottom: 14px;
+    }
+
+    .story-cta {
+        font-size: 0.85em;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        color: #a52a5a;
+        text-transform: uppercase;
+    }
+
+    .story-cta::after {
+        content: ' →';
+    }
+
+    /* Placeholder (not-yet-written) entries */
+    .story-card.placeholder {
+        background: rgba(253, 244, 244, 0.12);
+        box-shadow: none;
+        cursor: default;
+        pointer-events: none;
+    }
+
+    .story-card.placeholder .story-thumb {
+        background: rgba(253, 244, 244, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .story-card.placeholder .story-number {
+        position: static;
+        background: none;
+        padding: 0;
+        color: rgba(253, 244, 244, 0.4);
+        font-size: 1.8em;
+    }
+
+    .story-card.placeholder .story-title {
+        color: rgba(253, 244, 244, 0.55);
+        font-weight: 500;
+    }
+
+    .story-card.placeholder .story-summary {
+        color: rgba(253, 244, 244, 0.35);
+    }
+
+    @media (max-width: 640px) {
+        .story-card {
+            grid-template-columns: 1fr;
+        }
+        .story-thumb {
+            height: 180px;
+        }
+        .story-card.placeholder .story-thumb {
+            height: 90px;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        .story-info {
+            padding: 20px 22px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="page">
+    <header>
+        <div class="eyebrow">A Collection</div>
+        <h1>Table of Contents</h1>
+        <div class="rule"></div>
+    </header>
+
+    <div class="contents">
+
+        <!-- ============================================= -->
+        <!-- STORY 1 — finished, linked                     -->
+        <!-- ============================================= -->
+        <a class="story-card" href="https://Heuring.us/Story-1.html">
+            <div class="story-thumb">
+                <img src="1-Beginning-Fuji.png" alt="One Afternoon in Bangkok">
+                <span class="story-number">01</span>
+            </div>
+            <div class="story-info">
+                <div class="story-title">One Afternoon in Bangkok</div>
+                <!-- Replace the line below once you've written a summary -->
+                <div class="story-summary">Summary coming soon.</div>
+                <div class="story-cta">Read the Story</div>
+            </div>
+        </a>
+
+        <!-- ============================================= -->
+        <!-- STORIES 2–8 — placeholders                     -->
+        <!-- To activate a story once it's ready:            -->
+        <!--   1. Change <div class="story-card placeholder"> -->
+        <!--      to <a class="story-card" href="https://Heuring.us/Story-N.html"> -->
+        <!--      (and change the closing </div> to </a>)     -->
+        <!--   2. Add a thumbnail <img> inside .story-thumb    -->
+        <!--   3. Replace the title and summary placeholder    -->
+        <!--   4. Remove the "story-number" static style        -->
+        <!--      isn't needed — the number badge already works -->
+        <!--      the same way once it's a real .story-card    -->
+        <!-- ============================================= -->
+
+        <div class="story-card placeholder">
+            <div class="story-thumb"><span class="story-number">02</span></div>
+            <div class="story-info">
+                <div class="story-title">Chapter Two</div>
+                <div class="story-summary">Coming soon.</div>
+            </div>
+        </div>
+
+        <div class="story-card placeholder">
+            <div class="story-thumb"><span class="story-number">03</span></div>
+            <div class="story-info">
+                <div class="story-title">Chapter Three</div>
+                <div class="story-summary">Coming soon.</div>
+            </div>
+        </div>
+
+        <div class="story-card placeholder">
+            <div class="story-thumb"><span class="story-number">04</span></div>
+            <div class="story-info">
+                <div class="story-title">Chapter Four</div>
+                <div class="story-summary">Coming soon.</div>
+            </div>
+        </div>
+
+        <div class="story-card placeholder">
+            <div class="story-thumb"><span class="story-number">05</span></div>
+            <div class="story-info">
+                <div class="story-title">Chapter Five</div>
+                <div class="story-summary">Coming soon.</div>
+            </div>
+        </div>
+
+        <div class="story-card placeholder">
+            <div class="story-thumb"><span class="story-number">06</span></div>
+            <div class="story-info">
+                <div class="story-title">Chapter Six</div>
+                <div class="story-summary">Coming soon.</div>
+            </div>
+        </div>
+
+        <div class="story-card placeholder">
+            <div class="story-thumb"><span class="story-number">07</span></div>
+            <div class="story-info">
+                <div class="story-title">Chapter Seven</div>
+                <div class="story-summary">Coming soon.</div>
+            </div>
+        </div>
+
+        <div class="story-card placeholder">
+            <div class="story-thumb"><span class="story-number">08</span></div>
+            <div class="story-info">
+                <div class="story-title">Chapter Eight</div>
+                <div class="story-summary">Coming soon.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
