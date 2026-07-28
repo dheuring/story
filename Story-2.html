@@ -1,0 +1,807 @@
+Here is the HTML file with the `storyText` array replaced with "The Naughty School Girl" narrative. The rest of the HTML remains unchanged:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Naughty School Girl - Synchronized Read-Along</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+
+    <style>
+	.title-image {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.title-image img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    display: block;
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.9;
+            color: #2d3748;
+            background: linear-gradient(135deg, #0f2e2a 0%, #1a4a42 50%, #2d6b5c 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #f4fdfa;
+            padding: 60px;
+            border-radius: 15px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            text-align: center;
+            color: #0d5c4a;
+            margin-bottom: 8px;
+            font-size: 2.8em;
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #2d8570;
+            margin-bottom: 40px;
+            font-style: italic;
+            font-size: 1.1em;
+        }
+
+        .audio-section {
+            background: linear-gradient(135deg, #f0fdf7 0%, #f0fff5 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            border: 2px solid #a5e8c8;
+            text-align: center;
+            display: none;
+        }
+
+        .audio-section h3 {
+            color: #0d5c4a;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        audio {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 30px;
+            margin-bottom: 15px;
+        }
+
+        .instructions {
+            color: #2d8570;
+            font-size: 0.95em;
+            padding: 12px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .progress-container {
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #d9f0e4;
+            border-radius: 4px;
+            overflow: visible;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #14b88a, #0d7a5f);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.1s linear;
+        }
+
+        .progress-tick {
+            position: absolute;
+            top: -3px;
+            width: 3px;
+            height: 14px;
+            background: #0d5c4a;
+            border-radius: 2px;
+            pointer-events: none;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.6);
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            color: #2d8570;
+            margin-top: 8px;
+            font-family: 'Georgia', serif;
+        }
+
+        .story-text {
+            font-size: 1.15em;
+            text-align: justify;
+            color: #2d3748;
+        }
+
+        #storyContent p:first-of-type::first-letter {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 3.6em;
+            font-weight: 600;
+            float: left;
+            line-height: 0.85;
+            padding: 6px 10px 0 2px;
+            color: #0d5c4a;
+        }
+
+        .paragraph {
+            margin-bottom: 1em;
+            padding: 18px 25px;
+            border-radius: 10px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            position: relative;
+        }
+
+        .paragraph:hover {
+            background-color: #f0fdf7;
+            border-left-color: #6bd9ae;
+        }
+
+        .paragraph.active {
+            background: linear-gradient(90deg, #e0f7ec 0%, #f5fffa 100%);
+            border-left: 4px solid #14b88a;
+            box-shadow: 0 6px 25px rgba(20, 184, 138, 0.25);
+            transform: translateX(8px);
+        }
+
+        .paragraph.read {
+            background-color: #f0fdf7;
+            border-left-color: #8bd1b0;
+            opacity: 0.75;
+        }
+
+        .paragraph.upcoming {
+            opacity: 0.6;
+        }
+
+        .paragraph.image-entry,
+        .paragraph.image-entry.upcoming,
+        .paragraph.image-entry.read,
+        .paragraph.image-entry.active {
+            opacity: 1 !important;
+            background: none !important;
+            border-left: none !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+
+        .the-end {
+            text-align: center;
+            margin-top: 50px;
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-style: italic;
+            font-size: 1.4em;
+            letter-spacing: 2px;
+            color: #0d5c4a;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #14b88a 0%, #0d7a5f 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(20, 184, 138, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 4px 15px rgba(113, 128, 150, 0.4);
+        }
+		#playBtn {
+            font-size: 1.1em;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #18855b 0%, #105a3e 100%);
+            letter-spacing: 0.5px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(24, 133, 91, 0.4);
+        }
+
+        #playBtn:hover {
+            box-shadow: 0 6px 25px rgba(24, 133, 91, 0.55);
+        }
+
+        #playBtn.playing {
+            background: linear-gradient(135deg, #0d5c4a 0%, #0a3d30 100%);
+            box-shadow: 0 4px 20px rgba(13, 92, 74, 0.4);
+        }
+         .status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 101;
+        }
+
+        .shortcut-hint {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            background: rgba(255,255,255,0.95);
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            font-size: 0.85em;
+            color: #4a5568;
+            z-index: 100;
+        }
+
+        .key {
+            background: #edf2f7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        /* Mobile floating menu */
+        .mobile-fab {
+            display: none;
+        }
+
+        .mobile-drawer {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+
+            .story-text {
+                text-align: left;
+            }
+
+            .paragraph {
+                padding: 14px 16px;
+            }
+
+            #storyContent p:first-of-type::first-letter {
+                font-size: 2.6em;
+                padding: 4px 6px 0 0;
+            }
+
+            .story-image {
+                width: 92%;
+                max-width: 92%;
+            }
+
+            /* Hide desktop fixed overlays on mobile */
+            .status,
+            .controls,
+            .shortcut-hint {
+                display: none !important;
+            }
+
+            /* Floating action button */
+            .mobile-fab {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 52px;
+                height: 52px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #18855b, #105a3e);
+                color: white;
+                font-size: 1.5em;
+                border: none;
+                cursor: pointer;
+                z-index: 200;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+            }
+
+            /* Slide-up drawer */
+            .mobile-drawer {
+                display: block;
+                position: fixed;
+                bottom: -300px;
+                left: 0;
+                right: 0;
+                background: white;
+                border-radius: 18px 18px 0 0;
+                box-shadow: 0 -6px 30px rgba(0,0,0,0.25);
+                padding: 20px 24px 32px;
+                z-index: 199;
+                transition: bottom 0.3s ease;
+            }
+
+            .mobile-drawer.open {
+                bottom: 0;
+            }
+
+            .drawer-handle {
+                width: 40px;
+                height: 4px;
+                background: #cbd5e0;
+                border-radius: 2px;
+                margin: 0 auto 18px;
+            }
+
+            .drawer-status {
+                text-align: center;
+                color: #2d8570;
+                font-size: 0.9em;
+                margin-bottom: 14px;
+                font-style: italic;
+            }
+
+            .drawer-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .mobile-overlay-bg {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.3);
+                z-index: 198;
+            }
+
+            .mobile-overlay-bg.open {
+                display: block;
+            }
+        }
+        .story-image {
+            max-width: 75%;
+            width: 75%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            margin: 12px auto 20px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="status" id="topControls">
+        <button class="btn" id="playBtn" onclick="handlePlayBtn()">▶ Play Story</button>
+        <button class="btn btn-secondary" onclick="toggleAutoScroll()" id="autoScrollBtn">Auto-Scroll: ON</button>
+    </div>
+
+    <div class="container">
+        <h1>The Naughty School Girl</h1>
+		  <div class="title-image">
+            <img src="https://audio.heuring.us/added/2-Talking.png" alt="2-Talking">
+        </div>
+
+        <div class="audio-section">
+            <h3>🎧 Narration</h3>
+            <audio id="narration" controls>
+                <source src="https://audio.heuring.us/added/2-Naughty.m4a" type="audio/mp4">
+                <source src="https://audio.heuring.us/added/2-Naughty.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBarContainer">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+                <div class="time-display">
+                    <span id="currentTimeDisplay">0:00</span>
+                    <span id="durationDisplay">0:00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="story-text" id="storyContent">
+            <!-- Paragraphs generated by JavaScript -->
+        </div>
+
+        <div class="the-end">❦ The End ❦</div>
+
+        <div class="toc-link-wrapper" style="text-align: center; margin-top: 40px;">
+            <a href="TOC.html" class="btn" style="text-decoration: none; display: inline-block; background: linear-gradient(135deg, #18855b 0%, #105a3e 100%);">📚 Back to Table of Contents</a>
+        </div>
+
+    <!-- Mobile floating button + drawer (hidden on desktop) -->
+    <div class="mobile-overlay-bg" id="mobileOverlay" onclick="closeMobileDrawer()"></div>
+
+    <button class="mobile-fab" id="mobileFab" onclick="toggleMobileDrawer()">☰</button>
+
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-handle"></div>
+        <div class="drawer-status" id="drawerStatus">Press Play to begin</div>
+        <div class="drawer-buttons">
+            <button class="btn" id="drawerPlayBtn" onclick="handlePlayBtn(); updateDrawerStatus()">▶ Play Story</button>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="previousParagraph()">⏮ Previous</button>
+                <button class="btn btn-secondary" style="flex: 1;" onclick="nextParagraph()">Next ⏭</button>
+            </div>
+            <button class="btn btn-secondary" onclick="toggleAutoScroll(); updateDrawerStatus()" id="drawerAutoScrollBtn">Auto-Scroll: ON</button>
+        </div>
+    </div>
+
+    <script>
+      // TODO: run this story's narration audio through timestamp.html and paste the
+      // resulting array here — it must have exactly 62 entries, one per storyText paragraph below.
+      const timestamps = [4.144211, 25.373115, 40.977512, 63.808271, 71.038770, 76.428703, 104.080093, 132.098438, 150.899744, 169.355445, 189.396140, 201.795886, 205.297974, 212.202262, 219.107485, 221.849805, 227.454118, 245.798105, 253.645416, 257.646406, 262.211471, 269.816253, 275.480622, 290.924561, 313.733614, 321.955848, 341.244482, 350.206762, 355.163405, 360.894388, 366.430214, 369.123219, 389.268297, 409.468324, 415.789644, 426.632023, 433.242356, 447.950366, 458.029375, 470.238989, 507.339216, 538.868612, 544.138203, 564.313743, 572.935255, 575.673802, 577.848516, 590.647863, 597.436895, 610.489339, 614.668779, 624.506517, 648.303534, 650.350490, 652.468272, 671.293452, 688.907796, 694.104512, 700.102570, 724.107158, 733.276910];
+
+                const storyText = [
+				
+            "Hearing a knock at the door of his apartment, Dave checked his reflection in the hallway mirror. Suit jacket in place. Collar straight. Tie neat. The very picture of academic respectability. He opened the door.",
+            "\"Good evening, Professor,\" Alisa said, bowing slightly. She wore the traditional Thammasat University uniform. Crisp white blouse buttoned to the throat. Black skirt falling precisely to her knees. Black leather shoes polished to a shine. Her long black hair was pulled back in a simple ponytail. She clutched her backpack with both hands, her eyes downcast. \"Thank you for agreeing to help me.\"",
+            "\"Of course, Alisa. Come in.\" Dave stepped aside, gesturing toward the small desk he'd cleared for their study session. He hoped she wouldn't be embarrassed to be in a room with a bed. \"I was concerned when I saw your midterm score. Economics 201 isn't impossible, but it requires focus. I'm glad you reached out, though I usually do tutoring at the school.\"",
+            "\"I know, Professor. I've been so worried.\" She slipped off her shoes and padded across the wooden floor, setting her backpack on the chair. \"I can't fail. My parents would be so disappointed. I really appreciate you seeing me on short notice. I just didn't have time next week to meet at school.\"",
+            "\"It's fine, actually. Now, let's see what we can do.\" Dave removed his blazer, turning toward the coat rack in the corner. \"The final exam covers chapters eight through fourteen. We'll start with supply and demand curves.\"",
+            "As he hung up his jacket, adjusting it carefully on the wooden hanger, Alisa's fingers moved with practiced precision. She unbuttoned the top three buttons of her blouse. Then the fourth. The white fabric parted to reveal the swell of her breasts, her nipples barely contained by a thin lacy white bra that seemed shockingly incongruous underneath her prim uniform.",
+            "<img src='https://audio.heuring.us/added/2-Cleavage.png' class='story-image' alt='2-Cleavage'>",
+            "Dave turned back, textbook in hand, and froze. His mouth opened, then closed. He cleared his throat, adjusting his glasses, trying his best to ignore what was displayed in front of him.",
+            "\"Now then,\" he said, his voice slightly higher than before. He opened the book, pointing to a graph. \"This is the equilibrium point. Can you tell me what happens when demand shifts right?\"",
+            "Alisa leaned forward, resting her elbows on the table. Her cleavage deepened in the V of her blouse. \"I'm not sure, Professor. Could you show me here?\" She pointed to a diagram in the book, looking up at him through lowered lashes.",
+            "\"Well, when... when demand increases...\" Dave's finger hovered over the page, his eyes drifting despite his best intentions. \"The curve moves... um...\"",
+            "\"Like this?\" Alisa reached across, her left breast brushing his hand as she made a circling motion on the page.",
+            "\"Yes. Exactly.\" Dave stepped back, trying to regain his composure. \"Now, if you look at the elasticity...\" He tried to continue the lesson despite the distraction.",
+            "\"Oh!\" Alisa gasped, knocking her pencil from the table. It rolled across the floor, coming to rest near Dave's feet. \"I'm so clumsy. Let me get that.\"",
+            "She slid off the chair, kneeling before him. Her position put her face level with his groin, and she could see the unmistakable bulge growing against his dark trousers. She looked up at him through her lashes, maintaining her innocent expression.",
+            "\"There seems to be a different kind of problem here,\" she whispered. \"Perhaps I can help.\"",
+            "\"Alisa, I don't think—\" Dave mumbled.",
+            "But her hand was already there, pressing gently against his hardening length through the fabric. Dave's breath hitched.",
+            "\"You seem very tense, Professor,\" she said softly, her conservative facade cracking into something playful. \"All that teaching. All that responsibility. Don't you need... some special relief?\" She paused, catching her breath. \"I'm good at helping students with... practical applications.\"",
+            "\"Alisa, this is inappropriate. We shouldn't—\" Dave said, his protest weaker than intended.",
+            "Alisa continued to press. \"I really want to, Professor. Let me help you relieve the tension. I feel bad for you. You seem quite overwhelmed right now.\"",
+            "She squeezed gently, and Dave groaned despite himself.",
+            "Alisa urged him on. \"Let me help you with this big problem. Then we can talk about my grade on the final exam, okay?\"",
+            "Dave's hands hovered in the air, caught between propriety and desire. Finally, he nodded. Just a slight tilt of his head.",
+            "Alisa smiled, the good student transforming into something wicked. She unbuckled his belt with steady hands and pulled down his trousers and underwear together. His cock sprang free, thick and throbbing. She wrapped her fingers around it, pumping slowly.",
+            "\"Is this better, Professor?\" Alisa asked with a grin.",
+            "<img src='https://audio.heuring.us/added/2-Handjob.png' class='story-image' alt='2-Handjob'>",
+            "\"God, yes,\" Dave breathed, his proper demeanor shattering.",
+            "She worked him with both hands, twisting her wrists, watching his face contort with pleasure. She leaned forward, her tongue darting out to lick the bead of pre-cum from his tip.",
+            "\"Wait,\" Dave gasped. \"That feels great, but can you... can you use your mouth? Please.\"",
+            "Alisa obliged, taking him deep into her throat. She bobbed her head, using her hands to stroke what she couldn't fit, moaning around him to send vibrations through his shaft. Dave's hands found her hair, gripping tightly, holding on as if for dear life.",
+            "<img src='https://audio.heuring.us/added/2-Bloejob.png' class='story-image' alt='2-Blowjob'>",
+            "\"I'm close,\" he warned, his hips bucking. \"Don't stop. Please don't stop.\"",
+            "Just as his thighs tensed and his breathing turned ragged, Alisa pulled back with a wet pop. Dave cried out in frustration, his cock twitching in the air.",
+            "\"Not yet, my horny professor,\" she teased, standing up. She unzipped her skirt, letting it drop to her feet, then stepped out of her panties. \"I want you inside me. I want to feel my professor teaching me a proper lesson.\"",
+            "She positioned herself on the floor on all fours, lifting her hips toward him. She looked back over her shoulder, her hair swinging wildly, her eyes gleaming with mischief.",
+            "\"Like this, Professor. Doggy style. Don't you think it's the best position for... in-depth tutoring?\"",
+            "Dave didn't hesitate. He knelt behind her, gripping her hips, and thrust into her wet heat in one stroke. They both moaned.",
+            "<img src='https://audio.heuring.us/added/2-Doggie.png' class='story-image' alt='2-Doggie'>",
+            "\"So tight,\" he groaned, beginning to move. \"You're so fucking tight, Alisa. I can't believe how wet you are. Oh, this feels so good.\"",
+            "\"Harder and deeper,\" she gasped, pushing back against him. \"Fuck me real good, Professor. Make me pass the exam with your big cock.\"",
+            "Dave pounded into her, the slap of skin against skin filling the apartment. Alisa's moans grew louder, unrestrained, echoing off the walls.",
+            "\"Yes, yes, right there,\" she cried. \"Harder. Slam it in harder, Professor. I'm going to—I'm—\"",
+            "\"Come with me,\" Dave growled, reaching around to rub her clit with rough fingers. \"Come for your professor and pass the exam.\"",
+            "They crashed together, Dave burying himself to the hilt as he spilled inside her, Alisa clenching around him as waves of pleasure radiated through her body. Dave withdrew and collapsed beside her on the floor, both of them panting and sweating.",
+            "Alisa rolled over to him, her blouse still open, her skirt forgotten across the room. They kissed deeply, tongues tangling while Alisa massaged Dave's softening cock.",
+            "<img src='https://audio.heuring.us/added/2-Kiss.png' class='story-image' alt='2-Kiss'>",
+            "\"Well,\" she said, her voice lazy and content. \"I think I understand economics much better now. Supply and demand... very clear. I demand and you supply, yes?\"",
+            "Dave laughed, breathless. \"You're a really bad girl, Alisa. You know that?\"",
+            "\"Me?\" Alisa touched her chest in mock innocence. \"I'm just a struggling student trying to pass.\"",
+            "Then she squeezed Dave's cock and said, \"But even good girls need a little extra credit now and then, don't you think, Professor?\" She stroked him slowly, her thumb circling the sensitive tip as she bit her lip. \"Maybe I should come by for regular... private tutoring sessions. Just to make sure I really grasp the material.\"",
+            "\"Is that what this was? Extra credit?\"",
+            "\"Let's call it... a beginning.\" She gave his cock tip a quick lick before propping herself up on her elbows, saying mischievously, \"You know, I have sociology next semester. And I'm absolutely terrible at statistics.\"",
+            "Dave raised an eyebrow. \"Is that so?\"",
+            "\"Yes. And my friend Nok? She's in your Monday Econ section. She's failing too. Terrible at multiple choice. She's free this weekend. Very... eager to learn. Just like me.\"",
+            "Dave stared at her, realization dawning. \"You planned all of this, didn't you?\"",
+            "\"I was failing, but I have special skills I thought you might appreciate, Professor.\" Alisa smiled, sweet and sinful. \"I needed a strategy. A long-term strategy.\"",
+            "She stood up quickly, beginning to dress, leaving her blouse unbuttoned in a way that promised future lessons. At the door, she turned, her backpack slung over one shoulder.",
+            "\"See you this weekend? With Nok?\"",
+            "Dave looked at the messy room and his discarded clothes. Then he looked at her. Proper uniform. Wicked smile. Eyes full of naughty possibilities ahead.",
+            "\"I'll be sure to get another chair so you two can study together here,\" he said.",
+            "Alisa winked, stepped outside, and blew a kiss back at him as she closed the door behind her, leaving Dave alone with the lingering scent of her perfume and the certainty that this semester was going to be very different from all the others."
+        ];
+        // State — auto-scroll ON by default
+        let autoScroll = true;
+        let hasStarted = false;
+        let currentParagraph = -1;
+        let paragraphs = [];
+
+        const audio = document.getElementById('narration');
+        const progressBar = document.getElementById('progressBar');
+        const progressBarContainer = document.getElementById('progressBarContainer');
+        const playBtn = document.getElementById('playBtn');
+        const autoScrollBtn = document.getElementById('autoScrollBtn');
+        const currentTimeDisplay = document.getElementById('currentTimeDisplay');
+        const durationDisplay = document.getElementById('durationDisplay');
+
+        function formatTime(seconds) {
+            if (!isFinite(seconds) || seconds < 0) return '0:00';
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return m + ':' + String(s).padStart(2, '0');
+        }
+
+        function renderProgressTicks() {
+            if (!audio.duration || !isFinite(audio.duration)) return;
+            progressBarContainer.querySelectorAll('.progress-tick').forEach(t => t.remove());
+            storyText.forEach((text, index) => {
+                if (text.startsWith('<img') && timestamps[index] !== undefined) {
+                    const pct = (timestamps[index] / audio.duration) * 100;
+                    const tick = document.createElement('div');
+                    tick.className = 'progress-tick';
+                    tick.style.left = pct + '%';
+                    tick.title = 'Image';
+                    progressBarContainer.appendChild(tick);
+                }
+            });
+        }
+
+        audio.addEventListener('loadedmetadata', () => {
+            durationDisplay.textContent = formatTime(audio.duration);
+            renderProgressTicks();
+        });
+
+        function init() {
+            const container = document.getElementById('storyContent');
+            storyText.forEach((text, index) => {
+                const p = document.createElement('p');
+                p.className = 'paragraph upcoming';
+                p.setAttribute('data-index', index);
+                if (text.startsWith('<img')) {
+                    p.innerHTML = text;
+                    p.classList.add('image-entry');
+                    p.style.textAlign = 'center';
+                    p.style.cursor = 'default';
+                } else {
+                    p.textContent = text;
+                    p.addEventListener('click', () => seekToParagraph(index));
+                }
+                container.appendChild(p);
+                paragraphs.push(p);
+            });
+            // Update auto-scroll button to reflect default ON state
+            autoScrollBtn.textContent = 'Auto-Scroll: ON';
+        }
+
+        function handlePlayBtn() {
+            if (audio.paused) {
+                // First play: scroll to story text
+                if (!hasStarted) {
+                    hasStarted = true;
+                    document.getElementById('storyContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    setTimeout(() => audio.play(), 400);
+                } else {
+                    audio.play();
+                }
+            } else {
+                audio.pause();
+            }
+        }
+
+        audio.addEventListener('play', () => {
+            playBtn.textContent = '⏸ Pause';
+            playBtn.classList.add('playing');
+        });
+
+        audio.addEventListener('pause', () => {
+            playBtn.textContent = '▶ Play Story';
+            playBtn.classList.remove('playing');
+        });
+
+        audio.addEventListener('ended', () => {
+            playBtn.textContent = '↺ Play Again';
+            playBtn.classList.remove('playing');
+        });
+
+        document.getElementById('progressBarContainer').addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            audio.currentTime = pos * audio.duration;
+        });
+
+        // Minimum real-time (ms since epoch) to hold on the current paragraph.
+        // Used to guarantee images stay on screen for at least IMAGE_HOLD_MS,
+        // even if the audio's built-in silence is slightly shorter than expected.
+        const IMAGE_HOLD_MS = 10000;
+        let holdUntilTime = 0;
+
+        function onTimeUpdate() {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = progress + '%';
+            currentTimeDisplay.textContent = formatTime(audio.currentTime);
+
+            // Still holding on an image — skip advancing the highlight/scroll.
+            if (Date.now() < holdUntilTime) {
+                return;
+            }
+
+            let newIndex = -1;
+            for (let i = 0; i < timestamps.length; i++) {
+                if (audio.currentTime >= timestamps[i]) {
+                    newIndex = i;
+                } else {
+                    break;
+                }
+            }
+
+            if (newIndex !== currentParagraph) {
+                currentParagraph = newIndex;
+                highlightParagraph(newIndex);
+
+                if (paragraphs[newIndex] && paragraphs[newIndex].classList.contains('image-entry')) {
+                    holdUntilTime = Date.now() + IMAGE_HOLD_MS;
+                }
+            }
+        }
+
+        audio.addEventListener('timeupdate', onTimeUpdate);
+
+        function highlightParagraph(index) {
+            paragraphs.forEach((p, i) => {
+                p.classList.remove('active', 'read', 'upcoming');
+                if (i === index) {
+                    p.classList.add('active');
+                    if (autoScroll) {
+                        p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                } else if (i < index) {
+                    p.classList.add('read');
+                } else {
+                    p.classList.add('upcoming');
+                }
+            });
+        }
+
+        function seekToParagraph(index) {
+            if (index >= 0 && index < timestamps.length) {
+                holdUntilTime = 0;
+                audio.currentTime = timestamps[index];
+                audio.play();
+            }
+        }
+
+        function previousParagraph() {
+            const newIndex = Math.max(0, currentParagraph - 1);
+            seekToParagraph(newIndex);
+        }
+
+        function nextParagraph() {
+            const newIndex = Math.min(timestamps.length - 1, currentParagraph + 1);
+            seekToParagraph(newIndex);
+        }
+
+        function toggleAutoScroll() {
+            autoScroll = !autoScroll;
+            autoScrollBtn.textContent = autoScroll ? 'Auto-Scroll: ON' : 'Auto-Scroll: OFF';
+            autoScrollBtn.style.background = autoScroll
+                ? 'linear-gradient(135deg, #718096 0%, #4a5568 100%)'
+                : 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.code === 'Space' && e.target.tagName !== 'BUTTON') {
+                e.preventDefault();
+                handlePlayBtn();
+            } else if (e.code === 'ArrowRight') {
+                skip(10);
+            } else if (e.code === 'ArrowLeft') {
+                skip(-10);
+            } else if (e.code === 'ArrowUp') {
+                e.preventDefault();
+                previousParagraph();
+            } else if (e.code === 'ArrowDown') {
+                e.preventDefault();
+                nextParagraph();
+            }
+        });
+
+        function skip(seconds) {
+            audio.currentTime += seconds;
+        }
+
+        init();
+
+        // Mobile drawer controls
+        function toggleMobileDrawer() {
+            const drawer = document.getElementById('mobileDrawer');
+            const overlay = document.getElementById('mobileOverlay');
+            const isOpen = drawer.classList.contains('open');
+            if (isOpen) {
+                closeMobileDrawer();
+            } else {
+                drawer.classList.add('open');
+                overlay.classList.add('open');
+                document.getElementById('mobileFab').textContent = '✕';
+            }
+        }
+
+        function closeMobileDrawer() {
+            document.getElementById('mobileDrawer').classList.remove('open');
+            document.getElementById('mobileOverlay').classList.remove('open');
+            document.getElementById('mobileFab').textContent = '☰';
+        }
+
+        function updateDrawerStatus() {
+            // Keep drawer auto-scroll button in sync
+            const drawerBtn = document.getElementById('drawerAutoScrollBtn');
+            if (drawerBtn) {
+                drawerBtn.textContent = autoScroll ? 'Auto-Scroll: ON' : 'Auto-Scroll: OFF';
+                drawerBtn.style.background = autoScroll
+                    ? 'linear-gradient(135deg, #718096 0%, #4a5568 100%)'
+                    : 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+            }
+        }
+
+        // Keep drawer play button in sync with audio state
+        audio.addEventListener('play', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '⏸ Pause'; btn.style.background = 'linear-gradient(135deg, #7c2d42 0%, #5a1f30 100%)'; }
+            document.getElementById('drawerStatus').textContent = '▶️ Playing';
+        });
+        audio.addEventListener('pause', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '▶ Play Story'; btn.style.background = ''; }
+            document.getElementById('drawerStatus').textContent = '⏸️ Paused';
+        });
+        audio.addEventListener('ended', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '↺ Play Again'; btn.style.background = ''; }
+            document.getElementById('drawerStatus').textContent = '✅ Finished';
+        });
+    </script>
+</body>
+</html>
