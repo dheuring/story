@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Naughty School Girl - Synchronized Read-Along</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+
+    <style>
+	.title-image {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.title-image img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    display: block;
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.9;
+            color: #2d3748;
+            background: linear-gradient(135deg, #0f2e2a 0%, #1a4a42 50%, #2d6b5c 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #f4fdfa;
+            padding: 60px;
+            border-radius: 15px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            text-align: center;
+            color: #0d5c4a;
+            margin-bottom: 8px;
+            font-size: 2.8em;
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #2d8570;
+            margin-bottom: 40px;
+            font-style: italic;
+            font-size: 1.1em;
+        }
+
+        .audio-section {
+            background: linear-gradient(135deg, #f0fdf7 0%, #f0fff5 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            border: 2px solid #a5e8c8;
+            text-align: center;
+            display: none;
+        }
+
+        .audio-section h3 {
+            color: #0d5c4a;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        audio {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 30px;
+            margin-bottom: 15px;
+        }
+
+        .instructions {
+            color: #2d8570;
+            font-size: 0.95em;
+            padding: 12px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .progress-container {
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #d9f0e4;
+            border-radius: 4px;
+            overflow: visible;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #14b88a, #0d7a5f);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.1s linear;
+        }
+
+        .progress-tick {
+            position: absolute;
+            top: -3px;
+            width: 3px;
+            height: 14px;
+            background: #0d5c4a;
+            border-radius: 2px;
+            pointer-events: none;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.6);
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            color: #2d8570;
+            margin-top: 8px;
+            font-family: 'Georgia', serif;
+        }
+
+        .story-text {
+            font-size: 1.15em;
+            text-align: justify;
+            color: #2d3748;
+        }
+
+        #storyContent p:first-of-type::first-letter {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 3.6em;
+            font-weight: 600;
+            float: left;
+            line-height: 0.85;
+            padding: 6px 10px 0 2px;
+            color: #0d5c4a;
+        }
+
+        .paragraph {
+            margin-bottom: 1em;
+            padding: 18px 25px;
+            border-radius: 10px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            position: relative;
+        }
+
+        .paragraph:hover {
+            background-color: #f0fdf7;
+            border-left-color: #6bd9ae;
+        }
+
+        .paragraph.active {
+            background: linear-gradient(90deg, #e0f7ec 0%, #f5fffa 100%);
+            border-left: 4px solid #14b88a;
+            box-shadow: 0 6px 25px rgba(20, 184, 138, 0.25);
+            transform: translateX(8px);
+        }
+
+        .paragraph.read {
+            background-color: #f0fdf7;
+            border-left-color: #8bd1b0;
+            opacity: 0.75;
+        }
+
+        .paragraph.upcoming {
+            opacity: 0.6;
+        }
+
+        .paragraph.image-entry,
+        .paragraph.image-entry.upcoming,
+        .paragraph.image-entry.read,
+        .paragraph.image-entry.active {
+            opacity: 1 !important;
+            background: none !important;
+            border-left: none !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+
+        .the-end {
+            text-align: center;
+            margin-top: 50px;
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-style: italic;
+            font-size: 1.4em;
+            letter-spacing: 2px;
+            color: #0d5c4a;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #14b88a 0%, #0d7a5f 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(20, 184, 138, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 4px 15px rgba(113, 128, 150, 0.4);
+        }
+		#playBtn {
+            font-size: 1.1em;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #18855b 0%, #105a3e 100%);
+            letter-spacing: 0.5px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(24, 133, 91, 0.4);
+        }
+
+        #playBtn:hover {
+            box-shadow: 0 6px 25px rgba(24, 133, 91, 0.55);
+        }
+
+        #playBtn.playing {
+            background: linear-gradient(135deg, #0d5c4a 0%, #0a3d30 100%);
+            box-shadow: 0 4px 20px rgba(13, 92, 74, 0.4);
+        }
+         .status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 101;
+        }
+
+        .shortcut-hint {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            background: rgba(255,255,255,0.95);
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            font-size: 0.85em;
+            color: #4a5568;
+            z-index: 100;
+        }
+
+        .key {
+            background: #edf2f7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        /* Mobile floating menu */
+        .mobile-fab {
+            display: none;
+        }
+
+        .mobile-drawer {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+
+            .story-text {
+                text-align: left;
+            }
+
+            .paragraph {
+                padding: 14px 16px;
+            }
+
+            #storyContent p:first-of-type::first-letter {
+                font-size: 2.6em;
+                padding: 4px 6px 0 0;
+            }
+
+            .story-image {
+                width: 92%;
+                max-width: 92%;
+            }
+
+            /* Hide desktop fixed overlays on mobile */
+            .status,
+            .controls,
+            .shortcut-hint {
+                display: none !important;
+            }
+
+            /* Floating action button */
+            .mobile-fab {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 52px;
+                height: 52px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #18855b, #105a3e);
+                color: white;
+                font-size: 1.5em;
+                border: none;
+                cursor: pointer;
+                z-index: 200;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+            }
+
+            /* Slide-up drawer */
+            .mobile-drawer {
+                display: block;
+                position: fixed;
+                bottom: -300px;
+                left: 0;
+                right: 0;
+                background: white;
+                border-radius: 18px 18px 0 0;
+                box-shadow: 0 -6px 30px rgba(0,0,0,0.25);
+                padding: 20px 24px 32px;
+                z-index: 199;
+                transition: bottom 0.3s ease;
+            }
+
+            .mobile-drawer.open {
+                bottom: 0;
+            }
+
+            .drawer-handle {
+                width: 40px;
+                height: 4px;
+                background: #cbd5e0;
+                border-radius: 2px;
+                margin: 0 auto 18px;
+            }
+
+            .drawer-status {
+                text-align: center;
+                color: #2d8570;
+                font-size: 0.9em;
+                margin-bottom: 14px;
+                font-style: italic;
+            }
+
+            .drawer-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .mobile-overlay-bg {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.3);
+                z-index: 198;
+            }
+
+            .mobile-overlay-bg.open {
+                display: block;
+            }
+        }
+        .story-image {
+            max-width: 75%;
+            width: 75%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            margin: 12px auto 20px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="status" id="topControls">
+        <button class="btn" id="playBtn" onclick="handlePlayBtn()">▶ Play Story</button>
+        <button class="btn btn-secondary" onclick="toggleAutoScroll()" id="autoScrollBtn">Auto-Scroll: ON</button>
+    </div>
+
+    <div class="container">
+        <h1>The Shy Maid</h1>
+		  <div class="title-image">
+            <img src="https://audio.heuring.us/added/3-Entering.png" alt="2-Talking">
+        </div>
+
+        <div class="audio-section">
+            <h3>🎧 Narration</h3>
+            <audio id="narration" controls>
+                <source src="https://audio.heuring.us/added/3-Maid.m4a" type="audio/mp4">
+                <source src="https://audio.heuring.us/added/3-Maid.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBarContainer">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+                <div class="time-display">
+                    <span id="currentTimeDisplay">0:00</span>
+                    <span id="durationDisplay">0:00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="story-text" id="storyContent">
+            <!-- Paragraphs generated by JavaScript -->
+        </div>
+
+        <div class="the-end">❦ The End ❦</div>
+
+        <div class="toc-link-wrapper" style="text-align: center; margin-top: 40px;">
+            <a href="TOC.html" class="btn" style="text-decoration: none; display: inline-block; background: linear-gradient(135deg, #18855b 0%, #105a3e 100%);">📚 Back to Table of Contents</a>
+        </div>
+
+    <!-- Mobile floating button + drawer (hidden on desktop) -->
+    <div class="mobile-overlay-bg" id="mobileOverlay" onclick="closeMobileDrawer()"></div>
+
+    <button class="mobile-fab" id="mobileFab" onclick="toggleMobileDrawer()">☰</button>
+
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-handle"></div>
+        <div class="drawer-status" id="drawerStatus">Press Play to begin</div>
+        <div class="drawer-buttons">
+            <button class="btn" id="drawerPlayBtn" onclick="handlePlayBtn(); updateDrawerStatus()">▶ Play Story</button>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="previousParagraph()">⏮ Previous</button>
+                <button class="btn btn-secondary" style="flex: 1;" onclick="nextParagraph()">Next ⏭</button>
+            </div>
+            <button class="btn btn-secondary" onclick="toggleAutoScroll(); updateDrawerStatus()" id="drawerAutoScrollBtn">Auto-Scroll: ON</button>
+        </div>
+    </div>
+
+    <script>
+     	  
+	  const timestamps = [1.487820, 15.876358, 39.354981, 63.058115, 82.003269, 96.287244, 123.811106, 133.932859, 148.764128, 163.509824, 180.971729, 192.466854, 201.357474, 215.060158, 227.521940, 246.805093, 253.487678, 257.753998, 266.692062, 290.082930, 297.723705, 308.539911, 313.475391, 322.067894, 332.029532, 351.938241, 356.884662, 367.463156, 372.527640, 385.593222, 393.797209, 414.279328, 424.098765, 431.686980, 441.977610, 459.449094, 472.823626, 480.877412, 490.878466, 501.145794, 512.436061, 522.323908, 533.139672, 542.600495, 552.264785, 571.348448, 584.451657, 595.239583, 608.937752, 615.002728, 622.560523, 644.452772, 647.486170, 665.095234, 667.485733, 682.527180, 688.421884, 702.355613, 716.466864, 723.082876, 731.657552, 738.049786];
+
+                const storyText = [
+				
+            "The humidity of Bangkok pressed against the windows of the Grand Meridian Hotel like a living thing, but Davo barely noticed. He lay sprawled across the king-sized bed, the crisp white sheets already rumpled from two days of waiting. His phone sat face-down on the nightstand where he'd left it after the third delay notification from production.",
+            "Two days. Forty-eight hours in this boutique room while the investors sorted out permit issues across town. For a man accustomed to the rigorous schedule of adult film production, the long wait had left him needing release in ways that had nothing to do with boredom.",
+            "He wore only a red thong. The fabric was strained against his arousal, and the air conditioning did nothing to cool the heat that had been building since yesterday morning. In his line of work, regular release wasn't just pleasure. It was maintenance. It was routine. It was professional necessity. And now his body was reminding him of that fact with increasing insistence.",
+            "A knock came at the door.",
+            "Davo jumped up and grabbed his bathrobe from the bed and called out, \"Come in.\"",
+            "As he struggled to put on the bathrobe, the door opened slowly. A young woman in her early twenties stood there in the hotel's standard maid uniform. Black dress with white apron. Black nylons. Sensible shoes. Her long dark hair was pulled back enough to emphasize the delicate oval of her face. She carried a cleaning box filled with supplies, her eyes downcast as she stepped inside.",
+            "\"Housekeep—Oh! Uhm!\"",
+            "She froze. Her eyes widened as they took in the room's sole occupant. The famous Davo, international adult film star, standing in front of her wearing a scrap of red fabric that did nothing to conceal his obvious state of arousal.",
+            "\"I... oh, I apologize!\" Her English carried the musical lilt of a Thai accent. Her face flushed crimson as she began backing toward the door. \"I will come back later. So sorry.\"",
+            "\"Wait.\" Davo raised his hand and gestured for her to come in while offering his most disarming smile. That smile had launched a thousand scenes and melted a thousand inhibitions. \"It's fine, really. I'm just waiting around anyway. Go ahead and clean. I won't get in your way.\"",
+            "Her name badge read Alisa. She hesitated just inside the door, her knuckles white where they gripped the cleaning caddy. \"Are you sure? I can come back when you're not here.\"",
+            "\"I'm sure. I'm waiting for a phone call anyway and can't really leave the room.\" He moved to the far side of the room, adding, \"Besides, company would be nice. I'm going a little crazy in here.\"",
+			"<img src='https://audio.heuring.us/added/3-Cleaning.png' class='story-image' alt='3-Cleaning'>",
+            "She entered slowly, as if the carpet might bite, keeping her eyes fixed on the tasks ahead. She made the bed first. Davo sat on it, still wearing his tight red thong. Alisa continued her cleaning routine—vacuuming the floor, replacing towels, wiping surfaces. Sitting propped against the pillows, Davo watched her without seeming to, noting how her movements stayed efficient yet tentative, her shoulders slightly turned from him. She was clearly uncomfortable with him sitting there in his thong. He thought some small talk might ease the tension. Besides, he really wanted to talk to someone.",
+            "\"How long have you worked here?\" he asked, his voice casual and conversational.",
+            "\"Three months,\" she said, focusing intently on the full-length mirror she was cleaning. \"Since I just finished university.\"",
+            "\"University? Impressive. Your English is really good. What did you study?\"",
+            "\"Hospitality management.\" She continued cleaning the mirror, crouching down modestly to wipe the bottom. Her movements were precise and careful. \"But jobs are... competitive. I took this job to earn some spending money. But now that I have my B.A., I'll be able to start working at the front desk next month.\"",
+            "Davo shifted on the bed, letting one hand drift down to his thigh, then slowly, deliberately, to the strained fabric of his thong. He could see her face in the mirror as he traced the outline of his erection through the red material. He watched her eyes flick toward the movement before snapping back as she seemed to be cleaning the same spot over and over.",
+            "\"You're shy,\" he observed, not unkindly. \"I don't mean to make you uncomfortable.\"",
+            "\"I am not uncomfortable,\" she lied, her voice barely above a whisper.",
+            "He chuckled, a warm sound. \"You don't have to lie. I make a living reading people's bodies, you know. Their faces. The little tells.\" He continued the slow massage of himself through the fabric, noting how her cleaning motions had slowed, how her attention kept drifting back to his reflection in the mirror. \"You've never been in a room with a naked man before, have you?\"",
+            "The spray bottle in her hand paused mid-squeeze. \"I... that is not a good question.\"",
+            "\"Sorry. I'm in the adult film business, and I sometimes forget my manners.\" But he didn't stop touching himself, and he noticed that she didn't look away. \"I'm Davo, by the way. In case you didn't recognize me.\"",
+            "\"I know who you are,\" she admitted, her voice even smaller now. \"Everyone here at the hotel knows about you. Your movies are... well, um... my friends say they are um... popular.\"",
+            "\"Are they?\" He arched an eyebrow, genuinely pleased. \"Have you seen any of them?\"",
+            "\"Once,\" she whispered, then immediately looked horrified at her own admission. \"With friends. Girls. A video in one of the dorm rooms. We were curious about—well—you know.\"",
+            "\"And what did you think about... you know?\"",
+            "She didn't answer, but her face had gone from flushed to feverish. Her hands trembled slightly as she moved quickly to finish cleaning the mirror.",
+            "Davo stood up, moving toward her. He stood tall, the red thong straining against the pressure. The movement made his arousal impossible to ignore. The thong did nothing to hide the thick outline of his cock. He watched her reflection in the mirror, watched her eyes widen, watched her breath catch in her throat as her eyes shifted downward to see the bulge and the head of his cock peering out of the top of the thong.",
+            "\"You can look, you know,\" he said softly. \"It's just a body. Really, it's fine to have a closer look at the real thing instead of what you saw in the video.\"",
+            "\"I really should not,\" she said, but her eyes kept staring at his manhood in the mirror.",
+            "\"Tell me something,\" Davo said, spreading his legs slightly, framing himself for her view. \"In all your time at university, with all those curious friends... you've never touched a man here,\" he said, gesturing to his cock. \"Never explored?\"",
+            "Alisa's hand went to her throat, her fingers playing with the collar of her uniform. \"I was so busy,\" she said, but the excuse sounded hollow even to her. \"Studying. Working. There was no time for... for boys.\"",
+            "\"No time,\" Davo repeated, letting the words hang in the air. \"And now? Do you ever wonder what you missed?\"",
+            "She turned then, fully facing him, her back against the mirror, her cleaning forgotten. \"Why are you doing this?\" she asked. But there was no anger in it. Only confusion, and something else. Something warm and heavy that had begun pooling low just below her belly. A sensation she'd never quite felt before, and quite different from the few times she had touched herself in bed.",
+            "\"Because I'm bored, for one thing,\" he said honestly. \"Because you're really cute. Because I've been alone stuck in this room for two days, and I'm going out of my mind with need. And suddenly there's this lovely, curious girl standing in front of me looking at me like she'd like to know what a man feels like down here,\" he said as he pulled the front of his thong open to show more of his cock. \"Am I right?\"",
+            "\"I do not—\" she started, but the denial died on her lips because he was right. She was looking. She couldn't stop looking at it. Deep down, she wanted to see what it looked like without the thong. She began to feel a deep aching down below, an aching that was new to her.",
+            "Davo stood there, giving her time to flee if she wanted to. The thong sat low on his hips, the waistband of his professional tans visible above it, his arousal straining the fabric to its limits. He took one step toward her, then another. Close enough now that she could smell his soap, the musk of his skin.",
+            "\"I've filmed scenes in thirty countries,\" he said, his voice dropping to a register that vibrated through her chest. \"I've seen bodies of every shape, every color, every configuration. But I've never seen a Thai girl's shape. Not really. Not up close. Not when it mattered.\"",
+            "He reached out slowly, giving her every opportunity to pull away. He touched the collar of her uniform, his fingers brushing the skin of her throat. \"Would you show me? Just the shape of you. The uniform hides too much. Let's remove just your uniform so I can see your body shape better.\"",
+            "\"I cannot,\" she breathed, but she didn't move away.",
+            "\"You can,\" he murmured. \"Just the apron and the uniform. Keep your underwear. Keep anything on that you want. Just let me see your shape.\"",
+            "Something broke in her then. Some dam of propriety and caution and good-girl upbringing. Speaking softly, she said, \"Okay.\"",
+			"<img src='https://audio.heuring.us/added/3-Undressing.png' class='story-image' alt='3-Undressing'>",
+            "Davo untied her apron, letting it fall to the floor. His fingers found the hem of her dress, and he paused, searching her eyes for consent before lifting the garment over her head. She stood before him in nothing but a white bra, panties, and sensible black nylons—practical, everyday things that somehow made her slim, golden body seem even more perfect by contrast.",
+            "Davo's breath caught. \"Beautiful,\" he whispered, and she believed him—she could see the proof straining against his trousers. She could see his eyes wide and hungry, his chest rising and falling with quickened breath. Davo took her hand and spun her around, admiring her shape, and they ended up in front of the bed.",
+            "Davo stood there, still drinking her in, when she surprised herself with what she said next. \"Your turn.\" She pointed at the hard outline in his pants. \"I want to see that.\"",
+            "He smiled. God, that smile. He hooked his thumbs in the waistband of his thong. \"I'll take this off, but I'd love you to touch it, but only if you want to, okay?\"",
+            "She nodded, small and quick, and he pushed the fabric down, letting his cock spring free. Thick and heavy and already beading at the tip. Alisa made a small sound in her throat, her hand rising of its own accord, hovering in the space between them.",
+            "\"Go ahead,\" he encouraged. \"It likes being touched.\"",
+            "Her fingers made contact. Warm. Tentative. Exploring. And Davo groaned, the sound vibrating through his chest, his hips jerking slightly toward her palm. She wrapped her hand around him experimentally, marveling at the heat and weight of him, the way he pulsed against her grip, the velvet skin sliding over steel hardness.",
+            "\"Has anyone ever touched you?\" he asked, his voice strained. \"Has any man ever put his hands on you?\"",
+            "\"No,\" she whispered, her thumb tracing the ridge of his head, fascinated by the texture, the response her touch elicited.",
+            "\"May I?\"",
+            "She understood what he was asking. Her breath came faster now, her arousal a throbbing warmth between her legs, a wetness she'd never experienced before soaking through her panties. She nodded again, unable to speak, her hand still wrapped around his cock, reluctant to let it go. \"Sit,\" Davo said, his voice low and rough.",
+            "She backed toward the edge of the bed and lowered herself, her thighs parting slightly, her grip on him loosening only when she needed both hands to steady herself. Davo sank to his knees before her—not in worship, but for access. He reached behind her, unclasping her bra with practiced ease and sliding it from her shoulders, then hooked his fingers beneath the elastic of her panties. He pulled them down deftly, catching the black nylons as he went, stripping her of everything in a single motion until she sat bare before him, exposed and aching.",
+            "He leaned in, and his mouth found her with unerring precision. She gasped as his tongue touched her clit, a jolt shooting up her spine, her hand tightening on his cock again as she reached for him, desperate for something to anchor herself against the sensation.",
+			"<img src='https://audio.heuring.us/added/3-Fingering.png' class='story-image' alt='3-Fingering'>",
+            "\"Easy,\" he murmured, his fingers beginning to circle, to massage, to tease. \"Just feel. Just let yourself feel.\"",
+            "And she did. She felt everything. The unfamiliar pleasure building in her core. The way her hips wanted to rock against his hand. The scandalous intimacy of holding a man's most private part while he touched hers. The way his breathing matched hers, ragged and desperate.",
+            "\"You're so wet,\" he observed, wonder in his voice. \"So ready. Has anyone ever made you come, Alisa?\"",
+            "\"No,\" she gasped, her legs trembling as his fingers worked her with increasing confidence. \"Never. I never...\"",
+            "\"Would you like to? Would you like me to show you?\"",
+            "\"Yes,\" she moaned, the word escaping before she could catch it, before she could remember to be proper, to be careful, to be good. \"Please. Yes.\"",
+            "Davo withdrew his hand, making her whimper at the loss, but only to guide her toward the bed, to arrange her on the crisp white sheets. He climbed over her, but then paused, considering.",
+            "\"Have you ever heard of sixty-nine?\" he asked.",
+            "She shook her head, dazed, her body aching where he'd stopped touching her.",
+            "\"It's a position,\" he explained, repositioning himself. He turned around so that his cock hung near her face while his mouth hovered over her panty-clad mound. \"Where we both pleasure each other. Where I can taste you while you taste me. We use our mouths and tongues instead of our fingers.\"",
+            "\"Taste?\" The word came out high and surprised.",
+            "\"If you want,\" he said, looking back at her over his shoulder, his expression open and questioning. \"Only if you want. But it'll work better if we take off all of your clothes.\"",
+            "She nodded. Davo lay on his back on the bed and guided her to straddle his face, her legs positioned on either side of his head.",
+            "She leaned forward and looked at his cock, inches from her face. Smelled his musk. Felt her own arousal like a fever in her blood. Then she reached down with her hand, tentative, and guided him toward her lips, opening for him as his lips and tongue began to kiss and lick her pussy.",
+			"<img src='https://audio.heuring.us/added/3-69.png' class='story-image' alt='3-69'>",
+            "The dual sensation was overwhelming. His tongue pressing against her, while her mouth filled with the weight and heat of him, the taste of salt and skin and male. She moaned around him, the vibration making him buck against her tongue, and he redoubled his efforts, reaching up to her hips to pull her tighter into his mouth, his tongue darting from her opening to her clit.",
+            "Alisa cried out, the sound muffled by his cock, as his tongue continued to find her enlarged clit, circling and flicking with the expertise of a professional. She tried to mimic his movements, her tongue exploring the vein on the underside of his shaft, the ridge of his head, the slit that leaked salty precum with every stroke. They moved together, found a rhythm, her hips rising to meet his mouth as he thrust gently into hers.",
+            "The pleasure built like a tsunami, starting deep and spreading outward, her whole body tensing, her fingers digging into his thighs. When his tongue pressed firm and flat against her clit and stayed there, vibrating slightly, she broke. Her orgasm crashed through her with devastating force, her cry of release vibrating through his cock as she bucked and shuddered beneath him.",
+            "Davo gave her a moment, gentling his touch, letting her come down, but his own need was urgent now, his cock throbbing with denied release. He turned around, positioning himself between her legs, looking down at her flushed face, her dazed eyes, her swollen lips.",
+            "\"That was beautiful,\" he murmured. \"You're beautiful. But I need... may I show you more? May I show you how we finish in the movies?\"",
+            "\"Yes,\" she breathed, still floating in the afterglow. \"Show me. I want to know how it feels. Yes.\"",
+            "He repositioned her so she straddled his hips, guiding her legs around his waist, but then he paused again, speaking cautiously. \"This is your first time,\" he said, not actually asking a question.",
+            "\"Yes,\" she replied tentatively.",
+            "Davo realized the need to explain the position to her. \"It's better if you are on top because then you can go as slow or fast as you want. You'll be in control and able to decide for yourself what feels—\"",
+            "\"I like that,\" she interrupted, surprising them both with her certainty. \"I want to feel it inside. I really do, but you may need to tell me if I'm doing it wrong.\"",
+            "He smiled, thinking this girl is a natural and is about to enjoy herself using him. He held his cock upright as she positioned her entrance at the tip, feeling the wetness, the heat, the way her body opened for him as she pressed downward slowly, carefully, watching his face. She winced as he entered her, her nails digging into his shoulders, but then her expression shifted to wonder as he filled her, inch by inch, until he was fully inside her.",
+            "\"Okay?\" he asked, his jaw tight with the effort of holding still.",
+            "\"Yes,\" she breathed, experimenting with the feeling of him inside her, the fullness, the connection. \"That feels so good, so full. I want to slide up and down now.\"",
+            "She began to thrust, slowly at first, finding a rhythm that made her gasp with every stroke. Her body learned quickly what she liked, what made her eyes roll back, what made her moan his name. He showed her how to move with him and how to lean forward, angling her hips for maximum pleasure.",
+            "\"That's it,\" he gasped, shifting her, lifting her up to the tip of his cock and letting her thrust down his shaft, slowly at first and then faster, giving her full control. \"You ride me. You set the pace. Take what you need.\"",
+            "Alisa continued the movement, tentatively at first, then with increasing confidence as she discovered the power of this position. The way she could control the depth, the angle, the speed. She braced her hands on his chest, her hair falling loose and hitting Davo's face when she leaned downward to feel her clit pressed against his pubic bone. At other times her breasts bounced wildly during the thrusting phases.",
+            "\"That's it,\" Davo encouraged, his hands on her hips, guiding but not controlling. \"God, you're a natural. You feel incredible. So tight. So wet. So perfect.\"",
+            "She rode him harder, chasing the pleasure she'd found earlier, feeling it build again, different this time, deeper, centered where they joined. His hands moved to her breasts, kneading, his thumbs finding her nipples and making her cry out, her movements becoming erratic, desperate.",
+            "\"Come for me,\" he urged, his own release building at the base of his spine, his balls tightening. \"Come on my cock, Alisa. Let me feel you.\"",
+            "She did. Her second orgasm ripped through her with even more force than the first, her body clamping down on him, milking him, and that was enough, that was everything. He thrust up into her one final time and exploded, his full release pulsing hot and deep inside her, his groan of satisfaction filling the room as he spent himself completely.",
+			"<img src='https://audio.heuring.us/added/3-Orgasm.png' class='story-image' alt='3-Orgasm'>",          
+			"Alisa collapsed forward onto his chest. Both of them were panting, sweating, trembling. For long moments, they simply breathed together, their hearts hammering in sync.",
+            "Then reality began to return, and with it, embarrassment. She pushed herself up, looking down at him with wide, shocked eyes, as if suddenly realizing what she'd done, who she was, where she was.",
+            "\"I should—\" she started, scrambling off him, wincing slightly at the tenderness between her legs, at the unfamiliar wetness there. \"I should go. I should—\"",
+            "\"Hey,\" Davo said gently, sitting up, catching her hand. \"Hey. It's okay. You're okay.\"",
+            "\"I am not okay,\" she said, but she was already reaching for her uniform, pulling it on with shaking hands, not meeting his eyes. \"I am a maid. You are a guest. I should not have. I cannot believe I—\"",
+            "\"Alisa.\" He stood, finding his thong, pulling it on, approaching her carefully as she buttoned her dress with fumbling fingers. \"Look at me.\"",
+            "She did, finally, her eyes bright with unshed tears of confusion and post-coital vulnerability.",
+            "\"That was a beautiful thing,\" he said simply. \"And what happened here was good. We both wanted it and enjoyed it. You have nothing to be ashamed of. Nothing.\"",
+            "She nodded, not quite believing, smoothing her hair back with hands that still trembled. \"I must go now,\" she whispered. \"My supervisor...\"",
+            "\"Of course.\" He stepped back, giving her space. \"But Alisa—\"",
+            "She paused at the door, looking back at him, this man who had shown her things she'd never imagined, who had been so patient, so kind, so skilled.",
+            "Then, she surprised herself. \"Will you be here tomorrow?\" she asked, the words rushing out before she could stop them. \"When I clean your room? I mean... I want to learn more. About... everything. From an expert.\"",
+            "Davo smiled. That devastating smile that had launched a thousand fantasies in his adult movies, and now, apparently, that would launch this shy maid into a world she'd never known existed.",
+            "\"I'll be here,\" he promised. \"Production delays and all. I'll be right here at the same time, waiting for you to clean my room,\" he said with a devilish smile on his face.",
+            "She smiled back at him, small and shy but genuine, and slipped out the door, leaving him alone with the smell of her on his skin and the memory of her naivety changed to hunger she'd kept hidden, now set free.",
+            "Davo lay back on the bed, already planning tomorrow's lesson, already counting the hours.",
+            "Some delays, he decided, were absolutely worth the wait."
+        ];
+        // State — auto-scroll ON by default
+        let autoScroll = true;
+        let hasStarted = false;
+        let currentParagraph = -1;
+        let paragraphs = [];
+
+        const audio = document.getElementById('narration');
+        const progressBar = document.getElementById('progressBar');
+        const progressBarContainer = document.getElementById('progressBarContainer');
+        const playBtn = document.getElementById('playBtn');
+        const autoScrollBtn = document.getElementById('autoScrollBtn');
+        const currentTimeDisplay = document.getElementById('currentTimeDisplay');
+        const durationDisplay = document.getElementById('durationDisplay');
+
+        function formatTime(seconds) {
+            if (!isFinite(seconds) || seconds < 0) return '0:00';
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return m + ':' + String(s).padStart(2, '0');
+        }
+
+        function renderProgressTicks() {
+            if (!audio.duration || !isFinite(audio.duration)) return;
+            progressBarContainer.querySelectorAll('.progress-tick').forEach(t => t.remove());
+            storyText.forEach((text, index) => {
+                if (text.startsWith('<img') && timestamps[index] !== undefined) {
+                    const pct = (timestamps[index] / audio.duration) * 100;
+                    const tick = document.createElement('div');
+                    tick.className = 'progress-tick';
+                    tick.style.left = pct + '%';
+                    tick.title = 'Image';
+                    progressBarContainer.appendChild(tick);
+                }
+            });
+        }
+
+        audio.addEventListener('loadedmetadata', () => {
+            durationDisplay.textContent = formatTime(audio.duration);
+            renderProgressTicks();
+        });
+
+        function init() {
+            const container = document.getElementById('storyContent');
+            storyText.forEach((text, index) => {
+                const p = document.createElement('p');
+                p.className = 'paragraph upcoming';
+                p.setAttribute('data-index', index);
+                if (text.startsWith('<img')) {
+                    p.innerHTML = text;
+                    p.classList.add('image-entry');
+                    p.style.textAlign = 'center';
+                    p.style.cursor = 'default';
+                } else {
+                    p.textContent = text;
+                    p.addEventListener('click', () => seekToParagraph(index));
+                }
+                container.appendChild(p);
+                paragraphs.push(p);
+            });
+            // Update auto-scroll button to reflect default ON state
+            autoScrollBtn.textContent = 'Auto-Scroll: ON';
+        }
+
+        function handlePlayBtn() {
+            if (audio.paused) {
+                // First play: scroll to story text
+                if (!hasStarted) {
+                    hasStarted = true;
+                    document.getElementById('storyContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    setTimeout(() => audio.play(), 400);
+                } else {
+                    audio.play();
+                }
+            } else {
+                audio.pause();
+            }
+        }
+
+        audio.addEventListener('play', () => {
+            playBtn.textContent = '⏸ Pause';
+            playBtn.classList.add('playing');
+        });
+
+        audio.addEventListener('pause', () => {
+            playBtn.textContent = '▶ Play Story';
+            playBtn.classList.remove('playing');
+        });
+
+        audio.addEventListener('ended', () => {
+            playBtn.textContent = '↺ Play Again';
+            playBtn.classList.remove('playing');
+        });
+
+        document.getElementById('progressBarContainer').addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            audio.currentTime = pos * audio.duration;
+        });
+
+        // Minimum real-time (ms since epoch) to hold on the current paragraph.
+        // Used to guarantee images stay on screen for at least IMAGE_HOLD_MS,
+        // even if the audio's built-in silence is slightly shorter than expected.
+        const IMAGE_HOLD_MS = 10000;
+        let holdUntilTime = 0;
+
+        function onTimeUpdate() {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = progress + '%';
+            currentTimeDisplay.textContent = formatTime(audio.currentTime);
+
+            // Still holding on an image — skip advancing the highlight/scroll.
+            if (Date.now() < holdUntilTime) {
+                return;
+            }
+
+            let newIndex = -1;
+            for (let i = 0; i < timestamps.length; i++) {
+                if (audio.currentTime >= timestamps[i]) {
+                    newIndex = i;
+                } else {
+                    break;
+                }
+            }
+
+            if (newIndex !== currentParagraph) {
+                currentParagraph = newIndex;
+                highlightParagraph(newIndex);
+
+                if (paragraphs[newIndex] && paragraphs[newIndex].classList.contains('image-entry')) {
+                    holdUntilTime = Date.now() + IMAGE_HOLD_MS;
+                }
+            }
+        }
+
+        audio.addEventListener('timeupdate', onTimeUpdate);
+
+        function highlightParagraph(index) {
+            paragraphs.forEach((p, i) => {
+                p.classList.remove('active', 'read', 'upcoming');
+                if (i === index) {
+                    p.classList.add('active');
+                    if (autoScroll) {
+                        p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                } else if (i < index) {
+                    p.classList.add('read');
+                } else {
+                    p.classList.add('upcoming');
+                }
+            });
+        }
+
+        function seekToParagraph(index) {
+            if (index >= 0 && index < timestamps.length) {
+                holdUntilTime = 0;
+                audio.currentTime = timestamps[index];
+                audio.play();
+            }
+        }
+
+        function previousParagraph() {
+            const newIndex = Math.max(0, currentParagraph - 1);
+            seekToParagraph(newIndex);
+        }
+
+        function nextParagraph() {
+            const newIndex = Math.min(timestamps.length - 1, currentParagraph + 1);
+            seekToParagraph(newIndex);
+        }
+
+        function toggleAutoScroll() {
+            autoScroll = !autoScroll;
+            autoScrollBtn.textContent = autoScroll ? 'Auto-Scroll: ON' : 'Auto-Scroll: OFF';
+            autoScrollBtn.style.background = autoScroll
+                ? 'linear-gradient(135deg, #718096 0%, #4a5568 100%)'
+                : 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.code === 'Space' && e.target.tagName !== 'BUTTON') {
+                e.preventDefault();
+                handlePlayBtn();
+            } else if (e.code === 'ArrowRight') {
+                skip(10);
+            } else if (e.code === 'ArrowLeft') {
+                skip(-10);
+            } else if (e.code === 'ArrowUp') {
+                e.preventDefault();
+                previousParagraph();
+            } else if (e.code === 'ArrowDown') {
+                e.preventDefault();
+                nextParagraph();
+            }
+        });
+
+        function skip(seconds) {
+            audio.currentTime += seconds;
+        }
+
+        init();
+
+        // Mobile drawer controls
+        function toggleMobileDrawer() {
+            const drawer = document.getElementById('mobileDrawer');
+            const overlay = document.getElementById('mobileOverlay');
+            const isOpen = drawer.classList.contains('open');
+            if (isOpen) {
+                closeMobileDrawer();
+            } else {
+                drawer.classList.add('open');
+                overlay.classList.add('open');
+                document.getElementById('mobileFab').textContent = '✕';
+            }
+        }
+
+        function closeMobileDrawer() {
+            document.getElementById('mobileDrawer').classList.remove('open');
+            document.getElementById('mobileOverlay').classList.remove('open');
+            document.getElementById('mobileFab').textContent = '☰';
+        }
+
+        function updateDrawerStatus() {
+            // Keep drawer auto-scroll button in sync
+            const drawerBtn = document.getElementById('drawerAutoScrollBtn');
+            if (drawerBtn) {
+                drawerBtn.textContent = autoScroll ? 'Auto-Scroll: ON' : 'Auto-Scroll: OFF';
+                drawerBtn.style.background = autoScroll
+                    ? 'linear-gradient(135deg, #718096 0%, #4a5568 100%)'
+                    : 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+            }
+        }
+
+        // Keep drawer play button in sync with audio state
+        audio.addEventListener('play', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '⏸ Pause'; btn.style.background = 'linear-gradient(135deg, #7c2d42 0%, #5a1f30 100%)'; }
+            document.getElementById('drawerStatus').textContent = '▶️ Playing';
+        });
+        audio.addEventListener('pause', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '▶ Play Story'; btn.style.background = ''; }
+            document.getElementById('drawerStatus').textContent = '⏸️ Paused';
+        });
+        audio.addEventListener('ended', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '↺ Play Again'; btn.style.background = ''; }
+            document.getElementById('drawerStatus').textContent = '✅ Finished';
+        });
+    </script>
+</body>
+</html>
