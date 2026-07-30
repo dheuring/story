@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colleagues With Benefits - Synchronized Read-Along</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+
+    <style>
+	.title-image {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.title-image img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    display: block;
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.9;
+            color: #2d3748;
+            background: linear-gradient(135deg, #0f2e1f 0%, #184a30 50%, #286b4a 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #f4fdf9;
+            padding: 60px;
+            border-radius: 15px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            text-align: center;
+            color: #047857;
+            margin-bottom: 8px;
+            font-size: 2.8em;
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #059669;
+            margin-bottom: 40px;
+            font-style: italic;
+            font-size: 1.1em;
+        }
+
+        .audio-section {
+            background: linear-gradient(135deg, #ecfdf5 0%, #f0fff6 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            border: 2px solid #a5e8c8;
+            text-align: center;
+            display: none;
+        }
+
+        .audio-section h3 {
+            color: #047857;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        audio {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 30px;
+            margin-bottom: 15px;
+        }
+
+        .instructions {
+            color: #059669;
+            font-size: 0.95em;
+            padding: 12px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .progress-container {
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #d9f0e0;
+            border-radius: 4px;
+            overflow: visible;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3cd18a, #1fa562);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.1s linear;
+        }
+
+        .progress-tick {
+            position: absolute;
+            top: -3px;
+            width: 3px;
+            height: 14px;
+            background: #047857;
+            border-radius: 2px;
+            pointer-events: none;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.6);
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            color: #059669;
+            margin-top: 8px;
+            font-family: 'Georgia', serif;
+        }
+
+        .story-text {
+            font-size: 1.15em;
+            text-align: justify;
+            color: #2d3748;
+        }
+
+        #storyContent p:first-of-type::first-letter {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 3.6em;
+            font-weight: 600;
+            float: left;
+            line-height: 0.85;
+            padding: 6px 10px 0 2px;
+            color: #047857;
+        }
+
+        .paragraph {
+            margin-bottom: 1em;
+            padding: 18px 25px;
+            border-radius: 10px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            position: relative;
+        }
+
+        .paragraph:hover {
+            background-color: #ecfdf5;
+            border-left-color: #6be0a5;
+        }
+
+        .paragraph.active {
+            background: linear-gradient(90deg, #d9fce8 0%, #f0fff8 100%);
+            border-left: 4px solid #3cd18a;
+            box-shadow: 0 6px 25px rgba(60, 209, 138, 0.25);
+            transform: translateX(8px);
+        }
+
+        .paragraph.read {
+            background-color: #ecfdf5;
+            border-left-color: #70d1a5;
+            opacity: 0.75;
+        }
+
+        .paragraph.upcoming {
+            opacity: 0.6;
+        }
+
+        .paragraph.image-entry,
+        .paragraph.image-entry.upcoming,
+        .paragraph.image-entry.read,
+        .paragraph.image-entry.active {
+            opacity: 1 !important;
+            background: none !important;
+            border-left: none !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+
+        .the-end {
+            text-align: center;
+            margin-top: 50px;
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-style: italic;
+            font-size: 1.4em;
+            letter-spacing: 2px;
+            color: #047857;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #3cd18a 0%, #1fa562 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(60, 209, 138, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 4px 15px rgba(113, 128, 150, 0.4);
+        }
+		#playBtn {
+            font-size: 1.1em;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #2a8a5a 0%, #1a7a4a 100%);
+            letter-spacing: 0.5px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(42, 138, 90, 0.4);
+        }
+
+        #playBtn:hover {
+            box-shadow: 0 6px 25px rgba(42, 138, 90, 0.55);
+        }
+
+        #playBtn.playing {
+            background: linear-gradient(135deg, #047857 0%, #145c3a 100%);
+            box-shadow: 0 4px 20px rgba(4, 120, 87, 0.4);
+        }
+         .status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 101;
+        }
+
+        .shortcut-hint {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            background: rgba(255,255,255,0.95);
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            font-size: 0.85em;
+            color: #4a5568;
+            z-index: 100;
+        }
+
+        .key {
+            background: #edf2f7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        /* Mobile floating menu */
+        .mobile-fab {
+            display: none;
+        }
+
+        .mobile-drawer {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+
+            .story-text {
+                text-align: left;
+            }
+
+            .paragraph {
+                padding: 14px 16px;
+            }
+
+            #storyContent p:first-of-type::first-letter {
+                font-size: 2.6em;
+                padding: 4px 6px 0 0;
+            }
+
+            .story-image {
+                width: 92%;
+                max-width: 92%;
+            }
+
+            /* Hide desktop fixed overlays on mobile */
+            .status,
+            .controls,
+            .shortcut-hint {
+                display: none !important;
+            }
+
+            /* Floating action button */
+            .mobile-fab {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 52px;
+                height: 52px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #2a8a5a, #1a7a4a);
+                color: white;
+                font-size: 1.5em;
+                border: none;
+                cursor: pointer;
+                z-index: 200;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+            }
+
+            /* Slide-up drawer */
+            .mobile-drawer {
+                display: block;
+                position: fixed;
+                bottom: -300px;
+                left: 0;
+                right: 0;
+                background: white;
+                border-radius: 18px 18px 0 0;
+                box-shadow: 0 -6px 30px rgba(0,0,0,0.25);
+                padding: 20px 24px 32px;
+                z-index: 199;
+                transition: bottom 0.3s ease;
+            }
+
+            .mobile-drawer.open {
+                bottom: 0;
+            }
+
+            .drawer-handle {
+                width: 40px;
+                height: 4px;
+                background: #cbd5e0;
+                border-radius: 2px;
+                margin: 0 auto 18px;
+            }
+
+            .drawer-status {
+                text-align: center;
+                color: #059669;
+                font-size: 0.9em;
+                margin-bottom: 14px;
+                font-style: italic;
+            }
+
+            .drawer-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .mobile-overlay-bg {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.3);
+                z-index: 198;
+            }
+
+            .mobile-overlay-bg.open {
+                display: block;
+            }
+        }
+        .story-image {
+            max-width: 75%;
+            width: 75%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            margin: 12px auto 20px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="status" id="topControls">
+        <button class="btn" id="playBtn" onclick="handlePlayBtn()">▶ Play Story</button>
+        <button class="btn btn-secondary" onclick="toggleAutoScroll()" id="autoScrollBtn">Auto-Scroll: ON</button>
+    </div>
+
+    <div class="container">
+        <h1>A Surprise Evening Tryst</h1>
+		  <div class="title-image">
+            <img src="https://audio.heuring.us/added/6-Ladder.png" alt="6-Ladder">
+        </div>
+
+        <div class="audio-section">
+            <h3>🎧 Narration</h3>
+            <audio id="narration" controls>
+                <source src="https://audio.heuring.us/added/6-Colleagues.m4a" type="audio/mp4">
+                <source src="https://audio.heuring.us/added/6-Colleagues.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBarContainer">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+                <div class="time-display">
+                    <span id="currentTimeDisplay">0:00</span>
+                    <span id="durationDisplay">0:00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="story-text" id="storyContent">
+            <!-- Paragraphs generated by JavaScript -->
+        </div>
+
+        <div class="the-end">❦ The End ❦</div>
+
+        <div class="toc-link-wrapper" style="text-align: center; margin-top: 40px;">
+            <a href="TOC.html" class="btn" style="text-decoration: none; display: inline-block; background: linear-gradient(135deg, #2a8a5a 0%, #1a7a4a 100%);">📚 Back to Table of Contents</a>
+        </div>
+
+    <!-- Mobile floating button + drawer (hidden on desktop) -->
+    <div class="mobile-overlay-bg" id="mobileOverlay" onclick="closeMobileDrawer()"></div>
+
+    <button class="mobile-fab" id="mobileFab" onclick="toggleMobileDrawer()">☰</button>
+
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-handle"></div>
+        <div class="drawer-status" id="drawerStatus">Press Play to begin</div>
+        <div class="drawer-buttons">
+            <button class="btn" id="drawerPlayBtn" onclick="handlePlayBtn(); updateDrawerStatus()">▶ Play Story</button>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="previousParagraph()">⏮ Previous</button>
+                <button class="btn btn-secondary" style="flex: 1;" onclick="nextParagraph()">Next ⏭</button>
+            </div>
+            <button class="btn btn-secondary" onclick="toggleAutoScroll(); updateDrawerStatus()" id="drawerAutoScrollBtn">Auto-Scroll: ON</button>
+        </div>
+    </div>
+
+    <script>
+	  
+	const timestamps = [0.000000, 34.354528, 50.707544, 71.242252, 76.354993, 101.047405, 118.059367, 137.007797, 144.653003, 159.700952, 166.559399, 192.902386, 213.645650, 217.681357, 243.520858, 257.334617, 267.799269, 292.020568, 307.070659, 325.479776, 328.017315, 332.024355, 343.579224, 348.005776, 365.968538, 384.551244, 409.631574, 427.104502, 436.104386, 441.453682, 472.389826, 485.662450, 504.958222, 519.674322, 542.511533, 562.070500, 580.791824, 591.133650, 605.838661, 622.520306, 640.931409, 647.689659, 675.003353, 685.112771, 696.178209, 715.977235, 730.016985, 736.502282, 755.207951, 771.502190, 777.377582, 784.523593, 789.723178, 792.744471, 820.325597, 834.450014, 836.390510, 840.208390, 848.102568, 857.518625, 871.045625, 899.890313, 906.735298, 911.691713, 931.574569, 943.209943, 954.989816, 956.422763, 959.326578, 965.177937, 982.517903, 989.723038, 1012.681141, 1021.790453, 1025.185661, 1029.002415, 1052.954442, 1065.512937, 1077.518316, 1107.137389, 1109.407328, 1112.980234, 1115.693280, 1124.247580, 1143.727545, 1148.987108, 1152.134326, 1163.509522, 1178.387517, 1196.198242, 1206.905622, 1211.671831, 1215.840428, 1238.128975, 1247.711753, 1252.643767, 1260.858358, 1278.274259, 1290.555245, 1294.923948, 1299.956501, 1316.419572, 1325.151152, 1342.680283, 1347.853443, 1364.833044, 1372.806893, 1391.399858, 1395.388969, 1411.549464, 1413.311264, 1418.108860, 1437.861368, 1451.515286, 1464.007002, 1471.042420, 1476.807542];
+
+        const storyText = [
+            "Alisa T was the kind of woman who made men forget how to form complete sentences. At thirty-eight, she moved with commanding precision. Black hair framed sharp cheekbones. Brown Asian eyes missed nothing. And she had a body she weaponized with devastating expertise.",
+            "Dave H was twenty-four, fresh from business school, currently failing not to stare as his new department manager bent to retrieve a banner clip.",
+            "\"Problem, Dave?\" Alisa asked, not bothering to turn around.",
+            "\"No, Ms. T. Just checking placement.\"",
+            "She straightened slowly, turning to face him. Her white silk blouse was unbuttoned just enough to reveal the valley between her breasts and a gold chain disappearing beneath the fabric. \"Alisa,\" she corrected, stepping closer. \"We're working closely this weekend. No need for formalities.\"",
+            "The Grand Meridian Hotel's conference center smelled of fresh paint. As the new department manager, Alisa was overseeing logistics for the leadership summit. Dave, the eager intern who'd impressed everyone during his first three weeks, had been assigned as her assistant.",
+            "What Dave didn't know was that Alisa had specifically requested him.",
+            "She'd noticed him during his interview. Those blue, earnest eyes. Broad shoulders barely contained in his off-the-rack suit. The way he leaned forward when answering questions as if pouring himself into every word. He was hungry. Ambitious. And, she suspected from the way his gaze kept drifting to her mouth, deeply, helplessly attracted to her.",
+            "\"The banner looks good,\" she said, gesturing toward it. \"So, next, I need to clean that dark smudge on the ceiling over there.\" She pointed upward. \"Bring the ladder and stabilize the base for me.\"",
+            "Alisa positioned herself above him, tantalizingly close, enjoying how his eyes darted to her legs, her hips, the way her blouse pulled taut when she reached overhead. She wasn't wearing a bra. She never did when she wanted to feel powerful. Her skirt hiked up when she stepped higher, exposing her black lace thigh-high stockings.",
+            "\"Hand me that brush,\" she demanded.",
+            "Dave fumbled with the brush, then stepped closer to hand it up. From his position, looking up, he had a perfect view down her blouse as she bent to take it from him. Alisa knew this. She'd planned it.",
+            "Her nipples were visible through the thin silk, dark and already slightly hardened.",
+            "\"See something interesting, Dave?\" she asked, her voice honey-sweet.",
+            "\"I—uh—I was just—\"",
+            "\"Making sure I don't fall, right? How chivalrous.\" She descended until they were eye level, her perfume washing over him. Jasmine and something darker. Muskier. \"Tell me, would you catch me if I did?\"",
+            "\"Of course. I'd make sure you were safe.\"",
+            "\"Would you now?\"",
+            "She pretended to stumble, catching herself by gripping his thigh. High up. Inches from the growing bulge in his trousers. She squeezed once, deliberately, then released him. \"By the way, my room is four-twelve. Yours?\"",
+            "\"Four... four-fourteen.\"",
+            "\"Adjacent. How convenient.\" She smoothed her blouse, noting how his eyes followed. \"We're done here. Let's go back to our rooms. Order room service. Rest. Tomorrow will be... demanding.\"",
+            "She walked away without looking back, hips swaying in her tight skirt with calculated precision, knowing he was watching.",
+            "Dave didn't order room service. He paced his room. King bed. Neutral colors. Mini-bar tempting him. But he needed his wits. Alisa T had been flirting with him. Hadn't she? She was his boss. Twelve years his senior. Light-years beyond his experience.",
+            "But those nipples. That perfume. The way her hand had lingered on his thigh when she pretended to fall.",
+            "He lay back, staring at the ceiling. He imagined Alisa in four-twelve, just one thin wall away. Was she showering? Water streaming down her body, hands soaping those perfect breasts?",
+            "His cock stirred.",
+            "Just a quick release, he told himself, hand moving to his belt. Enough to clear my head.",
+            "He unzipped and pulled his pants and underwear down to his knees, freeing himself. His cock sprang up, half-hard, thick against his stomach. He wrapped his hand around it and sighed, closing his eyes, picturing her on the ladder. The way her skirt had ridden up, showing the tops of her stockings. Her upper thighs exposed. God, those nylons. He imagined catching her, her body falling into his arms, his hand grasping those thighs, her surprised gasp turning into something else.",
+            "He stroked faster, grip tightening. In his fantasy, she pressed against him, hand finding his cock through his pants, squeezing. She would be wet. He knew she would be wet.",
+            "Then he heard a noise.",
+            "The door to his room was slightly open. He realized it suddenly, eyes snapping open. When he'd entered, distracted, he'd forgotten to close it completely. The latch hadn't caught. Now it stood ajar by two, maybe three inches.",
+            "Dave froze. Anyone walking by could see him. The maid. Another guest. Or even his boss, Alisa.",
+            "But he couldn't stop. His cock throbbed, demanding attention. The risk made it hotter. The thought that someone might be watching, might see him vulnerable and hard and desperate.",
+            "He started stroking again, slower, teasing himself. \"That's it,\" he whispered to his phantom audience. \"Watch me. Watch me come.\"",
+            "He was close. Balls tightening. Pressure building at the base of his spine. He thought of Alisa's mouth, those pink lips, wrapped around him, her tongue.",
+            "Then, the door swung open.",
+            "<img src='https://audio.heuring.us/added/6-Masturbate.png' class='story-image' alt='6-Masturbate'>",
+            "Dave's eyes flew wide, hand freezing mid-stroke, his cock standing upright, glistening with pre-cum. Alisa stood in the doorway, one hand on the frame, another button undone on her blouse. Her eyes were dark, fixed on his exposed groin right in front of her, her lips curved in a smile that made his stomach drop through the floor.",
+            "\"Don't stop on my account,\" she purred. \"In fact, I insist you continue.\"",
+            "\"I—Ms. T—I didn't—\"",
+            "\"Didn't what? Didn't leave your door open deliberately? Didn't want to be seen?\" She stepped inside, closing the door with a decisive click. \"Don't lie, Dave. I watched you for three minutes. You knew the door was open. You liked it.\"",
+            "She moved toward the bed with predator's grace, hips swaying, heels clicking. Dave remained frozen, hand still wrapped around his cock, brain short-circuiting.",
+            "\"I was in my room,\" Alisa continued, \"trying to review tomorrow's schedule, when I heard something rhythmic. A creaking bed. A stroking sound.\" She reached the foot of the bed, hands on the mattress, leaning forward. Her blouse gaped, giving him full view of her breasts. Heavy. Perfect. Nipples dark and erect. \"I thought, 'Who could that be?' So, I walked into the hallway and checked your open door. Imagine my surprise to find my new intern pumping his beautiful cock like his life depended on it.\"",
+            "\"Please,\" Dave whispered. He didn't know what he was asking for. For her to leave. For her to stay. For her to touch him.",
+            "\"Please what? Please watch? Please help? Please fuck me? Which is it, Dave?\"",
+            "She straightened and unbuttoned her blouse slowly, deliberately, each button revealing more skin, more breast. \"While you were performing,\" she said, climbing onto the bed, \"I was touching myself.\" She took his free hand and guided it between her legs. The lace was soaked. Hot. Fragrant with arousal. \"Feel that? That's what watching you did to me. That's how wet you made your boss.\"",
+            "Dave groaned, hips bucking.",
+            "\"Now keep stroking,\" she commanded. \"Show me how big and thick you can get. Show me what you were going to do. It would be fun to watch you shoot your cum in the air.\"",
+            "He obeyed, hand moving again, pumping in long, slow strokes. Alisa watched, tongue darting to wet her lips. She reached behind her back, unclasping her bra, letting it fall. Her breasts were perfect. Full. Rose-colored areolas puckered tight. She cupped them, pinching her nipples, rolling them until she gasped.",
+            "\"Faster,\" she ordered. \"I want to see you desperate. On the edge.\"",
+            "He increased his pace, hand flying, the wet sound of his pre-cum mixing with ragged breathing. Alisa leaned closer, mouth inches from his ear.",
+            "\"Imagine this, Dave. Do you know what I'm going to do to you?\" she whispered. \"You're going to be my toy, Dave. My personal fuck toy. And if you're very, very good, I'm going to give you everything. A promotion. Power. And this nice cock inside me, every day, in every way I desire.\"",
+            "\"Oh god,\" he moaned. \"Alisa, please—\"",
+            "\"Please what?\"",
+            "\"Please fuck me. Please. I need—\"",
+            "She stood abruptly. Dave whimpered at the loss, cock twitching, desperate.",
+            "\"Not yet,\" she said. \"First, we establish the terms of your employment.\"",
+            "Alisa walked to the desk, picking up the notepad Dave had been ignoring. She tore off a sheet and returned, sitting cross-legged near his feet, seemingly unbothered by her near-nudity or his complete nudity.",
+            "\"Sit up,\" she commanded.",
+            "Dave struggled to comply, erection bobbing against his stomach. He sat facing her, knees drawn up.",
+            "\"Don't hide from me,\" Alisa said sharply. \"I want to see what I'm negotiating for. Spread your legs.\"",
+            "He obeyed, cock exposed between his thighs, head flushed and leaking.",
+            "\"Good.\" She wrote on the paper, then showed him. \"Performance review for Dave H. Item one: Professional competence. Check. Item two: Initiative. Check. Item three: Collaborative skills. Pending. Item four: Task management. Pending. Item five: Stress relief capabilities. Under evaluation.\"",
+            "\"Your career trajectory,\" she explained, setting the paper aside and leaning forward, breasts pressing together. \"Items one and two, you've demonstrated. Competent. Eager. But items three through five require practical assessment. Hands-on evaluation. And I do mean hands-on.\"",
+            "She cupped his balls, rolling them gently. Dave's head fell back, a groan escaping.",
+            "\"Collaborative skills mean working closely with me. Very closely. Anticipating my needs, satisfying my demands without question or hesitation. Can you be my collaborator, Dave?\"",
+            "\"Yes,\" he gasped. \"Anything.\"",
+            "\"Task management refers to stamina. Creativity. Willingness to perform unusual duties. Late nights. Early mornings. Weekends at my apartment. Sudden demands during business hours. Can you remain ready, hard, and eager at a moment's notice?\"",
+            "His cock jerked, pre-cum dripping onto his thigh. Alisa smiled, swiping her thumb through it, bringing it to her mouth and sucking clean.",
+            "\"And stress relief is the most important qualification,\" she continued, voice dropping to a whisper. \"I run a high-pressure department. I need an outlet. Someone who understands that when I close my office door and say 'Come here,' they drop everything and attend to my personal needs.\"",
+            "She squeezed his balls. Not hard enough to hurt, but enough to make him gasp. Enough to remind him who the boss was.",
+            "\"I understand,\" he managed. \"I'll be whatever you need. Your assistant. Your toy. Just please, Alisa, let me—\"",
+            "\"Let you what?\"",
+            "\"Let me taste you. Let me fuck you. I've been thinking about this since the interview. Since before that. Since I saw you walking through the office, so perfect, so powerful—\"",
+            "She released him and lay back, legs falling open. The black lace thong was soaked through, nearly transparent, showing the dark shadow of her pussy beneath.",
+            "\"Remove it,\" she said.",
+            "Dave scrambled forward, hooking his fingers in the waistband and pulling. The thong slid down her legs, over the thigh-highs, off her feet. She was bare now, except for stockings and garter belt, and the sight of her—glistening folds, swollen clit, the entrance to her body—made him dizzy.",
+            "\"Look at me,\" Alisa commanded. \"Really look. This is what you're working for now. Your new title: Special Projects Coordinator. Directly under me. Literally. Your office will be next to mine. Your primary responsibility: keeping me satisfied. Do you accept?\"",
+            "\"Yes,\" he breathed. \"God, yes.\"",
+            "\"Then prove it. Show me your collaborative skills. Make me come.\"",
+            "Dave positioned himself between her legs, hands sliding up her thighs, feeling the texture of stockings, the warmth above. He kissed her inner thigh, higher, his mouth watering at her scent. Musky. Sweet. Intoxicating.",
+            "<img src='https://audio.heuring.us/added/6-Pussy.png' class='story-image' alt='6-Pussy'>",
+            "\"Don't tease,\" Alisa said, but her voice was breathless, less commanding. \"I've been waiting all day.\"",
+            "He pressed his mouth to her pussy, tongue parting her folds, finding her clit. She cried out, hips bucking, hands gripping his hair tight. Dave licked with enthusiasm, with desperation, circling her clit, sucking it between his lips, flicking with his tongue.",
+            "\"Yes,\" she moaned. \"Yes, just like that. Don't stop. Don't you dare stop, my fuck boy.\"",
+            "He added his fingers, sliding one inside, then two, curling to find that spot that made her scream. Her walls clenched around him, hot and slick, and he imagined how they would feel around his cock.",
+            "\"I'm close,\" she gasped. \"Make me come, Dave. Make your boss come.\"",
+            "He doubled his efforts, tongue relentless, fingers pumping, and she shattered, crying out his name, body convulsing, juices flooding his chin. Dave kept licking, gentler now, drawing out her pleasure, until she pushed him away, oversensitive.",
+            "\"Enough,\" she laughed, breathless. \"God, you're good at eating pussy. Look at your mouth. My cunt juice all over it. Lick your lips. Taste it.\"",
+            "He crawled up her body, kissing her stomach, her breasts, her throat, finally her mouth. She tasted herself on his lips and groaned, tongue seeking his, hands roaming his back, his ass, finally wrapping around his cock.",
+            "\"Now I need this inside me,\" she whispered. \"I need to feel you filling me.\" She bit his lower lip, hard enough to sting. \"I want you raw. I want to feel you come inside me. Is that what you want, Dave? To fill your boss with your cum?\"",
+            "\"Fuck yes,\" he groaned.",
+            "\"Then take me.\"",
+            "He positioned himself at her entrance, head kissing her wet folds, and pushed forward slowly, groaning at her tight heat, the way she opened for him, accepted him, gripped him. Inch by inch, he sank into her until fully seated, hips pressed against hers, cock buried to the root.",
+            "<img src='https://audio.heuring.us/added/6-Missionary.png' class='story-image' alt='6-Missionary'>",
+            "Alisa's eyes were closed, mouth open, chest heaving. \"Move,\" she whispered. \"Fuck me, Dave. Fuck your boss.\"",
+            "He started slow, finding his rhythm, pulling out until just the tip remained, then thrusting deep. Alisa wrapped her legs around his waist, heels digging into his ass, urging him deeper, harder.",
+            "\"More,\" she demanded. \"Give me everything. Show me you're worth promoting.\"",
+            "Dave lost himself in the motion, the heat and wet and tightness. He fucked her with abandon, bodies slapping, bed creaking, breasts bouncing. He changed angles, lifting her hips, and she screamed when he hit a sensitive spot.",
+            "\"There! Right there! Don't stop! Harder! Fuck me harder!\"",
+            "He maintained that angle, pounding, cock dragging against her front wall with every stroke. Alisa's nails clawed his back, leaving marks, and he welcomed the pain, the proof this was real.",
+            "\"I'm going to come,\" she gasped. \"Don't stop. Make me come on your cock. Oh god—\"",
+            "She came with a wail, pussy clamping down, milking him, body arching off the bed. Dave gritted his teeth, holding back, determined to prove his stamina.",
+            "When she finally relaxed, panting, eyes glazed, she pushed at his chest. \"My turn. Lie back.\"",
+            "He withdrew, glistening with her arousal, and rolled onto his back. Alisa climbed on top, straddling his hips, and guided him back inside with a satisfied sigh.",
+            "\"Watch me,\" she commanded, sitting up, hands braced on his chest. \"Watch me use you.\"",
+            "She began to move, rolling her hips in a figure-eight that made his eyes roll back. She was in complete control now, setting pace, depth, angle. Her breasts swayed above him, hair falling around her face, looking like a goddess, a queen, a conqueror claiming her prize.",
+            "<img src='https://audio.heuring.us/added/6-Cowboy.png' class='story-image' alt='6-Cowboy'>",
+            "\"Touch me,\" she ordered. \"Play with my tits while I fuck you.\"",
+            "He reached up, cupping her breasts, pinching her nipples, and she moaned, movements becoming faster, more erratic. She was chasing another orgasm.",
+            "\"Alisa,\" he groaned, hips thrusting up to meet her. \"I'm close. I can't—\"",
+            "\"Not yet,\" she gasped. \"Wait for me. Come with me. I want to feel you shooting inside me while I come on your cock.\"",
+            "She reached between them, fingers finding her clit, rubbing furiously. Her pussy tightened, fluttering, and he knew she was close.",
+            "\"Now,\" she screamed. \"Come now, Dave! Fill me!\"",
+            "He let go, orgasm crashing through him, cock pulsing, shooting thick ropes deep inside her. At the same moment, Alisa came again, body shuddering, pussy milking him dry, her cry echoing off the hotel walls.",
+            "She collapsed onto his chest, both panting, sweating, spent. His cock softened inside her, but she didn't move, keeping them connected.",
+            "\"That,\" she whispered against his neck, \"was your preliminary interview. You passed.\"",
+            "Dave laughed, rumbling through his chest. \"Preliminary?\"",
+            "\"Hmm.\" She lifted her head, eyes sparkling with mischief. \"Tomorrow night, after the conference dinner, I'm taking you to my room and teaching you things you never knew possible. Tonight was screening. Tomorrow is the real performance review.\"",
+            "She rolled off him, his cock sliding free, and he immediately missed her warm cunt. She lay on her back, legs spread. \"Lick my cunt and clean all of your cum. As for your promotion, your new title is Special Projects Coordinator. Directly under me. Literally. Adjacent office with a connecting door. You'll attend all my meetings, take all my notes, and when I need stress relief—which is often, Dave, very often—you'll lock that door and service me until I'm satisfied.\"",
+            "\"And if I'm very good?\" he asked, catching her hand.",
+            "\"If you're very good,\" she purred, \"I'll let you choose positions. Let you tie me up sometimes. Take you in my office, the supply closet, the parking garage. I'll be your boss by day and your slut by night, and no one will ever know.\"",
+            "She sat up suddenly, eyes going to the bedside drawer. \"Speaking of which...\"",
+            "She reached over, revealing a sleek silver vibrator and lubricant. \"I brought toys. Recovery time, Dave. I need you hard again. I need you ready for round two. Because I'm not nearly done with you tonight.\"",
+            "They spent the night exploring every inch. Dave learned that Alisa liked to be spanked, liked to be called names in the heat of the moment, liked to be held afterward and praised. He learned that she was lonely at the top, that power came with isolation, and that what she craved more than orgasms was connection. Raw, honest, uninhibited connection.",
+            "By dawn, they were exhausted, entangled, Dave's cock sore from use, Alisa's body marked with love bites and fingerprints.",
+            "\"So,\" she murmured, head on his chest, \"do you accept the position?\"",
+            "\"Personal Affairs Coordinator?\" he asked, smiling into her hair. \"I thought it was Special Projects?\"",
+            "\"Both. And more.\" She kissed his chest. \"Lover. Confidant. My equal behind closed doors. The job comes with excellent benefits, Dave. Very excellent benefits.\"",
+            "He kissed her forehead, her nose, her lips. \"I accept.\"",
+            "Alisa's smile was soft, genuine, stripped of professional armor. \"Agreed. Now sleep. We have a conference in three hours, and I need you sharp. And hard.\" She closed her eyes. \"I have a feeling I'll need you during lunch.\"",
+            "Six months later, Dave sat at his new desk. Spacious. Ergonomic. Positioned directly outside Alisa's office with a connecting door that stayed locked during business hours and open during other hours. He was reviewing quarterly reports when his phone buzzed.",
+            "He smiled, already aroused, and stood. As he passed reception, the new intern stopped him.",
+            "\"Mr. H,\" Sophie said. She was twenty-two, a Cornell graduate, eyes hungry behind fashionable glasses. \"How did you rise so quickly? You were an intern six months ago.\"",
+            "Dave thought of Alisa waiting, the vibrator in her desk drawer, the life they'd built in stolen moments.",
+            "\"Collaboration,\" he said, mysterious. \"Taking on any task, no matter how demanding. Satisfying every requirement.\"",
+            "He walked away, already planning how to ask Alisa if she wanted to collaborate on Sophie's training.",
+            "Dave paused outside Alisa's office. Six months of stolen moments, locked doors, whispered commands. And now he wanted something more.",
+            "He pushed the door open. Alisa looked up, expression shifting from professional focus to heated recognition. She leaned back, her white silk blouse pulling taut across her breasts.",
+            "\"Close the door. Lock it.\" Her voice dropped to that tone he knew. \"Sit in my chair.\"",
+            "Dave settled into warm leather. Alisa rose, positioning herself on her desk before him, thighs open for him.",
+            "<img src='https://audio.heuring.us/added/6-Desk.png' class='story-image' alt='6-Desk'>",
+            "\"Six months,\" she murmured, fingers tracing his jaw. \"And you still look starving.\"",
+            "She guided his hands beneath her blouse, trembling as his thumbs found her bra clasp. \"Unbutton me.\"",
+            "He worked the buttons, revealing lace, the swell of her breasts. Alisa leaned to his ear. \"Touch me. Make me come before I let you inside.\"",
+            "His hands slid down, pushing her skirt higher, fingers brushing damp lace, hooking it aside.",
+            "\"Dave,\" she gasped as he found her, slick and ready.",
+            "He started slow, two fingers tracing folds before pressing inside with steady rhythm. Alisa's head fell back, hands gripping the armrests, hips rolling to set the pace. \"Right there,\" she moaned. \"Don't stop.\"",
+            "She came with a cry that he swallowed with his mouth, her body contracting around his fingers. Dave gentled, riding it out, until she pushed his hand away, gasping.",
+            "\"Enough,\" she laughed breathlessly, face flushed, eyes glassy.",
+            "But she wasn't done.",
+            "Alisa turned around, bracing her hands on the desk, skirt hiked around her hips. She looked back, hair disheveled, blouse hanging open. \"Now fuck me. Doggy style. Hard.\"",
+            "Dave stood, freeing himself from his trousers, gripped her waist and drove into her in one thrust, burying himself to the hilt. They groaned. Her from the stretch. Him from her heat, still pulsing from her first orgasm.",
+            "\"Move,\" she commanded. \"Don't be gentle.\"",
+            "He set a punishing rhythm, hips slapping hers, the desk shifting. Alisa pushed back to meet every thrust, knuckles white on the mahogany, moans growing louder. \"Harder,\" she gasped. \"I'm going to—oh god—\"",
+            "Dave angled his hips, fingers finding her swollen clit again, rubbing tight circles. \"Come for me,\" he growled. \"Come on my cock.\"",
+            "She shattered. Her second orgasm was deeper, body clamping down as she cried his name, legs buckling. Dave held her up, thrusting through her spasms until her heat pushed him over. He buried himself deep, spilling inside with a shudder that seemed endless.",
+            "They collapsed against the desk, breathing hard. Alisa turned, cheek pressed to the wood, smiling. Lazy. Satisfied. Wrecked. \"Six months,\" she whispered, \"and you still know how to ruin me.\"",
+            "Dave pressed a kiss to her shoulder, withdrawing slowly, steadying her as she stood. He buttoned her blouse with tender precision.",
+            "\"I need to ask something,\" he said. \"About Sophie. The new intern.\"",
+            "Alisa's eyes narrowed, calculating. \"The one who watches you walk by? Who blushes when I speak?\"",
+            "\"She's eager. Asked how I advanced.\" Dave moved closer. \"I told her collaboration. But I was thinking... what if we trained her together? You and me?\"",
+            "Alisa was quiet, finger tapping her lip. Then a slow, wicked smile spread. \"You want me to supervise the training?\"",
+            "\"Just like you trained me six months ago.\"",
+            "She gripped his hair, tugging his head back. \"I choose the time, place, lesson plan. You guide her, but I am final authority. Understood?\"",
+            "\"Yes, Ms. T.\"",
+            "\"Conference Room B. Tomorrow, ten AM.\" She picked up her phone, typing. \"Prepare her. Bring her ready.\" Her eyes darkened. \"And wear something I can easily remove.\"",
+            "The next morning, Dave intercepted Sophie at reception. She looked fresh, nervous, notebook clutched like a shield.",
+            "\"Ms. T wants to discuss your trajectory,\" Dave said, smile mysterious. \"But first, I need to brief you on our department's unconventional methods.\"",
+            "They walked the long way, Sophie chattering about ambitions, how she admired Ms. T's leadership.",
+            "\"She's demanding but fair,\" Dave said, stopping at Conference Room B. \"She rewards excellence. And she has specific expectations. The kind requiring absolute discretion and total commitment.\"",
+            "He opened the door. Alisa leaned back at the head of the table, blazer discarded, silk blouse unbuttoned to reveal black lace. She looked up, gaze sweeping Sophie with predatory assessment.",
+            "\"Before we begin, Ms. Chen, you need to understand something.\" She steepled her fingers. \"This department operates differently. Career advancement requires unconventional training. Physical submission. Complete discretion. Total commitment to meeting your superiors' requirements, whatever they may be.\"",
+            "Sophie's cheeks flushed, eyes darting to Dave, then back to Alisa's commanding presence. \"You mean...\"",
+            "\"You'll be expected to perform intimate acts. On command. Without hesitation.\" Alisa's voice dropped, honey-sweet and dangerous. \"Dave will demonstrate. I will supervise. And you will learn to meet our high expectations, professionally and physically. Do you accept these terms?\"",
+            "Sophie swallowed hard, breath quickening. She looked at Dave, who nodded, then back at Alisa's commanding presence. The silence stretched, electric.",
+            "Finally, Sophie whispered, voice trembling but resolute, \"Yes, I accept. I really want to advance. I'll do whatever it takes.\"",
+            "Alisa smiled, slow and triumphant. \"Good girl. Now, Dave, let's begin with lesson one.\"",
+            "Alisa purred, \"Lesson One focuses on anticipation. You will need to master the skill of making someone wait until they're desperate. Dave, demonstrate.\"",
+            "He approached Sophie, moving slowly. Excruciatingly slowly. Unbuttoning her blouse. One button. Pause. Two buttons. Her breathing quickened. By the fourth, her camisole was visible over creamy skin.",
+            "\"Look at her nipples,\" Alisa observed, moving behind Sophie. \"Already hard. Just like you were.\"",
+            "Alisa unzipped Sophie's skirt. It fell. She stood in open blouse, camisole, white lace panties. \"Turn around.\"",
+            "Sophie obeyed, facing Alisa. Alisa gripped her chin, forcing eye contact. \"Do you know why you're here?\"",
+            "\"To learn,\" Sophie breathed. \"To advance.\"",
+            "\"To be corrupted. Transformed.\" Alisa's voice dropped. \"Dave was my first project. Now I want another. Someone to share him with. Someone who understands that in this office, I am the sun, and you orbit me. Dave, lesson two.\"",
+            "He dropped to his knees behind Sophie, gripped her hips, pressed his face to her lace-covered ass. She gasped as he bit the edge of her panties, pulling them down. Smooth. Waxed. Glistening. \"Spread wider,\" Alisa commanded.",
+            "Sophie stepped wider, hands gripping the table. Dave buried his face between her cheeks, tongue finding her tight opening, circling, pressing. Sophie cried out, the sound turning to a moan.",
+            "\"Quiet,\" Alisa snapped. \"You don't speak unless asked. You don't come unless allowed. You exist for my pleasure and Dave's training. Understood?\"",
+            "\"Yes, Ms. T.\"",
+            "\"Good girl.\" Alisa removed her blouse. No bra. Nipples erect. \"Turn her around. I want to see her face while he eats her properly.\"",
+            "Dave turned Sophie, pushed her onto the table's edge, spread her legs over his shoulders. Alisa positioned herself beside Sophie's head. \"Look at me,\" she commanded. \"Not him. Me, while he licks your cunt.\"",
+            "Dave lowered his mouth to Sophie's pussy. Soaked. Swollen. Sweet. He licked slowly, avoiding her clit until she sobbed with need, knuckles white on the table edge. Alisa watched, hand between her own legs, rubbing through her skirt.",
+            "\"Tell me how it feels,\" Alisa demanded, pinching Sophie's nipple hard.",
+            "\"Good,\" Sophie moaned. \"Please—\"",
+            "\"Please what?\"",
+            "\"Please don't stop. Let me come. Please, Ms. T—\"",
+            "\"Lesson three: Control.\" Alisa laughed. \"You don't know need. Dave, stop.\"",
+            "He froze, tongue millimeters from Sophie's clit. She wailed, hips bucking.",
+            "\"Beg properly,\" Alisa whispered in her ear. \"Convince me you deserve it.\"",
+            "\"Please, Ms. T,\" Sophie cried, tears in her eyes. \"Let Dave make me come. Let him lick my pussy until I scream. I'll be so good for you. I may look like a nice girl, but I'm always feeling horny.\"",
+            "Alisa's eyes gleamed. She nodded at Dave.",
+            "He returned, closing his lips around Sophie's clit, sucking. She came screaming, body convulsing, flooding his chin. He gentled, riding it out, until she pushed him away, oversensitive.",
+            "\"Beautiful.\" Alisa removed her skirt, panties, revealing her naked arousal. \"Lesson four: Service. Sophie, suck his cock while I watch. Exactly as I instruct.\"",
+            "Sophie climbed between Dave's legs, uncertain. Alisa gripped her hair, guiding her down. \"Start with the balls. Gentle. Worship the whole package.\"",
+            "Sophie obeyed, lapping, sucking. Dave groaned, hips lifting.",
+            "\"Now the shaft. Long licks. Base to tip. This cock is mine. I'm loaning it to you.\"",
+            "Sophie licked up his length, swirled around the head, moaning at the taste. Alisa touched herself harder, rubbing through her folds.",
+            "\"Take it in your mouth. Slowly. Look at me.\"",
+            "Sophie locked eyes with Alisa and lowered her mouth onto Dave's cock, taking him inch by inch, lips stretching, until half his length filled her throat.",
+            "\"Good girl. Move. Up and down. Hand on what you can't fit. Dave, don't you dare come. You're saving that for me.\"",
+            "Dave gritted his teeth, focusing on the ceiling as Sophie found her rhythm. After minutes, Alisa commanded, \"Stop.\"",
+            "Sophie pulled back, gasping, saliva connecting her lips to his cock, desperate for direction.",
+            "\"Lesson five: Sharing.\" Alisa climbed onto the table, naked, glorious. \"Dave is mine, but I'm generous. Sophie, lie back. Dave, fuck her while I use her mouth. We'll see how she multitasks.\"",
+            "<img src='https://audio.heuring.us/added/6-Sophia.png' class='story-image' alt='6-Sophia'>",
+            "Sophie scrambled onto the table, legs falling open. Dave positioned himself, cock nudging her entrance. Tighter than Alisa. Soaked. Ready. Alisa straddled Sophie's face, facing Dave.",
+            "\"Wait,\" she commanded, lowering onto Sophie's mouth. \"I want to watch your face while you claim her.\"",
+            "Sophie began licking, tentative but eager, finding Alisa's clit. Alisa gasped, hands gripping her breasts, eyes locked on Dave's. \"Now,\" she breathed. \"Fuck her while she eats me. Make all three of us come together.\"",
+            "Dave pushed forward, sinking into Sophie's tight heat, groaning at the sensation. Different. Yielding. Perfect. Sophie moaned into Alisa's pussy, the vibration making Alisa cry out.",
+            "\"Yes,\" Alisa gasped. \"Hard. Make her scream into my cunt.\"",
+            "Dave thrust deep, table creaking. Sophie wrapped her legs around his waist, heels digging, urging deeper. Alisa rode her face, grinding, using Sophie's tongue while Dave used her pussy.",
+            "\"Touch my tits,\" Alisa commanded. \"Pinch my nipples while you fuck her.\"",
+            "He reached up, obeying, rolling her nipples, tugging. The three moved together. Alisa circling on Sophie's mouth. Dave pounding into her pussy. Sophie trembling between them, utterly possessed.",
+            "\"I'm going to come,\" Alisa announced, control slipping. \"Don't stop. Make me come on her face while you fill her, Dave. Now!\"",
+            "She came screaming, body convulsing, flooding Sophie's mouth. The sight pushed Dave over. He thrust deep and exploded, cock pulsing, shooting thick ropes inside Sophie's unprotected pussy, marking her as Alisa's territory.",
+            "Sophie came last. Silent. Rigid. Pussy clamping down, milking him dry.",
+            "They collapsed, tangled limbs and sweat and cum, Alisa draped over Sophie's chest, Dave still buried inside, all three panting, transformed.",
+            "\"Orientation complete, Sophie,\" Alisa whispered hoarsely. \"Welcome to the department.\"",
+            "Sophie laughed, breathless. \"When do I start?\"",
+            "\"You already have.\" Alisa lifted her head to meet Dave's eyes. \"Congratulations, Dave. Promoted to Senior Training Coordinator. Your new responsibility: helping me break in every eager intern. Accept?\"",
+            "Dave looked at Sophie. Flushed. Satisfied. His cum leaking from her pussy. Then at Alisa, his queen, his everything.",
+            "\"With pleasure,\" he said. \"Absolute pleasure.\"",
+            "Alisa grinned, wicked and triumphant. \"Good. So, Sophie, we've got three more sessions next week. Be ready to demonstrate everything you've learned. Now, I have another meeting in five minutes. Dave, you need to clean our new intern's pussy so she can return to her desk.\"",
+            "Alisa dressed quickly and put her hair in a bun, transforming back to the department manager, leaving only the flush in her cheeks as evidence. As the door closed, Dave looked down at Sophie, dazed and happy. \"Ready for your career to take off?\"",
+            "Sophie smiled slyly. \"I think I'm going to like working here.\"",
+            "Dave lowered his head between Sophie's legs and began licking the cum inside and outside of her pussy, cleaning her thoroughly. The training had only just begun.",
+            "<img src='https://audio.heuring.us/added/6-Cleanup.png' class='story-image' alt='6-Cleanup'>"
+        ];
+		
+        // State — auto-scroll ON by default
+        let autoScroll = true;
+        let hasStarted = false;
+        let currentParagraph = -1;
+        let paragraphs = [];
+
+        const audio = document.getElementById('narration');
+        const progressBar = document.getElementById('progressBar');
+        const progressBarContainer = document.getElementById('progressBarContainer');
+        const playBtn = document.getElementById('playBtn');
+        const autoScrollBtn = document.getElementById('autoScrollBtn');
+        const currentTimeDisplay = document.getElementById('currentTimeDisplay');
+        const durationDisplay = document.getElementById('durationDisplay');
+
+        function formatTime(seconds) {
+            if (!isFinite(seconds) || seconds < 0) return '0:00';
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return m + ':' + String(s).padStart(2, '0');
+        }
+
+        function renderProgressTicks() {
+            if (!audio.duration || !isFinite(audio.duration)) return;
+            progressBarContainer.querySelectorAll('.progress-tick').forEach(t => t.remove());
+            storyText.forEach((text, index) => {
+                if (text.startsWith('<img') && timestamps[index] !== undefined) {
+                    const pct = (timestamps[index] / audio.duration) * 100;
+                    const tick = document.createElement('div');
+                    tick.className = 'progress-tick';
+                    tick.style.left = pct + '%';
+                    tick.title = 'Image';
+                    progressBarContainer.appendChild(tick);
+                }
+            });
+        }
+
+        audio.addEventListener('loadedmetadata', () => {
+            durationDisplay.textContent = formatTime(audio.duration);
+            renderProgressTicks();
+        });
+
+        function init() {
+            const container = document.getElementById('storyContent');
+            storyText.forEach((text, index) => {
+                const p = document.createElement('p');
+                p.className = 'paragraph upcoming';
+                p.setAttribute('data-index', index);
+                if (text.startsWith('<img')) {
+                    p.innerHTML = text;
+                    p.classList.add('image-entry');
+                    p.style.textAlign = 'center';
+                    p.style.cursor = 'default';
+                } else {
+                    p.textContent = text;
+                    p.addEventListener('click', () => seekToParagraph(index));
+                }
+                container.appendChild(p);
+                paragraphs.push(p);
+            });
+            // Update auto-scroll button to reflect default ON state
+            autoScrollBtn.textContent = 'Auto-Scroll: ON';
+        }
+
+        function handlePlayBtn() {
+            if (audio.paused) {
+                // First play: scroll to story text
+                if (!hasStarted) {
+                    hasStarted = true;
+                    document.getElementById('storyContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    setTimeout(() => audio.play(), 400);
+                } else {
+                    audio.play();
+                }
+            } else {
+                audio.pause();
+            }
+        }
+
+        audio.addEventListener('play', () => {
+            playBtn.textContent = '⏸ Pause';
+            playBtn.classList.add('playing');
+        });
+
+        audio.addEventListener('pause', () => {
+            playBtn.textContent = '▶ Play Story';
+            playBtn.classList.remove('playing');
+        });
+
+        audio.addEventListener('ended', () => {
+            playBtn.textContent = '↺ Play Again';
+            playBtn.classList.remove('playing');
+        });
+
+        document.getElementById('progressBarContainer').addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            audio.currentTime = pos * audio.duration;
+        });
+
+        // Minimum real-time (ms since epoch) to hold on the current paragraph.
+        // Used to guarantee images stay on screen for at least IMAGE_HOLD_MS,
+        // even if the audio's built-in silence is slightly shorter than expected.
+        const IMAGE_HOLD_MS = 10000;
+        let holdUntilTime = 0;
+
+        function onTimeUpdate() {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = progress + '%';
+            currentTimeDisplay.textContent = formatTime(audio.currentTime);
+
+            // Still holding on an image — skip advancing the highlight/scroll.
+            if (Date.now() < holdUntilTime) {
+                return;
+            }
+
+            let newIndex = -1;
+            for (let i = 0; i < timestamps.length; i++) {
+                if (audio.currentTime >= timestamps[i]) {
+                    newIndex = i;
+                } else {
+                    break;
+                }
+            }
+
+            if (newIndex !== currentParagraph) {
+                currentParagraph = newIndex;
+                highlightParagraph(newIndex);
+
+                if (paragraphs[newIndex] && paragraphs[newIndex].classList.contains('image-entry')) {
+                    holdUntilTime = Date.now() + IMAGE_HOLD_MS;
+                }
+            }
+        }
+
+        audio.addEventListener('timeupdate', onTimeUpdate);
+
+        function highlightParagraph(index) {
+            paragraphs.forEach((p, i) => {
+                p.classList.remove('active', 'read', 'upcoming');
+                if (i === index) {
+                    p.classList.add('active');
+                    if (autoScroll) {
+                        p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                } else if (i < index) {
+                    p.classList.add('read');
+                } else {
+                    p.classList.add('upcoming');
+                }
+            });
+        }
+
+        function seekToParagraph(index) {
+            if (index >= 0 && index < timestamps.length) {
+                holdUntilTime = 0;
+                audio.currentTime = timestamps[index];
+                audio.play();
+            }
+        }
+
+        function previousParagraph() {
+            const newIndex = Math.max(0, currentParagraph - 1);
+            seekToParagraph(newIndex);
+        }
+
+        function nextParagraph() {
+            const newIndex = Math.min(timestamps.length - 1, currentParagraph + 1);
+            seekToParagraph(newIndex);
+        }
+
+        function toggleAutoScroll() {
+            autoScroll = !autoScroll;
+            autoScrollBtn.textContent = autoScroll ? 'Auto-Scroll: ON' : 'Auto-Scroll: OFF';
+            autoScrollBtn.style.background = autoScroll
+                ? 'linear-gradient(135deg, #718096 0%, #4a5568 100%)'
+                : 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.code === 'Space' && e.target.tagName !== 'BUTTON') {
+                e.preventDefault();
+                handlePlayBtn();
+            } else if (e.code === 'ArrowRight') {
+                skip(10);
+            } else if (e.code === 'ArrowLeft') {
+                skip(-10);
+            } else if (e.code === 'ArrowUp') {
+                e.preventDefault();
+                previousParagraph();
+            } else if (e.code === 'ArrowDown') {
+                e.preventDefault();
+                nextParagraph();
+            }
+        });
+
+        function skip(seconds) {
+            audio.currentTime += seconds;
+        }
+
+        init();
+
+        // Mobile drawer controls
+        function toggleMobileDrawer() {
+            const drawer = document.getElementById('mobileDrawer');
+            const overlay = document.getElementById('mobileOverlay');
+            const isOpen = drawer.classList.contains('open');
+            if (isOpen) {
+                closeMobileDrawer();
+            } else {
+                drawer.classList.add('open');
+                overlay.classList.add('open');
+                document.getElementById('mobileFab').textContent = '✕';
+            }
+        }
+
+        function closeMobileDrawer() {
+            document.getElementById('mobileDrawer').classList.remove('open');
+            document.getElementById('mobileOverlay').classList.remove('open');
+            document.getElementById('mobileFab').textContent = '☰';
+        }
+
+        function updateDrawerStatus() {
+            // Keep drawer auto-scroll button in sync
+            const drawerBtn = document.getElementById('drawerAutoScrollBtn');
+            if (drawerBtn) {
+                drawerBtn.textContent = autoScroll ? 'Auto-Scroll: ON' : 'Auto-Scroll: OFF';
+                drawerBtn.style.background = autoScroll
+                    ? 'linear-gradient(135deg, #718096 0%, #4a5568 100%)'
+                    : 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+            }
+        }
+
+        // Keep drawer play button in sync with audio state
+        audio.addEventListener('play', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '⏸ Pause'; btn.style.background = 'linear-gradient(135deg, #7c2d42 0%, #5a1f30 100%)'; }
+            document.getElementById('drawerStatus').textContent = '▶️ Playing';
+        });
+        audio.addEventListener('pause', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '▶ Play Story'; btn.style.background = ''; }
+            document.getElementById('drawerStatus').textContent = '⏸️ Paused';
+        });
+        audio.addEventListener('ended', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '↺ Play Again'; btn.style.background = ''; }
+            document.getElementById('drawerStatus').textContent = '✅ Finished';
+        });
+    </script>
+</body>
+</html>
