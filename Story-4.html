@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Slave Boy - Synchronized Read-Along</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+
+    <style>
+	.title-image {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.title-image img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    display: block;
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.9;
+            color: #2d3748;
+            background: linear-gradient(135deg, #2e0f18 0%, #4a1828 50%, #6b283e 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #fdf4f6;
+            padding: 60px;
+            border-radius: 15px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            text-align: center;
+            color: #7f1d3d;
+            margin-bottom: 8px;
+            font-size: 2.8em;
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #9c2749;
+            margin-bottom: 40px;
+            font-style: italic;
+            font-size: 1.1em;
+        }
+
+        .audio-section {
+            background: linear-gradient(135deg, #fdedf1 0%, #fff0f4 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            border: 2px solid #e8b0c0;
+            text-align: center;
+            display: none;
+        }
+
+        .audio-section h3 {
+            color: #7f1d3d;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        audio {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 30px;
+            margin-bottom: 15px;
+        }
+
+        .instructions {
+            color: #9c2749;
+            font-size: 0.95em;
+            padding: 12px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .progress-container {
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f0d9e3;
+            border-radius: 4px;
+            overflow: visible;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #d13c6a, #a51f4a);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.1s linear;
+        }
+
+        .progress-tick {
+            position: absolute;
+            top: -3px;
+            width: 3px;
+            height: 14px;
+            background: #7f1d3d;
+            border-radius: 2px;
+            pointer-events: none;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.6);
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            color: #9c2749;
+            margin-top: 8px;
+            font-family: 'Georgia', serif;
+        }
+
+        .story-text {
+            font-size: 1.15em;
+            text-align: justify;
+            color: #2d3748;
+        }
+
+        #storyContent p:first-of-type::first-letter {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 3.6em;
+            font-weight: 600;
+            float: left;
+            line-height: 0.85;
+            padding: 6px 10px 0 2px;
+            color: #7f1d3d;
+        }
+
+        .paragraph {
+            margin-bottom: 1em;
+            padding: 18px 25px;
+            border-radius: 10px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            position: relative;
+        }
+
+        .paragraph:hover {
+            background-color: #fdedf1;
+            border-left-color: #e06b96;
+        }
+
+        .paragraph.active {
+            background: linear-gradient(90deg, #fcd9e6 0%, #fff0f6 100%);
+            border-left: 4px solid #d13c6a;
+            box-shadow: 0 6px 25px rgba(209, 60, 106, 0.25);
+            transform: translateX(8px);
+        }
+
+        .paragraph.read {
+            background-color: #fdedf1;
+            border-left-color: #d170a0;
+            opacity: 0.75;
+        }
+
+        .paragraph.upcoming {
+            opacity: 0.6;
+        }
+
+        .paragraph.image-entry,
+        .paragraph.image-entry.upcoming,
+        .paragraph.image-entry.read,
+        .paragraph.image-entry.active {
+            opacity: 1 !important;
+            background: none !important;
+            border-left: none !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+
+        .the-end {
+            text-align: center;
+            margin-top: 50px;
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-style: italic;
+            font-size: 1.4em;
+            letter-spacing: 2px;
+            color: #7f1d3d;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #d13c6a 0%, #a51f4a 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(209, 60, 106, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 4px 15px rgba(113, 128, 150, 0.4);
+        }
+		#playBtn {
+            font-size: 1.1em;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #b82a5a 0%, #7a1a3a 100%);
+            letter-spacing: 0.5px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(184, 42, 90, 0.4);
+        }
+
+        #playBtn:hover {
+            box-shadow: 0 6px 25px rgba(184, 42, 90, 0.55);
+        }
+
+        #playBtn.playing {
+            background: linear-gradient(135deg, #7f1d3d 0%, #5c1428 100%);
+            box-shadow: 0 4px 20px rgba(127, 29, 61, 0.4);
+        }
+         .status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 101;
+        }
+
+        .shortcut-hint {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            background: rgba(255,255,255,0.95);
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            font-size: 0.85em;
+            color: #4a5568;
+            z-index: 100;
+        }
+
+        .key {
+            background: #edf2f7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        /* Mobile floating menu */
+        .mobile-fab {
+            display: none;
+        }
+
+        .mobile-drawer {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+
+            .story-text {
+                text-align: left;
+            }
+
+            .paragraph {
+                padding: 14px 16px;
+            }
+
+            #storyContent p:first-of-type::first-letter {
+                font-size: 2.6em;
+                padding: 4px 6px 0 0;
+            }
+
+            .story-image {
+                width: 92%;
+                max-width: 92%;
+            }
+
+            /* Hide desktop fixed overlays on mobile */
+            .status,
+            .controls,
+            .shortcut-hint {
+                display: none !important;
+            }
+
+            /* Floating action button */
+            .mobile-fab {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 52px;
+                height: 52px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #b82a5a, #7a1a3a);
+                color: white;
+                font-size: 1.5em;
+                border: none;
+                cursor: pointer;
+                z-index: 200;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+            }
+
+            /* Slide-up drawer */
+            .mobile-drawer {
+                display: block;
+                position: fixed;
+                bottom: -300px;
+                left: 0;
+                right: 0;
+                background: white;
+                border-radius: 18px 18px 0 0;
+                box-shadow: 0 -6px 30px rgba(0,0,0,0.25);
+                padding: 20px 24px 32px;
+                z-index: 199;
+                transition: bottom 0.3s ease;
+            }
+
+            .mobile-drawer.open {
+                bottom: 0;
+            }
+
+            .drawer-handle {
+                width: 40px;
+                height: 4px;
+                background: #cbd5e0;
+                border-radius: 2px;
+                margin: 0 auto 18px;
+            }
+
+            .drawer-status {
+                text-align: center;
+                color: #9c2749;
+                font-size: 0.9em;
+                margin-bottom: 14px;
+                font-style: italic;
+            }
+
+            .drawer-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .mobile-overlay-bg {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.3);
+                z-index: 198;
+            }
+
+            .mobile-overlay-bg.open {
+                display: block;
+            }
+        }
+        .story-image {
+            max-width: 75%;
+            width: 75%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            margin: 12px auto 20px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="status" id="topControls">
+        <button class="btn" id="playBtn" onclick="handlePlayBtn()">▶ Play Story</button>
+        <button class="btn btn-secondary" onclick="toggleAutoScroll()" id="autoScrollBtn">Auto-Scroll: ON</button>
+    </div>
+
+    <div class="container">
+        <h1>My Slave Boy</h1>
+		  <div class="title-image">
+            <img src="https://audio.heuring.us/added/4-Entry.png" alt="4-Ebtry">
+        </div>
+
+        <div class="audio-section">
+            <h3>🎧 Narration</h3>
+            <audio id="narration" controls>
+                <source src="https://audio.heuring.us/added/4-Slave.m4a" type="audio/mp4">
+                <source src="https://audio.heuring.us/added/4-Slave.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBarContainer">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+                <div class="time-display">
+                    <span id="currentTimeDisplay">0:00</span>
+                    <span id="durationDisplay">0:00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="story-text" id="storyContent">
+            <!-- Paragraphs generated by JavaScript -->
+        </div>
+
+        <div class="the-end">❦ The End ❦</div>
+
+        <div class="toc-link-wrapper" style="text-align: center; margin-top: 40px;">
+            <a href="TOC.html" class="btn" style="text-decoration: none; display: inline-block; background: linear-gradient(135deg, #b82a5a 0%, #7a1a3a 100%);">📚 Back to Table of Contents</a>
+        </div>
+
+    <!-- Mobile floating button + drawer (hidden on desktop) -->
+    <div class="mobile-overlay-bg" id="mobileOverlay" onclick="closeMobileDrawer()"></div>
+
+    <button class="mobile-fab" id="mobileFab" onclick="toggleMobileDrawer()">☰</button>
+
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-handle"></div>
+        <div class="drawer-status" id="drawerStatus">Press Play to begin</div>
+        <div class="drawer-buttons">
+            <button class="btn" id="drawerPlayBtn" onclick="handlePlayBtn(); updateDrawerStatus()">▶ Play Story</button>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="previousParagraph()">⏮ Previous</button>
+                <button class="btn btn-secondary" style="flex: 1;" onclick="nextParagraph()">Next ⏭</button>
+            </div>
+            <button class="btn btn-secondary" onclick="toggleAutoScroll(); updateDrawerStatus()" id="drawerAutoScrollBtn">Auto-Scroll: ON</button>
+        </div>
+    </div>
+
+    <script>
+	  
+	  
+	  
+	  const timestamps = [
+  0.483640, 22.463756, 44.523541, 60.208137, 61.646600, 71.243075, 93.404678,
+  115.321938, 134.673591, 155.995368, 186.945594, 200.378498, 219.887084,
+  223.126944, 231.684438, 233.684082, 251.00000, 261.171674, 262.524174,
+  289.190490, 297.859566, 299.532441, 306.122915, 323.406568, 326.485068,
+  348.196968, 349.736266, 350.836796, 352.735052, 354.497689, 377.935073,
+  388.471233, 390.571706, 406.605675, 434.943255, 440.068021, 446.145437,
+  466.306392, 497.113823, 507.629480, 513.076393, 519.730628, 527.571046,
+  533.779710, 535.192047, 537.839083, 542.085393, 545.646285, 564.310116,
+  572.776261, 579.076022, 609.703696, 615.645170, 643.577543, 655.224889,
+  679.966170, 699.962560, 709.637036, 736.184322, 744.520364, 755.050522,
+  758.734369, 781.646976, 791.676508, 808.522946, 824.785646, 851.938022,
+  858.308529, 877.086205, 878.893063, 899.323671, 908.944961, 955.522553,
+  961.672822, 978.466732, 998.255566, 1005.266606, 1021.278957, 1033.702854,
+  1044.869707, 1074.541380, 1080.343843, 1099.506941, 1107.647522, 1123.638328,
+  1139.667799, 1150.759746, 1169.729113, 1186.446790, 1200.415772, 1202.806160,
+  1217.299298, 1241.212445, 1249.181881, 1260.573924, 1292.310448, 1309.162231,
+  1355.270496, 1374.363768, 1393.484869, 1428.185105, 1455.108365, 1474.741825,
+  1484.833807, 1517.969345, 1537.765047, 1544.444926, 1572.950557, 1588.016636,
+  1615.017283, 1631.105447, 1676.831230, 1687.601256, 1709.999370, 1762.833901,
+  1798.777449, 1809.302047, 1848.043681, 1867.286461, 1870.249000, 1907.793620,
+  1917.319829, 1931.582915, 1942.915687, 1982.468428, 2018.021454, 2030.959313,
+  2054.839922, 2080.440744, 2107.481781, 2127.569205
+];
+
+    const storyText = [
+    "Alisa swiped her key card. The lock surrendered with a soft mechanical purr... and she pushed through into the suite. Her heels cracked against marble like a pistol report. Behind her, David's footsteps were nearly silent. Hesitant. Obedient. Designed to be overlooked.",
+    "The regional meeting had been a blood sport. Alisa had commanded the boardroom with surgical precision... while David hovered at its periphery. Mid-level HR. Distributing compliance reports like communion wafers. Nodding when spoken to. Dissolving when not. He was furniture that breathed.",
+    "\"Set up tomorrow's agenda,\" she said, without looking at him. She tossed her briefcase onto the carpet and began unbuttoning her blazer. \"I need a shower. This suit feels like a cage.\"",
+    "\"Yes, Ms. Alisa.\"",
+    "<img src='https://audio.heuring.us/added/4-Changing.png' class='story-image' alt='4-Changing'>",
+    "He scurried to the desk, laptop already warming beneath his anxious fingers. She caught his reflection in the bathroom mirror as she closed the door. The way he hunched over the keyboard. Spine curved in supplication. Eager to prove himself useful. Desperate to earn even the smallest acknowledgment.",
+    "The shower ran cold. She wanted it that way.",
+    "Alisa stood beneath the stinging needles, eyes shut, letting the Bangkok heat and boardroom politics and the ceaseless arithmetic of quarterly projections spiral down the drain. Twelve hours of command had left her wired. Every nerve firing. Her body humming with unspent voltage. The cold water did nothing to quiet it. She needed something the shower couldn't give her. She needed surrender. Not hers... but someone else's. She needed control exercised to its fullest expression.",
+    "In the bathroom closet, behind extra towels and a sewing kit no guest had ever touched, sat her leather travel case. Her fingers trembled as she unzipped it. Not from nerves... but from the sharp, electric thrill of anticipation. The smell of latex and oiled leather rose like incense.",
+    "She dressed with deliberate ceremony. Corset first. Laced tight enough to force shallow breaths, compressing her ribcage into something sculpted and severe. Boots next, their zippers singing a low song against her calves. Gloves that transformed her hands from instruments of corporate governance... into instruments of something far older. Last, the riding crop. Slender. Vicious. Elegant as a promise.",
+    "She studied herself in the mirror. The boardroom predator was gone. In her place stood something more honest. More essential. A woman who knew exactly what she was.",
+    "When she opened the bathroom door, David was still hunched over the keyboard. His back to her. Shoulders rounded in that perpetual posture of apology. The suite's air conditioning hummed. Bangkok's neon bled through the curtains in streaks of pink and gold.",
+    "\"You've been with the company four years,\" she said.",
+    "Her voice had changed. It had dropped a register. Shed its professional polish. Found something rawer underneath.",
+    "David's fingers froze above the keys.",
+    "\"Four years in HR.\" She stepped forward. The boots made no sound on the carpet. She moved like something inevitable. \"Four years of being invisible. Fetching filing reports. Saying yes ma'am with those big, grateful eyes.\"",
+    "He turned.",
+    "Alisa stood in the half-light, transformed. The navy power suit lay discarded in the bathroom like a shed skin. Now she wore black latex like a second hide, the corset carving her torso into clean, severe lines. Boots rising to mid-thigh. Gloves gleaming. In her right hand, the riding crop tapped a slow, patient rhythm against her open palm.",
+	"<img src='https://audio.heuring.us/added/4-Corset.png' class='story-image' alt='4-Corset'>",
+    "\"I...\" David's voice fractured. He swallowed, his Adam's apple jerking. \"Ms. Alisa, I don't understand.\"",
+    "\"Don't you?\"",
+    "She took another step. He didn't retreat. He couldn't. Something in his body wouldn't let him.",
+    "\"I watched you in the morning session. Forty mid-level accountants, all clawing for my attention. But you were different. You weren't performing. You kept looking at me. At my mouth. At my hands. Thinking I didn't notice.\"",
+    "David's lips parted. Nothing emerged.",
+    "She tilted her head, examining him the way one studies a specimen beneath glass. \"When I announced I needed assistance after the meeting, your hand went up before I'd finished the sentence.\" A pause. The crop stopped tapping. \"You've been waiting for this.\" Another pause. \"Haven't you, David?\"",
+    "\"I... I don't...\"",
+    "\"Kneel.\"",
+    "The word landed like a lash.",
+    "David dropped.",
+    "His knees struck the carpet with a muffled thud that seemed to expand outward, filling the sudden silence. The position should have felt absurd. Thirty-two years old. MBA from a state university. Kneeling in a Bangkok hotel suite in his wrinkled dress shirt and corporate slacks, with the faint ghost of coffee on his breath.",
+    "Instead, something inside him unlocked. It felt like a door he'd been leaning against for years had finally, quietly, swung open.",
+    "\"Look at me,\" Alisa commanded.",
+    "He raised his eyes. From this angle, she loomed. A monument of black latex and pale skin and lips painted crimson. Terrifying. Magnificent. Both at once, inseparably.",
+    "\"You've been hiding,\" she murmured, crouching to his level. The crop traced a slow line beneath his chin, tilting his face upward. The leather was cool against the fevered skin of his throat. \"Pretending to be a man. But you're not a man, David. You're a boy.\" She leaned closer, her breath warm against his ear. \"And do you know what boys need?\"",
+    "He couldn't breathe. He couldn't look away. The question hung between them like smoke.",
+    "\"They need to be owned.\"",
+    "She rose and crossed to the dresser. When she returned, she held a thick leather collar. Black. Heavy. Buckled. With a leash coiled beside it like a sleeping thing. \"This marks you as mine. My slave. My personal property.\" She paused, letting the weight of the words settle. \"Stand up.\"",
+    "He rose on unsteady legs. She stepped behind him and fastened the collar with practiced hands. The leather snug against his throat. The buckle clicking shut with a sound that seemed to sever something. Some last filament of resistance. Some final thread connecting him to the man he'd been pretending to be. She clipped the leash to the front ring and gave it a short, sharp tug. His head snapped forward.",
+    "<img src='https://audio.heuring.us/added/4-Collar.png' class='story-image' alt='4-Collar'>",
+    "\"Strip,\" she said. \"Slowly. And tell me what you are.\"",
+    "David's fingers found his tie. They shook as he loosened the knot, drew it from his collar, let it fall.",
+    "\"I'm...\" The word lodged in his throat. He tried again. \"I'm...\"",
+    "\"Say it.\"",
+    "\"Your slave, Ms. Alisa.\"",
+    "The crop snapped against her palm. Sharp as a starting pistol.",
+    "\"Good boy,\" she purred. \"Now show me.\"",
+    "She circled him slowly, the leash trailing from his collar. \"From this moment forward, you are my property. My personal slave. My possession. You will serve me. Obey me. Pleasure me. And exist solely for my satisfaction. Is that understood?\"",
+    "\"Yes, Mistress.\" The title left him naturally, as though it had always been there. Waiting.",
+    "\"I said strip. Faster,\" she ordered. \"A slave has no need for clothing in his master's presence.\"",
+    "He undressed with trembling urgency. Shirt. Undershirt. Belt. Slacks. Underwear. Each garment removed and discarded like layers of an identity he was shedding. When he stood before her naked, his skin prickling in the air-conditioned chill, his cock already thickening and rising with the terrible, undeniable knowledge of what he was becoming. Her property. Her toy. Her slave boy.",
+    "\"On all fours. Now.\" She tugged the leash. \"Follow, slave.\"",
+    "She led him across the suite like a pet on a tether. His knees burning against the carpet. His palms flat on the floor. The leash swinging gently between his shoulder blades. When they reached the edge of the bed, she raised one leg to the mattress, spreading the slit of her latex skirt to reveal nothing beneath. Smooth skin, already glistening.",
+    "\"A slave exists to serve his master's pleasure,\" she said, her voice dropping lower. \"Your mouth belongs to me now. Your tongue is my instrument. Use it.\"",
+    "She gripped a fistful of his hair and pulled his face toward her. David pressed his mouth to her, tasting heat and salt and arousal. The flavor of her desire sharp and musky on his tongue. He licked eagerly. Desperately. Wanting to prove his worth. Wanting to show he understood his purpose. That he accepted it completely.",
+    "\"Pathetic,\" she said. Though her hips rolled against his face, betraying her. \"Is that how a slave serves his mistress? I've owned better. Lick properly, slave boy. Use your fingers. First one, then two. Then suck my clit while you work them.\"",
+    "<img src='https://audio.heuring.us/added/4-Clitty.png' class='story-image' alt='4-Clitty'>",
+    "The command jolted through him. He obeyed instantly, sliding two fingers inside her wet heat while his tongue found her clit. Circling. Sucking. Flattening against the swollen bud with focused devotion. He could feel her tightening around his fingers. Feel the tremor in her thighs. Taste the shift in her arousal as it deepened and sharpened.",
+    "\"Better,\" she gasped. \"Much better. But still not good enough for your master to come. Work harder, slave.\"",
+    "She pushed him away suddenly, and he fell back, breathing hard. His face slick with her. The mark of his service drying on his chin.",
+    "\"On the bed.\"",
+    "He scrambled onto the mattress. Once positioned, Alisa picked up a black leather flogger and brought it down across his back and thighs. Each stroke bloomed heat into his skin, each lash a punctuation mark in a sentence he was learning to read. The sting evolved into something richer. A warmth that pooled low in his belly and made his cock ache.",
+    "<img src='https://audio.heuring.us/added/4-Whipping.png' class='story-image' alt='4-Whipping'>",
+    "\"Look at that hard cock,\" she said, flicking the flogger lightly against his erection. \"I did not permit you that. Time for some discipline. On your back. Legs spread. Present yourself to me, slave. Show me what I own.\"",
+    "David scrambled onto his back, positioning himself as instructed. Legs apart. Cock rigid against his stomach. Every inch of him offered up for her inspection. He felt utterly claimed. Utterly seen.",
+    "She retrieved a black bag from the closet and set it on the nightstand with a soft thud. \"A slave's body is his master's toy,\" she said, unzipping the bag to reveal an array of implements arranged with careful precision. \"I will use you as I please. Torment you. Deny you. Play with you. And you will accept it all with gratitude. Is that understood, slave?\"",
+    "\"Yes, Mistress,\" he whispered. \"Your slave understands. Use me. Please.\"",
+    "She wrapped her latex-gloved fingers around his cock, and the contrast of cool latex against hot flesh made him jerk involuntarily. \"You want to come, don't you, slave boy? Want to spill like an eager pet who can't control himself?\"",
+    "\"Yes, Mistress. Please. Let your slave come.\"",
+    "\"Not yet,\" she murmured, attaching a vibrating ring to the base of his shaft. The buzz was low and insistent. A maddening hum that thrummed through every nerve ending. \"A slave comes when his master allows it. Not before. You belong to me. Your pleasure is mine to control.\"",
+    "<img src='https://audio.heuring.us/added/4-Tease.png' class='story-image' alt='4-Tease'>",
+    "She played with him for what felt like hours. Bringing him to the edge, then withdrawing. Her gloved fingers dancing over his most sensitive flesh. The vibrating ring buzzing against him in merciless rhythm. Each time he neared the precipice, she pulled him back. By touch. By command. By the sheer authority in her voice. David was reduced to a whimpering, trembling mess, his hands fisting the sheets, his body arching toward her touch and then away, caught in an exquisite torture of denial. And he loved every second of it. The restraint. The surrender. The absolute ownership of his pleasure by someone who understood exactly what he needed.",
+    "\"Please,\" he sobbed. \"Please, Mistress, your slave begs you.\"",
+    "\"You beg so prettily,\" she said. \"But a slave must be thoroughly used before he's rewarded.\" Her eyes were dark. Glittering. \"Turn over. Hands and knees. Present your ass to me, slave. Offer yourself for your master's pleasure.\"",
+    "Trembling with need, David obeyed. The position was the deepest submission. Exposed. Vulnerable. Open. He felt the cool drip of lubricant, then her gloved fingers working him open slowly. Patiently. Each knuckle a new threshold.",
+    "\"A slave takes whatever his master gives him,\" she commanded. \"Relax. Submit. Accept.\"",
+    "The first toy slid into him, and David cried out. Overwhelmed by the sensation of being filled. Of being opened. Of being claimed from the inside. It buzzed to life, sending waves of pleasure rolling through his core.",
+    "\"Good slave,\" Alisa murmured, her voice warm with genuine approval. \"Taking his master's toys so obediently. You were made for this. Weren't you? Made to be owned.\"",
+    "\"Yes, Mistress,\" he sobbed. \"Your slave was made for you. Only for you. Please. Use me. Use your slave boy.\"",
+    "She replaced the toy with a string of anal beads, pushing them in one by one. Making him count each bead. Making him thank her for every intrusion. By the time she reached the largest, David was incoherent. Tears streaming down his face, not from pain but from the sheer, overwhelming intensity of his submission. Every nerve was alight. Every part of him belonged to her.",
+    "\"Please,\" he begged, his voice hoarse. \"Please, Mistress.\"",
+    "\"You need to be fucked,\" she finished. \"You need to feel your master claiming you completely. To know that your ass belongs to me. That you are my slave boy. My property. My possession to use as I see fit.\" Her voice dropped to a whisper. \"Isn't that right? Say it.\"",
+    "\"Yes,\" he gasped. \"Yes. Please, Mistress. Please fuck your slave. Claim me. I belong to you.\"",
+    "She withdrew the beads slowly, one by one, each exit making him gasp. Leaving him empty and aching. He heard the rustle of latex. The click of buckles. When he glanced back over his shoulder, his breath seized.",
+    "Alisa had strapped on a harness. A thick black dildo jutting from the front of it. She looked down at it, then at him, and the smile that crossed her face was the smile of someone about to take exactly what was hers.",
+    "\"Come here, slave,\" she ordered, reclining against the pillows. \"Prepare your master's cock. Show me how a slave worships the instrument that will own him.\"",
+    "David crawled to her, leash trailing from his collar, and lowered his mouth to the silicone shaft. He licked along its length. Took it deep. Coating it with saliva. His devotion made physical. His acceptance of what was coming made literal with each stroke of his tongue.",
+    "\"That's it,\" she said, watching him. \"Get it nice and wet. Because I'm going to fuck you, slave boy. I'm going to fuck you until you know, with absolute certainty, that you are mine. My property. My slave. My possession.\"",
+    "When she was satisfied, she pushed him back onto his hands and knees. He felt the blunt head of the dildo press against his entrance. Cool. Insistent. Inexorable.",
+    "\"Breathe,\" she commanded. \"Push back. Take your master inside you. Accept your complete possession.\"",
+    "<img src='https://audio.heuring.us/added/4-Pegging.png' class='story-image' alt='4-Pegging'>",
+    "She entered him slowly. Steadily. Not stopping until she was fully seated inside him. Then she paused, letting him feel it. The totality of it. The way his body yielded and accommodated. The way he opened around her. The way every inch of contact reinforced what she'd been telling him all night. You are mine.",
+    "\"Mine,\" she whispered, her hands gripping his hips hard enough to leave marks. \"My slave. My boy. My property. Say it.\"",
+    "\"Yours,\" he gasped. \"I'm yours, Mistress. Your slave. Your property. Your possession. Please. Use me. Use your slave boy.\"",
+    "She began to move. Pulling back until the head nearly slipped free, then driving forward with a powerful stroke that seated her fully inside him. The dildo angled against his prostate with each thrust, sending sharp sparks of pleasure cascading through his pelvis. David's arms trembled, then buckled, his chest dropping to the mattress as his master fucked him with increasing force. Her pace quickening. Her grip bruising and possessive and perfect.",
+    "\"Do not touch yourself,\" she commanded, voice sharp. \"A slave does not decide when he comes. You will come from my cock inside you. From your complete submission to me. Come for your master, slave. Come from your prostate like a good slave boy.\"",
+    "David's hands clawed the sheets, obeying, denying himself the relief of his own touch. The pressure built inside him like a tide. Relentless. Rising with each thrust as the dildo massaged that deep, secret place inside him. He was helpless. Owned. Completely at her mercy. And the orgasm that overtook him was unlike anything he had ever experienced. Deep. Full-body. Radiating outward from his core in waves. His prostate pulsing. His untouched cock spurting ropes of come onto the sheets beneath him as his body convulsed and clenched around the dildo buried inside him.",
+    "\"Good slave,\" Alisa purred, continuing her thrusts, milking every spasm from him, drawing out each aftershock until he was whimpering from the oversensitivity. \"Coming from your master's cock like a proper slave boy. Giving me everything. Your pleasure belongs to me. Only and completely.\"",
+    "Only when he was totally spent. Trembling. Hollowed out. Unable to support his own weight. Only then did she withdraw. She unbuckled the harness and set it aside, her eyes gleaming with dark appetite. She was not finished.",
+    "\"On your back,\" she commanded, climbing onto the bed and straddling him. She was naked now. The latex peeled away to reveal the body beneath. Her pussy slick and swollen, radiating heat he could feel against his stomach. \"Your master requires service. You will fuck me, slave. But understand this. You are not permitted to come inside me. Slaves do not defile their masters with their seed. You will fuck me for my pleasure, and you will hold back your own release. Is that understood?\"",
+    "\"Yes, Mistress,\" David gasped. His cock was still achingly hard despite his prostate orgasm. Still full. Still desperate. Sensitive to the point of pain. \"Your slave understands. I will serve you. I will not come inside you.\" He hesitated, then added, voice cracking. \"But please, Mistress. May your slave come after you do? Outside?\"",
+    "She stared at him. Then picked up the riding crop and brought it down sharply across his rigid cock. The sting bloomed into something that made him gasp. A bright, electric jolt that somehow sank straight into pleasure, pooling in his groin like liquid heat.",
+    "She leaned close, her lips brushing his ear. \"Listen carefully, slave boy. You come when I tell you. Where I tell you. Do you understand?\"",
+    "David nodded, swallowing hard, and Alisa reached between them, gripping his cock and guiding it to her entrance. She lowered herself onto him in one slow, fluid motion. And the sensation nearly broke him. She was impossibly tight. Impossibly hot. Her inner walls gripping him like a fist. He squeezed his pelvic floor desperately, fighting back the orgasm that threatened to explode from him immediately, clenching every muscle to keep from violating her command.",
+    "She rode him with abandon. Using his body. Grinding against him. Her pace accelerating as her own pleasure mounted. Her breasts swayed above him, nipples peaked and flushed, her eyes locked onto his with a gaze that said, I own you, louder than any word.",
+    "\"Fuck me, slave,\" she ordered. \"Make your master come. Show me you know how to serve me with that cock.\"",
+    "David thrust upward, meeting her rhythm, desperate to please her, to give her what she demanded while battling his own need. He could feel her building. The subtle contractions around his shaft. The quivering of her thighs. The quickening of her breath. He squeezed harder, jaw clenched, every muscle fighting to hold back the flood that wanted so desperately to pour into her.",
+    "\"Yes. Yes. Yes,\" she gasped, nails raking down his chest, leaving white lines that flushed to pink. \"Harder, slave. Slam it into me. Make me come on your cock. Now.\"",
+    "She cried out. Her body arching. Her pussy clenching around him in rhythmic, shuddering spasms as her orgasm tore through her. David fought with every fiber of his being not to follow. Not to spill inside her. Not to violate her command. His entire body trembling with the effort of denial. His cock throbbing. His balls drawn tight and aching.",
+    "When she finally stilled, she climbed off him and looked down at his cock. Rigid. Flushed an angry red. Visibly pulsing with denied release. She laughed softly and ran one fingertip along the underside, making him flinch.",
+    "\"Good slave,\" she murmured. \"Denied yourself for your master.\" She stroked him lightly, barely enough to be felt, and his hips jerked involuntarily. \"But your master is not yet satisfied.\" Her eyes darkened. \"I'm going to mount your face. We will sixty-nine, and you will lick and suck my clit until I come again. This time, I will let you have your release. But only in my mouth. Never inside me. A slave serves, then is consumed.\" She paused, a slow smile spreading. \"And once we've come together, I will return your seed to you. Would you like that, slave boy? Would you like to come in your master's mouth?\"",
+    "<img src='https://audio.heuring.us/added/4-69.png' class='story-image' alt='4-69'>",
+    "David was delirious. He wasn't certain what she meant by returning his seed. His mind was fogged with need, with denial, with the overwhelming desire for release. But he knew he had to empty himself. That he couldn't endure another moment of this ache. He nodded, his eyes pleading.",
+    "Alisa positioned herself above his face, lowering her still-soaked pussy to his waiting mouth while simultaneously taking his cock between her lips. David moaned against her. And the vibration traveled through her, making her shudder. He began at the outer folds, licking the length of her with slow, devoted strokes before pressing his tongue inside her, fucking her with it. Then he moved to her clit. Sucking. Flicking. Worshipping her with his mouth as she worked his cock with lips and tongue and the wet heat of her throat. He slid one finger, then two, inside her. Curling them. Finding the spot that made her gasp around his shaft. While his tongue maintained its relentless rhythm on her clit.",
+    "They moved together in perfect, escalating synchrony. Alisa grinding against his face as she took him deep, her hand stroking what her mouth couldn't reach. David could feel her approaching. Could taste the shift in her arousal. Feel the trembling of her thighs against his cheeks. Hear the muffled sounds escaping around his cock. And he was close too. So close it was agony. His balls drawn tight and heavy. His cock pulsing in her mouth. Every nerve pulled taut.",
+    "\"Come with me, slave,\" she commanded, her voice thick, muffled around him. \"Fill your master's mouth. Give me everything. Now.\"",
+    "They broke together. Alisa crying out against his cock as her second orgasm crashed through her body. David moaning into her pussy as his release finally erupted. He pulsed thick, hot ropes of come into her mouth. Wave after wave. His body convulsing beneath her. His hips jerking upward involuntarily. Every drop claimed by his master. She took it all without swallowing. Holding his release in her mouth, collecting every drop of his submission until he was empty. Whimpering. Hypersensitive. Utterly spent.",
+    "She waited until his body stilled. Then slowly turned herself around. Her cheeks were flushed. Her lips slightly parted. And he saw that she had not swallowed. His release pooled on her tongue, white and thick, a vivid mark of what she had taken from him.",
+    "\"Open,\" she commanded, her voice thick with his essence.",
+    "David opened his mouth obediently. She descended on him in a brutal, consuming kiss. Her tongue pushing deep, transferring his come from her mouth to his, forcing him to take it back. The kiss was wet. Messy. Intimate beyond measure. His own taste flooding his senses as she shared it between them, refusing to let either of them swallow, making him accept it all. It was degradation and tenderness woven together so tightly they became indistinguishable.",
+    "<img src='https://audio.heuring.us/added/4-Cum.png' class='story-image' alt='4-Cum'>",
+    "When she pulled back, some of his come had spilled. Onto her chin. Her cheeks. The corners of her mouth. Marking her skin in glistening trails. She pointed to it with one stern, gloved finger.",
+    "\"Clean your master, slave. Lick every drop from my face. A slave cleans up his mess. He consumes his own seed at his master's command.\"",
+    "David leaned forward and began to lick. His tongue tracing the trails of come from her chin, her cheeks, the corners of her mouth. Swallowing it down as she watched with dark, gleaming satisfaction. He cleaned her thoroughly. Worshipfully. Each stroke of his tongue a final act of surrender. The intimacy of it settled over him like a second skin. This, the total consumption of his own pleasure, performed at his master's command, completing the circuit of submission and ownership in a way nothing else could.",
+    "When her face was clean, she pulled him down beside her. The collar still encircled his throat, marking him as hers. The room was thick with the scent of sex and leather and sweat. The humidity of Bangkok pressing against the windows like a living thing. She reached down and took his cock and balls in her latex-gloved hand, squeezing with firm, possessive pressure that made him gasp and arch toward her touch. Pain and pleasure braiding together into something transcendent.",
+    "\"So, my slave boy,\" she said, her voice low and dangerous. \"Tell me. Does my slave want to return to his boring, meek existence? Or does he want to remain my property?\"",
+    "David looked into her eyes. Her grip tightened, and the sensation bloomed through him. Pain and pleasure and belonging, all three so interwoven he could not separate them. \"I want to remain yours, Mistress,\" he whispered, the words falling from him like a confession. \"I never want to go back.\"",
+    "\"Tomorrow,\" he continued, his voice steadying despite the pressure of her hand, his body marked by her touch and her toys and her absolute dominion over it, \"after the meetings... I want to come back here. To be your slave, Mistress. Your personal slave boy. To serve you. To be owned by you. To exist for your pleasure and nothing else.\"",
+    "He pressed closer, his eyes clear and honest, his surrender so complete it had become its own kind of freedom. \"I love being your slave. I love knowing I belong to you completely. That my body is yours. My pleasure is yours. My very essence is yours to command. Keep me, Mistress. Use me. Own me. Let me be your slave boy forever.\"",
+    "Alisa smiled. Slow. Dark. Satisfied. She tightened her grip on the leash and on him, her eyes luminous with something that looked, beneath all the authority and the games, like genuine hunger. She pressed a kiss to his forehead, tasting the salt that lingered on his skin.",
+    "\"Yes,\" she murmured against him. \"My perfect, willing, obedient slave. Mine to keep. Mine to use. Mine to command in every way.\" Her breath was warm against his brow. \"Tomorrow, and every day after.\""
+];
+        // State — auto-scroll ON by default
+        let autoScroll = true;
+        let hasStarted = false;
+        let currentParagraph = -1;
+        let paragraphs = [];
+
+        const audio = document.getElementById('narration');
+        const progressBar = document.getElementById('progressBar');
+        const progressBarContainer = document.getElementById('progressBarContainer');
+        const playBtn = document.getElementById('playBtn');
+        const autoScrollBtn = document.getElementById('autoScrollBtn');
+        const currentTimeDisplay = document.getElementById('currentTimeDisplay');
+        const durationDisplay = document.getElementById('durationDisplay');
+
+        function formatTime(seconds) {
+            if (!isFinite(seconds) || seconds < 0) return '0:00';
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return m + ':' + String(s).padStart(2, '0');
+        }
+
+        function renderProgressTicks() {
+            if (!audio.duration || !isFinite(audio.duration)) return;
+            progressBarContainer.querySelectorAll('.progress-tick').forEach(t => t.remove());
+            storyText.forEach((text, index) => {
+                if (text.startsWith('<img') && timestamps[index] !== undefined) {
+                    const pct = (timestamps[index] / audio.duration) * 100;
+                    const tick = document.createElement('div');
+                    tick.className = 'progress-tick';
+                    tick.style.left = pct + '%';
+                    tick.title = 'Image';
+                    progressBarContainer.appendChild(tick);
+                }
+            });
+        }
+
+        audio.addEventListener('loadedmetadata', () => {
+            durationDisplay.textContent = formatTime(audio.duration);
+            renderProgressTicks();
+        });
+
+        function init() {
+            const container = document.getElementById('storyContent');
+            storyText.forEach((text, index) => {
+                const p = document.createElement('p');
+                p.className = 'paragraph upcoming';
+                p.setAttribute('data-index', index);
+                if (text.startsWith('<img')) {
+                    p.innerHTML = text;
+                    p.classList.add('image-entry');
+                    p.style.textAlign = 'center';
+                    p.style.cursor = 'default';
+                } else {
+                    p.textContent = text;
+                    p.addEventListener('click', () => seekToParagraph(index));
+                }
+                container.appendChild(p);
+                paragraphs.push(p);
+            });
+            // Update auto-scroll button to reflect default ON state
+            autoScrollBtn.textContent = 'Auto-Scroll: ON';
+        }
+
+        function handlePlayBtn() {
+            if (audio.paused) {
+                // First play: scroll to story text
+                if (!hasStarted) {
+                    hasStarted = true;
+                    document.getElementById('storyContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    setTimeout(() => audio.play(), 400);
+                } else {
+                    audio.play();
+                }
+            } else {
+                audio.pause();
+            }
+        }
+
+        audio.addEventListener('play', () => {
+            playBtn.textContent = '⏸ Pause';
+            playBtn.classList.add('playing');
+        });
+
+        audio.addEventListener('pause', () => {
+            playBtn.textContent = '▶ Play Story';
+            playBtn.classList.remove('playing');
+        });
+
+        audio.addEventListener('ended', () => {
+            playBtn.textContent = '↺ Play Again';
+            playBtn.classList.remove('playing');
+        });
+
+        document.getElementById('progressBarContainer').addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            audio.currentTime = pos * audio.duration;
+        });
+
+        // Minimum real-time (ms since epoch) to hold on the current paragraph.
+        // Used to guarantee images stay on screen for at least IMAGE_HOLD_MS,
+        // even if the audio's built-in silence is slightly shorter than expected.
+        const IMAGE_HOLD_MS = 10000;
+        let holdUntilTime = 0;
+
+        function onTimeUpdate() {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = progress + '%';
+            currentTimeDisplay.textContent = formatTime(audio.currentTime);
+
+            // Still holding on an image — skip advancing the highlight/scroll.
+            if (Date.now() < holdUntilTime) {
+                return;
+            }
+
+            let newIndex = -1;
+            for (let i = 0; i < timestamps.length; i++) {
+                if (audio.currentTime >= timestamps[i]) {
+                    newIndex = i;
+                } else {
+                    break;
+                }
+            }
+
+            if (newIndex !== currentParagraph) {
+                currentParagraph = newIndex;
+                highlightParagraph(newIndex);
+
+                if (paragraphs[newIndex] && paragraphs[newIndex].classList.contains('image-entry')) {
+                    holdUntilTime = Date.now() + IMAGE_HOLD_MS;
+                }
+            }
+        }
+
+        audio.addEventListener('timeupdate', onTimeUpdate);
+
+        function highlightParagraph(index) {
+            paragraphs.forEach((p, i) => {
+                p.classList.remove('active', 'read', 'upcoming');
+                if (i === index) {
+                    p.classList.add('active');
+                    if (autoScroll) {
+                        p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                } else if (i < index) {
+                    p.classList.add('read');
+                } else {
+                    p.classList.add('upcoming');
+                }
+            });
+        }
+
+        function seekToParagraph(index) {
+            if (index >= 0 && index < timestamps.length) {
+                holdUntilTime = 0;
+                audio.currentTime = timestamps[index];
+                audio.play();
+            }
+        }
+
+        function previousParagraph() {
+            const newIndex = Math.max(0, currentParagraph - 1);
+            seekToParagraph(newIndex);
+        }
+
+        function nextParagraph() {
+            const newIndex = Math.min(timestamps.length - 1, currentParagraph + 1);
+            seekToParagraph(newIndex);
+        }
+
+        function toggleAutoScroll() {
+            autoScroll = !autoScroll;
+            autoScrollBtn.textContent = autoScroll ? 'Auto-Scroll: ON' : 'Auto-Scroll: OFF';
+            autoScrollBtn.style.background = autoScroll
+                ? 'linear-gradient(135deg, #718096 0%, #4a5568 100%)'
+                : 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.code === 'Space' && e.target.tagName !== 'BUTTON') {
+                e.preventDefault();
+                handlePlayBtn();
+            } else if (e.code === 'ArrowRight') {
+                skip(10);
+            } else if (e.code === 'ArrowLeft') {
+                skip(-10);
+            } else if (e.code === 'ArrowUp') {
+                e.preventDefault();
+                previousParagraph();
+            } else if (e.code === 'ArrowDown') {
+                e.preventDefault();
+                nextParagraph();
+            }
+        });
+
+        function skip(seconds) {
+            audio.currentTime += seconds;
+        }
+
+        init();
+
+        // Mobile drawer controls
+        function toggleMobileDrawer() {
+            const drawer = document.getElementById('mobileDrawer');
+            const overlay = document.getElementById('mobileOverlay');
+            const isOpen = drawer.classList.contains('open');
+            if (isOpen) {
+                closeMobileDrawer();
+            } else {
+                drawer.classList.add('open');
+                overlay.classList.add('open');
+                document.getElementById('mobileFab').textContent = '✕';
+            }
+        }
+
+        function closeMobileDrawer() {
+            document.getElementById('mobileDrawer').classList.remove('open');
+            document.getElementById('mobileOverlay').classList.remove('open');
+            document.getElementById('mobileFab').textContent = '☰';
+        }
+
+        function updateDrawerStatus() {
+            // Keep drawer auto-scroll button in sync
+            const drawerBtn = document.getElementById('drawerAutoScrollBtn');
+            if (drawerBtn) {
+                drawerBtn.textContent = autoScroll ? 'Auto-Scroll: ON' : 'Auto-Scroll: OFF';
+                drawerBtn.style.background = autoScroll
+                    ? 'linear-gradient(135deg, #718096 0%, #4a5568 100%)'
+                    : 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+            }
+        }
+
+        // Keep drawer play button in sync with audio state
+        audio.addEventListener('play', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '⏸ Pause'; btn.style.background = 'linear-gradient(135deg, #7c2d42 0%, #5a1f30 100%)'; }
+            document.getElementById('drawerStatus').textContent = '▶️ Playing';
+        });
+        audio.addEventListener('pause', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '▶ Play Story'; btn.style.background = ''; }
+            document.getElementById('drawerStatus').textContent = '⏸️ Paused';
+        });
+        audio.addEventListener('ended', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '↺ Play Again'; btn.style.background = ''; }
+            document.getElementById('drawerStatus').textContent = '✅ Finished';
+        });
+    </script>
+</body>
+</html>
