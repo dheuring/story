@@ -33,7 +33,7 @@
             font-family: 'Georgia', 'Times New Roman', serif;
             line-height: 1.9;
             color: #2d3748;
-            background: linear-gradient(135deg, #0f2e1f 0%, #184a30 50%, #286b4a 100%);
+            background: linear-gradient(135deg, #2e1f0f 0%, #4a3018 50%, #6b3a1f 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -41,7 +41,7 @@
         .container {
             max-width: 850px;
             margin: 0 auto;
-            background: #f4fdf9;
+            background: #fdf6f2;
             padding: 60px;
             border-radius: 15px;
             box-shadow: 0 25px 80px rgba(0,0,0,0.4);
@@ -49,7 +49,7 @@
 
         h1 {
             text-align: center;
-            color: #047857;
+            color: #9c3d1f;
             margin-bottom: 8px;
             font-size: 2.8em;
             font-family: 'Playfair Display', 'Georgia', serif;
@@ -59,24 +59,24 @@
 
         .subtitle {
             text-align: center;
-            color: #059669;
+            color: #b8492a;
             margin-bottom: 40px;
             font-style: italic;
             font-size: 1.1em;
         }
 
         .audio-section {
-            background: linear-gradient(135deg, #ecfdf5 0%, #f0fff6 100%);
+            background: linear-gradient(135deg, #fdece5 0%, #fff3ee 100%);
             padding: 30px;
             border-radius: 12px;
             margin-bottom: 40px;
-            border: 2px solid #a5e8c8;
+            border: 2px solid #e8b5a5;
             text-align: center;
             display: none;
         }
 
         .audio-section h3 {
-            color: #047857;
+            color: #9c3d1f;
             margin-bottom: 20px;
             font-size: 1.3em;
         }
@@ -89,7 +89,7 @@
         }
 
         .instructions {
-            color: #059669;
+            color: #b8492a;
             font-size: 0.95em;
             padding: 12px;
             background: rgba(255,255,255,0.6);
@@ -105,7 +105,7 @@
         .progress-bar {
             width: 100%;
             height: 8px;
-            background: #d9f0e0;
+            background: #f0ded9;
             border-radius: 4px;
             overflow: visible;
             cursor: pointer;
@@ -114,7 +114,7 @@
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #3cd18a, #1fa562);
+            background: linear-gradient(90deg, #d1613c, #a5391f);
             width: 0%;
             border-radius: 4px;
             transition: width 0.1s linear;
@@ -125,7 +125,7 @@
             top: -3px;
             width: 3px;
             height: 14px;
-            background: #047857;
+            background: #9c3d1f;
             border-radius: 2px;
             pointer-events: none;
             box-shadow: 0 0 0 1px rgba(255,255,255,0.6);
@@ -135,7 +135,7 @@
             display: flex;
             justify-content: space-between;
             font-size: 0.85em;
-            color: #059669;
+            color: #b8492a;
             margin-top: 8px;
             font-family: 'Georgia', serif;
         }
@@ -153,7 +153,7 @@
             float: left;
             line-height: 0.85;
             padding: 6px 10px 0 2px;
-            color: #047857;
+            color: #9c3d1f;
         }
 
         .paragraph {
@@ -167,20 +167,20 @@
         }
 
         .paragraph:hover {
-            background-color: #ecfdf5;
-            border-left-color: #6be0a5;
+            background-color: #fdece5;
+            border-left-color: #e08a6b;
         }
 
         .paragraph.active {
-            background: linear-gradient(90deg, #d9fce8 0%, #f0fff8 100%);
-            border-left: 4px solid #3cd18a;
-            box-shadow: 0 6px 25px rgba(60, 209, 138, 0.25);
+            background: linear-gradient(90deg, #fce3d9 0%, #fff5f0 100%);
+            border-left: 4px solid #d1613c;
+            box-shadow: 0 6px 25px rgba(209, 108, 60, 0.25);
             transform: translateX(8px);
         }
 
         .paragraph.read {
-            background-color: #ecfdf5;
-            border-left-color: #70d1a5;
+            background-color: #fdece5;
+            border-left-color: #d19170;
             opacity: 0.75;
         }
 
@@ -206,7 +206,7 @@
             font-style: italic;
             font-size: 1.4em;
             letter-spacing: 2px;
-            color: #047857;
+            color: #9c3d1f;
         }
 
         .controls {
@@ -224,7 +224,7 @@
         }
 
         .btn {
-            background: linear-gradient(135deg, #3cd18a 0%, #1fa562 100%);
+            background: linear-gradient(135deg, #d1613c 0%, #a5391f 100%);
             color: white;
             border: none;
             padding: 12px 24px;
@@ -238,7 +238,7 @@
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(60, 209, 138, 0.4);
+            box-shadow: 0 4px 15px rgba(209, 108, 60, 0.4);
         }
 
         .btn-secondary {
@@ -251,19 +251,19 @@
 		#playBtn {
             font-size: 1.1em;
             padding: 14px 28px;
-            background: linear-gradient(135deg, #2a8a5a 0%, #1a7a4a 100%);
+            background: linear-gradient(135deg, #8a4a2a 0%, #7a3a1a 100%);
             letter-spacing: 0.5px;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(42, 138, 90, 0.4);
+            box-shadow: 0 4px 20px rgba(138, 78, 42, 0.4);
         }
 
         #playBtn:hover {
-            box-shadow: 0 6px 25px rgba(42, 138, 90, 0.55);
+            box-shadow: 0 6px 25px rgba(138, 78, 42, 0.55);
         }
 
         #playBtn.playing {
-            background: linear-gradient(135deg, #047857 0%, #145c3a 100%);
-            box-shadow: 0 4px 20px rgba(4, 120, 87, 0.4);
+            background: linear-gradient(135deg, #9c3d1f 0%, #5c2e14 100%);
+            box-shadow: 0 4px 20px rgba(156, 61, 31, 0.4);
         }
          .status {
             position: fixed;
@@ -349,7 +349,7 @@
                 width: 52px;
                 height: 52px;
                 border-radius: 50%;
-                background: linear-gradient(135deg, #2a8a5a, #1a7a4a);
+                background: linear-gradient(135deg, #8a4a2a, #7a3a1a);
                 color: white;
                 font-size: 1.5em;
                 border: none;
@@ -387,7 +387,7 @@
 
             .drawer-status {
                 text-align: center;
-                color: #059669;
+                color: #b8492a;
                 font-size: 0.9em;
                 margin-bottom: 14px;
                 font-style: italic;
@@ -460,7 +460,7 @@
         <div class="the-end">❦ The End ❦</div>
 
         <div class="toc-link-wrapper" style="text-align: center; margin-top: 40px;">
-            <a href="TOC.html" class="btn" style="text-decoration: none; display: inline-block; background: linear-gradient(135deg, #2a8a5a 0%, #1a7a4a 100%);">📚 Back to Table of Contents</a>
+            <a href="TOC.html" class="btn" style="text-decoration: none; display: inline-block; background: linear-gradient(135deg, #8a4a2a 0%, #7a3a1a 100%);">📚 Back to Table of Contents</a>
         </div>
 
     <!-- Mobile floating button + drawer (hidden on desktop) -->
