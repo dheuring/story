@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Game Show - Synchronized Read-Along</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1;600&display=swap" rel="stylesheet">
+
+    <style>
+	.title-image {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.title-image img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    display: block;
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.9;
+            color: #2d3748;
+            background: linear-gradient(135deg, #0f1f2e 0%, #18304a 50%, #284a6b 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #f4f7fd;
+            padding: 60px;
+            border-radius: 15px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1e3a5f;
+            margin-bottom: 8px;
+            font-size: 2.8em;
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #2a4d7a;
+            margin-bottom: 40px;
+            font-style: italic;
+            font-size: 1.1em;
+        }
+
+        .audio-section {
+            background: linear-gradient(135deg, #ecf2fd 0%, #f0f6ff 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            border: 2px solid #a5c3e8;
+            text-align: center;
+            display: none;
+        }
+
+        .audio-section h3 {
+            color: #1e3a5f;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        audio {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 30px;
+            margin-bottom: 15px;
+        }
+
+        .instructions {
+            color: #2a4d7a;
+            font-size: 0.95em;
+            padding: 12px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .progress-container {
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #d9e0f0;
+            border-radius: 4px;
+            overflow: visible;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3c6ad1, #1f4aa5);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.1s linear;
+        }
+
+        .progress-tick {
+            position: absolute;
+            top: -3px;
+            width: 3px;
+            height: 14px;
+            background: #1e3a5f;
+            border-radius: 2px;
+            pointer-events: none;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.6);
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            color: #2a4d7a;
+            margin-top: 8px;
+            font-family: 'Georgia', serif;
+        }
+
+        .story-text {
+            font-size: 1.15em;
+            text-align: justify;
+            color: #2d3748;
+        }
+
+        #storyContent p:first-of-type::first-letter {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 3.6em;
+            font-weight: 600;
+            float: left;
+            line-height: 0.85;
+            padding: 6px 10px 0 2px;
+            color: #1e3a5f;
+        }
+
+        .paragraph {
+            margin-bottom: 1em;
+            padding: 18px 25px;
+            border-radius: 10px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            position: relative;
+        }
+
+        .paragraph:hover {
+            background-color: #ecf2fd;
+            border-left-color: #6ba0e0;
+        }
+
+        .paragraph.active {
+            background: linear-gradient(90deg, #d9e8fc 0%, #f0f8ff 100%);
+            border-left: 4px solid #3c6ad1;
+            box-shadow: 0 6px 25px rgba(60, 106, 209, 0.25);
+            transform: translateX(8px);
+        }
+
+        .paragraph.read {
+            background-color: #ecf2fd;
+            border-left-color: #70a0d1;
+            opacity: 0.75;
+        }
+
+        .paragraph.upcoming {
+            opacity: 0.6;
+        }
+
+        .paragraph.image-entry,
+        .paragraph.image-entry.upcoming,
+        .paragraph.image-entry.read,
+        .paragraph.image-entry.active {
+            opacity: 1 !important;
+            background: none !important;
+            border-left: none !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+
+        .the-end {
+            text-align: center;
+            margin-top: 50px;
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-style: italic;
+            font-size: 1.4em;
+            letter-spacing: 2px;
+            color: #1e3a5f;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #3c6ad1 0%, #1f4aa5 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(60, 106, 209, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 4px 15px rgba(113, 128, 150, 0.4);
+        }
+		#playBtn {
+            font-size: 1.1em;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #2a5a8a 0%, #1a3a7a 100%);
+            letter-spacing: 0.5px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(42, 90, 138, 0.4);
+        }
+
+        #playBtn:hover {
+            box-shadow: 0 6px 25px rgba(42, 90, 138, 0.55);
+        }
+
+        #playBtn.playing {
+            background: linear-gradient(135deg, #1e3a5f 0%, #14284a 100%);
+            box-shadow: 0 4px 20px rgba(30, 58, 95, 0.4);
+        }
+         .status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 101;
+        }
+
+        .shortcut-hint {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            background: rgba(255,255,255,0.95);
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            font-size: 0.85em;
+            color: #4a5568;
+            z-index: 100;
+        }
+
+        .key {
+            background: #edf2f7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        /* Mobile floating menu */
+        .mobile-fab {
+            display: none;
+        }
+
+        .mobile-drawer {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+
+            .story-text {
+                text-align: left;
+            }
+
+            .paragraph {
+                padding: 14px 16px;
+            }
+
+            #storyContent p:first-of-type::first-letter {
+                font-size: 2.6em;
+                padding: 4px 6px 0 0;
+            }
+
+            .story-image {
+                width: 92%;
+                max-width: 92%;
+            }
+
+            /* Hide desktop fixed overlays on mobile */
+            .status,
+            .controls,
+            .shortcut-hint {
+                display: none !important;
+            }
+
+            /* Floating action button */
+            .mobile-fab {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 52px;
+                height: 52px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #2a5a8a, #1a3a7a);
+                color: white;
+                font-size: 1.5em;
+                border: none;
+                cursor: pointer;
+                z-index: 200;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+            }
+
+            /* Slide-up drawer */
+            .mobile-drawer {
+                display: block;
+                position: fixed;
+                bottom: -300px;
+                left: 0;
+                right: 0;
+                background: white;
+                border-radius: 18px 18px 0 0;
+                box-shadow: 0 -6px 30px rgba(0,0,0,0.25);
+                padding: 20px 24px 32px;
+                z-index: 199;
+                transition: bottom 0.3s ease;
+            }
+
+            .mobile-drawer.open {
+                bottom: 0;
+            }
+
+            .drawer-handle {
+                width: 40px;
+                height: 4px;
+                background: #cbd5e0;
+                border-radius: 2px;
+                margin: 0 auto 18px;
+            }
+
+            .drawer-status {
+                text-align: center;
+                color: #2a4d7a;
+                font-size: 0.9em;
+                margin-bottom: 14px;
+                font-style: italic;
+            }
+
+            .drawer-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .mobile-overlay-bg {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.3);
+                z-index: 198;
+            }
+
+            .mobile-overlay-bg.open {
+                display: block;
+            }
+        }
+        .story-image {
+            max-width: 75%;
+            width: 75%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            margin: 12px auto 20px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="status" id="topControls">
+        <button class="btn" id="playBtn" onclick="handlePlayBtn()">▶ Play Story</button>
+        <button class="btn btn-secondary" onclick="toggleAutoScroll()" id="autoScrollBtn">Auto-Scroll: ON</button>
+    </div>
+
+    <div class="container">
+        <h1>The Gameshow</h1>
+		  <div class="title-image">
+            <img src="https://audio.heuring.us/added/8-Contestants.png" alt="8-Contestants">
+        </div>
+
+        <div class="audio-section">
+            <h3>🎧 Narration</h3>
+            <audio id="narration" controls>
+                <source src="https://audio.heuring.us/added/8-Gameshow.m4a" type="audio/mp4">
+                <source src="https://audio.heuring.us/added/8-Gameshow.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBarContainer">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+                <div class="time-display">
+                    <span id="currentTimeDisplay">0:00</span>
+                    <span id="durationDisplay">0:00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="story-text" id="storyContent">
+            <!-- Paragraphs generated by JavaScript -->
+        </div>
+
+        <div class="the-end">❦ The End ❦</div>
+
+        <div class="toc-link-wrapper" style="text-align: center; margin-top: 40px;">
+            <a href="TOC.html" class="btn" style="text-decoration: none; display: inline-block; background: linear-gradient(135deg, #2a5a8a 0%, #1a3a7a 100%);">📚 Back to Table of Contents</a>
+        </div>
+
+    <!-- Mobile floating button + drawer (hidden on desktop) -->
+    <div class="mobile-overlay-bg" id="mobileOverlay" onclick="closeMobileDrawer()"></div>
+
+    <button class="mobile-fab" id="mobileFab" onclick="toggleMobileDrawer()">☰</button>
+
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-handle"></div>
+        <div class="drawer-status" id="drawerStatus">Press Play to begin</div>
+        <div class="drawer-buttons">
+            <button class="btn" id="drawerPlayBtn" onclick="handlePlayBtn(); updateDrawerStatus()">▶ Play Story</button>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="previousParagraph()">⏮ Previous</button>
+                <button class="btn btn-secondary" style="flex: 1;" onclick="nextParagraph()">Next ⏭</button>
+            </div>
+            <button class="btn btn-secondary" onclick="toggleAutoScroll(); updateDrawerStatus()" id="drawerAutoScrollBtn">Auto-Scroll: ON</button>
+        </div>
+    </div>
+
+    <script>
+	  
+	  const timestamps = [];
+
+                const storyText = [
+    "ACT ONE: THE CONTESTANTS",
+    "Blindfold first. That was the rule everyone remembered. But nobody mentioned the silence—the way eight strangers breathed together in the dark before anyone touched anyone, and how that breath became prayer.",
+    "The studio lights blazed down on four illuminated circular platforms arranged across the polished floor. Behind them, a live audience sat in tiered rows, their faces a mixture of anticipation and something darker—hunger, maybe, or recognition of their own hidden desires reflected on stage. A low murmur ran through the crowd as contestants were introduced. Massive screens flanking the set displayed BLIND TRUST IDENTITY CHALLENGE in bold electric letters, with the tagline GUESS. CONNECT. WIN. beneath.",
+    "Mistress Vex stood at center stage, her black sequined gown slit high on the thigh, microphone in hand. Tall, raven-haired, eyes hidden behind an ornate black mask that seemed carved from obsidian rather than worn. She didn't announce; she occupied space.",
+    "\"Welcome,\" she purred, voice amplified through the studio speakers until it vibrated in ribcages. \"Four couples. Five acts. One winner.\"",
+    "A ripple of excitement moved through the front rows. Someone whispered loudly in the back.",
+    "She gestured to the platforms. Couple 1 from Germany—Markus and Heidi, tall and blond, athletic posture suggesting military training, severe in ways that drew eyes. The audience gave a respectful clap for their precision. Couple 2 from Taiwan—Chen and Mei-Lee, elegant and composed, movements calibrated like dancers who'd rehearsed for years. Soft appreciation. Couple 3 from the USA—Barry and Mary, California tanned, radiating that specific confidence that comes from being told you're attractive your whole life. Loud cheers. Couple 4 from the USA and Thailand—Dave and Alisa, Dave tall and fit, Alisa stunning with light colored skin and long black hair cascading down her back. A deeper wave of attention—they'd noticed Alisa immediately.",
+    "But there was something else about Markus. Dave noticed it first during introductions—Markus's gaze lingered on Alisa a fraction too long, the way a chess player studies a particular piece. The audience caught it too; someone in the third row made a knowing sound. Later, Alisa would confirm what Dave felt: during Round 4, Markus had gripped her hips hard enough to bruise, then whispered, \"You're tight,\" in English—not game language, but personal. Whether it was competitive drive or something else, she couldn't determine. Dave filed it away.",
+    "\"The rules are simple,\" Mistress Vex continued. \"For each act, all participants remain blindfolded. You will be rotated by attendants, never knowing who you pleasure or who pleasures you. Identify your partners correctly by taste and sensation alone, and you earn points. Fail, and watch others claim what should be yours.\"",
+    "She walked between platforms, heels clicking like gunshots. The audience leaned forward, phones raised unconsciously, remembering they weren't recording. \"Round One: The Kissing Challenge. Attendants will prepare you first.\"",
+    "Four male and four female attendants in black uniforms stepped forward. Silk blindfolds fitted over each contestant's eyes with ritual precision. Then stripping began—methodical, impersonal, transforming bodies from individuals into competitors. Shirts, dresses, bras, underwear fell away until eight bodies stood exposed under the fluorescent glare, vulnerable and trembling. The audience grew quiet, the initial chatter replaced by held breath.",
+    "Dave felt cool air against his bare skin, his body already responding to exposure despite the situation. He heard Alisa's soft gasp as her dress fell away, knew she stood naked beside him, her perfect small breasts exposed to the crowd, her dark nipples hardening. From the seats came a collective intake of breath.",
+    "Mistress Vex announced: \"You will be paired, all four couples simultaneously. Then rotate, four times total, so each experiences all four partners. Sixty seconds per connection. Memorize. Identify.\"",
+    "Attendants guided blindfolded, naked participants to different pedestals—beds arranged in a square formation. The audience watched intently, the rustle of fabric and shuffling feet audible across the silent studio.",
+    "________________________________________",
+    "ACT TWO: THE KISSING CHALLENGE",
+    "Rotation One:",
+    "Dave found home—the pause before diving in, the familiar dance of tongues, the small whimper that escaped her. Had to be Alisa. His wife. His heart soared even as his body responded to her familiar taste, her coconut scent, the way she always paused right before committing fully to the kiss.",
+    "Alisa knew immediately—Dave's familiar weight, his build, his tender hesitation giving way to passion. She melted into him, hot tears tracking under the silk blindfold, finding paths along her cheekbones. She wanted him to know her, needed him to recognize her through the chaos.",
+    "From the front row, a woman whispered, \"Oh god, that's them,\" and her companion nodded vigorously.",
+    "\"Time,\" Mistress Vex called. \"Rotate.\"",
+    "Rotation Two:",
+    "Dave tasted green tea and rain—delicate, restrained until passion overcame propriety. Mei-Lee, he recognized, her technique elegant, hands trembling slightly as she held his face. Not cold, just… precise. Like she was solving a puzzle.",
+    "Alisa felt familiar weight—Barry's surfer body, enthusiasm immediate and overwhelming. He kissed like he surfed—aggressive, chasing the wave, wanting to consume her. She gasped into her mouth, body responding even as mind searched for Dave, for familiarity she craved.",
+    "A low whistle from the back. Someone's phone light flickered briefly before turning off.",
+    "\"Time. Next rotation.\"",
+    "<img src='https://audio.heuring.us/added/8-Kissing.png' class='story-image' alt='8-Kissing'>",
+    "Rotation Three:",
+    "New lips for Dave—harder, more demanding, teeth grazing with American enthusiasm, hands pulling him closer. Mary, he catalogued, recognizing her surfer confidence, the way she made small sounds in her throat. He nudged his erection between her legs, feeling wetness.",
+    "Alisa found herself beneath a new man—restrained, polite at first, then building passion with deliberation. Chen. His kisses were soft, exploratory, like he was mapping her mouth, learning her. She leaned into him, wanting more, hating the anonymity, loving it too.",
+    "The audience murmured—approval, or maybe envy. A few exchanged glances.",
+    "\"Time. Final rotation.\"",
+    "Rotation Four:",
+    "Dave felt a body beneath him, warm and yielding. Lips met his—soft, tentative, then growing confident. A tongue traced his lower lip with precision, efficient, hungry. Heidi, he thought, memorizing the blonde scent, the way she nipped his lip.",
+    "Beside him, he heard other pairings—wet kisses, soft moans, bodies moving. The room echoed with it now, a symphony of intimacy laid bare. Before long, kissing gave way to full arousal, four erections standing poised and ready.",
+    "Alisa felt a man's weight settle over her. Lips pressed against hers—aggressive, confident, thick fingers threading through her hair. Markus. She knew his dominance immediately, the way he claimed her mouth without asking, stubble rough against her chin. Foreign and exciting, heart racing despite herself.",
+    "Someone in the third row muttered, \"That's the German guy—watch out for him.\" The comment traveled sideways through the crowd.",
+    "\"Time. Remove blindfolds and identify.\"",
+    "Dave lifted his blindfold. Before him stood Heidi, Mary, Mei-Lee, and Alisa, all flushed, lips swollen. The audience settled in, waiting.",
+    "\"Your order?\" Mistress Vex asked.",
+    "\"Alisa, Mary, Mei-Lee, Heidi,\" Dave said.",
+    "\"Three correct. You missed Mary and Mei-Lee—switched them. Nine points.\"",
+    "Alisa identified Dave, Markus, Chen, Barry. \"Two correct. You missed Markus and Chen. Six points.\"",
+    "Markus and Heidi both identified three correctly—nine points each. Barry got three right, Mary got three. Chen got two, Mei-Lee got three.",
+    "The board flashed scores: Markus and Heidi: 18. Barry and Mary: 18. Chen and Mei-Lee: 15. Dave and Alisa: 15. Tied for last place. The crowd responded with scattered applause, disappointed they hadn't seen more separation yet.",
+    "________________________________________",
+    "ACT THREE: THE CUNNILINGUS CHALLENGE",
+    "Round two dropped the beds from the floor. Four circular platforms emerged, white silk glowing with blue LED underlighting. No preamble this time—just the command. \"Ninety seconds per partner. Mouth only. Identify by taste, response, sound.\"",
+    "A collective groan from the audience—half anticipation, half nervous laughter. This was the round people had been waiting for.",
+    "Dave was guided to his first bed, knelt between spread legs, blindfold secure. Extended his tongue, finding wet heat—musky, jasmine, responsive immediately. Traced outer lips, found her clit, circled with precision. She moaned, efficient, hips bucking. Heidi.",
+    "Alisa lay back on her bed, legs spread, heart hammering. Felt a man's breath hot against her thighs, then his tongue—confident, clinical, mechanical in precision. Markus. Found her clit immediately, worked it with steady rhythm, bringing her close in seconds, then withdrew when Mistress Vex called time. She was panting, frustrated, intrigued by how her body responded to his efficiency—and by how little she knew about her own reactions to strangers.",
+    "In the front rows, someone audibly shifted in their seat. The air in the studio felt thicker now, charged.",
+    "\"Rotate,\" announced Mistress Vex.",
+    "Dave tasted new wetness—enthusiastic, eager, American confidence. Mary. Responsive, vocal, hips chasing his mouth shamelessly.",
+    "Alisa felt new breath—tentative, exploring, learning her slowly. Chen. Tongue was delicate, building arousal gradually, finding what made her gasp. She found herself arching into him, wanting more of his gentle thoroughness. The contrast to Markus's aggression made her dizzy.",
+    "A few people started clapping softly, a beat later realizing they'd done it.",
+    "\"Rotate,\" commanded Mistress Vex.",
+    "Dave found green tea and rain again—restrained, building slowly, soft whimpers. Mei-Lee. Thighs trembled against his cheeks as he brought her warmth.",
+    "Alisa felt surfer enthusiasm—Barry's tongue eager, rough, trying different angles, probing with aggressive curiosity. Made her moan despite herself, body confused by variety of sensations, missing Dave, craving familiarity.",
+    "The audience had stopped talking entirely. The only sounds were the contestants' breathing and the occasional rustle of fabric.",
+    "\"Rotate.\"",
+    "Dave found home—coconut and vanilla, familiar folds, the particular angle of her clit that made her gasp. Alisa. Worked her with devotion, wanting her to know him, hearing her whimper his name.",
+    "Alisa felt Dave's familiar tongue—reverent, knowing exactly her rhythm, when to suck gently, when to flatten his tongue. She whispered, a smile showing below the blindfold: \"Dave! It's you!\" Not caring about the rules, needing him to know she knew.",
+    "Gasps rippled through the crowd. She'd broken the rules—but nobody minded. Nobody cared.",
+    "\"Time's up. Remove blindfolds.\"",
+    "Dave got three correct—missed Mary and Mei-Lee. Nine points.",
+    "Alisa got two correct—only recognized Markus and Dave. Six points.",
+    "Markus and Heidi both got three correct again. Barry got three, Mary got four. Chen got three, Mei-Lee got three.",
+    "Board updated: Markus and Heidi: 36. Barry and Mary: 39. Chen and Mei-Lee: 33. Dave and Alisa: 30. Last place. The audience responded with sympathetic murmurs—they liked Dave and Alisa's chemistry, rooting for them quietly.",
+    "________________________________________",
+    "ACT FOUR: THE FELLATIO CHALLENGE",
+    "\"Round three,\" Mistress Vex announced. \"Fellatio Identification. Bring him to the edge, but if any man comes, he will be penalized. A three-point deduction. His identification scores void.\"",
+    "Markus stiffened where he stood. Something shifted in his posture—recognition, or perhaps calculation. Dave noted it and filed it away. The audience noticed too; several people leaned forward, sensing drama brewing.",
+    "\"Four rotations. Ninety seconds per man. Ready. Set. Begin.\"",
+    "Dave positioned on his first bed, spread and secured, blindfold descended. Felt new warmth—longer, thinner, tentative then confident, soft kisses and counter-rhythm. Mei-Lee. Delicate thoroughness, bringing him close with gentle persistence.",
+    "Alisa knelt on her first bed, cock presented to her—thick, curved, aggressive, German-accented groans as she took him deep. Markus. Tried to set the pace, hands rough in her hair, impatient. She worked him with resentment, hating his dominance, jaw aching. But beneath resentment—awareness. He was performing for someone. Not the game. Someone watching.",
+    "A few audience members exchanged glances. The story was becoming more complicated than the game.",
+    "\"Rotate,\" came the order.",
+    "Dave felt a mouth envelope him—warm, wet, confident, deep immediately, perfect suction. Heidi. German precision, bringing him to the brink in seconds.",
+    "Alisa tasted new flesh—restrained, polite, quiet moans. Chen. Gentle in her hair, guiding rather than demanding, cock thinner, curved upward, taste cleaner. She found herself enjoying his restraint, the way he appreciated her technique without demanding more.",
+    "The crowd had become spectators to something almost sacred now. Even the most jested comments had died away.",
+    "\"Rotate.\"",
+    "Dave found home—she took her time, teasing, tasting him like delicacy, knowing exactly where he was sensitive. Alisa. Perfect suction, intimate knowledge, heart swelling as he cried out her name. Tears flowed, but he stayed silent—respecting the rules this time.",
+    "Alisa found Dave—familiar weight, particular curve, taste of home. Took him with reverence, tears streaming, wanting him to feel her love, her recognition, using every technique she knew he loved.",
+    "Soft applause started from the back, spreading forward. People were invested in this couple now.",
+    "\"Rotate.\"",
+    "New mouth for Dave—enthusiastic, aggressive, hands and mouth working roughly. Mary. American confidence, bringing him to edge quickly, then backing off.",
+    "Alisa felt surfer cock—eager, enthusiastic, tasting of salt and coconut. Barry. Moaned loudly, hips bucking, chasing pleasure like a wave. She worked him with practiced skill, feeling thighs tremble.",
+    "<img src='https://audio.heuring.us/added/8-Blowjob.png' class='story-image' alt='8-Blowjob'>",
+    "\"Time. Remove blindfolds.\"",
+    "Dave got three correct—missed Mary. Nine points. Alisa got two correct—missed Chen and Barry. Six points. Total: fifteen.",
+    "Markus got two correct, Heidi got three. Total: fifteen.",
+    "Barry got two, Mary got one. Total: nine.",
+    "Chen got one, Mei-Lee got two. Total: nine.",
+    "Scores updated: Markus and Heidi: 51. Barry and Mary: 48. Chen and Mei-Lee: 42. Dave and Alisa: 45.",
+    "The audience did the math silently. Dave and Alisa were climbing, but still behind. Someone shouted, \"Keep going!\"—encouragement directed at no one specifically.",
+    "________________________________________",
+    "ACT FIVE: THE COPULATION CHALLENGE",
+    "\"Round four,\" Mistress Vex announced. \"Full penetration. Two minutes per coupling. Identify by tightness, rhythm, the way they move around you. Begin.\"",
+    "The pace quickened here. Rotations shortened, cuts sharper. This was the endurance test.",
+    "The audience rose slightly from their seats, a collective restlessness spreading. This round promised intensity.",
+    "Dave guided to first bed, positioned between spread legs, found wet heat, entered—tight, efficient, hips meeting thrusts with precision. Heidi. Felt different from Alisa—tighter, more controlled, moans disciplined.",
+    "Alisa felt first penetration—thick, aggressive, filling completely. Markus. Thrust with measured power, hands gripping hips hard enough to bruise. She gasped, body responding despite mind's resistance, hating how he made her feel—and hating more that her body didn't care.",
+    "A few people in the crowd winced. The physicality of this round was undeniable.",
+    "\"Rotate.\"",
+    "Dave entered new warmth—enthusiastic, eager, American hips bucking against him. Mary. Looser, more vocal, chasing pleasure shamelessly.",
+    "Alisa felt new entry—restrained, deliberate, thinner but precise. Chen. Moved with patience, finding rhythm, adjusting to responses. Found herself moving with him, appreciating consideration, the contrast to Markus's aggression.",
+    "Chen's deliberate movements earned nods from the audience. They understood the difference now between aggression and attentiveness.",
+    "\"Rotate.\"",
+    "Dave found delicate tightness—restrained at first, then yielding with building passion. Mei-Lee. Hips moved with elegant precision, moans soft and controlled.",
+    "Alisa felt surfer enthusiasm—Barry entered with aggressive confidence, thrusting hard and fast, chasing the wave. Gasped, overwhelmed by energy, body confused by variety, missing Dave's familiar rhythm.",
+    "The audience had stopped breathing collectively. Every movement, every sound, carried weight now.",
+    "\"Rotate.\"",
+    "Dave found home—familiar tightness, perfect fit, the way she paused before moving with him. Alisa. Thrusted with love and desperation, wanting her to know him, no tears this time—just certainty. Found her the way a blind man finds home.",
+    "Alisa felt Dave enter—familiar curve, perfect angle, the way he always paused to make sure she was ready. Wrapped legs around him, sobbing with recognition: \"Dave, it's you, I know you,\" not caring about points, only caring about him.",
+    "Silence fell over the crowd. Not awkward—reverent. This was their moment.",
+    "\"Time. Remove blindfolds.\"",
+    "Dave got one correct—only Alisa. Three points.",
+    "Alisa got two correct—only Markus and Dave. Six points.",
+    "Markus got two correct, Heidi got two. Barry got two, Mary got one. Chen got three, Mei-Lee got three.",
+    "Scores after Round Four: Markus and Heidi: 63. Barry and Mary: 57. Chen and Mei-Lee: 60. Dave and Alisa: 54. Still in last.",
+    "A collective groan from fans of Dave and Alisa. But there was determination now—people believed they could still come back.",
+    "________________________________________",
+    "ACT SIX: THE FINAL CHALLENGE",
+    "\"Round five,\" Mistress Vex announced. \"Female gangbang. Each wife receives four husbands successively. Each husband receives four wives successively. Identify the sequence. Major penalty for premature release. Correct identification scores. Incorrect costs the round. Begin with the first wife.\"",
+    "The center bed rose higher than the others, spotlight focused on it. Cold air circulated directly overhead.",
+    "The audience leaned forward in unison. This was the climax everyone had been waiting for. Phones came out again, forgotten about rules.",
+    "Alisa positioned on display bed, blindfolded, legs spread. Dave watched from station, cock aching, as Markus entered her first—efficient, measured, deep. Alisa moaned, head thrown back, caramel skin flushing.",
+    "Then Barry—enthusiastic, harder thrusts, making her gasp.",
+    "Then Chen—restrained, deliberate, bringing soft whimpers from her throat.",
+    "Finally, Dave himself—loving, familiar, tears streaming as he entered his wife, feeling her recognize him immediately, body arching into his.",
+    "The room was colder here. Alisa shivered as Markus entered, not from penetration but from draft rising beneath her. She tracked sequence by temperature shifts and texture: cold for Markus, warm for Barry (his sweat), damp for Chen, and finally, familiar heat of Dave's body pressing close.",
+    "Halfway through, the audience counted along silently with the sequence. They knew what order to expect now.",
+    "Alisa had to guess the order. She guessed: Markus, Chen, Barry, Dave. (She'd swapped Barry and Chen—too caught up in Markus's aggression to track properly.)",
+    "\"Correct on three,\" Mistress Vex announced. \"Nine points.\"",
+    "Audience murmured—three was solid. Good recovery.",
+    "Meanwhile, Dave blindfolded and edged by four wives. Heidi rough and efficient, bringing him to brink in seconds. Mary enthusiastic and aggressive, using hands and mouth together. Mei-Lee teasing and delicate, drawing it out until he was begging. Alisa loving and knowing, bringing him to edge with perfect rhythm, then backing off, whispering: \"I know it's you, I know you.\"",
+    "He guessed Mary, Heidi, Mei-Lee, Alisa.",
+    "\"Correct on two. Six points.\"",
+    "Total for this round: fifteen points. Running total: 69 points.",
+    "Cheers erupted—for Dave and Alisa's comeback momentum.",
+    "Then trouble for the leaders. Markus being edged by four wives. Heidi brought him close, then Mary, then Mei-Lee. When Alisa took him in her mouth, using familiar technique, Markus groaned, hips bucking—and exploded. Thick ropes shooting across her face, orgasm uncontrollable.",
+    "\"Markus has ejaculated!\" Mistress Vex announced. \"Three-point penalty for early release. His guesses void.\"",
+    "The crowd gasped in unison. That was the moment of defeat sealed.",
+    "Markus had guessed three correctly before coming—those points wouldn't count.",
+    "Heidi got two correct—six points.",
+    "Their total: three points for the round. Running total: 66 points.",
+    "Disappointment swept through the German supporters.",
+    "Barry got three correct—nine points. Mary got one correct—three points. Their total: twelve points for the round. Running total: 69 points.",
+    "Applause for Barry and Mary's consistency.",
+    "Chen got two correct—six points. Mei-Lee got one correct—three points. Their total: nine points for the round. Running total: 69 points.",
+    "Chen and Mei-Lee's supporters joined the cheering.",
+    "Final Scores: Markus and Heidi: 66. Barry and Mary: 69. Chen and Mei-Lee: 69. Dave and Alisa: 69.",
+    "The arena went dead silent. Three couples at 69. The tiebreaker meant everything.",
+    "\"We have a tie tonight,\" Mistress Vex announced, consulting notes. \"Barry and Mary, Chen and Mei-Lee, and Dave and Alisa—all tied with a top score of 69. The tiebreaker goes to the couple who correctly identified each other most consistently throughout all rounds.\"",
+    "She turned to the screen. \"Dave and Alisa identified each other correctly in every single round where they encountered each other. Barry and Mary missed each other once—in Round Three. Chen and Mei-Lee missed each other twice.\"",
+    "She smiled. \"The tiebreaker—and the night's biggest comeback—goes to Dave and Alisa.\"",
+    "The eruption was instantaneous. Standing ovation from the front rows. People were on their feet, cheering, clapping, some crying openly. This was why they'd paid admission—love triumphant over competition.",
+    "They didn't wait for the trophy. Dave scooped her up mid-cheer, legs locking around his waist as the crowd roared. Somewhere in the chaos, Alisa laughed through tears—one sound, familiar, home—and knew: the game was over, but this wasn't where they stopped.",
+    "Markus stood at the edge of the platform, staring at Alisa's back as she was carried away. His expression unreadable. He'd lost more than points tonight.",
+    "Dave caught that look over Alisa's shoulder. He tightened his grip on his wife, protective, possessive, certain of one thing: some contests weren't worth finishing. And he'd already won the only one that mattered.",
+    "The audience followed Dave and Alisa offstage, reluctant to leave, still catching their breath from the journey. Some wiped tears. Others were already planning their next visit to witness Blind Trust again. In the back of the hall, a few people whispered to each other about what they'd seen, the game fading from memory, replaced by something more lasting—the story of a couple who knew each other better than anyone else ever could.",
+    "________________________________________",
+    "ACT SEVEN: THE PRIZE",
+    "The applause died down to scattered claps, then silence. The crowd wasn't done. They wanted the payoff.",
+    "\"Your prize,\" Mistress Vex continued, voice hoarse now—not purring anymore, actually human—\"isn't money, isn't fame. It's power. The power to define what comes next. The power to make everyone else serve you.\"",
+    "She turned to Dave and Alisa, who still clung to each other, naked and trembling. \"What is your fantasy?\"",
+    "The studio held its breath. No contestant had ever heard this question before. Someone in row five whispered, \"Here we go.\"",
+    "Dave looked at Alisa, his wife, his champion. They'd whispered about this in bed, never thinking they'd actually win. Now, naked and trembling in front of thousands, they had to decide who they really were.",
+    "\"We want one bed,\" Dave said, voice thick with emotion. \"Alisa serviced by all three losing husbands simultaneously—every hole filled, completely airtight, while they worship her. While I'm serviced by all three losing wives and the host—every part of me attended to, brought to the edge repeatedly, denied until she's satisfied, then allowed to explode.\"",
+    "A collective intake of breath. Someone said \"fuck me\" under their breath.",
+    "\"We want to be the center of attention,\" Alisa finished, \"the prize, the kings and queens of this game.\"",
+    "Mistress Vex smiled, eyes gleaming with something new—not control, but anticipation. \"Your wish is granted. Losers, prepare yourselves. Attendants, prepare the center bed.\"",
+    "A massive circular bed rose from the center of the studio, larger than the others, with silk sheets and restraint points. The audience leaned forward, phones zooming in despite the rules they'd forgotten about.",
+    "Markus, Barry, and Chen were guided to positions around Alisa as she was laid back on the bed, her caramel skin glowing in the lights, her black hair spread across the white silk like a halo. They positioned themselves—Markus at her mouth, Barry at her pussy, Chen at her hands, but Dave held up a hand.",
+    "\"Wait. I want to watch them prepare her first. I want to see them make her ready.\"",
+    "<img src='https://audio.heuring.us/added/8-Winner.png' class='story-image' alt='8-Winner'>",
+    "The three men were commanded to worship Alisa first. Markus knelt between her legs, his tongue finding her clit, lapping at her with thoroughness. Barry sucked her nipples, his hands roaming her body, learning her curves. Chen kissed her neck, her shoulders, his hands gentle and reverent.",
+    "In the audience, someone whispered, \"Look at her—she's glowing,\" while another murmured, \"Dave knows exactly how to claim his prize.\"",
+    "Alisa moaned, her head thrown back, her body arching into their attentions. \"Dave,\" she gasped, \"I want you to see me, see how they want me, how I want them.\"",
+    "Dave watched, his cock throbbing, as the three men brought his wife to the edge with their mouths and hands, then backed off, denying her, building her higher.",
+    "For Dave, Heidi, Mary, Mei-Lee, and Mistress Vex herself arranged themselves around him. The host had agreed to participate in the prize—her concession for the winners.",
+    "Heidi took his cock in her mouth immediately, her efficiency bringing him to the brink in seconds, then stopping, squeezing his base. Mary sucked his balls, her tongue teasing, while Mei-Lee's fingers traced his ass, teasing, never quite entering. Mistress Vex knelt above him, lowering her pussy to his mouth—\"Lick me, winner,\" she commanded, \"taste the host who controlled you all night.\"",
+    "Dave licked her with desperation, tasting her for the first time, feeling her dominance even in submission, while the women denied him, brought him to the edge, stopped, started again.",
+    "\"Please,\" Dave begged, watching Alisa being prepared, \"please let me come.\"",
+    "\"Not yet,\" Mistress Vex purred, grinding against his face. \"Build him higher. Seven times denied for the seven rounds he lost.\"",
+    "Heidi rode Dave, bringing him to the edge, then stopping, squeezing, denying him. Again and again. Seven times he was brought to the precipice and denied, while Alisa was satisfied repeatedly by the three husbands—Markus making her come with his mouth, Barry with his fingers, Chen with his cock barely inside her, all of them building her to heights Dave had never seen.",
+    "The front row was on their feet, hands over mouths, some crying, all witnessing something they'd never forget.",
+    "\"Now,\" Dave gasped, \"please, she's ready, I'm ready.\"",
+    "\"Positions,\" Mistress Vex commanded.",
+    "Markus positioned himself at Alisa's mouth, his thick cock sliding between her lips. Barry entered her pussy with one thrust, making her scream around Markus's cock. Chen presented his cock to her hands, which she gripped desperately, stroking him as she was filled from both ends.",
+    "They moved in rhythm, the three men finding a pace that kept Alisa constantly on the edge, constantly coming, her body convulsing around them, her dark skin flushed and glistening.",
+    "For Dave, Heidi mounted his cock, riding him with efficiency, while Mary sat on his face, her pussy grinding against his tongue, while Mei-Lee and Mistress Vex sucked his nipples, their hands roaming his body.",
+    "\"Come,\" Mistress Vex commanded. \"Both of you. Now.\"",
+    "Alisa exploded first, her body convulsing, screaming around Markus's cock, her pussy clamping down on Barry, her hands milking Chen desperately. The sight of her coming, completely filled, completely possessed, sent Dave over the edge. He came with a roar that shook the studio, his cock pulsing in Heidi's pussy, his vision whiting out, seven denials releasing in one explosive, endless moment that seemed to last forever.",
+    "The audience erupted in cheers that lasted nearly a minute.",
+    "They collapsed together, Dave and Alisa reaching for each other across the bed, the other participants falling away, spent and satisfied.",
+    "________________________________________",
+    "ACT EIGHT: THE REVERSAL",
+    "Dave and Alisa lay together, panting, victorious, covered in sweat and seed and something deeper than victory. The other six participants rested nearby, spent, their competitive fire extinguished—or so it seemed.",
+    "Mistress Vex stood over them, gown back in place, mask fixed, but her composure cracked. Sweat darkened her collarbone. \"Your fantasy has been granted,\" she said, voice hoarse. \"The losers will serve you for twenty-four hours. Any way you desire.\"",
+    "She turned to leave, heels clicking on the wooden floor, dominance reasserted—or trying to be.",
+    "But Dave caught Alisa's eye. They'd discussed this possibility too, whispered about it in the dark after every rotation, after every anonymous touch. The ultimate fantasy—not just winning, but taking the controller, breaking the Dom, making her feel what they'd felt all night.",
+    "Alisa nodded. Eyes dark with something new: not just desire, but justice.",
+    "\"Actually,\" Dave called out, voice strong, commanding, \"we think the host deserves some recognition for her excellent game. Some... participation.\"",
+    "Mistress Vex turned. Surprise flickered behind the mask. \"I don't participate. I control. I am the game.\"",
+    "\"Not tonight,\" Alisa said, rising from the bed, naked and glorious, still glistening from their victory. \"Tonight you become the game.\"",
+    "The audience leaned forward. They'd seen this coming—they'd been waiting for it. Phones came out again, recording what they knew was about to change everything.",
+    "\"What is this?\" Mistress Vex demanded, voice losing its purr, becoming sharp, afraid. \"Security—\"",
+    "\"There is no security,\" Dave said. \"Only us. Only the game. And you gave us medicine all night. Now we give you some of yours.\"",
+    "But she wasn't the only one speaking.",
+    "\"She lied to us too,\" Barry said, stepping forward. \"Said we signed away our rights forever. Said we couldn't talk about the show. She controls our lives as much as the camera.\"",
+    "Markus nodded, rare vulnerability in his voice: \"She owns our contracts. Our visas. My family's future depends on her approval.\"",
+    "Chen added, calm but firm: \"She made us play against each other when we could have been allies.\"",
+    "Heidi spoke last, German precision replaced by raw honesty: \"We're tired of being her puppets. Tonight, we cut the strings.\"",
+    "The eight participants surrounded her—not just Dave and Alisa anymore, but everyone who'd been controlled all night. The audience understood instantly. This wasn't rebellion against Dave and Alisa—this was revolution against the system itself.",
+    "<img src='https://audio.heuring.us/added/8-Dom.png' class='story-image' alt='8-Dom'>",
+    "Mistress Vex tried to fight back physically—pushing against Heidi's grip, attempting to step backward, but there was nowhere to go. She fought verbally: \"You're ruining everything! This show will end! I'll blacklist all of you!\"",
+    "Alisa stepped forward, voice steady: \"We don't want your shows. We want our lives back.\"",
+    "The eight participants surrounded her. Heidi and Mary took her arms, their strength surprising, pinning her. Mei-Lee and Alisa stripped away her sequined gown with deliberate slowness, revealing pale, untouched skin beneath, her breasts small and firm, her pussy shaved and already wet—she'd been aroused all along, watching them, controlling them, denying herself.",
+    "\"No,\" Mistress Vex said, but her voice wavered, her eyes wide behind her mask. \"I'm in control. I—\"",
+    "\"Not anymore,\" Dave said, and there was steel in his voice, the voice of a winner.",
+    "They guided her to the center bed—the same bed where Dave and Alisa had claimed their prize, now stained with their victory. The audience leaned forward, sensing the shift in power, the ultimate reversal.",
+    "Markus held her wrists above her head, his strength unyielding. Barry spread her legs wide, his hands rough and eager. Chen positioned himself at her head, his cock already hard, pressing against her lips.",
+    "\"You've watched all night,\" Alisa whispered, straddling the Dom's face, lowering her slicked pussy to the woman's mouth. \"Time to participate. Taste what you've been denying. Taste victory.\"",
+    "The eight participants descended upon Mistress Vex. Dave entered her first, feeling her tight resistance, her shock at being penetrated after hours of denial, her wetness betraying her arousal. She was tight, her pussy clamping down on him as he thrust deep.",
+    "\"She's never been taken,\" Heidi observed, her voice cold with satisfaction. \"The controller has never lost control.\"",
+    "They took her in every configuration, rotating positions with precision. The three men filled her constantly—Markus in her mouth, Barry in her pussy, Dave in her ass, then rotating, each taking each hole, stretching her, claiming her. The five women used her hands, her tongue, rubbed their pussies against her face, made her lick them while being pounded from behind.",
+    "Mistress Vex came repeatedly, her mask knocked aside by Barry's eager hands, her severe bun undone, her raven hair wild around her face. She begged for mercy, then begged for more, then simply begged, incoherent with sensation, her control shattered, her dominance destroyed and rebuilt into something new—submission, acceptance, participation.",
+    "The audience had gone completely silent. Everyone understood the significance of what they were witnessing. This wasn't just sex—this was justice.",
+    "\"More,\" Dave commanded, pounding into her ass while Markus filled her mouth. \"Take her completely. She wanted to watch. Now she gets to feel.\"",
+    "They built her higher than she'd built any of them, denial after denial, edge after edge, until she was screaming, crying, her pale skin flushed red, her body convulsing.",
+    "Finally, all eight surrounded her. Dave, Markus, Barry, and Chen stroked themselves over her face and breasts, their cocks hard again from the dominance of taking the Dom. Alisa, Heidi, Mary, and Mei-Lee fingered themselves beside her, their pussies wet from the power of the reversal.",
+    "\"Now,\" Dave commanded, his voice the voice of the winner, the king of the game. \"Cover her. Mark her. Claim her.\"",
+    "They all came together in a chorus of groans and screams. Four men shooting thick ropes across her face, her breasts, her open mouth, her wild hair. Dave came last, his load the largest, covering her eyes, her nose, her lips, marking her completely. Four women shuddering, their fluids mingling with the men's seed on her skin, creating a pool of victory and submission on her stomach, her chest, her face.",
+    "Mistress Vex lay covered, conquered, her eyes glazed, her body twitching, dripping from her chin, her breasts, her thighs. She'd been taken completely, possessed entirely, the controller become the controlled.",
+    "The audience gave a standing ovation that lasted ten minutes. No one sat. No one spoke. They just watched, witnessing history.",
+    "________________________________________",
+    "ACT NINE: AFTERMATH",
+    "The cameras powered down at 3:47 AM. The audience filed out over the next hour, buzzing with excitement, whispering about what they'd witnessed—the game, the comeback, the reversal, the ultimate domination of the dominator.",
+    "Outside the studio, interviews happened spontaneously. One couple, still in their seats: \"That changes everything. If she can fall, anyone can fall.\" Another group: \"I've been watching for three seasons. Never seen this before.\" A woman in tears: \"My husband and I—we were the ones on stage ten years ago. She took our marriage apart piece by piece. Tonight I saw someone finally push back.\"",
+    "Dave and Alisa helped Mistress Vex to her feet. She was shaking, transformed, dominance shattered and rebuilt into something new—respect, admiration, perhaps even affection. Still covered, makeup ruined, hair wild, but smiling—genuine, unguarded, free.",
+    "\"Best game show ever,\" Alisa whispered, kissing the Dom's lips, tasting the victory.",
+    "Mistress Vex actually laughed—warm, human, no longer the controller but a participant. \"Next week,\" she said, voice hoarse from screaming, \"we do it again. But I get a head start. And I pick the couples.\"",
+    "Dave laughed, pulling Alisa close, feeling her warmth, her love, their victory. \"You're on. But we're defending champions.\"",
+    "As they carried their wife—now their partner, their equal—to the private chambers, the other couples following, chattering about what they'd experienced, Dave knew one thing: some games were worth playing forever. Especially when everyone won. Especially when love conquered all. Especially when the underdogs came from behind to claim their prize.",
+    "Behind them, the audience lingered in the lobby, reluctant to end the night. Some were already debating whether they should volunteer for next season. Others whispered about starting their own groups, their own games, their own reversals.",
+    "The line between spectator and participant had blurred forever.",
+    "And somewhere in that crowd, someone pulled out a phone and started recording a message to themselves: \"If you're watching this later—if you ever wonder if fighting back matters—remember the night the house won. Remember Dave and Alisa. Remember that control is an illusion. Remember that tonight, we all participated.\"",
+    "The building closed. The lights dimmed. But the story didn't end. It had just begun."
+];
+        // State — auto-scroll ON by default
+        let autoScroll = true;
+        let hasStarted = false;
+        let currentParagraph = -1;
+        let paragraphs = [];
+
+        const audio = document.getElementById('narration');
+        const progressBar = document.getElementById('progressBar');
+        const progressBarContainer = document.getElementById('progressBarContainer');
+        const playBtn = document.getElementById('playBtn');
+        const autoScrollBtn = document.getElementById('autoScrollBtn');
+        const currentTimeDisplay = document.getElementById('currentTimeDisplay');
+        const durationDisplay = document.getElementById('durationDisplay');
+
+        function formatTime(seconds) {
+            if (!isFinite(seconds) || seconds < 0) return '0:00';
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return m + ':' + String(s).padStart(2, '0');
+        }
+
+        function renderProgressTicks() {
+            if (!audio.duration || !isFinite(audio.duration)) return;
+            progressBarContainer.querySelectorAll('.progress-tick').forEach(t => t.remove());
+            storyText.forEach((text, index) => {
+                if (text.startsWith('<img') && timestamps[index] !== undefined) {
+                    const pct = (timestamps[index] / audio.duration) * 100;
+                    const tick = document.createElement('div');
+                    tick.className = 'progress-tick';
+                    tick.style.left = pct + '%';
+                    tick.title = 'Image';
+                    progressBarContainer.appendChild(tick);
+                }
+            });
+        }
+
+        audio.addEventListener('loadedmetadata', () => {
+            durationDisplay.textContent = formatTime(audio.duration);
+            renderProgressTicks();
+        });
+
+        function init() {
+            const container = document.getElementById('storyContent');
+            storyText.forEach((text, index) => {
+                const p = document.createElement('p');
+                p.className = 'paragraph upcoming';
+                p.setAttribute('data-index', index);
+                if (text.startsWith('<img')) {
+                    p.innerHTML = text;
+                    p.classList.add('image-entry');
+                    p.style.textAlign = 'center';
+                    p.style.cursor = 'default';
+                } else {
+                    p.textContent = text;
+                    p.addEventListener('click', () => seekToParagraph(index));
+                }
+                container.appendChild(p);
+                paragraphs.push(p);
+            });
+            // Update auto-scroll button to reflect default ON state
+            autoScrollBtn.textContent = 'Auto-Scroll: ON';
+        }
+
+        function handlePlayBtn() {
+            if (audio.paused) {
+                // First play: scroll to story text
+                if (!hasStarted) {
+                    hasStarted = true;
+                    document.getElementById('storyContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    setTimeout(() => audio.play(), 400);
+                } else {
+                    audio.play();
+                }
+            } else {
+                audio.pause();
+            }
+        }
+
+        audio.addEventListener('play', () => {
+            playBtn.textContent = '⏸ Pause';
+            playBtn.classList.add('playing');
+        });
+
+        audio.addEventListener('pause', () => {
+            playBtn.textContent = '▶ Play Story';
+            playBtn.classList.remove('playing');
+        });
+
+        audio.addEventListener('ended', () => {
+            playBtn.textContent = '↺ Play Again';
+            playBtn.classList.remove('playing');
+        });
+
+        document.getElementById('progressBarContainer').addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            audio.currentTime = pos * audio.duration;
+        });
+
+        // Minimum real-time (ms since epoch) to hold on the current paragraph.
+        // Used to guarantee images stay on screen for at least IMAGE_HOLD_MS,
+        // even if the audio's built-in silence is slightly shorter than expected.
+        const IMAGE_HOLD_MS = 10000;
+        let holdUntilTime = 0;
+
+        function onTimeUpdate() {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = progress + '%';
+            currentTimeDisplay.textContent = formatTime(audio.currentTime);
+
+            // Still holding on an image — skip advancing the highlight/scroll.
+            if (Date.now() < holdUntilTime) {
+                return;
+            }
+
+            let newIndex = -1;
+            for (let i = 0; i < timestamps.length; i++) {
+                if (audio.currentTime >= timestamps[i]) {
+                    newIndex = i;
+                } else {
+                    break;
+                }
+            }
+
+            if (newIndex !== currentParagraph) {
+                currentParagraph = newIndex;
+                highlightParagraph(newIndex);
+
+                if (paragraphs[newIndex] && paragraphs[newIndex].classList.contains('image-entry')) {
+                    holdUntilTime = Date.now() + IMAGE_HOLD_MS;
+                }
+            }
+        }
+
+        audio.addEventListener('timeupdate', onTimeUpdate);
+
+        function highlightParagraph(index) {
+            paragraphs.forEach((p, i) => {
+                p.classList.remove('active', 'read', 'upcoming');
+                if (i === index) {
+                    p.classList.add('active');
+                    if (autoScroll) {
+                        p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                } else if (i < index) {
+                    p.classList.add('read');
+                } else {
+                    p.classList.add('upcoming');
+                }
+            });
+        }
+
+        function seekToParagraph(index) {
+            if (index >= 0 && index < timestamps.length) {
+                holdUntilTime = 0;
+                audio.currentTime = timestamps[index];
+                audio.play();
+            }
+        }
+
+        function previousParagraph() {
+            const newIndex = Math.max(0, currentParagraph - 1);
+            seekToParagraph(newIndex);
+        }
+
+        function nextParagraph() {
+            const newIndex = Math.min(timestamps.length - 1, currentParagraph + 1);
+            seekToParagraph(newIndex);
+        }
+
+        function toggleAutoScroll() {
+            autoScroll = !autoScroll;
+            autoScrollBtn.textContent = autoScroll ? 'Auto-Scroll: ON' : 'Auto-Scroll: OFF';
+            autoScrollBtn.style.background = autoScroll
+                ? 'linear-gradient(135deg, #718096 0%, #4a5568 100%)'
+                : 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.code === 'Space' && e.target.tagName !== 'BUTTON') {
+                e.preventDefault();
+                handlePlayBtn();
+            } else if (e.code === 'ArrowRight') {
+                skip(10);
+            } else if (e.code === 'ArrowLeft') {
+                skip(-10);
+            } else if (e.code === 'ArrowUp') {
+                e.preventDefault();
+                previousParagraph();
+            } else if (e.code === 'ArrowDown') {
+                e.preventDefault();
+                nextParagraph();
+            }
+        });
+
+        function skip(seconds) {
+            audio.currentTime += seconds;
+        }
+
+        init();
+
+        // Mobile drawer controls
+        function toggleMobileDrawer() {
+            const drawer = document.getElementById('mobileDrawer');
+            const overlay = document.getElementById('mobileOverlay');
+            const isOpen = drawer.classList.contains('open');
+            if (isOpen) {
+                closeMobileDrawer();
+            } else {
+                drawer.classList.add('open');
+                overlay.classList.add('open');
+                document.getElementById('mobileFab').textContent = '✕';
+            }
+        }
+
+        function closeMobileDrawer() {
+            document.getElementById('mobileDrawer').classList.remove('open');
+            document.getElementById('mobileOverlay').classList.remove('open');
+            document.getElementById('mobileFab').textContent = '☰';
+        }
+
+        function updateDrawerStatus() {
+            // Keep drawer auto-scroll button in sync
+            const drawerBtn = document.getElementById('drawerAutoScrollBtn');
+            if (drawerBtn) {
+                drawerBtn.textContent = autoScroll ? 'Auto-Scroll: ON' : 'Auto-Scroll: OFF';
+                drawerBtn.style.background = autoScroll
+                    ? 'linear-gradient(135deg, #718096 0%, #4a5568 100%)'
+                    : 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+            }
+        }
+
+        // Keep drawer play button in sync with audio state
+        audio.addEventListener('play', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '⏸ Pause'; btn.style.background = 'linear-gradient(135deg, #7c2d42 0%, #5a1f30 100%)'; }
+            document.getElementById('drawerStatus').textContent = '▶️ Playing';
+        });
+        audio.addEventListener('pause', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '▶ Play Story'; btn.style.background = ''; }
+            document.getElementById('drawerStatus').textContent = '⏸️ Paused';
+        });
+        audio.addEventListener('ended', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '↺ Play Again'; btn.style.background = ''; }
+            document.getElementById('drawerStatus').textContent = '✅ Finished';
+        });
+    </script>
+</body>
+</html>
