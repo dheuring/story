@@ -362,12 +362,139 @@
             padding: 10px 16px;
             font-size: 0.8em;
         }
+    .page {
+        display: none;
+    }
+
+    .page.unlocked {
+        display: block;
+        animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .gate {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .gate-box {
+        max-width: 380px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .gate-eyebrow {
+        font-size: 0.8em;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: #e8b8c8;
+        margin-bottom: 14px;
+    }
+
+    .gate-title {
+        font-family: 'Playfair Display', 'Georgia', serif;
+        font-weight: 600;
+        font-style: italic;
+        font-size: 1.9em;
+        color: #fdf4f4;
+        margin-bottom: 10px;
+    }
+
+    .gate-subtitle {
+        font-size: 0.95em;
+        color: #e0b8c4;
+        line-height: 1.5;
+        margin-bottom: 32px;
+    }
+
+    .gate-input {
+        width: 100%;
+        padding: 14px 18px;
+        border-radius: 30px;
+        border: 1px solid rgba(253, 244, 244, 0.25);
+        background: rgba(253, 244, 244, 0.08);
+        color: #fdf4f4;
+        font-family: 'Georgia', serif;
+        font-size: 1em;
+        text-align: center;
+        letter-spacing: 1px;
+        margin-bottom: 18px;
+        outline: none;
+        transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .gate-input::placeholder {
+        color: rgba(253, 244, 244, 0.4);
+    }
+
+    .gate-input:focus {
+        border-color: #e08bb0;
+        background: rgba(253, 244, 244, 0.12);
+    }
+
+    .gate-input.error {
+        border-color: #d1477c;
+        animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-6px); }
+        75% { transform: translateX(6px); }
+    }
+
+    .gate-btn {
+        width: 100%;
+        padding: 14px 18px;
+        border-radius: 30px;
+        border: none;
+        background: linear-gradient(135deg, #7c2d42 0%, #5a1f30 100%);
+        color: #fdf4f4;
+        font-family: 'Georgia', serif;
+        font-size: 0.9em;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+        transition: transform 0.2s ease;
+    }
+
+    .gate-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .gate-error-msg {
+        margin-top: 14px;
+        font-size: 0.85em;
+        color: #e8a5c0;
+        height: 1.2em;
     }
 </style>
 </head>
 <body>
 
-<div class="page">
+<div class="gate" id="gate">
+    <div class="gate-box">
+        <div class="gate-eyebrow">For Alisa</div>
+        <div class="gate-title">Welcome back, Alisa, my love</div>
+        <div class="gate-subtitle">You know the word. Enter it to step inside our little corner of the internet.</div>
+        <form id="gateForm" autocomplete="off">
+            <input type="password" class="gate-input" id="gateInput" placeholder="Password" autofocus>
+            <button type="submit" class="gate-btn">Enter</button>
+            <div class="gate-error-msg" id="gateError"></div>
+        </form>
+    </div>
+</div>
+
+<div class="page" id="page">
     <header>
         <div class="eyebrow">A Collection of Personal Erotica</div>
         <div class="eyebrow">Curated by Dave for Alisa</div>
@@ -484,7 +611,7 @@
 </div>
 
 <audio id="bgMusic" loop preload="auto">
-    <source src="https://audio.heuring.us/added/TOC.mp3" type="audio/mpeg">
+    <source src="https://audio.heuring.us/added/toc-theme.mp3" type="audio/mpeg">
 </audio>
 
 <button class="music-toggle" id="musicToggle">
@@ -498,17 +625,53 @@
     const toggleBtn = document.getElementById('musicToggle');
     const icon = document.getElementById('musicIcon');
     const label = document.getElementById('musicLabel');
+    const gate = document.getElementById('gate');
+    const page = document.getElementById('page');
+    const gateForm = document.getElementById('gateForm');
+    const gateInput = document.getElementById('gateInput');
+    const gateError = document.getElementById('gateError');
 
-    audio.volume = 0.35; // adjust to taste, 0.0–1.0
-
+    const PASSWORD = 'Gikky';
     const STORAGE_KEY = 'heuring_music_playing';
     let isPlaying = false;
+
+    audio.volume = 0.35; // adjust to taste, 0.0–1.0
 
     function updateButton() {
         icon.textContent = isPlaying ? '⏸' : '▶';
         label.textContent = isPlaying ? 'Pause Music' : 'Play Music';
         toggleBtn.classList.toggle('playing', isPlaying);
     }
+
+    gateForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const entered = gateInput.value.trim().toLowerCase();
+
+        if (entered === PASSWORD) {
+            // This runs inside a real user gesture (form submit),
+            // so the browser allows audio to start reliably here.
+            audio.play().then(() => {
+                isPlaying = true;
+                sessionStorage.setItem(STORAGE_KEY, 'true');
+                updateButton();
+            }).catch(() => {
+                // Extremely rare fallback if playback still fails for another reason
+                isPlaying = false;
+                sessionStorage.setItem(STORAGE_KEY, 'false');
+                updateButton();
+            });
+
+            gate.style.display = 'none';
+            page.classList.add('unlocked');
+        } else {
+            gateInput.classList.remove('error');
+            void gateInput.offsetWidth; // restart animation
+            gateInput.classList.add('error');
+            gateError.textContent = "That's not it — try again.";
+            gateInput.value = '';
+            gateInput.focus();
+        }
+    });
 
     toggleBtn.addEventListener('click', () => {
         if (isPlaying) {
