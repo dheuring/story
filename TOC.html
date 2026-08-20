@@ -320,6 +320,49 @@
             padding: 20px 22px;
         }
     }
+
+    .music-toggle {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        border-radius: 30px;
+        background: linear-gradient(135deg, #7c2d42 0%, #5a1f30 100%);
+        border: none;
+        cursor: pointer;
+        color: #fdf4f4;
+        font-family: 'Georgia', serif;
+        font-size: 0.85em;
+        letter-spacing: 0.5px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        z-index: 100;
+    }
+
+    .music-toggle:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 26px rgba(0, 0, 0, 0.45);
+    }
+
+    .music-toggle.playing {
+        background: linear-gradient(135deg, #a52a5a 0%, #7c2d42 100%);
+    }
+
+    .music-icon {
+        font-size: 1.1em;
+    }
+
+    @media (max-width: 640px) {
+        .music-toggle {
+            bottom: 18px;
+            right: 18px;
+            padding: 10px 16px;
+            font-size: 0.8em;
+        }
+    }
 </style>
 </head>
 <body>
@@ -439,6 +482,47 @@
 
     </div>
 </div>
+
+<audio id="bgMusic" loop preload="auto">
+    <source src="https://audio.heuring.us/added/toc-theme.mp3" type="audio/mpeg">
+</audio>
+
+<button class="music-toggle" id="musicToggle">
+    <span class="music-icon" id="musicIcon">▶</span>
+    <span id="musicLabel">Play Music</span>
+</button>
+
+<script>
+(function () {
+    const audio = document.getElementById('bgMusic');
+    const toggleBtn = document.getElementById('musicToggle');
+    const icon = document.getElementById('musicIcon');
+    const label = document.getElementById('musicLabel');
+
+    audio.volume = 0.35; // adjust to taste, 0.0–1.0
+
+    let isPlaying = false;
+
+    function updateButton() {
+        icon.textContent = isPlaying ? '⏸' : '▶';
+        label.textContent = isPlaying ? 'Pause Music' : 'Play Music';
+        toggleBtn.classList.toggle('playing', isPlaying);
+    }
+
+    toggleBtn.addEventListener('click', () => {
+        if (isPlaying) {
+            audio.pause();
+            isPlaying = false;
+        } else {
+            audio.play().catch(() => {});
+            isPlaying = true;
+        }
+        updateButton();
+    });
+
+    updateButton();
+})();
+</script>
 
 </body>
 </html>
