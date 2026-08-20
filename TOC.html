@@ -321,49 +321,6 @@
         }
     }
 
-    .music-toggle {
-        position: fixed;
-        top: 24px;
-        right: 24px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 12px 20px;
-        border-radius: 30px;
-        background: linear-gradient(135deg, #7c2d42 0%, #5a1f30 100%);
-        border: none;
-        cursor: pointer;
-        color: #fdf4f4;
-        font-family: 'Georgia', serif;
-        font-size: 0.85em;
-        letter-spacing: 0.5px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        z-index: 100;
-    }
-
-    .music-toggle:hover {
-        transform: scale(1.05);
-        box-shadow: 0 8px 26px rgba(0, 0, 0, 0.45);
-    }
-
-    .music-toggle.playing {
-        background: linear-gradient(135deg, #a52a5a 0%, #7c2d42 100%);
-    }
-
-    .music-icon {
-        font-size: 1.1em;
-    }
-
-    @media (max-width: 640px) {
-        .music-toggle {
-            top: 16px;
-            right: 16px;
-            padding: 10px 16px;
-            font-size: 0.8em;
-        }
-    }
-
     .page {
         display: none;
     }
@@ -486,7 +443,7 @@
 <div class="gate" id="gate">
     <div class="gate-box">
         <div class="gate-eyebrow">For Alisa</div>
-        <div class="gate-title">Welcome back, Alisa, my love.</div>
+        <div class="gate-title">Welcome back, Alisa, my love</div>
         <div class="gate-subtitle">You know the word. Enter it to step inside our little corner of the internet.</div>
         <form id="gateForm" autocomplete="off">
             <input type="password" class="gate-input" id="gateInput" placeholder="Password" autofocus>
@@ -616,34 +573,19 @@
     <source src="https://audio.heuring.us/added/TOC.mp3" type="audio/mpeg">
 </audio>
 
-<button class="music-toggle" id="musicToggle">
-    <span class="music-icon" id="musicIcon">▶</span>
-    <span id="musicLabel">Play Music</span>
-</button>
-
 <script>
 (function () {
     const audio = document.getElementById('bgMusic');
-    const toggleBtn = document.getElementById('musicToggle');
-    const icon = document.getElementById('musicIcon');
-    const label = document.getElementById('musicLabel');
     const gate = document.getElementById('gate');
     const page = document.getElementById('page');
     const gateForm = document.getElementById('gateForm');
     const gateInput = document.getElementById('gateInput');
     const gateError = document.getElementById('gateError');
 
-    const PASSWORD = 'Gig';
+    const PASSWORD = 'gig';
     const STORAGE_KEY = 'heuring_music_playing';
-    let isPlaying = false;
 
     audio.volume = 0.35; // adjust to taste, 0.0–1.0
-
-    function updateButton() {
-        icon.textContent = isPlaying ? '⏸' : '▶';
-        label.textContent = isPlaying ? 'Pause Music' : 'Play Music';
-        toggleBtn.classList.toggle('playing', isPlaying);
-    }
 
     gateForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -653,14 +595,10 @@
             // This runs inside a real user gesture (form submit),
             // so the browser allows audio to start reliably here.
             audio.play().then(() => {
-                isPlaying = true;
                 sessionStorage.setItem(STORAGE_KEY, 'true');
-                updateButton();
             }).catch(() => {
                 // Extremely rare fallback if playback still fails for another reason
-                isPlaying = false;
                 sessionStorage.setItem(STORAGE_KEY, 'false');
-                updateButton();
             });
 
             gate.style.display = 'none';
@@ -674,20 +612,6 @@
             gateInput.focus();
         }
     });
-
-    toggleBtn.addEventListener('click', () => {
-        if (isPlaying) {
-            audio.pause();
-            isPlaying = false;
-        } else {
-            audio.play().catch(() => {});
-            isPlaying = true;
-        }
-        sessionStorage.setItem(STORAGE_KEY, isPlaying ? 'true' : 'false');
-        updateButton();
-    });
-
-    updateButton();
 })();
 </script>
 
