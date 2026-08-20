@@ -423,6 +423,9 @@
     </style>
 </head>
 <body>
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://audio.heuring.us/added/toc-theme.mp3" type="audio/mpeg">
+    </audio>
     <div class="status" id="topControls">
         <button class="btn" id="playBtn" onclick="handlePlayBtn()">▶ Play Story</button>
         <button class="btn btn-secondary" onclick="toggleAutoScroll()" id="autoScrollBtn">Auto-Scroll: ON</button>
@@ -670,6 +673,11 @@
         }
 
         function handlePlayBtn() {
+            const bgMusic = document.getElementById('bgMusic');
+            if (bgMusic && !bgMusic.paused) {
+                bgMusic.pause();
+                sessionStorage.setItem('heuring_music_playing', 'false');
+            }
             if (audio.paused) {
                 // First play: scroll to story text
                 if (!hasStarted) {
@@ -854,6 +862,20 @@
             if (btn) { btn.textContent = '↺ Play Again'; btn.style.background = ''; }
             document.getElementById('drawerStatus').textContent = '✅ Finished';
         });
+
+        (function () {
+            const bgMusic = document.getElementById('bgMusic');
+            if (sessionStorage.getItem('heuring_music_playing') === 'true') {
+                bgMusic.volume = 0.35;
+                bgMusic.play().catch(() => {
+                    // If the browser still blocks it, start on the first click anywhere
+                    document.addEventListener('click', function resumeMusic() {
+                        bgMusic.play().catch(() => {});
+                        document.removeEventListener('click', resumeMusic);
+                    }, { once: true });
+                });
+            }
+        })();
     </script>
 </body>
 </html>

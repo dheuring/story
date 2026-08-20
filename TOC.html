@@ -323,7 +323,7 @@
 
     .music-toggle {
         position: fixed;
-        bottom: 24px;
+        top: 24px;
         right: 24px;
         display: flex;
         align-items: center;
@@ -357,8 +357,8 @@
 
     @media (max-width: 640px) {
         .music-toggle {
-            bottom: 18px;
-            right: 18px;
+            top: 16px;
+            right: 16px;
             padding: 10px 16px;
             font-size: 0.8em;
         }
@@ -484,7 +484,7 @@
 </div>
 
 <audio id="bgMusic" loop preload="auto">
-    <source src="https://audio.heuring.us/added/TOC.mp3" type="audio/mpeg">
+    <source src="https://audio.heuring.us/added/toc-theme.mp3" type="audio/mpeg">
 </audio>
 
 <button class="music-toggle" id="musicToggle">
@@ -501,6 +501,7 @@
 
     audio.volume = 0.35; // adjust to taste, 0.0–1.0
 
+    const STORAGE_KEY = 'heuring_music_playing';
     let isPlaying = false;
 
     function updateButton() {
@@ -517,6 +518,7 @@
             audio.play().catch(() => {});
             isPlaying = true;
         }
+        sessionStorage.setItem(STORAGE_KEY, isPlaying ? 'true' : 'false');
         updateButton();
     });
 
