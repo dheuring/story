@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Challenge - Synchronized Read-Along</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1;600&display=swap" rel="stylesheet">
+
+    <style>
+	.title-image {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.title-image img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    display: block;
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.9;
+            color: #2d3748;
+            background: linear-gradient(135deg, #1a0f2e 0%, #2b184a 50%, #42286b 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #f5f4fd;
+            padding: 60px;
+            border-radius: 15px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            text-align: center;
+            color: #3730a3;
+            margin-bottom: 8px;
+            font-size: 2.8em;
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #4338ca;
+            margin-bottom: 40px;
+            font-style: italic;
+            font-size: 1.1em;
+        }
+
+        .audio-section {
+            background: linear-gradient(135deg, #eeecfd 0%, #f2f0ff 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            border: 2px solid #c0b5e8;
+            text-align: center;
+            display: none;
+        }
+
+        .audio-section h3 {
+            color: #3730a3;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        audio {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 30px;
+            margin-bottom: 15px;
+        }
+
+        .instructions {
+            color: #4338ca;
+            font-size: 0.95em;
+            padding: 12px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .progress-container {
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0dcf0;
+            border-radius: 4px;
+            overflow: visible;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6a5cd1, #4a3ba5);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.1s linear;
+        }
+
+        .progress-tick {
+            position: absolute;
+            top: -3px;
+            width: 3px;
+            height: 14px;
+            background: #3730a3;
+            border-radius: 2px;
+            pointer-events: none;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.6);
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            color: #4338ca;
+            margin-top: 8px;
+            font-family: 'Georgia', serif;
+        }
+
+        .story-text {
+            font-size: 1.15em;
+            text-align: justify;
+            color: #2d3748;
+        }
+
+        #storyContent p:first-of-type::first-letter {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 3.6em;
+            font-weight: 600;
+            float: left;
+            line-height: 0.85;
+            padding: 6px 10px 0 2px;
+            color: #3730a3;
+        }
+
+        .paragraph {
+            margin-bottom: 1em;
+            padding: 18px 25px;
+            border-radius: 10px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            position: relative;
+        }
+
+        .paragraph:hover {
+            background-color: #eeecfd;
+            border-left-color: #a08ae0;
+        }
+
+        .paragraph.active {
+            background: linear-gradient(90deg, #e6e0fc 0%, #f5f2ff 100%);
+            border-left: 4px solid #6a5cd1;
+            box-shadow: 0 6px 25px rgba(106, 92, 209, 0.25);
+            transform: translateX(8px);
+        }
+
+        .paragraph.read {
+            background-color: #eeecfd;
+            border-left-color: #9170d1;
+            opacity: 0.75;
+        }
+
+        .paragraph.upcoming {
+            opacity: 0.6;
+        }
+
+        .paragraph.image-entry,
+        .paragraph.image-entry.upcoming,
+        .paragraph.image-entry.read,
+        .paragraph.image-entry.active {
+            opacity: 1 !important;
+            background: none !important;
+            border-left: none !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+
+        .the-end {
+            text-align: center;
+            margin-top: 50px;
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-style: italic;
+            font-size: 1.4em;
+            letter-spacing: 2px;
+            color: #3730a3;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #6a5cd1 0%, #4a3ba5 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(106, 92, 209, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 4px 15px rgba(113, 128, 150, 0.4);
+        }
+		#playBtn {
+            font-size: 1.1em;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #5a4a8a 0%, #3a2a7a 100%);
+            letter-spacing: 0.5px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(90, 74, 138, 0.4);
+        }
+
+        #playBtn:hover {
+            box-shadow: 0 6px 25px rgba(90, 74, 138, 0.55);
+        }
+
+        #playBtn.playing {
+            background: linear-gradient(135deg, #3730a3 0%, #241454 100%);
+            box-shadow: 0 4px 20px rgba(55, 48, 163, 0.4);
+        }
+         .status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 101;
+        }
+
+        .shortcut-hint {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            background: rgba(255,255,255,0.95);
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            font-size: 0.85em;
+            color: #4a5568;
+            z-index: 100;
+        }
+
+        .key {
+            background: #edf2f7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        /* Mobile floating menu */
+        .mobile-fab {
+            display: none;
+        }
+
+        .mobile-drawer {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+
+            .story-text {
+                text-align: left;
+            }
+
+            .paragraph {
+                padding: 14px 16px;
+            }
+
+            #storyContent p:first-of-type::first-letter {
+                font-size: 2.6em;
+                padding: 4px 6px 0 0;
+            }
+
+            .story-image {
+                width: 92%;
+                max-width: 92%;
+            }
+
+            /* Hide desktop fixed overlays on mobile */
+            .status,
+            .controls,
+            .shortcut-hint {
+                display: none !important;
+            }
+
+            /* Floating action button */
+            .mobile-fab {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 52px;
+                height: 52px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #5a4a8a, #3a2a7a);
+                color: white;
+                font-size: 1.5em;
+                border: none;
+                cursor: pointer;
+                z-index: 200;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+            }
+
+            /* Slide-up drawer */
+            .mobile-drawer {
+                display: block;
+                position: fixed;
+                bottom: -300px;
+                left: 0;
+                right: 0;
+                background: white;
+                border-radius: 18px 18px 0 0;
+                box-shadow: 0 -6px 30px rgba(0,0,0,0.25);
+                padding: 20px 24px 32px;
+                z-index: 199;
+                transition: bottom 0.3s ease;
+            }
+
+            .mobile-drawer.open {
+                bottom: 0;
+            }
+
+            .drawer-handle {
+                width: 40px;
+                height: 4px;
+                background: #cbd5e0;
+                border-radius: 2px;
+                margin: 0 auto 18px;
+            }
+
+            .drawer-status {
+                text-align: center;
+                color: #4338ca;
+                font-size: 0.9em;
+                margin-bottom: 14px;
+                font-style: italic;
+            }
+
+            .drawer-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .mobile-overlay-bg {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.3);
+                z-index: 198;
+            }
+
+            .mobile-overlay-bg.open {
+                display: block;
+            }
+        }
+        .story-image {
+            max-width: 75%;
+            width: 75%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            margin: 12px auto 20px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="status" id="topControls">
+        <button class="btn" id="playBtn" onclick="handlePlayBtn()">▶ Play Story</button>
+        <button class="btn btn-secondary" onclick="toggleAutoScroll()" id="autoScrollBtn">Auto-Scroll: ON</button>
+    </div>
+
+    <div class="container">
+        <h1>The Challenge</h1>
+		  <div class="title-image">
+            <img src="https://audio.heuring.us/added/7-Pool.png" alt="7-Pool">
+        </div>
+
+        <div class="audio-section">
+            <h3>🎧 Narration</h3>
+            <audio id="narration" controls>
+                <source src="https://audio.heuring.us/added/7-Challenge.m4a" type="audio/mp4">
+                <source src="https://audio.heuring.us/added/7-Challenge.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBarContainer">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+                <div class="time-display">
+                    <span id="currentTimeDisplay">0:00</span>
+                    <span id="durationDisplay">0:00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="story-text" id="storyContent">
+            <!-- Paragraphs generated by JavaScript -->
+        </div>
+
+        <div class="the-end">❦ The End ❦</div>
+
+        <div class="toc-link-wrapper" style="text-align: center; margin-top: 40px;">
+            <a href="TOC.html" class="btn" style="text-decoration: none; display: inline-block; background: linear-gradient(135deg, #5a4a8a 0%, #3a2a7a 100%);">📚 Back to Table of Contents</a>
+        </div>
+
+    <!-- Mobile floating button + drawer (hidden on desktop) -->
+    <div class="mobile-overlay-bg" id="mobileOverlay" onclick="closeMobileDrawer()"></div>
+
+    <button class="mobile-fab" id="mobileFab" onclick="toggleMobileDrawer()">☰</button>
+
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-handle"></div>
+        <div class="drawer-status" id="drawerStatus">Press Play to begin</div>
+        <div class="drawer-buttons">
+            <button class="btn" id="drawerPlayBtn" onclick="handlePlayBtn(); updateDrawerStatus()">▶ Play Story</button>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="previousParagraph()">⏮ Previous</button>
+                <button class="btn btn-secondary" style="flex: 1;" onclick="nextParagraph()">Next ⏭</button>
+            </div>
+            <button class="btn btn-secondary" onclick="toggleAutoScroll(); updateDrawerStatus()" id="drawerAutoScrollBtn">Auto-Scroll: ON</button>
+        </div>
+    </div>
+
+    <script>
+	  
+	 const timestamps = [0.663326, 4.201271, 30.845167, 36.313187, 54.822998, 70.350647, 106.254293, 129.326241, 140.219886, 148.657773, 154.352388, 174.297024, 186.953407, 191.592115, 200.881494, 217.000000, 227.133404, 232.506601, 241.454895, 252.507740, 271.914795, 280.279553, 291.243206, 306.551016, 334.060390, 344.002296, 350.342128, 360.473587, 369.874621, 377.640168, 392.125064, 406.862138, 422.519288, 435.048890, 440.820723, 474.976797, 478.654362, 492.814052, 498.726704, 501.993784, 508.267688, 512.788004, 527.657271, 537.996371, 544.349034, 547.858824, 581.046137, 591.517925, 636.181923, 659.456711, 682.066418, 705.026764, 721.468512, 731.892080, 774.852026, 826.635411, 846.943129, 852.886393, 877.851162, 889.521144, 896.493825, 913.268570, 926.878503, 929.549879, 933.575117, 944.778208, 948.536957, 961.780095, 971.422096, 986.350492, 1000.803764, 1023.736699, 1043.495697, 1065.579985, 1096.587326, 1110.007596, 1135.851476, 1167.103181, 1190.734708, 1193.324797, 1204.678771, 1210.306943, 1233.921089, 1259.035418, 1283.783249, 1308.713103, 1328.119101, 1357.640768, 1362.353325, 1369.372925, 1391.963545, 1396.766282, 1400.659861, 1417.321772, 1432.346600, 1448.789716, 1452.507955, 1456.291553, 1470.403301, 1484.841826, 1500.781693, 1508.760936, 1523.851717, 1527.549672, 1556.606449, 1581.540092, 1587.779755, 1612.338616, 1640.337216, 1666.073528, 1693.046913, 1702.111286, 1712.586442, 1749.406983, 1761.115511, 1784.536601, 1797.704963, 1842.742692, 1852.953762, 1866.903480, 1879.687102, 1898.707718, 1920.326225, 1953.046980, 1956.671115, 1972.734355, 1985.395402, 1996.167050, 2002.904536, 2010.851990, 2015.748402, 2024.141428, 2033.840174, 2046.961505];
+
+                const storyText = [
+            "SCENE 1: The Setup",
+            "The late afternoon sun filtered through the oak trees, casting dappled shadows across the stone patio where Dave sat on a wicker lounge chair, his hand resting on Alisa's bare thigh. She was relaxing beside him, her dark hair hanging loosely. In her hand, she held a sweating glass of lime water, the condensation dripping slowly onto the floral cushion beneath them.",
+            "\"Barry, those steaks are going to be charcoal,\" Dave called out, turning toward the grill.",
+            "Barry stood at the built-in unit, spatula in hand, wearing khaki shorts and a blue polo shirt, sunglasses pushed up into his sandy hair. \"I know what I'm doing,\" he grinned back, turning to face the group. \"Twenty years of marriage to Mary, I ought to know my way around a grill by now.\"",
+            "Mary laughed from the shallow end of the pool, where she sat on the submerged stone ledge with a dark red cocktail in hand, her blonde hair twisted up in a messy bun. \"Twenty years of me doing the actual cooking while you play with fire, you mean.\"",
+            "The backyard was lush with greenery—purple hydrangeas blooming along the fence line, potted plants on the stone counters, the turquoise pool reflecting the cloudless sky. Chen and Mai-Lee occupied the matching wicker loveseat across from Dave and Alisa, Chen still wearing his navy t-shirt and patterned swim trunks, looking almost comically proper despite having known everyone for nearly a decade. Mai-Lee sat beside him in a floral sundress, her legs crossed at the ankle, holding a glass with a lime wedge perched on the rim.",
+            "Marcus and Heidi sat on the adjacent lounge chairs—Marcus shirtless in dark trunks that showed off the physique of a man who cycled everywhere, Heidi in a black bikini top with her blonde hair catching the sun. They were only there for another six months before Marcus's consulting contract ended and they'd return to Munich.",
+            "\"How long have we been doing this?\" Dave asked, taking a pull from his beer. \"Fourth of July, Labor Day, random Saturdays when someone declares it barbecue weather?\"",
+            "\"Rather routine,\" Marcus said, the word carrying that slight German precision. \"It is comfortable, yes? But comfortable can become...\"",
+            "\"Boring?\" Heidi finished for him, arching an eyebrow as she sipped her drink.",
+            "The word hung in the humid air. Dave felt Alisa shift beside him, felt the familiar warmth of her skin against his palm. They'd been married twelve years. They'd built a life in this suburb—the nice house, the careers, the predictable rhythm of weekends that looked exactly like this one.",
+            "\"God, yes,\" Mary said, draining her glass and setting it on the pool's edge. \"I love you all, I love this, but sometimes I feel like we're all just... waiting.\"",
+            "\"Waiting for what?\" Mai-Lee asked, her voice soft.",
+            "\"For something to happen,\" Barry said, flipping the steaks with practiced ease. \"For life to stop being so damn predictable.\"",
+            "Barry set down his spatula and walked over to where the group was gathered, pulling up a chair from the outdoor dining set. He looked at Mary, then at the others, and Dave saw something electric pass between the hosts—something that made him sit up a little straighter.",
+			"<img src='https://audio.heuring.us/added/7-Barry.png' class='story-image' alt='7-Barry'>",
+            "\"So, let's stop waiting,\" Barry said. \"Let's issue a challenge.\"",
+            "\"The Challenge,\" Mary repeated, her eyes bright. \"We've been talking about it for months. Something to break the routine. Something that pushes us.\"",
+            "\"A challenge to explore,\" Barry continued, his voice dropping slightly. \"To see how far we're willing to go. Together. Safe. But... something else.\"",
+            "The conversation drifted, as it often did when they'd all had a few drinks, into edgier territory. Marcus started telling a story about a club in Berlin, something about an underground scene, and Heidi was laughing, her hand on his chest, saying, \"Tell them about the glory hole place.\"",
+            "\"Glory hole?\" Chen's eyes widened behind his wire-rimmed glasses. \"Like in the... the adult films?\"",
+            "\"We tried it,\" Marcus said, not bragging, just stating fact. \"In Hamburg. Very clean, very discreet. Heidi wanted to see what it was like.\"",
+            "\"It was exciting,\" Heidi admitted, her cheeks coloring slightly. \"The anonymity. Not knowing who was on the other side. We only watched, didn't participate, but... it was something different. Something we did together.\"",
+            "Dave felt Alisa's hand find his, her fingers interlacing with his. He knew what she was thinking. They'd had their own adventure last year, a weekend in DC where they'd found a similar establishment. They'd stood in the hallway holding hands, watching shadows move behind frosted glass, feeling the charge of the place, but they'd left without going further. Too nervous, too unsure. But they'd talked about it for weeks after.",
+            "\"We went to one,\" Alisa said, her voice casual but carrying an edge Dave recognized. \"In DC. The Pearl, near Dupont Circle.\"",
+            "\"Get out,\" Mary said, swimming over to the edge, suddenly alert. \"You never told us.\"",
+            "\"We didn't do anything,\" Dave added quickly. \"Just... looked. Walked around. It was intense, though.\"",
+            "\"We also tried soft swapping,\" Alisa continued. \"With another couple we met online. Just watching, being watched. No touching between couples.\"",
+            "\"How was it?\" Mai-Lee asked, and Dave was surprised to hear genuine curiosity in her voice, not judgment.",
+            "\"Amazing,\" Alisa said. \"Terrifying and amazing. Seeing the other couple right next to us on the bed was something else, really a turn-on... it was like we were discovering each other again.\"",
+            "Chen looked at Mai-Lee, something passing between them—fear and longing mixed together. \"We have talked about things,\" he said carefully. \"Fantasies. But we never... we wouldn't know where to begin.\"",
+            "\"That's where the Challenge comes in,\" Barry said, standing up. \"My man cave. Soundproofed, private, downstairs. I've been fixing it up. And here's the challenge: we set up a game. Tonight. Right now.\"",
+            "The silence that followed wasn't uncomfortable. It was charged, alive with possibility. Dave looked at Alisa, saw the flush rising on her chest, the way her pupils had dilated.",
+            "\"What kind of game?\" Heidi asked, and Dave heard the eagerness in her voice.",
+            "\"Anonymous,\" Barry said. \"Four couples. Four holes. We draw for positions, rotate every two minutes. No talking—if you speak, you forfeit. No revealing yourselves until after. The men stick it through the hole. The girls on the other side can touch it, you can... participate... you know what I mean. But you never know for certain who's on the other side. That's the Challenge. Can you handle not knowing? Can you handle knowing it might be your wife, or might be someone else's?\"",
+            "\"This evening?\" Mai-Lee whispered.",
+            "\"Why wait?\" Barry grinned. \"We've got a sheets, wood and the tools. A couple hours, we could have it ready in no time. The Challenge is issued—who's brave enough to accept?\"",
+            "The four men looked at each other. Dave felt his heart hammering against his ribs.",
+            "\"I'm in,\" Dave heard himself say.",
+            "Chen nodded slowly, deliberately. \"I will accept the Challenge.\"",
+            "\"Ja,\" Marcus said. \"Show us this man cave.\"",
+            "The women were already whispering together, heads bent close. As Dave stood up, Alisa caught his hand, pulled him down for a kiss that was deeper than casual, her tongue darting against his, promising.",
+            "\"We're going to prepare,\" she said when they broke apart, her eyes bright. \"Victoria's Secret. We need... outfits. Something that makes this feel real.\"",
+            "\"Something for the Challenge,\" Mary added, laughing. \"God, I can't believe we're doing this.\"",
+            "SCENE 2: The Game",
+            "The basement man cave was everything Barry had promised—dark wood paneling lined the walls, adorned with framed sports memorabilia and vintage baseball photos. A fully stocked bar stood against the left wall, bottles glinting under the recessed lighting. The air smelled of cedar and whiskey. The men gathered in the man cave to prepare the forbidden barrier. The women gleefully pranced off in Mary's car to the neighborhood mall and the lingerie shop they knew had what they needed.",
+            "<img src='https://audio.heuring.us/added/7-Shopping.png' class='story-image' alt='7-Shopping'>",
+            "Two hours later, the women descended the stairs one by one, transformed by their Victoria's Secret expedition into living fantasies. Alisa led the way in a scarlet red babydoll that clung to her light-colored skin, the sheer lace ruffled at the hem and ending mid-thigh, barely covering the matching red lingerie beneath. An oversized red bow was pinned in her dark hair like gift wrapping, and scarlet thigh-high stockings encased her legs, making her look like a present waiting to be unwrapped. She filed to the far side of the room, taking her position opposite the men, and caught Dave's gaze with a look that made his stomach tighten.",
+            "Mary had embraced the virginal opposite—pure white lingerie that glowed against her tanned skin. A white bra pushed up her breasts, connected to a garter belt that held up white thigh-high stockings. Her blonde hair cascaded over her shoulders, and she stood beside Alisa with one hand on her hip, grinning at her husband across the divide.",
+            "Mai-Lee had chosen black—a stark contrast to her petite Taiwanese frame. A black bra and matching panties, simple and devastatingly effective, paired with sheer black thigh-high stockings. She stood with her hands clasped in front of her, eyes bright behind her glasses, looking almost surprised by her own daring.",
+            "Heidi wore black as well, but with a twist—a black bra paired with a short, flirty black skirt that barely covered her hips, and black stockings that disappeared beneath the hem, held up by garter straps. She stood at the end of the line, arms crossed, the German efficiency in her posture even now, but her eyes danced with anticipation.",
+            "The four women arranged themselves facing the men, the white sheet hanging on the emptier side of the room, a curtain of possibility. Four small holes had been cut into the fabric at waist height, each ringed with soft padding, spaced evenly across the width.",
+            "<img src='https://audio.heuring.us/added/7-Rules.png' class='story-image' alt='7-Rules'>",
+            "Barry stepped forward, the unofficial master of ceremonies. \"The rules of the Challenge,\" he announced, his voice carrying in the quiet room. \"On one side of the sheet, the four of you will kneel. On the other side, we wait.\" He gestured to the sheet. \"There are four holes. Numbered one through four. Once the women are positioned, the men will approach randomly. We insert through the hole. You receive us—however you choose—for four minutes. I'll set up my phone to chime every four, and we will then rotate to the next hole. We'll do this until we visited all four holes. Then, we'll share our best guesses about who was whom.\"",
+            "Dave felt his pulse hammering in his throat, blood rushing south as he glanced at the sheet next to him. He knew Alisa—knew how much she adored cock, how her eyes lit up when she took him in her mouth, how she moaned around him like she was worshipping something sacred. The thought of her on the other side, hungry and eager, getting to enjoy three other hard cocks besides his own... it sent a jolt of arousal through him so intense his knees weakened. His cock strained against his shorts, already achingly hard. What a fantasy come true—not just for him, but for her. He pictured her enthusiasm, her unbridled pleasure at having so much to taste and explore, and his grin grew wicked, matching the swelling between his legs.",
+            "\"So, to summarize, after four minutes, we rotate,\" Barry continued. \"New hole, new... arrangement. We continue until every man has visited every hole. Everyone gets a turn with everyone, but no one knows who is where. Total anonymity.\"",
+            "\"And then?\" Mai-Lee's voice came from behind the sheet, trembling slightly.",
+            "\"Then comes the second part of the Challenge,\" Mary said, her voice muffled by the fabric. \"After we've all... participated... we separate. The women go upstairs. The men stay down here. Each group tries to guess who was behind holes one, two, three, and four. We write down our guesses. Then we meet and reveal.\"",
+            "\"Winner gets bragging rights,\" Barry grinned. \"And the satisfaction of knowing they can identify their partner... or that they can't.\"",
+            "Chen cleared his throat. \"And if we want to... stop?\"",
+            "\"Then you stop,\" Barry said immediately. \"This is the Challenge, not a requirement. But I think we're all here to see how far we can go. To push past the boredom. To actually do something instead of just talking about it.\"",
+            "The room fell silent as the women filed behind the sheet. Dave could hear the hum of the refrigerator behind the bar, the muffled sound of fabric rustling as they settled into place on the other side.",
+            "\"We're ready,\" Alisa called.",
+            "\"Men... positions,\" Barry commanded.",
+            "The women had already arranged themselves on cushions placed on the floor behind the sheet. Dave heard soft whispered giggles, the creak of knees settling onto the thick carpet.",
+            "\"Ready,\" Mary's voice came through, slightly muffled.",
+            "The four men looked at each other. Dave's heart was pounding so hard he was certain the others could hear it. He was acutely aware of his arousal straining against his shorts, of the adrenaline coursing through him.",
+            "\"Random order,\" Barry said softly. \"Pick a hole. Any hole. Remember, no talking once we start. No clues.\"",
+            "Dave found himself moving toward the third hole from the left. Barry took the first, Chen the second, Marcus the fourth. They stood in a line, waiting, the white sheet hanging like a curtain between them and their wives.",
+            "Dave reached into his shorts and freed himself, already hard, the cool basement air a shock against his heated skin. He stepped forward, guided himself toward the hole, and pressed through the soft fabric ring.",
+            "Warmth enveloped him immediately. Wet, eager warmth. He felt hands—small, soft hands—reaching up to cradle him, to stroke the base as lips sealed around the tip and began to suck with surprising intensity. He bit back a groan, remembering the no-talking rule, his hands gripping the fabric on either side of the hole.",
+            "From his left, he heard Barry's sharp intake of breath, a low hiss. To his right, Chen made a strangled sound, and Marcus let out a breathy German exhalation. The room filled with the wet sounds of mouths working, of four women pleasuring anonymous cocks through a sheet.",
+            "Dave closed his eyes, lost in sensation. The mouth on him was skilled, teasing, swirling around his length before pulling back to focus on the sensitive underside of the head. A tongue flickered, probed, danced. He felt nails grazing his thighs, the sensation muffled by the fabric but present, intimate.",
+            "He tried to identify her. The technique was enthusiastic, almost playful—sucking hard, then soft, varying the rhythm. Alisa usually started slow and built up. But was she trying to throw him off? Was this Mary, the blonde soccer mom, treating him like she'd treat her husband? Or was it Mai-Lee in black, the quietest of them all, revealing a hidden voracious side? Or Heidi, efficient and thorough?",
+            "The four minutes felt like an eternity and an instant. Before he was ready, before he could get closer to the edge, a timer chimed—Barry's phone, set on the coffee table.",
+            "Dave pulled back, his cock glistening in the dim light, and moved to the next hole—number four, Marcus's spot. The German moved to three, Chen to one, Barry to two. They shuffled like a strange dance, four men in pulled-down underwear and erect cocks, circling the sheet. Kind of funny, though. Dave grinned again, wondering how Alisa was enjoying all those cocks.",
+            "Dave approached hole four and pushed through. This mouth was different—more deliberate, methodical. A firm grip on the balls, the head taken deep immediately, held there, swallowed around. Dave's knees nearly buckled. This was technique, practiced and confident. Heidi? She had that German efficiency, that sense of purpose. Or was it Alisa in red, drawing on their twelve years together, knowing exactly how to undo him?",
+            "The suction increased, a hand cupping his balls harder, rolling them gently. Dave bit his lip hard enough to almost draw blood, stifling the moan that wanted to escape. He could hear the others struggling similarly—the wet sounds punctuated by suppressed groans, the rustle of fabric, the creak of leather as someone gripped a couch for support.",
+            "Another chime. Another rotation.",
+            "<img src='https://audio.heuring.us/added/7-Gloryhole.png' class='story-image' alt='7-Gloryhole'>",
+            "Hole one. Dave stepped up, heart hammering, and slid through.",
+            "Gentler, this time. Tentative at first, then gaining confidence. Exploring with the tongue, mapping his shape, learning him. This had to be Mai-Lee, he thought—the carefulness, the discovery. Or was it Mary, playing coy? The mouth took him deeper, humming slightly, the vibration traveling up his spine.",
+            "Dave risked a glance to his side. Barry was at hole three, his head thrown back, eyes squeezed shut, his hips making small involuntary thrusts. Chen at hole two looked like he was praying, his lips moving silently, his hands clenched at his sides. Marcus at hole four had one hand pressed against the sheet, steadying himself, his chest heaving.",
+            "The chime came again. Final rotation. Wow, three mouths so far. Dave's cock was aching. No one talked about actually losing it and shooting all over whoever is on the other side. Okay, here we go... hole two. Dave approached, his cock aching, throbbing, desperate for release. He pushed through.",
+            "This mouth knew him. There was no other explanation. The way she took him immediately, the angle, the rhythm that matched his breathing—it was Alisa. It had to be Alisa. She took him with her mouth and hand in perfect coordination, the way she had a thousand times in their bedroom, but different now, charged by the anonymity, by the game.",
+            "Dave felt his orgasm building, unstoppable. He wanted to last, wanted to make it to the end, but Alisa—or whoever this was—wasn't letting up. She was sucking him hard, her hand pumping the base, her tongue pressing just where he liked it—",
+            "He came with a strangled cry, unable to hold back, his hips jerking forward, spilling into the anonymous mouth that accepted him, swallowed him, milked him dry. Around him, Dave's release prompted more releases: he heard Barry's groan, then Chen's surprised yelp, then Marcus's deep German grunt as they all found their release, one by one, the room filling with the sounds of completion.",
+            "Silence followed, broken only by heavy breathing.",
+            "\"The Challenge,\" Barry said, his voice rough, \"is complete. Phase one, anyway.\"",
+            "They separated. The men retreated to the bar area, pouring drinks with shaking hands, not speaking, each processing what had just happened. Dave leaned against the bar, his chest heaving, his mind racing. Had that been Alisa at the end? He was certain, but the Challenge was about uncertainty, about doubt.",
+            "After ten minutes, Barry called out, \"Ladies? You decent?\"",
+            "\"We're coming down,\" Mary's voice replied.",
+            "They met at the bar, the women wrapped in silk robes now, their faces flushed, lips swollen, eyes bright. No one spoke of what had just happened. The unspoken rule of the Challenge hung between them—no revelations yet.",
+            "\"Paper,\" Barry said, producing a notepad and pen. \"Everyone writes their guesses. Men guess who was at holes one, two, three, four. Women do the same. Then we reveal.\"",
+            "They wrote in silence. Dave scribbled his guesses: Hole one—Mai-Lee. Hole two—Alisa. Hole three—Mary. Hole four—Heidi. He had no idea if he was right.",
+            "They folded their papers. Barry collected them.",
+            "\"On three,\" he said. \"One. Two. Three.\"",
+            "They read their guesses aloud, then revealed the truth. The shouts of laughter, the groans of wrong guesses, the triumph of correct ones—it spilled out of them, releasing the tension.",
+            "Dave had been wrong about two of them. Alisa had been at hole three, not two. He'd mistaken Mary's enthusiasm for Mai-Lee's caution, Heidi's precision for Alisa's familiarity.",
+            "\"I'd like to suggest that The Challenge continue in thirty minutes,\" Barry announced, his eyes gleaming. \"Were all in the mood after all so let's continue with our partner and keep the fun going. Just give us guys a little time to recharge and build up our loads again.\"",
+            "He paused, letting the implication settle over the room. There were half grins everywhere and more than one head was nodding.",
+            "\"No objections, then it's on to the next phase,\" he continued, his voice dropping lower. \"Soft swap. Everyone with their own partner... but everyone watching. No more anonymity. Just... exhibition.\"",
+            "SCENE 3: The Reveal",
+            "The basement man cave had transformed. The sheet with its four holes had been pushed aside, tossed to the floor in the corner like a discarded curtain. The recessed lighting had been dimmed further, casting the room in warm amber shadows that made the dark wood paneling glow like honey. The television still played—some European soccer match, the announcers speaking rapid German that Marcus had muted but not turned off.",
+            "They had shed much of their remaining clothes. The lingerie lay in a forgotten pile near the bar—Alisa's scarlet red babydoll crumpled on a barstool, Mary's white stockings draped over a bottle of whiskey, Mai-Lee's black bra hanging from the brass footrail, Heidi's short black skirt abandoned on the Oriental rug like a shadow.",
+            "Now they were arranged around the room like living art, each couple with their own partner.",
+           
+            "Dave and Alisa occupied the leather sofa in the foreground, the plush cushions cradling them as they reclined together. Alisa's scarlet bra contrasted against the dark leather, her scarlet stockings catching the warm light, while Dave leaned in close, his hand spanning her waist as they kissed, her dark hair spilling across his shoulder.",
+            "Barry and Mary had claimed the leather sofa on the far side of the room. Mary reclined against the cushions, her blonde hair spread across the leather, her white stockings glowing in the dim light. Barry leaned over her, one hand tangled in her hair, the other cupping her breast, rolling her nipple between his fingers as they kissed. Mary's legs were partially spread, Barry's hand between them, moving in slow circles as they embraced.",
+            "Heidi and Marcus stood at the pool table in the center of the room. Heidi sat on the edge of the felt, her legs parted, wearing black lingerie that stood out against the green surface. Marcus stood between her thighs, his hands spanning her waist, and they were kissing deeply, their mouths fused together, Heidi's arms wrapped around his shoulders as she pulled him closer, her hips making small movements against him.",
+            "Chen and Mai-Lee were on the thick carpet near the TV, partially in shadow. Mai-Lee was sitting back propped up on her hands, her back arched, looking at Chen over her shoulder with an expression of fierce concentration. Chen knelt next to her, his hands probing, guiding himself into his wife with deliberate slowness, and Mai-Lee was demanding more, her fingers gripping the carpet as her husband found his rhythm.",
+            "\"This is crazy. Look at them,\" Alisa breathed, her hand finding Dave's and guiding it between her legs. \"All of them. Look at them.\"",
+			 "<img src='https://audio.heuring.us/added/7-Sexparty.png' class='story-image' alt='7-Sexparty'>",
+            "Dave looked, his fingers sliding through Alisa's wetness, finding her swollen and ready. He watched Barry's hand move from Mary's breast down her stomach, watched him dip between her legs where her own hand worked, adding his fingers to hers. He watched Heidi finally sink onto Marcus, her head falling back, her mouth open in a silent cry as she took her husband fully. He watched Chen begin to move in earnest, Mai-Lee's back arching further, her breasts swaying beneath her, the sound of their bodies meeting beginning to fill the room.",
+            "\"And us,\" Dave whispered against Alisa's ear, his fingers circling her clit, feeling her jerk against him. \"They can see us. They're watching us too.\"",
+            "Alisa turned her head, captured his mouth in a kiss steeped in desire, the lingering salt of the game they'd just played. She shifted, lifting her hips, and Dave understood. He positioned himself, guided himself to her entrance, and she sank back onto him, taking him in one slow movement that made them both groan into each other's mouths.",
+            "They stayed like that for a moment, joined, connected, her back pressed to his chest, his hands spanning her hips. They could see everything from this position—the sofa gave them the perfect vantage point, like box seats at a theater. And they were visible too, Dave realized, looking across to where Barry's eyes had opened, where the other man was watching them even as his fingers worked inside his wife.",
+            "The room filled with sound. Mary's soft, breathy gasps as Barry brought her to the edge with his hand. Heidi's German words—\"ja, ja, bitte\"—spilling out of her as Marcus found a pace that made her tremble. Mai-Lee's high, surprised cries as Chen lost his careful rhythm, his hips slapping against hers. And Dave and Alisa, their own sounds joining the chorus, the wet slap of their bodies meeting, Alisa's whimpers as Dave's hand returned to her clit.",
+            "\"Do you think they remember?\" Alisa asked, her voice ragged, her hips rolling to meet Dave's upward strokes. \"Do they think about whose mouth was on them?\"",
+            "\"They remember,\" Dave said, watching Barry's eyes lock with his across the room, watching the other man smile before returning his attention to Mary. \"But they're here now. With their wives. That's the point.\"",
+            "Dave watched Mary come, her body shuddering against Barry's fingers, her cry sharp and triumphant. Barry followed her release, his hand gripping her hair, his groan rumbling through the room.",
+            "He watched Chen lose his careful rhythm, watched him grip Mai-Lee's hips and thrust deep, holding there, his face a mask of concentration giving way to release, Mai-Lee's own orgasm rippling through her moments later, her arms collapsing as Chen followed her down.",
+            "And Marcus—Marcus lifted Heidi from the pool table, turned her to face the room, and entered her from behind as she gripped the felt edge of the table. Her breasts bounced with each thrust, her blonde hair swinging, her mouth open in a wail as she came, and Marcus held her through it, his own release following, his head dropping back.",
+            "Only Dave and Alisa remained, building toward their own peak, the spectators now the observed. Alisa turned in his arms, shifting to face him, her legs wrapping around his waist, her hands gripping the back of the sofa. Watching everyone else come before her left her so hot and horny. She rode Dave's cock with total abandon, her breasts bouncing, her dark hair wild, her eyes locked on his, and Dave knowing that they were being watched now, thrust up to meet her with equal abandon, his hands on her ass, feeling her tighten around him.",
+            "\"Come with me,\" she gasped. \"Dave, come with me.\"",
+            "He did. They shattered together, her cry and his groan merging, their bodies locking in spasms that seemed to go on forever, the culmination of the evening's tension, the game's uncertainty, the intimacy of this shared space with their friends.",
+            "Alisa collapsed against him, her face buried in his neck, her body trembling. Dave held her, his heart hammering against hers, looking around the room at the other couples, similarly entwined.",
+            "The soccer match played on, ignored. The pool table had new marks on its felt. The rug on the floor lay in a pile off to the side.",
+            "And in the man cave, four couples breathed together, the silence comfortable, charged, complete.",
+            "\"The Challenge,\" Barry said eventually, his voice rough, Mary still curled in his lap, \"was a success.\"",
+            "Dave kissed Alisa's temple, felt her smile against her skin.",
+            "\"Hey, wait, how about a selfie of us all kissing to remember this by?\" Barry asked, his voice just a little tentative.",
+            "Without delay, everyone jumped up, ready for the final pose that would etch the moment in history. Barry set up his phone and counted down.",
+            "\"Three, two, one,\" he said. The passionate kissing began. The camera flashed. And the kissing continued long after with four couples already hungry for whatever forbidden game comes next.",
+            "<img src='https://audio.heuring.us/added/7-Finalkiss.png' class='story-image' alt='7-Finalkiss'>"
+        ];
+        // State — auto-scroll ON by default
+        let autoScroll = true;
+        let hasStarted = false;
+        let currentParagraph = -1;
+        let paragraphs = [];
+
+        const audio = document.getElementById('narration');
+        const progressBar = document.getElementById('progressBar');
+        const progressBarContainer = document.getElementById('progressBarContainer');
+        const playBtn = document.getElementById('playBtn');
+        const autoScrollBtn = document.getElementById('autoScrollBtn');
+        const currentTimeDisplay = document.getElementById('currentTimeDisplay');
+        const durationDisplay = document.getElementById('durationDisplay');
+
+        function formatTime(seconds) {
+            if (!isFinite(seconds) || seconds < 0) return '0:00';
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return m + ':' + String(s).padStart(2, '0');
+        }
+
+        function renderProgressTicks() {
+            if (!audio.duration || !isFinite(audio.duration)) return;
+            progressBarContainer.querySelectorAll('.progress-tick').forEach(t => t.remove());
+            storyText.forEach((text, index) => {
+                if (text.startsWith('<img') && timestamps[index] !== undefined) {
+                    const pct = (timestamps[index] / audio.duration) * 100;
+                    const tick = document.createElement('div');
+                    tick.className = 'progress-tick';
+                    tick.style.left = pct + '%';
+                    tick.title = 'Image';
+                    progressBarContainer.appendChild(tick);
+                }
+            });
+        }
+
+        audio.addEventListener('loadedmetadata', () => {
+            durationDisplay.textContent = formatTime(audio.duration);
+            renderProgressTicks();
+        });
+
+        function init() {
+            const container = document.getElementById('storyContent');
+            storyText.forEach((text, index) => {
+                const p = document.createElement('p');
+                p.className = 'paragraph upcoming';
+                p.setAttribute('data-index', index);
+                if (text.startsWith('<img')) {
+                    p.innerHTML = text;
+                    p.classList.add('image-entry');
+                    p.style.textAlign = 'center';
+                    p.style.cursor = 'default';
+                } else {
+                    p.textContent = text;
+                    p.addEventListener('click', () => seekToParagraph(index));
+                }
+                container.appendChild(p);
+                paragraphs.push(p);
+            });
+            // Update auto-scroll button to reflect default ON state
+            autoScrollBtn.textContent = 'Auto-Scroll: ON';
+        }
+
+        function handlePlayBtn() {
+            if (audio.paused) {
+                // First play: scroll to story text
+                if (!hasStarted) {
+                    hasStarted = true;
+                    document.getElementById('storyContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    setTimeout(() => audio.play(), 400);
+                } else {
+                    audio.play();
+                }
+            } else {
+                audio.pause();
+            }
+        }
+
+        audio.addEventListener('play', () => {
+            playBtn.textContent = '⏸ Pause';
+            playBtn.classList.add('playing');
+        });
+
+        audio.addEventListener('pause', () => {
+            playBtn.textContent = '▶ Play Story';
+            playBtn.classList.remove('playing');
+        });
+
+        audio.addEventListener('ended', () => {
+            playBtn.textContent = '↺ Play Again';
+            playBtn.classList.remove('playing');
+        });
+
+        document.getElementById('progressBarContainer').addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            audio.currentTime = pos * audio.duration;
+        });
+
+        // Minimum real-time (ms since epoch) to hold on the current paragraph.
+        // Used to guarantee images stay on screen for at least IMAGE_HOLD_MS,
+        // even if the audio's built-in silence is slightly shorter than expected.
+        const IMAGE_HOLD_MS = 10000;
+        let holdUntilTime = 0;
+
+        function onTimeUpdate() {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = progress + '%';
+            currentTimeDisplay.textContent = formatTime(audio.currentTime);
+
+            // Still holding on an image — skip advancing the highlight/scroll.
+            if (Date.now() < holdUntilTime) {
+                return;
+            }
+
+            let newIndex = -1;
+            for (let i = 0; i < timestamps.length; i++) {
+                if (audio.currentTime >= timestamps[i]) {
+                    newIndex = i;
+                } else {
+                    break;
+                }
+            }
+
+            if (newIndex !== currentParagraph) {
+                currentParagraph = newIndex;
+                highlightParagraph(newIndex);
+
+                if (paragraphs[newIndex] && paragraphs[newIndex].classList.contains('image-entry')) {
+                    holdUntilTime = Date.now() + IMAGE_HOLD_MS;
+                }
+            }
+        }
+
+        audio.addEventListener('timeupdate', onTimeUpdate);
+
+        function highlightParagraph(index) {
+            paragraphs.forEach((p, i) => {
+                p.classList.remove('active', 'read', 'upcoming');
+                if (i === index) {
+                    p.classList.add('active');
+                    if (autoScroll) {
+                        p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                } else if (i < index) {
+                    p.classList.add('read');
+                } else {
+                    p.classList.add('upcoming');
+                }
+            });
+        }
+
+        function seekToParagraph(index) {
+            if (index >= 0 && index < timestamps.length) {
+                holdUntilTime = 0;
+                audio.currentTime = timestamps[index];
+                audio.play();
+            }
+        }
+
+        function previousParagraph() {
+            const newIndex = Math.max(0, currentParagraph - 1);
+            seekToParagraph(newIndex);
+        }
+
+        function nextParagraph() {
+            const newIndex = Math.min(timestamps.length - 1, currentParagraph + 1);
+            seekToParagraph(newIndex);
+        }
+
+        function toggleAutoScroll() {
+            autoScroll = !autoScroll;
+            autoScrollBtn.textContent = autoScroll ? 'Auto-Scroll: ON' : 'Auto-Scroll: OFF';
+            autoScrollBtn.style.background = autoScroll
+                ? 'linear-gradient(135deg, #718096 0%, #4a5568 100%)'
+                : 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.code === 'Space' && e.target.tagName !== 'BUTTON') {
+                e.preventDefault();
+                handlePlayBtn();
+            } else if (e.code === 'ArrowRight') {
+                skip(10);
+            } else if (e.code === 'ArrowLeft') {
+                skip(-10);
+            } else if (e.code === 'ArrowUp') {
+                e.preventDefault();
+                previousParagraph();
+            } else if (e.code === 'ArrowDown') {
+                e.preventDefault();
+                nextParagraph();
+            }
+        });
+
+        function skip(seconds) {
+            audio.currentTime += seconds;
+        }
+
+        init();
+
+        // Mobile drawer controls
+        function toggleMobileDrawer() {
+            const drawer = document.getElementById('mobileDrawer');
+            const overlay = document.getElementById('mobileOverlay');
+            const isOpen = drawer.classList.contains('open');
+            if (isOpen) {
+                closeMobileDrawer();
+            } else {
+                drawer.classList.add('open');
+                overlay.classList.add('open');
+                document.getElementById('mobileFab').textContent = '✕';
+            }
+        }
+
+        function closeMobileDrawer() {
+            document.getElementById('mobileDrawer').classList.remove('open');
+            document.getElementById('mobileOverlay').classList.remove('open');
+            document.getElementById('mobileFab').textContent = '☰';
+        }
+
+        function updateDrawerStatus() {
+            // Keep drawer auto-scroll button in sync
+            const drawerBtn = document.getElementById('drawerAutoScrollBtn');
+            if (drawerBtn) {
+                drawerBtn.textContent = autoScroll ? 'Auto-Scroll: ON' : 'Auto-Scroll: OFF';
+                drawerBtn.style.background = autoScroll
+                    ? 'linear-gradient(135deg, #718096 0%, #4a5568 100%)'
+                    : 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+            }
+        }
+
+        // Keep drawer play button in sync with audio state
+        audio.addEventListener('play', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '⏸ Pause'; btn.style.background = 'linear-gradient(135deg, #7c2d42 0%, #5a1f30 100%)'; }
+            document.getElementById('drawerStatus').textContent = '▶️ Playing';
+        });
+        audio.addEventListener('pause', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '▶ Play Story'; btn.style.background = ''; }
+            document.getElementById('drawerStatus').textContent = '⏸️ Paused';
+        });
+        audio.addEventListener('ended', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '↺ Play Again'; btn.style.background = ''; }
+            document.getElementById('drawerStatus').textContent = '✅ Finished';
+        });
+    </script>
+</body>
+</html>
