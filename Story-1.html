@@ -275,53 +275,6 @@
             z-index: 101;
         }
 
-        .mode-toggle {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            display: flex;
-            gap: 8px;
-            z-index: 101;
-        }
-
-        .mode-btn {
-            background: rgba(253, 244, 244, 0.9);
-            color: #7c2d42;
-            border: 1.5px solid #e8a5b8;
-            padding: 9px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.8em;
-            font-weight: 600;
-            font-family: Georgia, serif;
-            letter-spacing: 0.3px;
-            white-space: nowrap;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .mode-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .mode-btn.active {
-            background: linear-gradient(135deg, #7c2d42 0%, #5a1f30 100%);
-            color: #fdf4f4;
-            border-color: transparent;
-        }
-
-        @media (max-width: 640px) {
-            .mode-toggle {
-                top: 14px;
-                left: 14px;
-                gap: 6px;
-            }
-            .mode-btn {
-                padding: 7px 12px;
-                font-size: 0.72em;
-            }
-        }
-
         .quiet-hide {
             display: none !important;
         }
@@ -387,6 +340,15 @@
             .controls,
             .shortcut-hint {
                 display: none !important;
+            }
+
+            .quiet-panel.show-panel {
+                display: flex !important;
+                top: auto;
+                bottom: 20px;
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
             }
 
             /* Floating action button */
@@ -478,17 +440,14 @@
         <source src="https://audio.heuring.us/added/TOC.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="mode-toggle" id="modeToggle">
-        <button class="mode-btn" id="modeNarratedBtn" onclick="setMode('narrated', true)">🎧 Narrated</button>
-        <button class="mode-btn" id="modeQuietBtn" onclick="setMode('quiet', true)">🎵 Quiet Reading</button>
-    </div>
-
     <div class="status" id="topControls">
         <button class="btn" id="playBtn" onclick="handlePlayBtn()">▶ Play Story</button>
         <button class="btn btn-secondary" onclick="toggleAutoScroll()" id="autoScrollBtn">Auto-Scroll: ON</button>
+        <button class="btn btn-secondary" id="quietModeBtn" onclick="setMode('quiet', true)">🎵 Quiet Reading</button>
     </div>
 
-    <div class="status" id="quietControls" style="display: none;">
+    <div class="status quiet-panel" id="quietControls" style="display: none;">
+        <button class="btn btn-secondary" id="narratedModeBtn" onclick="setMode('narrated', true)">🎧 Back to Narrated</button>
         <button class="btn btn-secondary" id="musicMuteBtn" onclick="toggleBgMusic()">🔊 Pause Music</button>
     </div>
 
@@ -922,8 +881,6 @@
         // ===== Reading mode: Narrated vs Quiet Reading =====
         (function () {
             const bgMusic = document.getElementById('bgMusic');
-            const modeNarratedBtn = document.getElementById('modeNarratedBtn');
-            const modeQuietBtn = document.getElementById('modeQuietBtn');
             const topControlsEl = document.getElementById('topControls');
             const quietControlsEl = document.getElementById('quietControls');
             const audioSectionEl = document.getElementById('audioSection');
@@ -936,12 +893,10 @@
             function applyModeUI(mode) {
                 const isQuiet = mode === 'quiet';
 
-                modeNarratedBtn.classList.toggle('active', !isQuiet);
-                modeQuietBtn.classList.toggle('active', isQuiet);
-
                 topControlsEl.classList.toggle('quiet-hide', isQuiet);
                 audioSectionEl.classList.toggle('quiet-hide', isQuiet);
                 mobileFabEl.classList.toggle('quiet-hide', isQuiet);
+                quietControlsEl.classList.toggle('show-panel', isQuiet);
                 quietControlsEl.style.display = isQuiet ? 'flex' : 'none';
             }
 
