@@ -275,6 +275,57 @@
             z-index: 101;
         }
 
+        .mode-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 8px;
+            z-index: 101;
+        }
+
+        .mode-btn {
+            background: rgba(253, 244, 244, 0.9);
+            color: #7c2d42;
+            border: 1.5px solid #e8a5b8;
+            padding: 9px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: 600;
+            font-family: Georgia, serif;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .mode-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .mode-btn.active {
+            background: linear-gradient(135deg, #7c2d42 0%, #5a1f30 100%);
+            color: #fdf4f4;
+            border-color: transparent;
+        }
+
+        @media (max-width: 640px) {
+            .mode-toggle {
+                top: 14px;
+                left: 14px;
+                gap: 6px;
+            }
+            .mode-btn {
+                padding: 7px 12px;
+                font-size: 0.72em;
+            }
+        }
+
+        .quiet-hide {
+            display: none !important;
+        }
+
         .shortcut-hint {
             position: fixed;
             bottom: 25px;
@@ -424,11 +475,21 @@
 </head>
 <body>
     <audio id="bgMusic" loop preload="auto">
-        <source src="https://audio.heuring.us/added/toc-theme.mp3" type="audio/mpeg">
+        <source src="https://audio.heuring.us/added/TOC.mp3" type="audio/mpeg">
     </audio>
+
+    <div class="mode-toggle" id="modeToggle">
+        <button class="mode-btn" id="modeNarratedBtn" onclick="setMode('narrated', true)">🎧 Narrated</button>
+        <button class="mode-btn" id="modeQuietBtn" onclick="setMode('quiet', true)">🎵 Quiet Reading</button>
+    </div>
+
     <div class="status" id="topControls">
         <button class="btn" id="playBtn" onclick="handlePlayBtn()">▶ Play Story</button>
         <button class="btn btn-secondary" onclick="toggleAutoScroll()" id="autoScrollBtn">Auto-Scroll: ON</button>
+    </div>
+
+    <div class="status" id="quietControls" style="display: none;">
+        <button class="btn btn-secondary" id="musicMuteBtn" onclick="toggleBgMusic()">🔊 Pause Music</button>
     </div>
 
     <div class="container">
@@ -437,7 +498,7 @@
             <img src="https://audio.heuring.us/added/1-Beginning-Fuji.png" alt="1-Beginning-Fuji">
         </div>
 
-        <div class="audio-section">
+        <div class="audio-section" id="audioSection">
             <h3>🎧 Narration</h3>
             <audio id="narration" controls>
                 <source src="https://audio.heuring.us/added/Beginning.m4a" type="audio/mp4">
@@ -673,11 +734,6 @@
         }
 
         function handlePlayBtn() {
-            const bgMusic = document.getElementById('bgMusic');
-            if (bgMusic && !bgMusic.paused) {
-                bgMusic.pause();
-                sessionStorage.setItem('heuring_music_playing', 'false');
-            }
             if (audio.paused) {
                 // First play: scroll to story text
                 if (!hasStarted) {
@@ -863,17 +919,68 @@
             document.getElementById('drawerStatus').textContent = '✅ Finished';
         });
 
+        // ===== Reading mode: Narrated vs Quiet Reading =====
         (function () {
             const bgMusic = document.getElementById('bgMusic');
-            if (sessionStorage.getItem('heuring_music_playing') === 'true') {
-                bgMusic.volume = 0.35;
-                bgMusic.play().catch(() => {
-                    // If the browser still blocks it, start on the first click anywhere
-                    document.addEventListener('click', function resumeMusic() {
+            const modeNarratedBtn = document.getElementById('modeNarratedBtn');
+            const modeQuietBtn = document.getElementById('modeQuietBtn');
+            const topControlsEl = document.getElementById('topControls');
+            const quietControlsEl = document.getElementById('quietControls');
+            const audioSectionEl = document.getElementById('audioSection');
+            const mobileFabEl = document.getElementById('mobileFab');
+            const musicMuteBtn = document.getElementById('musicMuteBtn');
+            const MODE_KEY = 'heuring_read_mode';
+
+            bgMusic.volume = 0.35; // adjust to taste, 0.0–1.0
+
+            function applyModeUI(mode) {
+                const isQuiet = mode === 'quiet';
+
+                modeNarratedBtn.classList.toggle('active', !isQuiet);
+                modeQuietBtn.classList.toggle('active', isQuiet);
+
+                topControlsEl.classList.toggle('quiet-hide', isQuiet);
+                audioSectionEl.classList.toggle('quiet-hide', isQuiet);
+                mobileFabEl.classList.toggle('quiet-hide', isQuiet);
+                quietControlsEl.style.display = isQuiet ? 'flex' : 'none';
+            }
+
+            function updateMusicButton() {
+                musicMuteBtn.textContent = bgMusic.paused ? '🔇 Play Music' : '🔊 Pause Music';
+            }
+
+            window.setMode = function (mode, userInitiated) {
+                localStorage.setItem(MODE_KEY, mode);
+                applyModeUI(mode);
+
+                if (mode === 'quiet') {
+                    if (!audio.paused) audio.pause();
+                    if (userInitiated) {
+                        // This click is a real user gesture, so autoplay is reliably allowed here
                         bgMusic.play().catch(() => {});
-                        document.removeEventListener('click', resumeMusic);
-                    }, { once: true });
-                });
+                    }
+                } else {
+                    if (!bgMusic.paused) bgMusic.pause();
+                }
+                updateMusicButton();
+            };
+
+            window.toggleBgMusic = function () {
+                if (bgMusic.paused) {
+                    bgMusic.play().catch(() => {});
+                } else {
+                    bgMusic.pause();
+                }
+                updateMusicButton();
+            };
+
+            const savedMode = localStorage.getItem(MODE_KEY) || 'narrated';
+            // Apply saved mode on load without forcing autoplay (page load isn't a user gesture)
+            setMode(savedMode, false);
+            if (savedMode === 'quiet') {
+                // Best-effort: some browsers allow this if the domain has enough prior engagement
+                bgMusic.play().catch(() => {});
+                updateMusicButton();
             }
         })();
     </script>
