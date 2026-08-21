@@ -275,6 +275,10 @@
             z-index: 101;
         }
 
+        .quiet-hide {
+            display: none !important;
+        }
+
         .shortcut-hint {
             position: fixed;
             bottom: 25px;
@@ -336,6 +340,15 @@
             .controls,
             .shortcut-hint {
                 display: none !important;
+            }
+
+            .quiet-panel.show-panel {
+                display: flex !important;
+                top: auto;
+                bottom: 20px;
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
             }
 
             /* Floating action button */
@@ -423,9 +436,19 @@
     </style>
 </head>
 <body>
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://audio.heuring.us/added/TOC.mp3" type="audio/mpeg">
+    </audio>
+
     <div class="status" id="topControls">
         <button class="btn" id="playBtn" onclick="handlePlayBtn()">▶ Play Story</button>
         <button class="btn btn-secondary" onclick="toggleAutoScroll()" id="autoScrollBtn">Auto-Scroll: ON</button>
+        <button class="btn btn-secondary" id="quietModeBtn" onclick="setMode('quiet', true)">🎵 Quiet Reading</button>
+    </div>
+
+    <div class="status quiet-panel" id="quietControls" style="display: none;">
+        <button class="btn btn-secondary" id="narratedModeBtn" onclick="setMode('narrated', true)">🎧 Back to Narrated</button>
+        <button class="btn btn-secondary" id="musicMuteBtn" onclick="toggleBgMusic()">🔊 Pause Music</button>
     </div>
 
     <div class="container">
@@ -434,7 +457,7 @@
             <img src="https://audio.heuring.us/added/2-Talking.png" alt="2-Talking">
         </div>
 
-        <div class="audio-section">
+        <div class="audio-section" id="audioSection">
             <h3>🎧 Narration</h3>
             <audio id="narration" controls>
                 <source src="https://audio.heuring.us/added/2-Naughty.m4a" type="audio/mp4">
@@ -471,13 +494,18 @@
     <div class="mobile-drawer" id="mobileDrawer">
         <div class="drawer-handle"></div>
         <div class="drawer-status" id="drawerStatus">Press Play to begin</div>
-        <div class="drawer-buttons">
+        <div class="drawer-buttons" id="drawerNarratedControls">
             <button class="btn" id="drawerPlayBtn" onclick="handlePlayBtn(); updateDrawerStatus()">▶ Play Story</button>
             <div style="display: flex; gap: 10px;">
                 <button class="btn btn-secondary" style="flex: 1;" onclick="previousParagraph()">⏮ Previous</button>
                 <button class="btn btn-secondary" style="flex: 1;" onclick="nextParagraph()">Next ⏭</button>
             </div>
             <button class="btn btn-secondary" onclick="toggleAutoScroll(); updateDrawerStatus()" id="drawerAutoScrollBtn">Auto-Scroll: ON</button>
+            <button class="btn btn-secondary" onclick="setMode('quiet', true)">🎵 Quiet Reading</button>
+        </div>
+        <div class="drawer-buttons" id="drawerQuietControls" style="display: none;">
+            <button class="btn btn-secondary" onclick="setMode('narrated', true)">🎧 Back to Narrated</button>
+            <button class="btn btn-secondary" id="drawerMusicMuteBtn" onclick="toggleBgMusic()">🔊 Pause Music</button>
         </div>
     </div>
 
@@ -706,6 +734,7 @@
         }
 
         function seekToParagraph(index) {
+            if (window.currentReadMode === 'quiet') return;
             if (index >= 0 && index < timestamps.length) {
                 holdUntilTime = 0;
                 audio.currentTime = timestamps[index];
@@ -732,6 +761,7 @@
         }
 
         document.addEventListener('keydown', function(e) {
+            if (window.currentReadMode === 'quiet') return;
             if (e.code === 'Space' && e.target.tagName !== 'BUTTON') {
                 e.preventDefault();
                 handlePlayBtn();
@@ -801,6 +831,76 @@
             if (btn) { btn.textContent = '↺ Play Again'; btn.style.background = ''; }
             document.getElementById('drawerStatus').textContent = '✅ Finished';
         });
+
+        // ===== Reading mode: Narrated vs Quiet Reading =====
+        (function () {
+            const bgMusic = document.getElementById('bgMusic');
+            const topControlsEl = document.getElementById('topControls');
+            const quietControlsEl = document.getElementById('quietControls');
+            const audioSectionEl = document.getElementById('audioSection');
+            const musicMuteBtn = document.getElementById('musicMuteBtn');
+            const drawerNarratedControlsEl = document.getElementById('drawerNarratedControls');
+            const drawerQuietControlsEl = document.getElementById('drawerQuietControls');
+            const drawerMusicMuteBtn = document.getElementById('drawerMusicMuteBtn');
+            const MODE_KEY = 'heuring_read_mode';
+
+            bgMusic.volume = 0.35; // adjust to taste, 0.0–1.0
+
+            function applyModeUI(mode) {
+                const isQuiet = mode === 'quiet';
+
+                // Desktop panel
+                topControlsEl.classList.toggle('quiet-hide', isQuiet);
+                audioSectionEl.classList.toggle('quiet-hide', isQuiet);
+                quietControlsEl.classList.toggle('show-panel', isQuiet);
+                quietControlsEl.style.display = isQuiet ? 'flex' : 'none';
+
+                // Mobile drawer panel (FAB itself always stays visible/reachable)
+                drawerNarratedControlsEl.style.display = isQuiet ? 'none' : 'flex';
+                drawerQuietControlsEl.style.display = isQuiet ? 'flex' : 'none';
+            }
+
+            function updateMusicButton() {
+                const label = bgMusic.paused ? '🔇 Play Music' : '🔊 Pause Music';
+                musicMuteBtn.textContent = label;
+                drawerMusicMuteBtn.textContent = label;
+            }
+
+            window.setMode = function (mode, userInitiated) {
+                window.currentReadMode = mode;
+                localStorage.setItem(MODE_KEY, mode);
+                applyModeUI(mode);
+
+                if (mode === 'quiet') {
+                    if (!audio.paused) audio.pause();
+                    if (userInitiated) {
+                        // This click is a real user gesture, so autoplay is reliably allowed here
+                        bgMusic.play().catch(() => {});
+                    }
+                } else {
+                    if (!bgMusic.paused) bgMusic.pause();
+                }
+                updateMusicButton();
+            };
+
+            window.toggleBgMusic = function () {
+                if (bgMusic.paused) {
+                    bgMusic.play().catch(() => {});
+                } else {
+                    bgMusic.pause();
+                }
+                updateMusicButton();
+            };
+
+            const savedMode = localStorage.getItem(MODE_KEY) || 'narrated';
+            // Apply saved mode on load without forcing autoplay (page load isn't a user gesture)
+            setMode(savedMode, false);
+            if (savedMode === 'quiet') {
+                // Best-effort: some browsers allow this if the domain has enough prior engagement
+                bgMusic.play().catch(() => {});
+                updateMusicButton();
+            }
+        })();
     </script>
 </body>
 </html>
