@@ -494,13 +494,18 @@
     <div class="mobile-drawer" id="mobileDrawer">
         <div class="drawer-handle"></div>
         <div class="drawer-status" id="drawerStatus">Press Play to begin</div>
-        <div class="drawer-buttons">
+        <div class="drawer-buttons" id="drawerNarratedControls">
             <button class="btn" id="drawerPlayBtn" onclick="handlePlayBtn(); updateDrawerStatus()">▶ Play Story</button>
             <div style="display: flex; gap: 10px;">
                 <button class="btn btn-secondary" style="flex: 1;" onclick="previousParagraph()">⏮ Previous</button>
                 <button class="btn btn-secondary" style="flex: 1;" onclick="nextParagraph()">Next ⏭</button>
             </div>
             <button class="btn btn-secondary" onclick="toggleAutoScroll(); updateDrawerStatus()" id="drawerAutoScrollBtn">Auto-Scroll: ON</button>
+            <button class="btn btn-secondary" onclick="setMode('quiet', true)">🎵 Quiet Reading</button>
+        </div>
+        <div class="drawer-buttons" id="drawerQuietControls" style="display: none;">
+            <button class="btn btn-secondary" onclick="setMode('narrated', true)">🎧 Back to Narrated</button>
+            <button class="btn btn-secondary" id="drawerMusicMuteBtn" onclick="toggleBgMusic()">🔊 Pause Music</button>
         </div>
     </div>
 
@@ -782,6 +787,7 @@
         }
 
         function seekToParagraph(index) {
+            if (window.currentReadMode === 'quiet') return;
             if (index >= 0 && index < timestamps.length) {
                 holdUntilTime = 0;
                 audio.currentTime = timestamps[index];
@@ -808,6 +814,7 @@
         }
 
         document.addEventListener('keydown', function(e) {
+            if (window.currentReadMode === 'quiet') return;
             if (e.code === 'Space' && e.target.tagName !== 'BUTTON') {
                 e.preventDefault();
                 handlePlayBtn();
@@ -884,8 +891,10 @@
             const topControlsEl = document.getElementById('topControls');
             const quietControlsEl = document.getElementById('quietControls');
             const audioSectionEl = document.getElementById('audioSection');
-            const mobileFabEl = document.getElementById('mobileFab');
             const musicMuteBtn = document.getElementById('musicMuteBtn');
+            const drawerNarratedControlsEl = document.getElementById('drawerNarratedControls');
+            const drawerQuietControlsEl = document.getElementById('drawerQuietControls');
+            const drawerMusicMuteBtn = document.getElementById('drawerMusicMuteBtn');
             const MODE_KEY = 'heuring_read_mode';
 
             bgMusic.volume = 0.35; // adjust to taste, 0.0–1.0
@@ -893,18 +902,25 @@
             function applyModeUI(mode) {
                 const isQuiet = mode === 'quiet';
 
+                // Desktop panel
                 topControlsEl.classList.toggle('quiet-hide', isQuiet);
                 audioSectionEl.classList.toggle('quiet-hide', isQuiet);
-                mobileFabEl.classList.toggle('quiet-hide', isQuiet);
                 quietControlsEl.classList.toggle('show-panel', isQuiet);
                 quietControlsEl.style.display = isQuiet ? 'flex' : 'none';
+
+                // Mobile drawer panel (FAB itself always stays visible/reachable)
+                drawerNarratedControlsEl.style.display = isQuiet ? 'none' : 'flex';
+                drawerQuietControlsEl.style.display = isQuiet ? 'flex' : 'none';
             }
 
             function updateMusicButton() {
-                musicMuteBtn.textContent = bgMusic.paused ? '🔇 Play Music' : '🔊 Pause Music';
+                const label = bgMusic.paused ? '🔇 Play Music' : '🔊 Pause Music';
+                musicMuteBtn.textContent = label;
+                drawerMusicMuteBtn.textContent = label;
             }
 
             window.setMode = function (mode, userInitiated) {
+                window.currentReadMode = mode;
                 localStorage.setItem(MODE_KEY, mode);
                 applyModeUI(mode);
 
