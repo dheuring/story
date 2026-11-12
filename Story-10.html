@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Follow the Script - Synchronized Read-Along</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1;600&display=swap" rel="stylesheet">
+
+    <style>
+	.title-image {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.title-image img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    display: block;
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.9;
+            color: #2d3748;
+            background: linear-gradient(135deg, #0f2a33 0%, #17434f 50%, #26606e 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #f4fbfd;
+            padding: 60px;
+            border-radius: 15px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            text-align: center;
+            color: #0e7490;
+            margin-bottom: 8px;
+            font-size: 2.8em;
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #0891b2;
+            margin-bottom: 40px;
+            font-style: italic;
+            font-size: 1.1em;
+        }
+
+        .audio-section {
+            background: linear-gradient(135deg, #ecf9fd 0%, #f0fcff 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            border: 2px solid #a5dbe8;
+            text-align: center;
+            display: none;
+        }
+
+        .audio-section h3 {
+            color: #0e7490;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        audio {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 30px;
+            margin-bottom: 15px;
+        }
+
+        .instructions {
+            color: #0891b2;
+            font-size: 0.95em;
+            padding: 12px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .progress-container {
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #d9eef0;
+            border-radius: 4px;
+            overflow: visible;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #22b3d4, #0b7a96);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.1s linear;
+        }
+
+        .progress-tick {
+            position: absolute;
+            top: -3px;
+            width: 3px;
+            height: 14px;
+            background: #0e7490;
+            border-radius: 2px;
+            pointer-events: none;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.6);
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            color: #0891b2;
+            margin-top: 8px;
+            font-family: 'Georgia', serif;
+        }
+
+        .story-text {
+            font-size: 1.15em;
+            text-align: justify;
+            color: #2d3748;
+        }
+
+        #storyContent p:first-of-type::first-letter {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 3.6em;
+            font-weight: 600;
+            float: left;
+            line-height: 0.85;
+            padding: 6px 10px 0 2px;
+            color: #0e7490;
+        }
+
+        .paragraph {
+            margin-bottom: 1em;
+            padding: 18px 25px;
+            border-radius: 10px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            position: relative;
+        }
+
+        .paragraph:hover {
+            background-color: #ecf9fd;
+            border-left-color: #6bd0e0;
+        }
+
+        .paragraph.active {
+            background: linear-gradient(90deg, #d9f3fc 0%, #f0fbff 100%);
+            border-left: 4px solid #22b3d4;
+            box-shadow: 0 6px 25px rgba(34, 179, 212, 0.25);
+            transform: translateX(8px);
+        }
+
+        .paragraph.read {
+            background-color: #ecf9fd;
+            border-left-color: #70c4d1;
+            opacity: 0.75;
+        }
+
+        .paragraph.upcoming {
+            opacity: 0.6;
+        }
+
+        .paragraph.image-entry,
+        .paragraph.image-entry.upcoming,
+        .paragraph.image-entry.read,
+        .paragraph.image-entry.active {
+            opacity: 1 !important;
+            background: none !important;
+            border-left: none !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+
+        .the-end {
+            text-align: center;
+            margin-top: 50px;
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-style: italic;
+            font-size: 1.4em;
+            letter-spacing: 2px;
+            color: #0e7490;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #22b3d4 0%, #0b7a96 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(34, 179, 212, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 4px 15px rgba(113, 128, 150, 0.4);
+        }
+		#playBtn {
+            font-size: 1.1em;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #1a8aa8 0%, #0b5a73 100%);
+            letter-spacing: 0.5px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(26, 138, 168, 0.4);
+        }
+
+        #playBtn:hover {
+            box-shadow: 0 6px 25px rgba(26, 138, 168, 0.55);
+        }
+
+        #playBtn.playing {
+            background: linear-gradient(135deg, #0e7490 0%, #0a3f52 100%);
+            box-shadow: 0 4px 20px rgba(14, 116, 144, 0.4);
+        }
+         .status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 101;
+        }
+
+        .quiet-hide {
+            display: none !important;
+        }
+
+        .shortcut-hint {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            background: rgba(255,255,255,0.95);
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            font-size: 0.85em;
+            color: #4a5568;
+            z-index: 100;
+        }
+
+        .key {
+            background: #edf2f7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        /* Mobile floating menu */
+        .mobile-fab {
+            display: none;
+        }
+
+        .mobile-drawer {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+
+            .story-text {
+                text-align: left;
+            }
+
+            .paragraph {
+                padding: 14px 16px;
+            }
+
+            #storyContent p:first-of-type::first-letter {
+                font-size: 2.6em;
+                padding: 4px 6px 0 0;
+            }
+
+            .story-image {
+                width: 92%;
+                max-width: 92%;
+            }
+
+            /* Hide desktop fixed overlays on mobile */
+            .status,
+            .controls,
+            .shortcut-hint {
+                display: none !important;
+            }
+
+            .quiet-panel.show-panel {
+                display: flex !important;
+                top: auto;
+                bottom: 20px;
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
+            }
+
+            /* Floating action button */
+            .mobile-fab {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 52px;
+                height: 52px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #1a8aa8, #0b5a73);
+                color: white;
+                font-size: 1.5em;
+                border: none;
+                cursor: pointer;
+                z-index: 200;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+            }
+
+            /* Slide-up drawer */
+            .mobile-drawer {
+                display: block;
+                position: fixed;
+                bottom: -300px;
+                left: 0;
+                right: 0;
+                background: white;
+                border-radius: 18px 18px 0 0;
+                box-shadow: 0 -6px 30px rgba(0,0,0,0.25);
+                padding: 20px 24px 32px;
+                z-index: 199;
+                transition: bottom 0.3s ease;
+            }
+
+            .mobile-drawer.open {
+                bottom: 0;
+            }
+
+            .drawer-handle {
+                width: 40px;
+                height: 4px;
+                background: #cbd5e0;
+                border-radius: 2px;
+                margin: 0 auto 18px;
+            }
+
+            .drawer-status {
+                text-align: center;
+                color: #0891b2;
+                font-size: 0.9em;
+                margin-bottom: 14px;
+                font-style: italic;
+            }
+
+            .drawer-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .mobile-overlay-bg {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.3);
+                z-index: 198;
+            }
+
+            .mobile-overlay-bg.open {
+                display: block;
+            }
+        }
+        .story-image {
+            max-width: 75%;
+            width: 75%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            margin: 12px auto 20px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://audio.heuring.us/added/TOC.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="status" id="topControls">
+        <button class="btn" id="playBtn" onclick="handlePlayBtn()">▶ Play Story</button>
+        <button class="btn btn-secondary" onclick="toggleAutoScroll()" id="autoScrollBtn">Auto-Scroll: ON</button>
+        <button class="btn btn-secondary" id="quietModeBtn" onclick="setMode('quiet', true)">🎵 Quiet Reading</button>
+    </div>
+
+    <div class="status quiet-panel" id="quietControls" style="display: none;">
+        <button class="btn btn-secondary" id="narratedModeBtn" onclick="setMode('narrated', true)">🎧 Back to Narrated</button>
+        <button class="btn btn-secondary" id="musicMuteBtn" onclick="toggleBgMusic()">🔊 Pause Music</button>
+    </div>
+
+    <div class="container">
+        <h1>Follow the Script</h1>
+		  <div class="title-image">
+            <img src="https://audio.heuring.us/added/10-Bar.png" alt="10-Bar">
+        </div>
+
+        <div class="audio-section" id="audioSection">
+            <h3>🎧 Narration</h3>
+            <audio id="narration" controls>
+                <source src="https://audio.heuring.us/added/10-Script.m4a" type="audio/mp4">
+                <source src="https://audio.heuring.us/added/10-Script.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBarContainer">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+                <div class="time-display">
+                    <span id="currentTimeDisplay">0:00</span>
+                    <span id="durationDisplay">0:00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="story-text" id="storyContent">
+            <!-- Paragraphs generated by JavaScript -->
+        </div>
+
+        <div class="the-end">❦ The End ❦</div>
+
+        <div class="toc-link-wrapper" style="text-align: center; margin-top: 40px;">
+            <a href="TOC.html" class="btn" style="text-decoration: none; display: inline-block; background: linear-gradient(135deg, #1a8aa8 0%, #0b5a73 100%);">📚 Back to Table of Contents</a>
+        </div>
+
+    <!-- Mobile floating button + drawer (hidden on desktop) -->
+    <div class="mobile-overlay-bg" id="mobileOverlay" onclick="closeMobileDrawer()"></div>
+
+    <button class="mobile-fab" id="mobileFab" onclick="toggleMobileDrawer()">☰</button>
+
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-handle"></div>
+        <div class="drawer-status" id="drawerStatus">Press Play to begin</div>
+        <div class="drawer-buttons" id="drawerNarratedControls">
+            <button class="btn" id="drawerPlayBtn" onclick="handlePlayBtn(); updateDrawerStatus()">▶ Play Story</button>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="previousParagraph()">⏮ Previous</button>
+                <button class="btn btn-secondary" style="flex: 1;" onclick="nextParagraph()">Next ⏭</button>
+            </div>
+            <button class="btn btn-secondary" onclick="toggleAutoScroll(); updateDrawerStatus()" id="drawerAutoScrollBtn">Auto-Scroll: ON</button>
+            <button class="btn btn-secondary" onclick="setMode('quiet', true)">🎵 Quiet Reading</button>
+        </div>
+        <div class="drawer-buttons" id="drawerQuietControls" style="display: none;">
+            <button class="btn btn-secondary" onclick="setMode('narrated', true)">🎧 Back to Narrated</button>
+            <button class="btn btn-secondary" id="drawerMusicMuteBtn" onclick="toggleBgMusic()">🔊 Pause Music</button>
+        </div>
+    </div>
+
+    <script>
+	
+
+
+
+const storyText = [
+    "The first snow of the season had come on a Tuesday, thin and mean, and by the following Monday it had melted into the gray slush that would sit in the gutters of Maple Grove until April.",
+    "The bus picked up Anya at 8:35. By then, the house was Dave's, and it stayed his until 3:50, and that was the whole shape of his days now — five years retired and underfoot in an apartment that had gotten very quiet. His days were housework, the gym three times a week, and killing time.",
+    "He was seventy-three, thirty-three years older than his wife, and he had long since stopped thinking of that as remarkable. Alisa worked from her home office three days a week. Dave made her coffee at 8:00 and then found things to do that didn't need doing. She didn't drink — nothing stronger than coffee and sparkling water — and he had opted to quit drinking for her. The last few years he'd noticed he was watching her more and touching her less, a function of family priorities and perhaps his advancing age.",
+    "At 10:40 she took a break, sleeves pushed up to the elbow, and started stripping basil leaves off the stems into a bowl for lunch. Lemongrass, galangal, lime, a fistful of bird's-eye chilies that would have made the neighbors weep. The kitchen smelled like Bangkok at its best. She was forty. The softness had settled into her hips and her belly, the way it does, and her hair had a few silver threads that she hated and he loved. She wore a thick sweatshirt with a curry stain on the cuff and bulky jeans. When she reached up for the fish sauce, the sweatshirt rode up and he saw the band of her bra — plain, beige, sensible, the kind of bra a woman wears when she has stopped imagining anyone will see it.",
+    "Not that she'd let herself go — she biked regularly, she worked out at the gym in their apartment complex, she was in better shape than women ten years younger. It was that she'd gone quiet. Somewhere in the last few years, she had disappeared into childcare and her job at a nonprofit. The two of them had become a very smooth, very well-run household. Sex happened once a month at most, and it had become routine. Both were always grateful afterward, but the naughty fun of the distant past was gone.",
+    "\"What are you looking at?\" she said, without turning around — just a slight sideways look.",
+    "\"My hot Asian girl,\" he said immediately, grinning.",
+    "\"You're after something, aren't you?\"",
+    "He laughed and set his coffee down. \"Yep, for sure, I'm after something.\"",
+    "She turned, and there it was, that grin — the one that had knocked the wind out of him outside a Starbucks in Siam Center when she was only nineteen years old and the world was a wide-open door. It was still there. It just came out less often.",
+    "\"Twenty-one years together,\" she said. \"You still think you can charm me with a compliment.\"",
+    "\"I will charm you with a compliment and then ask for something unreasonable.\"",
+    "\"Mmmmm.\" She went back to the basil. \"Such as?\"",
+    "She had her smartphone on the counter, one eye on the screen, when he started.",
+    "\"Remember the fantasy scripts?\" he said.",
+    "Alisa glanced over. \"What scripts?\"",
+    "\"The Professor. The Porn Star. The Executive and the Slave Boy.\" He watched her face. \"Our scripts. The ones we used to write for each other when we were eight thousand miles apart, before meeting up to act them out.\"",
+    "The corner of her mouth pulled. \"That was forever ago.\"",
+    "\"Remember how it worked? We'd write it out online, and then we'd perform and record the scene when I got to Bangkok.\"",
+    "\"I remember.\" She wiped her hands and turned to face him. \"Why?\"",
+    "\"Because I want to write another one.\"",
+    "\"Okay.\" She said it the way she said most things, agreeable and a little distracted. \"Write one.\"",
+    "\"This one's different. One you might want to know about first.\"",
+    "\"Different how?\"",
+    "Dave reached over and covered the phone. She turned her head to look at him properly.",
+    "\"I want to bring someone else into the script,\" he said. \"And when we act it out — well. Another man. Once. For you.\"",
+    "Alisa blinked. Then she laughed — one short, disbelieving sound. \"A threesome?\"",
+    "\"A threesome. With a man. You, and me, and one other man. One night. A nice hotel downtown. Nobody's husband, nobody's friend, nobody we'll run into at Cub Foods.\"",
+    "She pulled her sleeves down over her hands. It was what she did when she was thinking. \"Dave. I'm not — you know how I am. I don't know that I could do this.\"",
+    "\"I know exactly how you are. I also know what you're like once you get turned on. That's why it's you I'm asking.\"",
+    "\"I'd be too shy and unsure. It'd get weird. I'd be the one sitting on the end of the bed with my arms crossed while two men look at me.\"",
+    "\"Yeah, you'd be the one with your arms crossed,\" he agreed, \"and then you won't. I know you, Alisa. You're shy and careful until you aren't. You know what I'm talking about.\"",
+    "She made a face at him. But she didn't say no, and after twenty-one years he knew the difference between her hard no and a soft no. This was the latter.",
+    "\"Well, then — who would it even be?\"",
+    "\"Somebody with no expectations. Somebody out of your past fantasies from when we first met. I've got someone in mind.\"",
+    "\"Who?\"",
+    "\"Ryan Chen. He's the director of education for a university in Taipei. I've been in touch with him on LinkedIn for years. He's in town this weekend for a conference at the convention center. Fifty-three, lean, nice-looking, really fit, and —\" he paused, \"— Taiwanese.\"",
+    "He watched her go still.",
+    "\"Taiwanese,\" she said.",
+    "\"Yes, Taiwanese,\" he said, then added, \"I remember that elevator at the Royal River Hotel in Bangkok well — five Taiwanese guys in it, and the way you gawked at them when they got off.\"",
+    "\"You noticed that?\" She pulled nervously at her sleeves again.",
+    "\"Sure. I've also seen you watching those dramas at night, and how you pause for the kissing scenes. I've always known about your thing for Taiwanese men, Alisa. It must be in your wiring,\" he said, smiling.",
+    "She covered her face with her sleeve and laughed into it. \"This is so crazy. I'll admit to the Taiwanese thing, but to go all the way — well, I just don't know about that.\"",
+    "\"Why?\"",
+    "\"Because it's true. I've had fantasies, and it's kind of embarrassing. You're my husband and I love you first and foremost.\"",
+    "\"I've been paying attention to you since the day I met you, Alisa. I adore you and I want you to have fun, even sexual fun. And you know as well as I do. I'm getting on in age,\" he said, and something in his voice made her stop disagreeing.",
+    "She was quiet for a while. \"I've had only you and before that just two hand jobs,\" she said, looking into her coffee cup. \"That's the entire list. Nineteen years old and I'd never —\" she lifted a hand and let it fall. \"Even those hand jobs were clumsy and awkward. Both white guys, both fumbling, both over in ninety seconds. And then I lose my virginity to you, and twenty-one years of you, and that's the whole list. And you know what? I don't really need more.\"",
+    "He shifted closer. \"You told me about them after we'd been together a while, and you know what? It turned me on to hear you tell me about them. Crazy, huh?\"",
+    "\"When we first met, you were fifty-two and I was nineteen and you assumed I'd —\" she shrugged, \"— been around. I didn't tell you. It was easier, and I really liked you right from the beginning.\"",
+    "\"I know, Alisa.\"",
+    "\"I know, too.\"",
+    "He watched her pick at the corner of the cutting board. \"So, what about it,\" he said. \"With the Taiwanese thing. Where'd that come from, if there's never been one?\"",
+    "Her cheeks went hot. \"I don't know. Maybe the movies.\"",
+    "\"Movies.\"",
+    "\"The dramas. Channel 3, and then the streaming ones, and now the Korean and Chinese ones with the subtitles.\" She pulled her sleeves down again. \"I watch them in bed at night and I —\" she stopped. \"I've never said this out loud. I imagine things once in a while. About the men in them. That's the whole of my experience with Asian men. Just stuff in my head.\"",
+    "Dave sat back. \"And what about cocks?\" he said, grinning.",
+    "She looked up sharply. \"What?\"",
+    "\"We both know that you love cocks. You always want mine in your hand, your mouth, your pussy. We both know there's no shyness once you get turned on. And when you get the pink thing out of the nightstand, you demand my cock in your mouth. C'mon, Alisa, you're a cock lover. Why not another one?\" He said it easily, and she went redder.",
+    "\"I guess I do have a thing for them. I told you about college, before, you — well, we girls watched gay porn,\" she said, like a confession. \"A bunch of us in a dorm room. And I knew then that I liked looking at cocks, and well, maybe more. It seemed like I liked it more than any of them did, but I never said so, because it wasn't the —\" she gestured, \"— the storyline. It was those cocks. All of them. I was so young and I just couldn't stop thinking about them.\"",
+    "\"So, what I'm hearing,\" he said, \"is that you like looking at them, and you've only ever touched two that weren't mine, and your whole life you've been watching Taiwanese men on a screen. It seems like this is something we can consider.\"",
+    "\"That's —\" she pressed her hands to her face. \"Yes. God. It's true, but I just feel it's wrong because I'm with you.\"",
+    "\"Geez, honey, that's the best thing I've heard in ten years.\"",
+    "She laughed into her palms. Dave let her. Then he said, quieter, \"So, let me give you two of them. One to look at, one to be looked at with. And you don't have to pretend it's not what it is.\"",
+    "She lowered her hands. Her eyes were bright.",
+    "\"Write the script,\" she said. Then she asked, \"What would we do with our daughter?\"",
+    "\"Tricia's been asking to have her overnight for a month. She'll be thrilled.\"",
+    "\"Our daughter is going to spend the night away so her mother can go get laid by two men.\"",
+    "\"Another man and me,\" Dave said. \"I'll be there.\"",
+    "She laughed again, and this time it stuck.",
+    "He wrote it that afternoon while she worked. At five o'clock he printed two copies, left one on her keyboard, and scanned the other into his email and sent it to Ryan without saying anything about it.",
+    "THE BUSINESSWOMAN AND THE TWO STRANGERS",
+    "A woman in a gray suit checks into a downtown hotel for a conference she doesn't care about. She's forty, she's tired of being reasonable, and she has never in her life done anything like this. Two men are waiting in the bar. They've been talking about her for an hour. She's going to pretend she doesn't know it.",
+    "Page two:",
+    "The first ten minutes are hers. She can sit anywhere she wants. She doesn't have to talk. If she wants the bed, she takes the bed. If she wants to stand at the end of it with her arms crossed and make them come to her, that's the scene. Nobody hurries her. The men wait to be told.",
+    "Then, when she's ready: one of them puts his mouth on her neck. She decides which one.",
+    "Alisa read it twice. Then she folded it into a square and put it in her purse to read later.",
+    "The week turned into a slow, humming torture. She was distracted on Tuesday and Wednesday. On Wednesday at lunch break she drove to the Galleria and bought a gray skirt suit and a pair of heels and a black lace bra-and-panty set, then sat in the car with the engine running for four minutes wondering if this was such a good idea.",
+    "Thursday night he woke at two and found her sitting up with her phone.",
+    "\"Can't sleep?\" he murmured.",
+    "\"Reading his LinkedIn.\"",
+    "\"At two in the morning.\"",
+    "\"He's got a picture from a golf tournament.\" She turned the screen toward him. \"Look at his hands on that nine-iron.\"",
+    "Dave laughed into the pillow, realizing that this wild idea was going to happen.",
+    "On Friday, Ryan texted Dave. Confirmed. Four Seasons, high floor, river view. I'll be in the bar at seven. Tell her the gray suit was a good call.",
+    "Dave showed Alisa. She read it three times, set the phone down, and said, \"He knows about the suit?\"",
+    "\"He asked what she's wearing.\"",
+    "\"He asked?\"",
+    "\"That's what men do. He's thinking about it right now. He's probably thinking about the zipper on that skirt.\"",
+    "She pressed her hands flat to her face. \"Dave, stop it. You're making it worse.\"",
+    "Finally, the day arrived. Saturday afternoon she packed Anya's bag — the good pajamas, the stuffed rabbit, a toothbrush — and they dropped her at Tricia's place at five and drove on to the hotel. On the way, she asked, \"Tell me one thing.\"",
+    "\"What's that?\"",
+    "\"Am I supposed to talk? Or is that weird? Do I say something when we walk in?\"",
+    "\"You say hello. Then you don't have to say anything at all. Nobody expects you to take the lead.\"",
+    "\"And if I just want to sit there?\"",
+    "\"Then sit there. Let us guys handle it. You'll know when it feels right for you. If not, that's fine. Ryan knows it's our first time.\"",
+    "She was quiet. Then, muffled against the window: \"Okay.\"",
+    "The script was a folded square in her purse. She'd read it thirty times. She had most of it by heart, and that was the only reason she could walk into the building.",
+    "The Four Seasons lobby smelled like expensive wood and somebody's expensive perfume, and Alisa walked through it with her chin up and her hand clamped around Dave's arm hard enough to bruise.",
+    "She looked good. Better than good. The gray suit fit like it had been cut for her, the skirt to the knee, the heels adding two inches and a good deal of hip swagger she didn't feel. Her hair was up. Her lipstick was the only bright thing on her. Red.",
+    "She did not look like a woman who'd been in the same relationship for twenty-one years. She looked terrific...like somebody who'd attract attention just walking into a room.",
+    "Ryan was at the end of the bar in a navy jacket with the tie already loosened, and he stood when they came in.",
+    "Fifty-three, and everything Dave had said was true, and none of it did him justice. Lean as a whippet, silver through the temples, a handshake that was firm and dry and not one second too long. His eyes came to Alisa's face and stayed there, and his smile was slow and easy, like they had all evening. Which they did.",
+    "\"Mrs. Alisa,\" he said. His voice was low, with the soft, clipped edges of Taipei. \"Dave said you'd wear the gray suit. He was right, and he undersold it.\"",
+    "Then he set something on the bar between them — a folded sheet of paper, softened at the creases, marked up in pencil.",
+    "Her script.",
+    "\"I've read it four times,\" he said. \"It's good. Page two's the best page.\"",
+    "\"There wasn't a page two,\" Dave said.",
+    "\"There's a page two now.\" Ryan turned it around so she could see. Neat pencil, in the margins. Slow down here. Let her breathe. She decides.",
+    "Alisa looked at the paper, then at Ryan, then at Dave. Somebody had been taking her seriously in writing.",
+    "Her shoulders went back. \"Thank you.\"",
+    "\"I have a table in the corner. Would you like a drink first, or would you rather go up?\"",
+    "She looked at Dave. Dave looked back at her, easy, letting her steer. The thought of sitting around making small talk made her nervous. She swallowed, and then surprised herself. \"Up,\" she said, her eyes moving to the ceiling.",
+    "The elevator ride took forty seconds. Dave made small talk with Ryan on the way up. Alisa stood between the two of them with her hands folded in front of her like a woman waiting for a bus, and Ryan leaned against the rail and didn't touch her. Dave watched her reflection in the brushed steel and saw her eyes flick, once, to Ryan's hands.",
+    "The room was on the twenty-ninth floor. River view, city glitter below, the bed turned down at the corners.",
+    "Ryan went to the window and opened the curtain all the way, so the room was lit in blue and gold, and then he came back and stood at a polite distance and said, \"Let's sit down and have a drink.\"",
+    "Dave got glasses and filled them with sparkling water for himself and Alisa. Ryan poured three fingers of whiskey into a glass and took a sip as the three of them sat down in the living area.",
+    "\"Okay,\" Alisa said. \"Okay.\" She set the glass down untouched. Then she got up and went to the end of the bed and stood there with her arms crossed, exactly as predicted, and said, \"I'm going to be honest. I'm nervous. I don't do this.\"",
+    "\"That's why we're here,\" Ryan said. He didn't move from the sofa. \"The script says you can stand there all night if you want to. Nobody's going to be disappointed.\"",
+    "She nodded, too fast.",
+    "\"And it says if you want the bed, you take the bed.\" He nodded at the folded paper he'd set down on the coffee table. \"So. Do you want the bed?\"",
+    "She looked at it. Then she sat down on the end of it, and Dave got up and sat beside her and put a hand on her knee; she leaned into his shoulder a little.",
+    "\"Twenty-one years,\" Ryan said. \"That's a long time. It's obviously hard to do something new. Well — this kind of new thing.\"",
+    "\"Well, it's his idea,\" she said, looking from Ryan to Dave.",
+    "\"Of course it's his idea. It's always his idea. The question is whether you want it to be yours, too.\"",
+    "Ryan looked from her to Dave and back, and something in his manner changed — quieter, more careful.",
+    "\"How long has it been?\" he asked. \"Since anyone but him.\"",
+    "\"Never,\" Dave said. \"It's only ever been me.\"",
+    "Ryan's eyebrows came up. He looked at Alisa for a moment like she'd just become more interesting.",
+    "\"Twenty-one years,\" he said slowly. \"One man. And you're sitting here wondering if this is the right thing for you.\" He shook his head. \"That's fine, Alisa. No pressure. We go as slow as you want, and you tell me when it's too much, and nothing happens that you don't ask for. All right?\"",
+	
+	"She swallowed and nodded. That helped.",
+    "She took a deep breath. Let it out slowly.",
+    "\"Yes,\" she said, quietly. \"It's up to me, and we go slowly.\"",
+    "Ryan came over and sat on the other side of her, but he didn't touch her.",
+    "\"The script's got a line here,\" he said. \"One of us puts his mouth on your neck. You decide which one.\"",
+    "She looked at Dave. Dave raised his eyebrows — easy, letting her.",
+    "Surprisingly, her hand came up and she turned Ryan's face toward her.",
+    "He moved like a man doing something he'd thought about, and he put two fingers under her chin and looked at her for a long moment before he leaned in and kissed her neck.",
+    "It was a soft kiss, just below her ear. Dave watched it travel through her. Slow, patient — Ryan's tongue moved up the side of her neck and then his lips nibbled at the lobe of her ear, and Alisa's crossed arms came slowly undone. Her hand lifted and found his arm and pressed it. When he drew back, she leaned toward him before she caught herself.",
+    "\"Okay?\" Ryan asked.",
+    "She nodded, and Dave leaned in and kissed her mouth, warm and familiar, as Ryan went back to her ear, and her shoulders dropped an inch.",
+    "She made a small, surprised sound against Dave's lips.",
+    "Ryan's hand settled on her thigh, over the skirt, and Dave's hand found her other thigh, and the two of them worked in a slow, easy rhythm that never once felt like a competition. Ryan undid her jacket button. Dave slid the jacket off her shoulders. Ryan's mouth came down on the side of her throat and Dave's hand found her breast through the silk blouse and she let her head fall back and heard herself breathe out, ragged, \"Oh.\"",
+    "\"Are you still okay?\" Dave murmured.",
+    "\"Yes, you don't need to ask,\" she said, and both men laughed, and she blushed, and then Ryan's thumb found her nipple through the blouse and her back arched and she stopped being funny at all.",
+    "The heels came off first. Then the skirt, down over her hips, Ryan's hands skimming her thighs on the way. Then the blouse, and she was on the bed in the black lace, and she made one aborted move to cover herself before Ryan caught her wrist and put it back down at her side.",
+    "\"Let me look at you,\" he said.",
+    "And she let him. That was the first surrender, and Dave felt it land like a change in air pressure. Her breathing went shallow. Her hips shifted.",
+    "\"God,\" Dave said, mostly to himself.",
+    "Ryan's hand slid up her stomach, over the lace, and her eyes closed.",
+    "The turn happened on a dime, the way Dave had known it would, and it happened over the bra strap.",
+    "Ryan hooked it with two fingers and eased it down her shoulder, and Alisa reached back and unhooked it herself, without being asked, and pulled the whole thing off and threw it. Dave actually blinked.",
+    "\"That's not in the script,\" he said.",
+    "\"The script's done,\" she said.",
+    "Ryan reached back and set his folded copy face-down on the nightstand, and nobody looked at it again.",
+    "\"There she is,\" Dave said.",
+    "\"Shush,\" she said, and dragged Ryan down by his lapels and kissed him hard and messy and with her tongue while Dave took off his shirt and came back to her other side.",
+    "From there it went fast. Ryan shucked his own jacket and shirt and came back with his chest against her, and she got a hand flat on his stomach and dragged it up over his ribs with a sound in her throat. Dave put his mouth to her breast and she cried out and twisted, one hand in Dave's hair and one in Ryan's, holding both of them there, and for a while there was nothing in the room but the wet sounds of their mouths on her breasts and her ragged breathing and the hotel's low hum.",
+    "She worked a hand into Ryan's trousers and found him hard, closed her fingers around him through the fabric and squeezed, and he groaned against her collarbone.",
+    "\"Take them off,\" she said.",
+    "\"You first.\" Ryan said. \"I want to see that Asian cunt.\"",
+    "He got her out of the panties. She didn't cover up this time.",
+    "\"Your pussy is gorgeous,\" Ryan said wonderingly. \"Look at that. It's perfect.\"",
+    "Alisa's hand came up over her face. \"Enough talking.\"",
+    "He put his palm flat on her stomach, then slid it down over her thigh and turned her leg outward a little, taking his time, just looking at her pussy.",
+    "\"Twenty-one years of one man,\" he said, almost to himself. \"He's had all of this to himself. Not fair.\"",
+    "\"He has,\" she said, muffled behind her hand.",
+    "\"He's so lucky. It's beautiful.\"",
+    "Dave pushed one finger first, then a second, into her pussy. She arched clean off the mattress as he continued fingering her the way he always did to get her turned on. Ryan went back to her breasts, sucking one with his mouth and pinching the other. She made a sound like she'd been struck. Ryan dragged his mouth down her stomach, licking the whole way, then lower, and started licking her clit just above where Dave's fingers were. Dave began finger-fucking her faster as Ryan circled his tongue around her swollen clit, then sucked it between his lips.",
+    "She'd never had this dual sensation before. Fingers and tongue working her vagina in harmony. It put her somewhere she'd never been, and the first wave of a big one started building almost immediately.",
+    "She came in under four minutes, with her bare heel hooked over Ryan's shoulder and one hand fisted in the duvet and her mouth wide open and nothing coming out of it. Then came a second, third, and fourth wave before she grabbed Dave's hand and Ryan's head to make them stop. She didn't let go of either of them for a while, as her body unclenched ever so slowly. She lay there gulping air.",
+    "Then she sat up. \"Both of you,\" she said. \"That's it. Get undressed. Strip naked and stand in front of me. Now.\"",
+    "Ryan said, grinning, \"Sounds like the director is revising the script on the fly,\" and stood up to take his trousers off.",
+    "They did, standing next to each other in front of her with their cocks hard. She had imagined this at nineteen and never once believed it would happen — two cocks erect and waiting for her to command them. Dave's familiar seven inches, straight and blunt, pointed toward her, and then there was the new one, Ryan's, thick and uncircumcised, the shaft curved upward, the head pushing out of the hood.",
+    "She moved off the bed and knelt between them, their erect cocks just inches from her mouth, and she made a small, satisfied noise. She put a hand on each of them and began stroking in unison. Alisa licked her lips, looked at both cocks, then up at the two men; her eyes went dark and bright. The feel of two hard cocks in her grip was almost too much to hold. It showed on her thighs as her wetness seeped downward. Her nipples stood up, hard and tingling. She had totally flipped and was ready to be a naughty girl, to do something she had only fantasized about — two cocks begging to be licked and sucked — and she wasn't going to wait any longer.",
+    "She took Dave first, because he was her husband and she knew exactly how he liked it, sliding her mouth down over him with a confidence that made his knees feel weak. Her hand never stopped stroking Ryan's cock. She came off Dave with a wet, smooching sound, then dipped her tongue into the slit at the tip of him. Pure lust in her eyes, she turned her head and took Ryan in her mouth, and his hand came down on the back of her neck, gentle, and he said something soft in Mandarin that Dave didn't understand and Alisa moaned around him. She took him all the way down the curve to the base — a shape she had never had in her mouth before, and one she could not stop imagining somewhere else. Every pass of it along her tongue made her wetter.",
+    "\"Fuck,\" Ryan said.",
+    "She switched back to Dave. Then she reversed it — Ryan deep in her mouth, her hand working Dave. Then she got a hand around each of them and brought them together, laid the two shafts side by side, and took them in turn at her lips, her tongue dragging from one to the other, and Dave watched his wife — his shy, sensible, one-piece-swimsuit wife — handling two cocks like a pro, and had to close his eyes.",
+    "She pressed the heads together and licked across both at once, again and again, and Dave's breath caught. His cockhead was against another man's. The tingle started somewhere behind his balls and he realized he liked it far too much. It was becoming too much. He got a hand under her jaw and lifted her off his cock gently. \"Not yet. Not for me. I want to feel that tight, wet pussy.\"",
+    "\"Me neither,\" Ryan said hoarsely.",
+    "She wiped her mouth with the back of her wrist and grinned at them both, flushed and bright-eyed and pleased with herself. \"Then get on the bed, Dave.\"",
+    "Dave lay on his back and she climbed onto the bed, swung a leg over him and sank down onto him in one long motion that pulled a groan out of both of them. It was the only way they ever did it, and had been for years — her on top, him flat on his back, her hands braced on his chest where they always went. She was slick and hot, and she didn't ease into it; she began to ride him fast and hard from the first stroke, leaning back.",
+    "\"Whoa, slow down, girl. That tight, wet pussy is going to make me come too fast.\"",
+    "Ryan came up behind her. His hands found her breasts, and he squeezed them, rolling her nipples between his fingers while she pumped up and down on Dave. He pressed in close against her back and she rolled her head against his shoulder and kept riding, but more slowly.",
+    "Ryan's cock laid itself along the crease of her ass, the curve of it settling in as though the crease had been cut for it, the head pointing downward and the base farther up against the small of her back. He rocked with her and it slid — up, and back, and up — hot, and getting slick, dragging over her where she was tenderest, and Dave could watch it: hard, and lined up right behind the one she was full of.",
+    "She pushed back into it without deciding to, and when she did his tip hit her vaginal entrance, already full of Dave. Ryan made a low sound against her shoulder and pushed back, and the whole length of him pressed in along the crease, curved from the root to the head, and none of it inside her. That was the worst of it. That was the best of it.",
+    "\"Two cocks,\" she gasped. \"Oh my God. This is so good.\"",
+    "\"Dave, tell him,\" she said.",
+    "\"Tell him what?\" Dave said.",
+    "\"Tell him how my pussy feels.\"",
+    "\"Alisa,\" Dave said, amazed.",
+    "\"Tell him.\"",
+    "Dave grinned, took a breath, and waited until Alisa slowed. \"A hotel in Bangkok. She was nineteen. I rubbed my cockhead at her opening and it felt like pure heaven — so warm, so soft I nearly came right then. Sliding in was better. The sides of her opened up slow. She's tight, man — Asian tight — and so wet I could barely fit, but the wetness let me in. She's the best I've ever had. Tightest, wettest pussy you'll ever feel. And you know what? All these years later she gets just as wet and just as horny.\"",
+    "Ryan laughed — a short, surprised breath against her shoulder, nothing mocking in it. \"'Tightest, wettest,'\" he said, quoting it back into her ear, low. \"Let's see.\"",
+    "\"Go ahead, Ryan,\" Alisa said, high and quick. \"Finger me and find out.\"",
+    "She rocked back and ground her ass against Ryan's cock. Dave's cock slipped out of her, wet and dragging, and she got a hand around him so he wouldn't go cold. Ryan's hand slid down her belly, his fingers found her; she jolted, her rhythm broke, and she swore.",
+    "She was so wet it ran. He worked her in slow circles while she rode his hand, and her head fell back on his shoulder and she stopped talking and started making noise. It built, and built. Then her nails dug into his forearm and she came again, hard, clenching around his fingers, sobbing out one long \"ohhhh\" that turned into a laugh at the end — and then she let Dave go, climbed off him, turned onto her hands and knees, and pushed her ass back at Ryan.",
+    "\"You,\" she said to Ryan. \"Your turn. And you —\" she turned her head to Dave, \"— right here. I want your white boy cock in my mouth while Ryan fucks me doggy-style with that Taiwanese cock.\"",
+    "Dave knelt up at her head and she turned her face to the side, cheek on the sheet, and took him in her mouth.",
+    "Ryan pushed into her from behind — and then stopped, halfway, with one hand flat on her hip and his thumb pressed into the small of her back.",
+    "\"Hold on,\" he said.",
+    "She made a strangled sound around Dave's cock. Dave slid out of her so she could talk.",
+    "\"You've never had this kind of a cock,\" Ryan said. \"Not once. Twenty-one years and one man, and now a Taiwanese cock in a hotel room.\"",
+    "\"No,\" she said. Her voice had gone thin and high. \"Never. It's my fantasy, so please...\"",
+    "Ryan leaned down over her back and murmured something low in Mandarin against her shoulder blade, quick and soft, and she made a sound like it had gone through her.",
+    "\"What'd he say?\" Dave asked.",
+    "Ryan lifted his head. \"I said, 'First ones are the ones you remember.'\" He smoothed his hand down her flank. \"All right. Now.\"",
+    "\"Tell me what it's like,\" Dave said.",
+    "She got a hand under herself, lifted her head; her eyes were glassy and half-lidded.",
+    "\"Different,\" she said, thick. \"He's — smoother. Leaner. In all these years, you've never taken me from behind, Dave, not once —\" her breath hitched as Ryan changed his angle and she lost the sentence entirely, then found it again, \"— he's curved. God. He's curved, and it's deep, it's so deep —.\"",
+    "Ryan's hips stuttered and he laughed, breathless, behind her.",
+    "\"We never do it this way,\" Dave said, and his voice had gone quiet.",
+    "\"I know,\" Ryan said. \"The angle. And it curves right along her G-spot — that's the difference. Straight doesn't hit the same place the same way. And curved makes it feel thicker.\" He settled his hand flat on her hip and pulled her back onto him. \"Twenty-one years with the same man. It's time to enjoy a different cock.\"",
+    "She got her hand back around Dave's cock and worked him in time with Ryan's strokes, and Dave propped himself on his elbow and looked down the length of her body and watched Ryan's hips snap against her, watched her whole body take the rhythm, watched her eyes close, heard her moan every time Ryan drove deep and felt her fist clench on him with each one.",
+    "Then she put her mouth back on his cock and she was good at it — sloppy and eager, her tongue flat and dragging — and the combination of the two of them, Ryan's hands on her hips and her mouth hot and pulling, had Dave's stomach tightening much too fast.",
+    "\"Alisa,\" he managed. \"I'm close. You've got to —\"",
+    "She pulled off, gasping, and clamped her hand around the base of him and squeezed, and the squeeze came down like a wall. \"Not yet,\" she said. \"Hold it. You're going to watch me first.\"",
+    "\"Jesus.\"",
+    "She put her mouth back on him but stayed shallow, easy, just the head, while Ryan's rhythm went ragged behind her. She got a fist in the duvet and her hips started pushing back to meet him.",
+    "\"Ryan,\" she said around him. \"Harder. Ram me faster. Don't stop.\"",
+    "He didn't. She dropped her forehead to the mattress and let Dave's cock slide out of her mouth and lay there with her cheek flat against the sheet, taking it, and the sound she made when she came the third time was almost a shout and seemed to go on forever.",
+    "Ryan pulled out and finished across the small of her back with a low, broken groan, and for a moment the only sound was the three of them breathing.",
+    "Then Alisa lifted her head. Her eyes were glassy and her mouth was pink, and she looked up at Ryan, still kneeling over her, and said, \"Now help me.\"",
+    "Ryan blinked at her. \"Help you what?\"",
+    "\"With him.\" She pushed herself up onto her knees and put a hand on Dave's thigh. \"He's been holding it for ten minutes. Get down here and help me get him off.\"",
+    "Dave laughed once, unsteadily. \"Hey, wait. You don't have to — Ryan, you just —\"",
+    "Ryan moved around to Dave's other side. \"I've been doing this since I was nineteen,\" he said. \"Relax. I want to see what a white boy's cock tastes like.\"",
+    "Alisa took Dave in her hand and put her mouth back on him.",
+    "Ryan paused with his hand on Dave's thigh. \"That director's at it again,\" he said with a haughty laugh, \"revising the script to make it even better.\"",
+    "\"No, this is beyond the script. It's way too wild,\" Dave said hesitantly.",
+    "\"This is my revision. You agreed to follow my lead, so you have no choice. Follow the script,\" Alisa said, and went back down on Dave.",
+    "Dave felt the bed dip, then a warm hand closed around the base of him just above hers, and then Ryan's breath was on him and Ryan's mouth came down alongside hers.",
+    "Dave's whole body jolted. \"Oh —\"",
+    "It was nothing like a woman. Ryan's jaw was harder, his mouth bigger and hotter and far less careful, and he took Dave deep on the first pass like it was nothing, all the way down, and Dave's hips lifted off the bed and his hand came down on Ryan's shoulder and gripped.",
+    "\"God. Oh my God.\"",
+    "Alisa pulled off to watch, kept her hand moving on the part of him Ryan couldn't reach, and breathed hard against his hip, smiling that smug, filthy smile.",
+    "\"Look at that,\" she said. \"Look at your face.\"",
+    "Dave couldn't do anything but look at the ceiling. Ryan's tongue flattened and dragged, then pulled up with a hard, wet suction that curled Dave's toes and sank back down and hummed, and the hum was what nearly finished it.",
+    "\"Different, isn't it,\" Alisa murmured. She kissed the crease of Dave's thigh, and the fine stubble on Ryan's jaw scraped against the shaft, and Dave made a sound he didn't recognize.",
+    "\"Yeah,\" he got out. \"Yeah.\"",
+    "\"He's better at it than me.\"",
+    "\"He's —\" Dave's hand slid into Ryan's hair and Ryan took it as instruction and went faster, and Dave's voice cracked down the middle. \"He's good. Oh, God, he's good.\"",
+    "\"Give it to him,\" Alisa said. \"I want it ready to shoot hot come.\"",
+    "Ryan looked back at Alisa with a smile and muttered, \"Finger his ass and see what happens.\" Dave felt Alisa's hand slide under his buttocks to his anus, where she inserted her finger. It was too much. The jolt began deep inside him and he jerked hard into Ryan's mouth. The first rope of cum began to spurt just as Ryan pulled off with a slick sound. Alisa was already there, mouth open, taking Dave from him without a beat of transition. Ryan stayed close with his hand massaging the base, his cheek against Alisa's temple. Dave looked down and saw his wife's mouth full of him, a man's face an inch from hers, both of them watching him come apart.",
+    "He couldn't have stopped it if he'd tried. He spurted rope after rope into Alisa's waiting mouth. It came up through him hard and he bucked and heard himself say something shapeless, and Alisa stayed there, swallowed, swallowed again, and worked him through it. She took the head of his cock and sucked more out until he was shaking and had to push her off by the hair.",
+    "She came up with her lips wet and her chin wet and swallowed one last time, deliberately, looking him right in the eye.",
+    "\"Alisa,\" he said, totally wrecked.",
+    "\"Every drop,\" she said. Then she crawled up the bed over him and kissed him, and he could taste himself in her mouth, and it was so good it was almost funny.",
+    "She got her hand on his jaw and held his face and pressed her forehead to his, and she didn't say anything at all. She just looked at him, her eyes bright and her breath still coming hard, and kissed him once more, soft and close-mouthed, and stayed there breathing against his lips.",
+    "Dave put a hand flat on the back of her head. \"Twenty-one years,\" he said, hoarse. \"I'd have done it twenty-one years ago if I'd known you'd look like that.\"",
+    "She shook her head against him, still not talking, and kissed him again.",
+    "Ryan laughed from the other side of the bed and got up for a warm cloth.",
+    "Alisa rolled onto her side and lay there, spent and shining. Ryan came back and cleaned her up, careful and slow, and she lay still for it with her eyes half shut. Then Dave got an arm under her and pulled her to his chest.",
+    "\"Don't say anything,\" she said into his shoulder. \"Or else I'll cry for joy.\"",
+    "\"Okay.\"",
+    "Ryan lay down on her other side and pulled the duvet over all three of them.",
+    "\"Twenty-one years,\" he said to the ceiling. \"You two are doing something right.\"",
+    "Alisa laughed weakly. \"We're doing something right tonight.\"",
+    "\"You're doing something right most nights. Tonight's just the proof.\"",
+    "She was asleep in six minutes. Ryan left early in the morning for the conference with a handshake and a kiss to her hair that didn't wake her, and Dave lay in the morning light with his wife's head on his chest and the river glittering below and felt something in his sternum ease that had been clenched for years.",
+    "She woke on the drive home, somewhere on I-694 with the heater going and the wipers slapping slush.",
+    "She sat up. \"Did that really happen?\"",
+    "\"It happened.\"",
+    "She was quiet for a mile. Then, \"Twenty-one years, Dave. Twenty-one years and one man, and you found someone who made this work.\"",
+    "She sat back. \"It's not just that he's Taiwanese, you know.\"",
+    "She looked out the window at the passing buildings. \"You wrote me a whole script,\" she said. \"Two pages. Not one line in it where you get anything.\"",
+    "\"I got plenty. I wanted you to enjoy.\"",
+    "She turned her head. \"Your face, though. When he did it. You went somewhere.\"",
+    "\"I did. Do you remember years ago when I would crossdress: a sexy slip, nylons, lipstick and all that? I guess I do have bisexual tendancies and thanks to you...\"",
+    "\"I want to see that again. Reminds me of the gay videos back in college.\" Then she added, \"Dave, there's something else...when I was riding you, and Ryan's cock was sliding along my ass, the tip was hitting me. That feeling and thought of two cocks in me at the same time, it...um...made...made me come. Now, just thinking about it...um... Do you think...?\"",
+    "Dave tightened his hand on the wheel. \"Just say the word, Alisa.\"",
+    "She said it loud enough for him to hear. \"I will, honey. I will.\"",
+    "Once at home, she hung the jacket up properly, then took it back off the hanger and laid it flat over the chair, changed her mind twice about which way it should face, and left it out. Dave was in the bathroom with the toothbrush in his mouth when she came in, her coat back on, the heels, and the gray skirt.",
+    "\"Come to bed.\"",
+    "\"Give me two minutes. What's up?\"",
+    "\"No questions, bi-guy. Now,\" she said, and he spat and rinsed and followed her.",
+	 
+	 "She didn't take her coat off. She put him on the edge of the mattress with a hand on his chest and went down on her knees on the carpet, still in the coat and the heels, and she worked him slowly this time, thorough, no rush at all, one hand fondling his balls the other resting on his thigh. When she came up for air she said, \"I've been thinking about Ryan's mouth on you cock since we left the hotel,\" and went back down. Dave had to grip the duvet with both hands.",
+	 "Lifting her head again to speak, she said firmly, \"Watching him do you taught me a couple of things... and then there's the ass play.\" She returned to slow, deep thrusts, reached between his legs, and found his anus, working her finger into him again and again. Her finger and her mouth together brought him off the second time in twelve hours, in the lamplight, in her good suit, on their bedroom floor in Maple Grove with sleet ticking at the window, and when she was done swallowing, she wiped her mouth on her wrist and rested her cheek on his knee.",
+	 "\"That's for last night.\"",
+	 "\"Alisa, you're going to kill me.\"",
+    "Later that evening, after they'd picked Anya up from Tricia's and put her to bed, they sat together on the sofa, she watching her Korean dramas and he tapping at his laptop. Her script was on the coffee table, softened from her purse. She'd been at it with a pen.",
+    "He looked down at it. She'd drawn a line through the title and written a new one above it:",
+    "THE BUSINESSWOMAN AND THE TWO STRANGERS, PART TWO.",
+    "Below that was added text. Dave read it:",
+	"The woman gets to have two cocks. She decides where she wants them in her. After she's had her fill, she gets to watch and direct the next action.",
+    "Then, lower, there is an arrow aimed at some text. It says: One man is on all fours at the edge of the bed, face down, back arched. The other kneels behind him, bent over him, cock buried, hips working, one hand reaching around to hold the other man's cock.",
+	"She doesn't help — she sits at the end of the bed with her arms crossed and watches. Her job is to decide who does what to whom and how it's done.",
+    "Noticing Dave leaning forward to read the script, Alisa turned and gave him an inquisitive look. With a mischievous smirk, Dave put an arm around her shoulders, pulled her closer, and kissed her lightly on the forehead. \"Looks like you're revising again.\"",
+    "\"I think I want to do it again sometime,\" she said, low enough that he had to lean in. \"Not right away. But sometime.\"",
+    "\"Okay,\" he said softly.",
+    "\"Good,\" she responded firmly, turning towards him so he could see the grin on her face. \"We'll need some more paper. I've got a few more changes for the script.\""
+];
+
+
+
+        // State — auto-scroll ON by default
+        let autoScroll = true;
+        let hasStarted = false;
+        let currentParagraph = -1;
+        let paragraphs = [];
+
+        const audio = document.getElementById('narration');
+        const progressBar = document.getElementById('progressBar');
+        const progressBarContainer = document.getElementById('progressBarContainer');
+        const playBtn = document.getElementById('playBtn');
+        const autoScrollBtn = document.getElementById('autoScrollBtn');
+        const currentTimeDisplay = document.getElementById('currentTimeDisplay');
+        const durationDisplay = document.getElementById('durationDisplay');
+
+        function formatTime(seconds) {
+            if (!isFinite(seconds) || seconds < 0) return '0:00';
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return m + ':' + String(s).padStart(2, '0');
+        }
+
+        function renderProgressTicks() {
+            if (!audio.duration || !isFinite(audio.duration)) return;
+            progressBarContainer.querySelectorAll('.progress-tick').forEach(t => t.remove());
+            storyText.forEach((text, index) => {
+                if (text.startsWith('<img') && timestamps[index] !== undefined) {
+                    const pct = (timestamps[index] / audio.duration) * 100;
+                    const tick = document.createElement('div');
+                    tick.className = 'progress-tick';
+                    tick.style.left = pct + '%';
+                    tick.title = 'Image';
+                    progressBarContainer.appendChild(tick);
+                }
+            });
+        }
+
+        audio.addEventListener('loadedmetadata', () => {
+            durationDisplay.textContent = formatTime(audio.duration);
+            renderProgressTicks();
+        });
+
+        function init() {
+            const container = document.getElementById('storyContent');
+            storyText.forEach((text, index) => {
+                const p = document.createElement('p');
+                p.className = 'paragraph upcoming';
+                p.setAttribute('data-index', index);
+                if (text.startsWith('<img')) {
+                    p.innerHTML = text;
+                    p.classList.add('image-entry');
+                    p.style.textAlign = 'center';
+                    p.style.cursor = 'default';
+                } else {
+                    p.textContent = text;
+                    p.addEventListener('click', () => seekToParagraph(index));
+                }
+                container.appendChild(p);
+                paragraphs.push(p);
+            });
+            // Update auto-scroll button to reflect default ON state
+            autoScrollBtn.textContent = 'Auto-Scroll: ON';
+        }
+
+        function handlePlayBtn() {
+            if (audio.paused) {
+                // First play: scroll to story text
+                if (!hasStarted) {
+                    hasStarted = true;
+                    document.getElementById('storyContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    setTimeout(() => audio.play(), 400);
+                } else {
+                    audio.play();
+                }
+            } else {
+                audio.pause();
+            }
+        }
+
+        audio.addEventListener('play', () => {
+            playBtn.textContent = '⏸ Pause';
+            playBtn.classList.add('playing');
+        });
+
+        audio.addEventListener('pause', () => {
+            playBtn.textContent = '▶ Play Story';
+            playBtn.classList.remove('playing');
+        });
+
+        audio.addEventListener('ended', () => {
+            playBtn.textContent = '↺ Play Again';
+            playBtn.classList.remove('playing');
+        });
+
+        document.getElementById('progressBarContainer').addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            audio.currentTime = pos * audio.duration;
+        });
+
+        // Minimum real-time (ms since epoch) to hold on the current paragraph.
+        // Used to guarantee images stay on screen for at least IMAGE_HOLD_MS,
+        // even if the audio's built-in silence is slightly shorter than expected.
+        const IMAGE_HOLD_MS = 10000;
+        let holdUntilTime = 0;
+
+        function onTimeUpdate() {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = progress + '%';
+            currentTimeDisplay.textContent = formatTime(audio.currentTime);
+
+            // Still holding on an image — skip advancing the highlight/scroll.
+            if (Date.now() < holdUntilTime) {
+                return;
+            }
+
+            let newIndex = -1;
+            for (let i = 0; i < timestamps.length; i++) {
+                if (audio.currentTime >= timestamps[i]) {
+                    newIndex = i;
+                } else {
+                    break;
+                }
+            }
+
+            if (newIndex !== currentParagraph) {
+                currentParagraph = newIndex;
+                highlightParagraph(newIndex);
+
+                if (paragraphs[newIndex] && paragraphs[newIndex].classList.contains('image-entry')) {
+                    holdUntilTime = Date.now() + IMAGE_HOLD_MS;
+                }
+            }
+        }
+
+        audio.addEventListener('timeupdate', onTimeUpdate);
+
+        function highlightParagraph(index) {
+            paragraphs.forEach((p, i) => {
+                p.classList.remove('active', 'read', 'upcoming');
+                if (i === index) {
+                    p.classList.add('active');
+                    if (autoScroll) {
+                        p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                } else if (i < index) {
+                    p.classList.add('read');
+                } else {
+                    p.classList.add('upcoming');
+                }
+            });
+        }
+
+        function seekToParagraph(index) {
+            if (window.currentReadMode === 'quiet') return;
+            if (index >= 0 && index < timestamps.length) {
+                holdUntilTime = 0;
+                audio.currentTime = timestamps[index];
+                audio.play();
+            }
+        }
+
+        function previousParagraph() {
+            const newIndex = Math.max(0, currentParagraph - 1);
+            seekToParagraph(newIndex);
+        }
+
+        function nextParagraph() {
+            const newIndex = Math.min(timestamps.length - 1, currentParagraph + 1);
+            seekToParagraph(newIndex);
+        }
+
+        function toggleAutoScroll() {
+            autoScroll = !autoScroll;
+            autoScrollBtn.textContent = autoScroll ? 'Auto-Scroll: ON' : 'Auto-Scroll: OFF';
+            autoScrollBtn.style.background = autoScroll
+                ? 'linear-gradient(135deg, #718096 0%, #4a5568 100%)'
+                : 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (window.currentReadMode === 'quiet') return;
+            if (e.code === 'Space' && e.target.tagName !== 'BUTTON') {
+                e.preventDefault();
+                handlePlayBtn();
+            } else if (e.code === 'ArrowRight') {
+                skip(10);
+            } else if (e.code === 'ArrowLeft') {
+                skip(-10);
+            } else if (e.code === 'ArrowUp') {
+                e.preventDefault();
+                previousParagraph();
+            } else if (e.code === 'ArrowDown') {
+                e.preventDefault();
+                nextParagraph();
+            }
+        });
+
+        function skip(seconds) {
+            audio.currentTime += seconds;
+        }
+
+        init();
+
+        // Mobile drawer controls
+        function toggleMobileDrawer() {
+            const drawer = document.getElementById('mobileDrawer');
+            const overlay = document.getElementById('mobileOverlay');
+            const isOpen = drawer.classList.contains('open');
+            if (isOpen) {
+                closeMobileDrawer();
+            } else {
+                drawer.classList.add('open');
+                overlay.classList.add('open');
+                document.getElementById('mobileFab').textContent = '✕';
+            }
+        }
+
+        function closeMobileDrawer() {
+            document.getElementById('mobileDrawer').classList.remove('open');
+            document.getElementById('mobileOverlay').classList.remove('open');
+            document.getElementById('mobileFab').textContent = '☰';
+        }
+
+        function updateDrawerStatus() {
+            // Keep drawer auto-scroll button in sync
+            const drawerBtn = document.getElementById('drawerAutoScrollBtn');
+            if (drawerBtn) {
+                drawerBtn.textContent = autoScroll ? 'Auto-Scroll: ON' : 'Auto-Scroll: OFF';
+                drawerBtn.style.background = autoScroll
+                    ? 'linear-gradient(135deg, #718096 0%, #4a5568 100%)'
+                    : 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+            }
+        }
+
+        // Keep drawer play button in sync with audio state
+        audio.addEventListener('play', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '⏸ Pause'; btn.style.background = 'linear-gradient(135deg, #7c2d42 0%, #5a1f30 100%)'; }
+            document.getElementById('drawerStatus').textContent = '▶️ Playing';
+        });
+        audio.addEventListener('pause', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '▶ Play Story'; btn.style.background = ''; }
+            document.getElementById('drawerStatus').textContent = '⏸️ Paused';
+        });
+        audio.addEventListener('ended', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '↺ Play Again'; btn.style.background = ''; }
+            document.getElementById('drawerStatus').textContent = '✅ Finished';
+        });
+
+        // ===== Reading mode: Narrated vs Quiet Reading =====
+        (function () {
+            const bgMusic = document.getElementById('bgMusic');
+            const topControlsEl = document.getElementById('topControls');
+            const quietControlsEl = document.getElementById('quietControls');
+            const audioSectionEl = document.getElementById('audioSection');
+            const musicMuteBtn = document.getElementById('musicMuteBtn');
+            const drawerNarratedControlsEl = document.getElementById('drawerNarratedControls');
+            const drawerQuietControlsEl = document.getElementById('drawerQuietControls');
+            const drawerMusicMuteBtn = document.getElementById('drawerMusicMuteBtn');
+            const MODE_KEY = 'heuring_read_mode';
+
+            bgMusic.volume = 0.35; // adjust to taste, 0.0–1.0
+
+            function applyModeUI(mode) {
+                const isQuiet = mode === 'quiet';
+
+                // Desktop panel
+                topControlsEl.classList.toggle('quiet-hide', isQuiet);
+                audioSectionEl.classList.toggle('quiet-hide', isQuiet);
+                quietControlsEl.classList.toggle('show-panel', isQuiet);
+                quietControlsEl.style.display = isQuiet ? 'flex' : 'none';
+
+                // Mobile drawer panel (FAB itself always stays visible/reachable)
+                drawerNarratedControlsEl.style.display = isQuiet ? 'none' : 'flex';
+                drawerQuietControlsEl.style.display = isQuiet ? 'flex' : 'none';
+            }
+
+            function updateMusicButton() {
+                const label = bgMusic.paused ? '🔇 Play Music' : '🔊 Pause Music';
+                musicMuteBtn.textContent = label;
+                drawerMusicMuteBtn.textContent = label;
+            }
+
+            window.setMode = function (mode, userInitiated) {
+                window.currentReadMode = mode;
+                localStorage.setItem(MODE_KEY, mode);
+                applyModeUI(mode);
+
+                if (mode === 'quiet') {
+                    if (!audio.paused) audio.pause();
+                    if (userInitiated) {
+                        // This click is a real user gesture, so autoplay is reliably allowed here
+                        bgMusic.play().catch(() => {});
+                    }
+                } else {
+                    if (!bgMusic.paused) bgMusic.pause();
+                }
+                updateMusicButton();
+            };
+
+            window.toggleBgMusic = function () {
+                if (bgMusic.paused) {
+                    bgMusic.play().catch(() => {});
+                } else {
+                    bgMusic.pause();
+                }
+                updateMusicButton();
+            };
+
+            const savedMode = localStorage.getItem(MODE_KEY) || 'narrated';
+            // Apply saved mode on load without forcing autoplay (page load isn't a user gesture)
+            setMode(savedMode, false);
+            if (savedMode === 'quiet') {
+                // Best-effort: some browsers allow this if the domain has enough prior engagement
+                bgMusic.play().catch(() => {});
+                updateMusicButton();
+            }
+        })();
+    </script>
+</body>
+</html>
