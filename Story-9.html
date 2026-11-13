@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Bangkok Protocol - Synchronized Read-Along</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1;600&display=swap" rel="stylesheet">
+
+    <style>
+	.title-image {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.title-image img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    display: block;
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.9;
+            color: #2d3748;
+            background: linear-gradient(135deg, #0f2a33 0%, #17434f 50%, #26606e 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #f4fbfd;
+            padding: 60px;
+            border-radius: 15px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            text-align: center;
+            color: #0e7490;
+            margin-bottom: 8px;
+            font-size: 2.8em;
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #0891b2;
+            margin-bottom: 40px;
+            font-style: italic;
+            font-size: 1.1em;
+        }
+
+        .audio-section {
+            background: linear-gradient(135deg, #ecf9fd 0%, #f0fcff 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            border: 2px solid #a5dbe8;
+            text-align: center;
+            display: none;
+        }
+
+        .audio-section h3 {
+            color: #0e7490;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        audio {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 30px;
+            margin-bottom: 15px;
+        }
+
+        .instructions {
+            color: #0891b2;
+            font-size: 0.95em;
+            padding: 12px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .progress-container {
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #d9eef0;
+            border-radius: 4px;
+            overflow: visible;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #22b3d4, #0b7a96);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.1s linear;
+        }
+
+        .progress-tick {
+            position: absolute;
+            top: -3px;
+            width: 3px;
+            height: 14px;
+            background: #0e7490;
+            border-radius: 2px;
+            pointer-events: none;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.6);
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            color: #0891b2;
+            margin-top: 8px;
+            font-family: 'Georgia', serif;
+        }
+
+        .story-text {
+            font-size: 1.15em;
+            text-align: justify;
+            color: #2d3748;
+        }
+
+        #storyContent p:first-of-type::first-letter {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 3.6em;
+            font-weight: 600;
+            float: left;
+            line-height: 0.85;
+            padding: 6px 10px 0 2px;
+            color: #0e7490;
+        }
+
+        .paragraph {
+            margin-bottom: 1em;
+            padding: 18px 25px;
+            border-radius: 10px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            position: relative;
+        }
+
+        .paragraph:hover {
+            background-color: #ecf9fd;
+            border-left-color: #6bd0e0;
+        }
+
+        .paragraph.active {
+            background: linear-gradient(90deg, #d9f3fc 0%, #f0fbff 100%);
+            border-left: 4px solid #22b3d4;
+            box-shadow: 0 6px 25px rgba(34, 179, 212, 0.25);
+            transform: translateX(8px);
+        }
+
+        .paragraph.read {
+            background-color: #ecf9fd;
+            border-left-color: #70c4d1;
+            opacity: 0.75;
+        }
+
+        .paragraph.upcoming {
+            opacity: 0.6;
+        }
+
+        .paragraph.image-entry,
+        .paragraph.image-entry.upcoming,
+        .paragraph.image-entry.read,
+        .paragraph.image-entry.active {
+            opacity: 1 !important;
+            background: none !important;
+            border-left: none !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+
+        .the-end {
+            text-align: center;
+            margin-top: 50px;
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-style: italic;
+            font-size: 1.4em;
+            letter-spacing: 2px;
+            color: #0e7490;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #22b3d4 0%, #0b7a96 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(34, 179, 212, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 4px 15px rgba(113, 128, 150, 0.4);
+        }
+		#playBtn {
+            font-size: 1.1em;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #1a8aa8 0%, #0b5a73 100%);
+            letter-spacing: 0.5px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(26, 138, 168, 0.4);
+        }
+
+        #playBtn:hover {
+            box-shadow: 0 6px 25px rgba(26, 138, 168, 0.55);
+        }
+
+        #playBtn.playing {
+            background: linear-gradient(135deg, #0e7490 0%, #0a3f52 100%);
+            box-shadow: 0 4px 20px rgba(14, 116, 144, 0.4);
+        }
+         .status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 101;
+        }
+
+        .quiet-hide {
+            display: none !important;
+        }
+
+        .shortcut-hint {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            background: rgba(255,255,255,0.95);
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            font-size: 0.85em;
+            color: #4a5568;
+            z-index: 100;
+        }
+
+        .key {
+            background: #edf2f7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        /* Mobile floating menu */
+        .mobile-fab {
+            display: none;
+        }
+
+        .mobile-drawer {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+
+            .story-text {
+                text-align: left;
+            }
+
+            .paragraph {
+                padding: 14px 16px;
+            }
+
+            #storyContent p:first-of-type::first-letter {
+                font-size: 2.6em;
+                padding: 4px 6px 0 0;
+            }
+
+            .story-image {
+                width: 92%;
+                max-width: 92%;
+            }
+
+            /* Hide desktop fixed overlays on mobile */
+            .status,
+            .controls,
+            .shortcut-hint {
+                display: none !important;
+            }
+
+            .quiet-panel.show-panel {
+                display: flex !important;
+                top: auto;
+                bottom: 20px;
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
+            }
+
+            /* Floating action button */
+            .mobile-fab {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 52px;
+                height: 52px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #1a8aa8, #0b5a73);
+                color: white;
+                font-size: 1.5em;
+                border: none;
+                cursor: pointer;
+                z-index: 200;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+            }
+
+            /* Slide-up drawer */
+            .mobile-drawer {
+                display: block;
+                position: fixed;
+                bottom: -300px;
+                left: 0;
+                right: 0;
+                background: white;
+                border-radius: 18px 18px 0 0;
+                box-shadow: 0 -6px 30px rgba(0,0,0,0.25);
+                padding: 20px 24px 32px;
+                z-index: 199;
+                transition: bottom 0.3s ease;
+            }
+
+            .mobile-drawer.open {
+                bottom: 0;
+            }
+
+            .drawer-handle {
+                width: 40px;
+                height: 4px;
+                background: #cbd5e0;
+                border-radius: 2px;
+                margin: 0 auto 18px;
+            }
+
+            .drawer-status {
+                text-align: center;
+                color: #0891b2;
+                font-size: 0.9em;
+                margin-bottom: 14px;
+                font-style: italic;
+            }
+
+            .drawer-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .mobile-overlay-bg {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.3);
+                z-index: 198;
+            }
+
+            .mobile-overlay-bg.open {
+                display: block;
+            }
+        }
+        .story-image {
+            max-width: 75%;
+            width: 75%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            margin: 12px auto 20px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://audio.heuring.us/added/TOC.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="status" id="topControls">
+        <button class="btn" id="playBtn" onclick="handlePlayBtn()">▶ Play Story</button>
+        <button class="btn btn-secondary" onclick="toggleAutoScroll()" id="autoScrollBtn">Auto-Scroll: ON</button>
+        <button class="btn btn-secondary" id="quietModeBtn" onclick="setMode('quiet', true)">🎵 Quiet Reading</button>
+    </div>
+
+    <div class="status quiet-panel" id="quietControls" style="display: none;">
+        <button class="btn btn-secondary" id="narratedModeBtn" onclick="setMode('narrated', true)">🎧 Back to Narrated</button>
+        <button class="btn btn-secondary" id="musicMuteBtn" onclick="toggleBgMusic()">🔊 Pause Music</button>
+    </div>
+
+    <div class="container">
+        <h1>The Bangkok Protocol</h1>
+		  <div class="title-image">
+            <img src="https://audio.heuring.us/added/9-Entering.png" alt="9-Entering">
+        </div>
+
+        <div class="audio-section" id="audioSection">
+            <h3>🎧 Narration</h3>
+            <audio id="narration" controls>
+                <source src="https://audio.heuring.us/added/9-Protocol.m4a" type="audio/mp4">
+                <source src="https://audio.heuring.us/added/9-Protocol.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBarContainer">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+                <div class="time-display">
+                    <span id="currentTimeDisplay">0:00</span>
+                    <span id="durationDisplay">0:00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="story-text" id="storyContent">
+            <!-- Paragraphs generated by JavaScript -->
+        </div>
+
+        <div class="the-end">❦ The End ❦</div>
+
+        <div class="toc-link-wrapper" style="text-align: center; margin-top: 40px;">
+            <a href="TOC.html" class="btn" style="text-decoration: none; display: inline-block; background: linear-gradient(135deg, #1a8aa8 0%, #0b5a73 100%);">📚 Back to Table of Contents</a>
+        </div>
+
+    <!-- Mobile floating button + drawer (hidden on desktop) -->
+    <div class="mobile-overlay-bg" id="mobileOverlay" onclick="closeMobileDrawer()"></div>
+
+    <button class="mobile-fab" id="mobileFab" onclick="toggleMobileDrawer()">☰</button>
+
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-handle"></div>
+        <div class="drawer-status" id="drawerStatus">Press Play to begin</div>
+        <div class="drawer-buttons" id="drawerNarratedControls">
+            <button class="btn" id="drawerPlayBtn" onclick="handlePlayBtn(); updateDrawerStatus()">▶ Play Story</button>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="previousParagraph()">⏮ Previous</button>
+                <button class="btn btn-secondary" style="flex: 1;" onclick="nextParagraph()">Next ⏭</button>
+            </div>
+            <button class="btn btn-secondary" onclick="toggleAutoScroll(); updateDrawerStatus()" id="drawerAutoScrollBtn">Auto-Scroll: ON</button>
+            <button class="btn btn-secondary" onclick="setMode('quiet', true)">🎵 Quiet Reading</button>
+        </div>
+        <div class="drawer-buttons" id="drawerQuietControls" style="display: none;">
+            <button class="btn btn-secondary" onclick="setMode('narrated', true)">🎧 Back to Narrated</button>
+            <button class="btn btn-secondary" id="drawerMusicMuteBtn" onclick="toggleBgMusic()">🔊 Pause Music</button>
+        </div>
+    </div>
+
+    <script>
+	
+
+
+
+const storyText = [
+	  "Part 1: The Diagnosis: Ten years of numbness.",
+      "It started in my toes, which is a stupid place for a life to start coming apart, and it climbed. Gabapentin, then pregabalin, then an acupuncturist in Silom who charged by the needle and told me to drink warm water. Nothing. By the end I could put my foot down on a dropped fork and feel only that *something* was there — a shape, not a texture. I'd started showering with my eyes on the drain so I wouldn't have to watch my own hands not register.",
+      "So when a colleague mentioned a clinic on Sukhumvit, a specialist called Dr. Alisa, and a “genuine solution” for men only — with a dirty little corner to his smile — I went. I didn't ask what the smile meant. I didn't want it explained to me. I wanted to be in a taxi.",
+      "The Sirikit Medical Center smelled of jasmine laid over antiseptic, the way a temple smells over a hospital. The lift was slow. My hands were wet.",
+      "The changing room had a bench, a locker, and a folded hospital gown on the bench with the paper still round it. Green, thin, laundered to the softness of old sheeting, and the paper tore a little when I unfolded it. The instruction card said everything off, gown open at the back, ties done, and I stood there in my socks for a while before I could make myself do it. The air found my back the moment the gown was on. It hung to mid-thigh and did nothing at all about the fact that I was naked under it, and my own body heat collected underneath it and made it worse, and every time I moved the hem swung against the outside of my thighs and reminded me.",
+      "Dr. Alisa was younger than I'd expected and better looking, in a way that made the whole thing worse — because you can be clinical with an old man in a white coat and you cannot be clinical with this. She had her hair pinned back off her neck and a tablet she never once looked down at properly.",
+      "The nurse, Patiporn, had high cheekbones and a white hospital uniform, and she was the one who closed the door and the one who stood at the corner of the couch with her hands folded. As she gestured for me to follow her into the examination room, I noticed that she looked at me a half-second longer than needed and then looked away as though she'd been caught. Normally, Thai nurses are shy and don't make eye contact, certainly not the way she did.",
+      "“The treatment needs access to the nerve pathways,” Dr. Alisa said, in the flat voice of someone reading out a label. “It will get into areas that cause physiological responses. It's clinical.” A beat. “Mostly. We will first need you to consent to intimate diagnostic procedures?”",
+      "“Yes,” I said. “I agree. I'm desperate.”",
+      "“Desperation is often the prerequisite for a cure.” Dr. Alisa turned a page. “Patiporn, help the patient on to the bed. Face down.”",
+      "Patiporn handed me a towel and had me wrap it round my waist underneath the gown, and stood there while I did it, and then said, quietly, “All the way to the thighs, please.” When I'd done that she reached in through the vent at the back of the gown to check the hem — and the towel began to slip off. But instead of catching it, she reached around the front and dragged her knuckles along the length of me underneath, pressing my genitals. Then she straightened the towel so it stayed and pulled the gown above my waist. Backing away, she stood facing me with her hands behind her back. I noticed a slight grin at the corners of her mouth.",
+      "Dr. Alisa, not looking up from the screen: “Was that the patient's towel slipping off again?”",
+      "“Um… just a bit, Doctor.” Patiporn's voice had gone up at the end.",
+      "Patiporn looked at the tent in the towel and bit her lip. Dr. Alisa said, “Patiporn has one weakness. She likes this kind of work a little too much.”",
+      "“Only a little, Doctor.”",
+      "“No need to argue, Patiporn. It's written on your face.”",
+      "Once on the bed face down and the towel pulled down to the back of my knees, I felt the cold gel. It was cold enough to make me hiss, and the hiss turned into something else halfway through. Her hands found the guarding along my spine, then the sacral plexus beneath it, and she pressed until the muscle gave up its grip, and it hurt in the way that only the right thing hurts.",
+      "“Ten years puts the origin of your neuropathy at the roots, not the extremities,” Dr. Alisa said, thumbs working. “We find the source before we address the symptom.”",
+      "Her thumbs walked down through my glutes, my thighs, working and releasing, and every single pass brought her fingertips up under my balls and then took them away again. By the fourth pass I was half hard against the couch and could feel the damp print of it. Nobody said anything. Nobody was going to say anything.",
+      "“Let's have him turn over. And take the gown off — I want a clean respiratory reading.”",
+      "Patiporn untied it. Two ties, one at the nape, one at the small of my back, and she did them slowly and with a kind of attention that had nothing to do with speed. The back of it fell open to the cold and she gathered the shoulders and drew it down my arms, and I sat up into it so she could get it past my elbows, and the whole front of me was bare for as long as it took her to walk it to the chair and fold it — properly, in thirds, taking her time, while I sat there with the towel over my hips covering my genitals and the monitor clipped to my finger reading 102, climbing.",
+      "The towel became a hint. The three of us listened to the monitor climb to 104.",
+      "Patiporn knelt at my head. Her voice came down close to my ear, warm and slightly unsteady, and she had to clear her throat in the middle of it. “Some of this might arouse you, but it's okay.” Her breath moved across the shell of my ear. “Just trust the process.” Then, so low I felt it in my jaw: “Between you and me, I really like this part.”",
+      "Suddenly, Dr. Alisa took the towel away. The air on me was cool and the attention on me was worse. “Spontaneous erection is a good sign. The autonomic system can still initiate — which tells me the deficit is proximal, radicular, reachable.” She tapped the tablet. “Patiporn. Hold the base.”",
+      "Patiporn moved to the side of the bed and took my balls instead.",
+      "“Rigidity's up,” Patiporn said.",
+      "“That isn't the base, Patiporn.”",
+      "“Well, it's near the base,” Patiporn said, and I felt her hand caressing my balls ever so caringly, her palm warm and a little damp.",
+      "Dr. Alisa reached over and moved the hand, holding it there a moment, correcting the grip with her fingertips on the back of Patiporn's. “This is the base,” she said. “Now, let's do this properly. This isn't the time to be exploring your interests, young lady.”",
+      "Patiporn's breath went shallow. “Yes, Doctor.”",
+      "I then felt Dr. Alisa's hand wrap around my cock. The first stroke took everything I had, and she dripped lubricant on me at the same time, cold, and it ran. She found the place under the ridge that made my thighs jump and she stayed there, unhurried, and my heels skated on the paper. “Note the turgidity, filling symmetrically.” A pause, the wet click of the pen. “Swab it.”",
+      "Removing her hand from the base, Patiporn picked up a cotton tip and slowly turned it inside my slit. I made an undignified sound, and while I was still making it she licked her finger and rubbed the head. Dr. Alisa's pen stopped.",
+      "“Is that part of the procedure, nurse?” Dr. Alisa said, her pen still down.",
+      "“No, Doctor,” Patiporn said.",
+      "“Then don't do it.”",
+      "“But it worked,” Patiporn said, showing a generous amount of precum oozing from the tip.",
+      "“It worked,” Dr. Alisa conceded, after a moment in which she had to look at the ceiling. “Fine. Do it your way. But, if he softens, you're answering for it.”",
+      "Patiporn bent to my ear again, and this time she kept her voice at a whisper and her cheek almost against mine. “She's going to take a really long time. She always does. And I'm going to have to stand here and watch, and by the end my underwear will be soaked. It always is.” A pause, and she drew back half an inch. “I'm sorry. That's probably more than you wanted to know.”",
+      "“If you're going to talk to the patient,” Dr. Alisa said, “talk quietly enough that I can't hear you.”",
+      "Tape. Measurements. A probe that ran bright buzzing ticks up into my pelvis and made my scrotum tighten by itself, involuntary as a sneeze. A silicone ring rolled down to my base so blood went in and couldn't come out, and the ache of it arrived slowly, like weather. Then stirrups, and the undignified business of evacuation, and Patiporn running one finger along my cock on her way out from under the table.",
+      "“Oops. Couldn't resist,” Patiporn said, with a mischievous look on her face.",
+      "“Geez, Patiporn. You're not even pretending now.”",
+      "She straightened her collar. “Um… I'm not even pretending now.”",
+      "Two fingers inserted in my anus, no ceremony, and they curled. My back came off the paper. “Firm, enlarged, healthy prostate,” Dr. Alisa said. “Keep him at maximum — if he loses his erection the test fails and we start again.” She said it to Patiporn, and Patiporn took it as an order, and her hand closed round me and worked, steady and businesslike, and her thumb swiped through what was beading at the tip and used it, and the sound of it was obscene in a room with a heart monitor in it. Patiporn was clearly enjoying the stroking and at one point she licked and pursed her lips. I was certainly not going to lose my erection.",
+      "Then Patiporn put her free hand under her skirt, unasked. Dr. Alisa let it go a beat too long, watching. “Ask properly,” Dr. Alisa said. “Say what you want.”",
+      "“May I put my hand under my skirt and touch myself while you work, please, Doctor?”",
+      "“Go on, then,” Dr. Alisa said. “You'll have to be quiet.”",
+      "“I will,” Patiporn said.",
+      "“You won't.”",
+      "Dr. Alisa and Patiporn worked me to the edge of an orgasm the ring wouldn't let through, and held me there, and my thighs began to shake, and Dr. Alisa reached for a curved silicone device and let me breathe. “Hands-free, the angle seats against the anterior wall,” she said. “Both hands on the penis, steady.”",
+      "“Both hands?” Patiporn said.",
+      "“Both hands.”",
+      "Patiporn pulled her wet hand out from under her skirt, shining, and put both hands on me without wiping them. “Was that necessary?” Dr. Alisa said. “It's not sterile.”",
+      "“It's all right,” I said, and my voice came out thinner than I meant it to.",
+      "“It's nearly sterile,” Patiporn said. Dr. Alisa made a sound that was almost a laugh.",
+      "“Ask me about restraints,” Dr. Alisa said.",
+      "“Restraints, please —”",
+      "“Good. In the treatment suite you'll be strapped down for the duration. Say it back.”",
+      "“Strapped down. The duration,” Patiporn said.",
+      "“Good!”",
+      "And then, past all of it — past the ring and the probe and the two of them talking over me like furniture — a prickle along my left sole. Warmth. Real warmth, low and spreading under the arch, the first honest thing my foot had said in years. My eyes stung before I understood why. Dr. Alisa saw it and her whole face changed. “The signals are normalizing. The toes are becoming red. That's the plexus opening.”",
+      "Dr. Alisa slowed, drew out, sat back.",
+      "“All right. Go on. Properly. And don't stop when I tell you to.”",
+      "Patiporn was on me before the sentence finished. Dr. Alisa watched with her jaw set and her hand loose in her lap, and after a while she wasn't watching the monitor at all. “He tastes so good,” Patiporn said, surfacing, and went back down.",
+      "“The neuropathy isn't peripheral,” Dr. Alisa said, and her voice had gone clinical again, which was somehow worse with Patiporn's mouth on me. “It's proximal, radicular — the same compression that's been strangling your erections. One cause, two symptoms. The Protocol treats both. We can do it right away!”",
+      "Then Dr. Alisa gave me the option. “The surgical theatre is free until six, and Patiporn can assist. Two minutes to decide. It's experimental, and I'll want it said out loud and signed.”",
+      "Patiporn, offhand, from her knees, seemed insistent: “The theatre's ready to go. And you're warm. If you go home now, you'll stiffen up in the taxi.” A pause. “And the feet. If you stop now, you'll have lost the window —”",
+      "And then Patiporn stopped, because it was already happening. The warmth under my arch thinned. Not gone — thinning, drawn back toward the ankle like water going out, and the sole went from warm to tepid to that old familiar nothing, and I felt it go and made a sound I'm not proud of.",
+      "“Doctor.” Patiporn's hand came off me entirely. “Doctor, it's going. It's going cold.”",
+      "Dr. Alisa was round the table before Patiporn finished. Two fingers on the arch, then the heel, then the toes, and her mouth went thin. “Ninety seconds. Once it's gone it doesn't come back on its own at this stage — we've proved the pathway and now we starve it.” Her hand closed round my ankle. “Mr. Heuring, look at me. Do you want to walk on grass again this year?”",
+      "“Yes,” I said, and it came out like a cough.",
+      "“Then decide now.”",
+      "Patiporn was already at the drawer, pulling the consent forms, and her hands were not steady. Dr. Alisa hadn't turned round. “Patiporn. Are you arguing for the patient, or for yourself?”",
+      "“Both, Doctor,” Patiporn said.",
+      "“Mm.” A beat, and Dr. Alisa said it a shade too quickly to be purely clinical: “Mr. Heuring?”",
+      "“Now,” I said. “God. Now.”",
+      "I read it — barely, my eyes skidding. I signed it. Patiporn witnessed it with an unsteady thumb, and Dr. Alisa looked at the two marks a moment longer than necessary, and then at Patiporn's thumb, and then at Patiporn.",
+      "“Right,” Dr. Alisa said. “I'll get in my scrubs while you take him into the theatre. Keep him hard. We don't want to lose the warmth and have to start over.”",
+      "Part 2: The Treatment",
+      "Theatre. Steel, tile, ozone, and four monitors already looping the last hour of me on my back with my heels in the air.",
+      "Patiporn buckled my wrists fast, the clicks going off like small dry snaps, and set my ankles high and wide, and took her time about the ankles, and when she'd finished, she stood between my spread knees with her hands behind her back like a girl reciting. The tile threw her voice back at both of us.",
+      "“I'm going to be honest,” she said, low. “This is my favourite room in the building. And she's going to let me off the leash in here.” She pulled her gloves off finger by finger, watching me watch her do it. “I've been wet since the towel. Before the towel. Since you walked out of that changing room in that gown.” She looked down at me. “Oh, oh, it looks to me like you're starting to soften. That's a problem.”",
+      "Two bare fingers. Then up under her skirt, and the sound of it came off the tile twice, wet and unmistakable. She held them out to me, strung and glistening, and said, “Lick them!” She pushed them into my mouth to the knuckle. “Go on. Suck them!”",
+      "Then she climbed over my chest, hauled her skirt up round her waist with a small apologetic tug, and came down on my mouth in a slow crush.",
+      "I got my tongue flat and dragged it up her and her knees went. She rocked in short rolls with her fist in my hair and the heart monitor climbing behind us, and she laughed once, breathless, at the sound of it, embarrassed and delighted at once. “Don't stop. If you stop I'll — oh, there, right there —”",
+      "The door opened. She froze with her hand over my mouth. I did not stop.",
+      "Dr. Alisa stood in the doorway with her gloves already on and looked at the clock. “What happened? Was he losing his erection? Is it still hard enough to continue?”",
+      "“Yes, Doctor,” Patiporn said. “He's also doing it well.”",
+      "“He's strapped down — he couldn't have stopped you if he'd wanted to,” Dr. Alisa said. “But it certainly is keeping him hard. Which is precisely the point.” A pause, and the dry voice went drier. “Well. You've started. Finish. And you ask first.”",
+      "“May I finish, Doctor?” Patiporn said, breathless, into the wet quiet.",
+      "“You may, and then you need to get in your scrubs quickly.”",
+      "Dr. Alisa slid two gloved fingers into Patiporn from behind. “Don't stop working,” she said. “He's doing all the work and you're getting the credit.” Patiporn rode my mouth graceless and loud, and Dr. Alisa worked her slow, watching her back rather than her own hand.",
+      "Patiporn came with her thighs locked round my head, and the sound she made rang off the far wall.",
+      "“Wipe his face,” Dr. Alisa said. “You've got a patient full of your fluids.”",
+      "Treatment one was the violet wand — a wasp-sting at my perineum, then slow circles, then the underside of my cock, and the sting turned into something that ran up my spine and glowed at the top of it. Ozone came off it, thin and bright, the same smell as the room. Patiporn's left hand worked my prostate while her right moved under her skirt. “Hand,” Dr. Alisa said, without looking round, and looked at the fingers and then at her face. “Wetter than last time. Get it back down and use two fingers.”",
+      "Treatment two: a harness, band round my cock, scrotum drawn taut. “Restricted flow raises sensitivity,” Dr. Alisa said. The little flogger, one-handed, Patiporn counting time while her other hand never left her skirt. Every eighth stroke across the head, and the whistle of it arrived a half-beat before the sting. “It's meant to be a metronome,” Dr. Alisa said. “It has flourishes.”",
+      "“It's a Thai metronome,” Patiporn said, and hit me again.",
+      "Treatment three: a heavy steel massager, cold even through the glove, seated on the glans and humming. “Ten minutes on the edge,” Dr. Alisa said. “You tell me when you're close and I decide. You don't come until I say.” Then Patiporn's mouth, slow and wet and deliberate, and the warmth coming up over my arches until my dead feet curled in the stirrups and I laughed out loud, stupidly, at the ceiling.",
+      "“That's ten years of starved nerve waking up,” Dr. Alisa said. “Your body is doing that. Nobody's written down what to do if it does it this fast.”",
+      "Dr. Alisa pulled the massager out and put her hand inside her own waistband, and her eyes half closed. “Doctor,” Patiporn said, delighted. “Shut up,” Dr. Alisa said, not opening them. Dr. Alisa pulled her scrub top off, and her skin was flushed right up her chest. Patiporn stripped to mask and gloves and slick thighs.",
+      "Patiporn looked at her and grinned. “Look at you. You're running and just as horny as me.”",
+      "“I know,” Dr. Alisa said. “You'd do this for free, wouldn't you?”",
+      "“I would. Having a man strapped down and ready for me to pounce his hard cock is my favorite fantasy.”",
+      "Dr. Alisa laughed properly for the first time all afternoon, threw the uniform on the floor, and said, “Treatment four. The psychological component. Both of us. There's no part of it you get to skip.”",
+      "She reached down and worked the ring off me, and the blood went out of me all at once, and for a second the room swam. “He'll have to come,” she said. “So, it comes off now.” Then she unbuckled my right wrist and put the hand on Patiporn's hip. “One hand. Don't get clever with it. Mount him. Cowgirl. I want him sheathed while I work the rest.”",
+      "Patiporn sank down on me in one long gripping slide and stopped, full, eyes shut. “Move,” Dr. Alisa said. “Slow and deep. Grind on the dorsal nerve.” Dr. Alisa knelt underneath and put her tongue to my balls, then lower, to where Patiporn's body was stretched round me.",
+      "Then, Dr. Alisa walked over to a shelf, picked up a double-ended vibrators and inserted it into herself. She walked behind us and inserted the other end into Patiporn's ass while Patiporn stopped pumping me. “She's going to fill me up,” Patiporn whispered, and her breath was going in my ear. “You'll feel the vibration through my pussy.”",
+      "Filled in both channels, Patiporn found my mouth and French kissed me deeply — and Dr. Alisa said, “You didn't ask.”",
+      "“I'm not asking anymore,” Patiporn said against my lips, and kissed me again.",
+      "The three of us found one rhythm. Patiporn talked the whole way through it, filthy, into my ear and then into my mouth — …stay like that, …you feel so good, …don't you dare stop, …I want it in me* — and Dr. Alisa stopped correcting her entirely and started talking too.",
+      "“She'd have had you on the floor of that exam room if I'd let her,” Dr. Alisa said, and her voice had gone low and rough. “And I'm going to let her. Again and again, until you can't remember which of us is treating you.”",
+      "“The signals are holding,” she said. “You're cured, Mr. Heuring. But you have to finish, or we can't call it confirmed.”",
+      "“I'm —”",
+      "“Ask,” Dr. Alisa said.",
+      "“Please, Doctor —”",
+      "“Now. Finish.”",
+      "It came up out of me like something pulled loose. Dr. Alisa kept the vibrator working through every surge, and Patiporn ground down through her own climax with her teeth against my throat.",
+      "“Vascular response maintained post-ejaculation,” Dr. Alisa said. “The ED is behind you.” Her eyes went dark. “Though I'd want to see that hold up more than once. Before we sign anything off.”",
+      "They bent over me together, and she said, “Bonus time for this nice looking cock,” and they took turns licking and sucking my cock, faster each time, until I lost track of whose mouth was on me. Then, both came off at once — and kissed each other across the head of it.",
+      "It started slow and got wetter and less careful, their lips sliding over each other with me caught in the seam, their tongues meeting over the ridge. Nobody had a hand on me. That was the thing. The only thing touching my cock was two mouths busy with each other, and I was climbing anyway.",
+      "“Again,” Dr. Alisa said.",
+      "I got my heels into the stirrups and could not have held it if I'd tried. Neither of them moved away. The first surge went across both their lips; they broke off to gasp and came straight back, and Dr. Alisa laughed against Patiporn's mouth and licked it off her. They kissed through all of it, and Dr. Alisa pressed the head flat against her own lip so she could feel every pulse go by.",
+      "Then she straightened, and everything in her changed.",
+      "“Time of completion, seventeen fifty-two,” Dr. Alisa said. “Trace clean, thermal restored. The Protocol has run. Which means my professional duties are finished. So I am, as of this moment, off duty.”",
+      "She looked at us with her chin up, and then the chin came down a little, and the professional voice ran out of road. “There have been four orgasms so far and none for me. Two for her before I'd even got my scrubs on, two for you since. And me — I'm so horny right now. I need it and you two are going to do me.” Her voice snagged, and she pushed through it. “I've stood in this room listening to the pair of you with the water running down my legs, and I've had nothing.”",
+      "“Doctor —” Patiporn started.",
+      "“Now you two are going to do me, I need it.” She got her breath. “Nobody's going home. The cameras stay on. And I don't want a lot of little ones — I want one. One, and I want it to be the best of my life, and the two of you are going to build it and not spill it.”",
+      "“Everything's yours,” I said. “Both of us. Nothing else.”",
+      "“Good.” To Patiporn: “You get to be useful with your mouth and fingers.”",
+      "Dr. Alisa climbed onto the table and knelt astride my chest and dragged Patiporn up in front of her by the hair and pushed her head down between her thighs. “You've been looking at it all afternoon. Open your mouth.”",
+      "Patiporn didn't warm her up and didn't ask to. Her mouth went flat and wide and stayed there, and Dr. Alisa's hips started moving at once — short, tight, grinding circles, riding Patiporn's tongue like she knew the way. From underneath I had the whole length of her back bowing over me, the backs of her thighs going tight and slack and tight.",
+      "“Flat tongue,” Dr. Alisa said, muffled. “Don't be clever.”",
+      "Patiporn's hands came round to her breasts and rolled her nipples, and Dr. Alisa's back arched hard enough to open her ribs, and her breath went ragged — and then she took her cunt off Patiporn's mouth and sat back on my chest.",
+      "“Not yet. That's too quick.” She was already slick to the knee. “Stand up. Both of you.”",
+      "She came off the table and turned her back on it and bent over the end, cheek on the paper, and looked back at us. “Him first. Fingers, then cock. She's at my mouth, and she doesn't touch herself, and neither of you says a word unless I ask for it.”",
+      "I got two fingers in her and she was so wet they went in without a sound, and she pushed back onto them twice and then reached back and pulled my wrist away. “Now.”",
+      "She took me and sank back in one relentless slide and did not stop until her ass was against my hips. Then she just breathed, forehead down on the paper, getting used to it, and her hips began to work — slow, deliberate, taking me to the root and rolling forward off it and back again.",
+      "Patiporn bent over the table in front of her and put her mouth on Dr. Alisa's nipple. Dr. Alisa made a low noise and her hand came up into Patiporn's hair and held her there.",
+      "“Harder with your tongue. Flat and hard.” A pause, and her hips stuttered. “That's it. Don't stop.”",
+      "She was climbing fast and she knew it, and she pulled off me and swore and put her hand flat on the paper.",
+      "“Too fast again. I'm going to fall over the edge and it'll be a small one and I'll be cross.” She straightened, turned, and looked at the table. “Both of you. On it. Him underneath.”",
+      "She got me down on my back along the length of the table and climbed on top of me face-down, sprawled along me with her cheek on my chest and her hips over my hips, her legs outside mine, wide. Patiporn got on her knees alongside her, head at her breasts, and Dr. Alisa reached back with one hand and found me and lifted her hips and put me against her cunt and pushed back.",
+      "She took me in from behind, from above, in one long sinking push, and went still with her forehead on my sternum and her breath hot and broken against my scrub top.",
+      "“Don't move yet. Just — let me have it.”",
+      "Patiporn's mouth found her nipple again and Dr. Alisa's hips rolled, tiny, involuntary. She got her hand under herself and worked it between her thighs, and I could feel her fingers glancing against the base of me.",
+      "“Now. From underneath. Slow.”",
+      "I got my hand on her hip and thrust up into her from below, long and slow, and she came down to meet every one of them and her mouth opened against my chest. My other hand went up her spine, flat, dragging, feeling every vertebra and the muscles jumping either side of them, up between her shoulder blades and back down over her ribs and into the dip of her waist and over the rise of her ass.",
+      "Patiporn slid her hand down under Dr. Alisa's belly and got two fingers on her clit and Dr. Alisa made a sound into my shirt like she'd been hit.",
+      "“Like that. Exactly like that. Don't change it, either of you — don't change it —”",
+      "She was so wet it was running down the inside of my thigh. Her heel came up and hooked over the back of my calf and her whole body went long and taut along mine, and her fingers curled into the paper beside my head, and I could feel her cunt start to flutter and clamp in quick uneven flutters.",
+      "“Say it,” she gasped. “Talk to me, one of you —”",
+      "“You're right there,” Patiporn said, mouth still against her breast. “You're right on the edge of it, you can feel how close, it's right under your ribs —”",
+      "“*Yes* —”",
+      "“— and it's going to be huge, it's going to be the biggest of your life, and you don't have to do anything, just let it —”",
+      "She came. She came and it tore out of her, a long, ragged, open-throated cry, and her back bowed so hard Patiporn had to take her weight, and she clamped down on me in wave after wave and pushed back into every one, riding it out on my cock and Patiporn's fingers, and it went on and on and then broke and left her shaking, and she still wouldn't let it end, grinding down, chasing the last of it.",
+      "Then she went limp all along my chest, breathing in wet gulps.",
+      "Patiporn took her hand away slowly, and Dr. Alisa's hips twitched. Her fingers uncurled from the paper.",
+      "“That's the one,” she said into my shirt, wrecked. “That's the one. Now be very still, both of you, and let me remember it.”",
+      "“Thank you,” Dr. Alisa said eventually, in a small cracked voice, to nobody in particular. She sat on the edge of the table with her top in her lap and didn't put it on for a while.",
+      "“Booking,” she said, when she did. “Twelve sessions. Two-week review and four-week review — I've no idea what the recovery curve on a combined case looks like and I'm not guessing. Give it ten minutes and drink the water.”",
+      "Patiporn, naked and wrecked and grinning: “Twelve sessions. And I'll be here for all of it, and one of these days she'll let me have you properly and then she'll be sorry, because you'll not want to leave.” She bit her lip. “And you'll come back for the review. You will.”",
+      "“I'll come back for the review,” I said.",
+      "Dr. Alisa buttoned her top, still barefoot. “Eight sharp. And Mr. Heuring — you'll be able to feel this by the weekend. The floor under your soles. Grass, if you've got any. Don't wear the thick socks out of habit, it undoes the work.”",
+      "She stopped in the doorway and looked back at me, and for a moment she looked nothing at all like a doctor.",
+      "I was going to be ruined. I was going to be able to feel my feet."
+];
+
+
+
+        // State — auto-scroll ON by default
+        let autoScroll = true;
+        let hasStarted = false;
+        let currentParagraph = -1;
+        let paragraphs = [];
+
+        const audio = document.getElementById('narration');
+        const progressBar = document.getElementById('progressBar');
+        const progressBarContainer = document.getElementById('progressBarContainer');
+        const playBtn = document.getElementById('playBtn');
+        const autoScrollBtn = document.getElementById('autoScrollBtn');
+        const currentTimeDisplay = document.getElementById('currentTimeDisplay');
+        const durationDisplay = document.getElementById('durationDisplay');
+
+        function formatTime(seconds) {
+            if (!isFinite(seconds) || seconds < 0) return '0:00';
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return m + ':' + String(s).padStart(2, '0');
+        }
+
+        function renderProgressTicks() {
+            if (!audio.duration || !isFinite(audio.duration)) return;
+            progressBarContainer.querySelectorAll('.progress-tick').forEach(t => t.remove());
+            storyText.forEach((text, index) => {
+                if (text.startsWith('<img') && timestamps[index] !== undefined) {
+                    const pct = (timestamps[index] / audio.duration) * 100;
+                    const tick = document.createElement('div');
+                    tick.className = 'progress-tick';
+                    tick.style.left = pct + '%';
+                    tick.title = 'Image';
+                    progressBarContainer.appendChild(tick);
+                }
+            });
+        }
+
+        audio.addEventListener('loadedmetadata', () => {
+            durationDisplay.textContent = formatTime(audio.duration);
+            renderProgressTicks();
+        });
+
+        function init() {
+            const container = document.getElementById('storyContent');
+            storyText.forEach((text, index) => {
+                const p = document.createElement('p');
+                p.className = 'paragraph upcoming';
+                p.setAttribute('data-index', index);
+                if (text.startsWith('<img')) {
+                    p.innerHTML = text;
+                    p.classList.add('image-entry');
+                    p.style.textAlign = 'center';
+                    p.style.cursor = 'default';
+                } else {
+                    p.textContent = text;
+                    p.addEventListener('click', () => seekToParagraph(index));
+                }
+                container.appendChild(p);
+                paragraphs.push(p);
+            });
+            // Update auto-scroll button to reflect default ON state
+            autoScrollBtn.textContent = 'Auto-Scroll: ON';
+        }
+
+        function handlePlayBtn() {
+            if (audio.paused) {
+                // First play: scroll to story text
+                if (!hasStarted) {
+                    hasStarted = true;
+                    document.getElementById('storyContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    setTimeout(() => audio.play(), 400);
+                } else {
+                    audio.play();
+                }
+            } else {
+                audio.pause();
+            }
+        }
+
+        audio.addEventListener('play', () => {
+            playBtn.textContent = '⏸ Pause';
+            playBtn.classList.add('playing');
+        });
+
+        audio.addEventListener('pause', () => {
+            playBtn.textContent = '▶ Play Story';
+            playBtn.classList.remove('playing');
+        });
+
+        audio.addEventListener('ended', () => {
+            playBtn.textContent = '↺ Play Again';
+            playBtn.classList.remove('playing');
+        });
+
+        document.getElementById('progressBarContainer').addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            audio.currentTime = pos * audio.duration;
+        });
+
+        // Minimum real-time (ms since epoch) to hold on the current paragraph.
+        // Used to guarantee images stay on screen for at least IMAGE_HOLD_MS,
+        // even if the audio's built-in silence is slightly shorter than expected.
+        const IMAGE_HOLD_MS = 10000;
+        let holdUntilTime = 0;
+
+        function onTimeUpdate() {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = progress + '%';
+            currentTimeDisplay.textContent = formatTime(audio.currentTime);
+
+            // Still holding on an image — skip advancing the highlight/scroll.
+            if (Date.now() < holdUntilTime) {
+                return;
+            }
+
+            let newIndex = -1;
+            for (let i = 0; i < timestamps.length; i++) {
+                if (audio.currentTime >= timestamps[i]) {
+                    newIndex = i;
+                } else {
+                    break;
+                }
+            }
+
+            if (newIndex !== currentParagraph) {
+                currentParagraph = newIndex;
+                highlightParagraph(newIndex);
+
+                if (paragraphs[newIndex] && paragraphs[newIndex].classList.contains('image-entry')) {
+                    holdUntilTime = Date.now() + IMAGE_HOLD_MS;
+                }
+            }
+        }
+
+        audio.addEventListener('timeupdate', onTimeUpdate);
+
+        function highlightParagraph(index) {
+            paragraphs.forEach((p, i) => {
+                p.classList.remove('active', 'read', 'upcoming');
+                if (i === index) {
+                    p.classList.add('active');
+                    if (autoScroll) {
+                        p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                } else if (i < index) {
+                    p.classList.add('read');
+                } else {
+                    p.classList.add('upcoming');
+                }
+            });
+        }
+
+        function seekToParagraph(index) {
+            if (window.currentReadMode === 'quiet') return;
+            if (index >= 0 && index < timestamps.length) {
+                holdUntilTime = 0;
+                audio.currentTime = timestamps[index];
+                audio.play();
+            }
+        }
+
+        function previousParagraph() {
+            const newIndex = Math.max(0, currentParagraph - 1);
+            seekToParagraph(newIndex);
+        }
+
+        function nextParagraph() {
+            const newIndex = Math.min(timestamps.length - 1, currentParagraph + 1);
+            seekToParagraph(newIndex);
+        }
+
+        function toggleAutoScroll() {
+            autoScroll = !autoScroll;
+            autoScrollBtn.textContent = autoScroll ? 'Auto-Scroll: ON' : 'Auto-Scroll: OFF';
+            autoScrollBtn.style.background = autoScroll
+                ? 'linear-gradient(135deg, #718096 0%, #4a5568 100%)'
+                : 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (window.currentReadMode === 'quiet') return;
+            if (e.code === 'Space' && e.target.tagName !== 'BUTTON') {
+                e.preventDefault();
+                handlePlayBtn();
+            } else if (e.code === 'ArrowRight') {
+                skip(10);
+            } else if (e.code === 'ArrowLeft') {
+                skip(-10);
+            } else if (e.code === 'ArrowUp') {
+                e.preventDefault();
+                previousParagraph();
+            } else if (e.code === 'ArrowDown') {
+                e.preventDefault();
+                nextParagraph();
+            }
+        });
+
+        function skip(seconds) {
+            audio.currentTime += seconds;
+        }
+
+        init();
+
+        // Mobile drawer controls
+        function toggleMobileDrawer() {
+            const drawer = document.getElementById('mobileDrawer');
+            const overlay = document.getElementById('mobileOverlay');
+            const isOpen = drawer.classList.contains('open');
+            if (isOpen) {
+                closeMobileDrawer();
+            } else {
+                drawer.classList.add('open');
+                overlay.classList.add('open');
+                document.getElementById('mobileFab').textContent = '✕';
+            }
+        }
+
+        function closeMobileDrawer() {
+            document.getElementById('mobileDrawer').classList.remove('open');
+            document.getElementById('mobileOverlay').classList.remove('open');
+            document.getElementById('mobileFab').textContent = '☰';
+        }
+
+        function updateDrawerStatus() {
+            // Keep drawer auto-scroll button in sync
+            const drawerBtn = document.getElementById('drawerAutoScrollBtn');
+            if (drawerBtn) {
+                drawerBtn.textContent = autoScroll ? 'Auto-Scroll: ON' : 'Auto-Scroll: OFF';
+                drawerBtn.style.background = autoScroll
+                    ? 'linear-gradient(135deg, #718096 0%, #4a5568 100%)'
+                    : 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+            }
+        }
+
+        // Keep drawer play button in sync with audio state
+        audio.addEventListener('play', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '⏸ Pause'; btn.style.background = 'linear-gradient(135deg, #7c2d42 0%, #5a1f30 100%)'; }
+            document.getElementById('drawerStatus').textContent = '▶️ Playing';
+        });
+        audio.addEventListener('pause', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '▶ Play Story'; btn.style.background = ''; }
+            document.getElementById('drawerStatus').textContent = '⏸️ Paused';
+        });
+        audio.addEventListener('ended', () => {
+            const btn = document.getElementById('drawerPlayBtn');
+            if (btn) { btn.textContent = '↺ Play Again'; btn.style.background = ''; }
+            document.getElementById('drawerStatus').textContent = '✅ Finished';
+        });
+
+        // ===== Reading mode: Narrated vs Quiet Reading =====
+        (function () {
+            const bgMusic = document.getElementById('bgMusic');
+            const topControlsEl = document.getElementById('topControls');
+            const quietControlsEl = document.getElementById('quietControls');
+            const audioSectionEl = document.getElementById('audioSection');
+            const musicMuteBtn = document.getElementById('musicMuteBtn');
+            const drawerNarratedControlsEl = document.getElementById('drawerNarratedControls');
+            const drawerQuietControlsEl = document.getElementById('drawerQuietControls');
+            const drawerMusicMuteBtn = document.getElementById('drawerMusicMuteBtn');
+            const MODE_KEY = 'heuring_read_mode';
+
+            bgMusic.volume = 0.35; // adjust to taste, 0.0–1.0
+
+            function applyModeUI(mode) {
+                const isQuiet = mode === 'quiet';
+
+                // Desktop panel
+                topControlsEl.classList.toggle('quiet-hide', isQuiet);
+                audioSectionEl.classList.toggle('quiet-hide', isQuiet);
+                quietControlsEl.classList.toggle('show-panel', isQuiet);
+                quietControlsEl.style.display = isQuiet ? 'flex' : 'none';
+
+                // Mobile drawer panel (FAB itself always stays visible/reachable)
+                drawerNarratedControlsEl.style.display = isQuiet ? 'none' : 'flex';
+                drawerQuietControlsEl.style.display = isQuiet ? 'flex' : 'none';
+            }
+
+            function updateMusicButton() {
+                const label = bgMusic.paused ? '🔇 Play Music' : '🔊 Pause Music';
+                musicMuteBtn.textContent = label;
+                drawerMusicMuteBtn.textContent = label;
+            }
+
+            window.setMode = function (mode, userInitiated) {
+                window.currentReadMode = mode;
+                localStorage.setItem(MODE_KEY, mode);
+                applyModeUI(mode);
+
+                if (mode === 'quiet') {
+                    if (!audio.paused) audio.pause();
+                    if (userInitiated) {
+                        // This click is a real user gesture, so autoplay is reliably allowed here
+                        bgMusic.play().catch(() => {});
+                    }
+                } else {
+                    if (!bgMusic.paused) bgMusic.pause();
+                }
+                updateMusicButton();
+            };
+
+            window.toggleBgMusic = function () {
+                if (bgMusic.paused) {
+                    bgMusic.play().catch(() => {});
+                } else {
+                    bgMusic.pause();
+                }
+                updateMusicButton();
+            };
+
+            const savedMode = localStorage.getItem(MODE_KEY) || 'narrated';
+            // Apply saved mode on load without forcing autoplay (page load isn't a user gesture)
+            setMode(savedMode, false);
+            if (savedMode === 'quiet') {
+                // Best-effort: some browsers allow this if the domain has enough prior engagement
+                bgMusic.play().catch(() => {});
+                updateMusicButton();
+            }
+        })();
+    </script>
+</body>
+</html>
