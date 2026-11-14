@@ -33,7 +33,7 @@
             font-family: 'Georgia', 'Times New Roman', serif;
             line-height: 1.9;
             color: #2d3748;
-            background: linear-gradient(135deg, #0f2a33 0%, #17434f 50%, #26606e 100%);
+            background: linear-gradient(135deg, #1c260b 0%, #2f3f0f 50%, #46591a 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -41,7 +41,7 @@
         .container {
             max-width: 850px;
             margin: 0 auto;
-            background: #f4fbfd;
+            background: #f9fbf1;
             padding: 60px;
             border-radius: 15px;
             box-shadow: 0 25px 80px rgba(0,0,0,0.4);
@@ -49,7 +49,7 @@
 
         h1 {
             text-align: center;
-            color: #0e7490;
+            color: #53710f;
             margin-bottom: 8px;
             font-size: 2.8em;
             font-family: 'Playfair Display', 'Georgia', serif;
@@ -59,24 +59,24 @@
 
         .subtitle {
             text-align: center;
-            color: #0891b2;
+            color: #6a8f12;
             margin-bottom: 40px;
             font-style: italic;
             font-size: 1.1em;
         }
 
         .audio-section {
-            background: linear-gradient(135deg, #ecf9fd 0%, #f0fcff 100%);
+            background: linear-gradient(135deg, #f4f9e6 0%, #f8fcee 100%);
             padding: 30px;
             border-radius: 12px;
             margin-bottom: 40px;
-            border: 2px solid #a5dbe8;
+            border: 2px solid #c9dc9a;
             text-align: center;
             display: none;
         }
 
         .audio-section h3 {
-            color: #0e7490;
+            color: #53710f;
             margin-bottom: 20px;
             font-size: 1.3em;
         }
@@ -89,7 +89,7 @@
         }
 
         .instructions {
-            color: #0891b2;
+            color: #6a8f12;
             font-size: 0.95em;
             padding: 12px;
             background: rgba(255,255,255,0.6);
@@ -105,7 +105,7 @@
         .progress-bar {
             width: 100%;
             height: 8px;
-            background: #d9eef0;
+            background: #e4ecd0;
             border-radius: 4px;
             overflow: visible;
             cursor: pointer;
@@ -114,7 +114,7 @@
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #22b3d4, #0b7a96);
+            background: linear-gradient(90deg, #8bbd1f, #4a6a0c);
             width: 0%;
             border-radius: 4px;
             transition: width 0.1s linear;
@@ -125,7 +125,7 @@
             top: -3px;
             width: 3px;
             height: 14px;
-            background: #0e7490;
+            background: #53710f;
             border-radius: 2px;
             pointer-events: none;
             box-shadow: 0 0 0 1px rgba(255,255,255,0.6);
@@ -135,7 +135,7 @@
             display: flex;
             justify-content: space-between;
             font-size: 0.85em;
-            color: #0891b2;
+            color: #6a8f12;
             margin-top: 8px;
             font-family: 'Georgia', serif;
         }
@@ -153,7 +153,7 @@
             float: left;
             line-height: 0.85;
             padding: 6px 10px 0 2px;
-            color: #0e7490;
+            color: #53710f;
         }
 
         .paragraph {
@@ -167,20 +167,20 @@
         }
 
         .paragraph:hover {
-            background-color: #ecf9fd;
-            border-left-color: #6bd0e0;
+            background-color: #f4f9e6;
+            border-left-color: #a6cf4a;
         }
 
         .paragraph.active {
-            background: linear-gradient(90deg, #d9f3fc 0%, #f0fbff 100%);
-            border-left: 4px solid #22b3d4;
-            box-shadow: 0 6px 25px rgba(34, 179, 212, 0.25);
+            background: linear-gradient(90deg, #eaf6cf 0%, #f7fce9 100%);
+            border-left: 4px solid #8bbd1f;
+            box-shadow: 0 6px 25px rgba(139, 189, 31, 0.25);
             transform: translateX(8px);
         }
 
         .paragraph.read {
-            background-color: #ecf9fd;
-            border-left-color: #70c4d1;
+            background-color: #f4f9e6;
+            border-left-color: #9bbf5a;
             opacity: 0.75;
         }
 
@@ -206,7 +206,7 @@
             font-style: italic;
             font-size: 1.4em;
             letter-spacing: 2px;
-            color: #0e7490;
+            color: #53710f;
         }
 
         .controls {
@@ -224,7 +224,7 @@
         }
 
         .btn {
-            background: linear-gradient(135deg, #22b3d4 0%, #0b7a96 100%);
+            background: linear-gradient(135deg, #8bbd1f 0%, #4a6a0c 100%);
             color: white;
             border: none;
             padding: 12px 24px;
@@ -238,7 +238,7 @@
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(34, 179, 212, 0.4);
+            box-shadow: 0 4px 15px rgba(139, 189, 31, 0.4);
         }
 
         .btn-secondary {
@@ -251,19 +251,19 @@
 		#playBtn {
             font-size: 1.1em;
             padding: 14px 28px;
-            background: linear-gradient(135deg, #1a8aa8 0%, #0b5a73 100%);
+            background: linear-gradient(135deg, #5f8a12 0%, #3d5a0c 100%);
             letter-spacing: 0.5px;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(26, 138, 168, 0.4);
+            box-shadow: 0 4px 20px rgba(95, 138, 18, 0.4);
         }
 
         #playBtn:hover {
-            box-shadow: 0 6px 25px rgba(26, 138, 168, 0.55);
+            box-shadow: 0 6px 25px rgba(95, 138, 18, 0.55);
         }
 
         #playBtn.playing {
-            background: linear-gradient(135deg, #0e7490 0%, #0a3f52 100%);
-            box-shadow: 0 4px 20px rgba(14, 116, 144, 0.4);
+            background: linear-gradient(135deg, #53710f 0%, #2c420a 100%);
+            box-shadow: 0 4px 20px rgba(83, 113, 15, 0.4);
         }
          .status {
             position: fixed;
@@ -362,7 +362,7 @@
                 width: 52px;
                 height: 52px;
                 border-radius: 50%;
-                background: linear-gradient(135deg, #1a8aa8, #0b5a73);
+                background: linear-gradient(135deg, #5f8a12, #3d5a0c);
                 color: white;
                 font-size: 1.5em;
                 border: none;
@@ -400,7 +400,7 @@
 
             .drawer-status {
                 text-align: center;
-                color: #0891b2;
+                color: #6a8f12;
                 font-size: 0.9em;
                 margin-bottom: 14px;
                 font-style: italic;
@@ -483,7 +483,7 @@
         <div class="the-end">❦ The End ❦</div>
 
         <div class="toc-link-wrapper" style="text-align: center; margin-top: 40px;">
-            <a href="TOC.html" class="btn" style="text-decoration: none; display: inline-block; background: linear-gradient(135deg, #1a8aa8 0%, #0b5a73 100%);">📚 Back to Table of Contents</a>
+            <a href="TOC.html" class="btn" style="text-decoration: none; display: inline-block; background: linear-gradient(135deg, #5f8a12 0%, #3d5a0c 100%);">📚 Back to Table of Contents</a>
         </div>
 
     <!-- Mobile floating button + drawer (hidden on desktop) -->
@@ -533,20 +533,23 @@ const storyText = [
       "“No need to argue, Patiporn. It's written on your face.”",
       "Once on the bed face down and the towel pulled down to the back of my knees, I felt the cold gel. It was cold enough to make me hiss, and the hiss turned into something else halfway through. Her hands found the guarding along my spine, then the sacral plexus beneath it, and she pressed until the muscle gave up its grip, and it hurt in the way that only the right thing hurts.",
       "“Ten years puts the origin of your neuropathy at the roots, not the extremities,” Dr. Alisa said, thumbs working. “We find the source before we address the symptom.”",
+	  "<img src='https://audio.heuring.us/added/9-Spine.png' class='story-image' alt='9-Spine'>",
       "Her thumbs walked down through my glutes, my thighs, working and releasing, and every single pass brought her fingertips up under my balls and then took them away again. By the fourth pass I was half hard against the couch and could feel the damp print of it. Nobody said anything. Nobody was going to say anything.",
       "“Let's have him turn over. And take the gown off — I want a clean respiratory reading.”",
       "Patiporn untied it. Two ties, one at the nape, one at the small of my back, and she did them slowly and with a kind of attention that had nothing to do with speed. The back of it fell open to the cold and she gathered the shoulders and drew it down my arms, and I sat up into it so she could get it past my elbows, and the whole front of me was bare for as long as it took her to walk it to the chair and fold it — properly, in thirds, taking her time, while I sat there with the towel over my hips covering my genitals and the monitor clipped to my finger reading 102, climbing.",
       "The towel became a hint. The three of us listened to the monitor climb to 104.",
       "Patiporn knelt at my head. Her voice came down close to my ear, warm and slightly unsteady, and she had to clear her throat in the middle of it. “Some of this might arouse you, but it's okay.” Her breath moved across the shell of my ear. “Just trust the process.” Then, so low I felt it in my jaw: “Between you and me, I really like this part.”",
-      "Suddenly, Dr. Alisa took the towel away. The air on me was cool and the attention on me was worse. “Spontaneous erection is a good sign. The autonomic system can still initiate — which tells me the deficit is proximal, radicular, reachable.” She tapped the tablet. “Patiporn. Hold the base.”",
-      "Patiporn moved to the side of the bed and took my balls instead.",
-      "“Rigidity's up,” Patiporn said.",
-      "“That isn't the base, Patiporn.”",
-      "“Well, it's near the base,” Patiporn said, and I felt her hand caressing my balls ever so caringly, her palm warm and a little damp.",
-      "Dr. Alisa reached over and moved the hand, holding it there a moment, correcting the grip with her fingertips on the back of Patiporn's. “This is the base,” she said. “Now, let's do this properly. This isn't the time to be exploring your interests, young lady.”",
+      "Suddenly, Dr. Alisa took the towel away. The air on me was cool and the attention on me was worse. “Spontaneous erection is a good sign. The autonomic system can still initiate — which tells me the deficit is proximal, radicular, reachable.” She tapped the tablet.",
+      "“Rigidity's up,” Patiporn said."",
+	  ""Good, I'll hold it erect and you take the measurement." Patiporn placed the tape along the length of the cock and then around it saying. "Length seven inches and girth five inches... Wow, nice."",
+	  "<img src='https://audio.heuring.us/added/9-Measure.png' class='story-image' alt='9-Measure'>",
+	  ""Just the measurements, Patiporn. Additional comments are not needed for the diagnosis. Now take the base from me."",
+	  "But instead of the base, Patiporn took the balls in her hand",
+	  "Dr. Alisa reached over and moved the hand, holding it there a moment, correcting the grip with her fingertips on the back of Patiporn's. “This is the base,” she said. “Now, let's do this properly. This isn't the time to be exploring your interests, young lady.”",
       "Patiporn's breath went shallow. “Yes, Doctor.”",
       "I then felt Dr. Alisa's hand wrap around my cock. The first stroke took everything I had, and she dripped lubricant on me at the same time, cold, and it ran. She found the place under the ridge that made my thighs jump and she stayed there, unhurried, and my heels skated on the paper. “Note the turgidity, filling symmetrically.” A pause, the wet click of the pen. “Swab it.”",
       "Removing her hand from the base, Patiporn picked up a cotton tip and slowly turned it inside my slit. I made an undignified sound, and while I was still making it she licked her finger and rubbed the head. Dr. Alisa's pen stopped.",
+	  "<img src='https://audio.heuring.us/added/9-Swab.png' class='story-image' alt='9-Swab'>",
       "“Is that part of the procedure, nurse?” Dr. Alisa said, her pen still down.",
       "“No, Doctor,” Patiporn said.",
       "“Then don't do it.”",
@@ -554,7 +557,7 @@ const storyText = [
       "“It worked,” Dr. Alisa conceded, after a moment in which she had to look at the ceiling. “Fine. Do it your way. But, if he softens, you're answering for it.”",
       "Patiporn bent to my ear again, and this time she kept her voice at a whisper and her cheek almost against mine. “She's going to take a really long time. She always does. And I'm going to have to stand here and watch, and by the end my underwear will be soaked. It always is.” A pause, and she drew back half an inch. “I'm sorry. That's probably more than you wanted to know.”",
       "“If you're going to talk to the patient,” Dr. Alisa said, “talk quietly enough that I can't hear you.”",
-      "Tape. Measurements. A probe that ran bright buzzing ticks up into my pelvis and made my scrotum tighten by itself, involuntary as a sneeze. A silicone ring rolled down to my base so blood went in and couldn't come out, and the ache of it arrived slowly, like weather. Then stirrups, and the undignified business of evacuation, and Patiporn running one finger along my cock on her way out from under the table.",
+      "A probe that ran bright buzzing ticks up into my pelvis and made my scrotum tighten by itself, involuntary as a sneeze. A silicone ring rolled down to my base so blood went in and couldn't come out, and the ache of it arrived slowly, like weather. Then stirrups, and the undignified business of evacuation, and Patiporn running one finger along my cock on her way out from under the table.",
       "“Oops. Couldn't resist,” Patiporn said, with a mischievous look on her face.",
       "“Geez, Patiporn. You're not even pretending now.”",
       "She straightened her collar. “Um… I'm not even pretending now.”",
@@ -577,7 +580,7 @@ const storyText = [
       "“Good!”",
       "And then, past all of it — past the ring and the probe and the two of them talking over me like furniture — a prickle along my left sole. Warmth. Real warmth, low and spreading under the arch, the first honest thing my foot had said in years. My eyes stung before I understood why. Dr. Alisa saw it and her whole face changed. “The signals are normalizing. The toes are becoming red. That's the plexus opening.”",
       "Dr. Alisa slowed, drew out, sat back.",
-      "“All right. Go on. Properly. And don't stop when I tell you to.”",
+      "“All right. Go on. Properly. And don't stop until I tell you to.”",
       "Patiporn was on me before the sentence finished. Dr. Alisa watched with her jaw set and her hand loose in her lap, and after a while she wasn't watching the monitor at all. “He tastes so good,” Patiporn said, surfacing, and went back down.",
       "“The neuropathy isn't peripheral,” Dr. Alisa said, and her voice had gone clinical again, which was somehow worse with Patiporn's mouth on me. “It's proximal, radicular — the same compression that's been strangling your erections. One cause, two symptoms. The Protocol treats both. We can do it right away!”",
       "Then Dr. Alisa gave me the option. “The surgical theatre is free until six, and Patiporn can assist. Two minutes to decide. It's experimental, and I'll want it said out loud and signed.”",
