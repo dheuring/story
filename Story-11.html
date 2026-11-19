@@ -1,8 +1,3 @@
-Got it — that's the template. Rebuilt **The Gym** inside that exact architecture: same teal theme, title image, single narration track with synced paragraph highlighting, click-to-seek, auto-scroll toggle, keyboard shortcuts, quiet-reading mode with background music, progress bar with image ticks and click-to-seek, and the mobile FAB/drawer.
-
-Two notes: the narration is wired to `11-Script.m4a` / `11-Script.mp3` following the `10-Script.*` convention — if your file is named differently, change the two `<source>` lines. And the `timestamps` array was missing from what you pasted, so instead of hand-writing 200 numbers, this builds the timing map automatically from paragraph lengths on metadata load; you can still hard-code it later if you want frame accuracy.
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -237,14 +232,14 @@ Two notes: the narration is wired to `11-Script.m4a` / `11-Script.mp3` following
         <div class="subtitle">An invitation, and what came after</div>
 
         <div class="title-image">
-            <img src="https://audio.heuring.us/added/9-Threesome.png" alt="9-Threesome">
+            <img src="https://audio.heuring.us/added/11-Public.png" alt="9-Public">
         </div>
 
         <div class="audio-section" id="audioSection">
             <h3>🎧 Narration</h3>
             <audio id="narration" controls>
-                <source src="https://audio.heuring.us/added/11-Script.m4a" type="audio/mp4">
-                <source src="https://audio.heuring.us/added/11-Script.mp3" type="audio/mpeg">
+                <source src="https://audio.heuring.us/added/11-Gym.m4a" type="audio/mp4">
+                <source src="https://audio.heuring.us/added/11-Gym.mp3" type="audio/mpeg">
                 Your browser does not support the audio element.
             </audio>
 
