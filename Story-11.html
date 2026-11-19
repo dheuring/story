@@ -1,0 +1,744 @@
+Got it — that's the template. Rebuilt **The Gym** inside that exact architecture: same teal theme, title image, single narration track with synced paragraph highlighting, click-to-seek, auto-scroll toggle, keyboard shortcuts, quiet-reading mode with background music, progress bar with image ticks and click-to-seek, and the mobile FAB/drawer.
+
+Two notes: the narration is wired to `11-Script.m4a` / `11-Script.mp3` following the `10-Script.*` convention — if your file is named differently, change the two `<source>` lines. And the `timestamps` array was missing from what you pasted, so instead of hand-writing 200 numbers, this builds the timing map automatically from paragraph lengths on metadata load; you can still hard-code it later if you want frame accuracy.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Gym - Synchronized Read-Along</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1;600&display=swap" rel="stylesheet">
+
+    <style>
+        .title-image { text-align: center; margin-bottom: 40px; }
+        .title-image img {
+            max-width: 100%; width: 100%; height: auto;
+            border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); display: block;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.9; color: #2d3748;
+            background: linear-gradient(135deg, #0f2a33 0%, #17434f 50%, #26606e 100%);
+            min-height: 100vh; padding: 20px;
+        }
+
+        .container {
+            max-width: 850px; margin: 0 auto; background: #f4fbfd;
+            padding: 60px; border-radius: 15px; box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            text-align: center; color: #0e7490; margin-bottom: 8px; font-size: 2.8em;
+            font-family: 'Playfair Display', 'Georgia', serif; font-weight: 600; letter-spacing: 1px;
+        }
+
+        .subtitle {
+            text-align: center; color: #0891b2; margin-bottom: 40px;
+            font-style: italic; font-size: 1.1em;
+        }
+
+        .audio-section {
+            background: linear-gradient(135deg, #ecf9fd 0%, #f0fcff 100%);
+            padding: 30px; border-radius: 12px; margin-bottom: 40px;
+            border: 2px solid #a5dbe8; text-align: center; display: none;
+        }
+        .audio-section h3 { color: #0e7490; margin-bottom: 20px; font-size: 1.3em; }
+        audio { width: 100%; max-width: 600px; border-radius: 30px; margin-bottom: 15px; }
+        .instructions {
+            color: #0891b2; font-size: 0.95em; padding: 12px;
+            background: rgba(255,255,255,0.6); border-radius: 8px; margin-top: 10px;
+        }
+
+        .progress-container { margin-top: 20px; position: relative; }
+        .progress-bar {
+            width: 100%; height: 8px; background: #d9eef0; border-radius: 4px;
+            overflow: visible; cursor: pointer; position: relative;
+        }
+        .progress-fill {
+            height: 100%; background: linear-gradient(90deg, #22b3d4, #0b7a96);
+            width: 0%; border-radius: 4px; transition: width 0.1s linear;
+        }
+        .progress-tick {
+            position: absolute; top: -3px; width: 3px; height: 14px;
+            background: #0e7490; border-radius: 2px; pointer-events: none;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.6);
+        }
+        .time-display {
+            display: flex; justify-content: space-between; font-size: 0.85em;
+            color: #0891b2; margin-top: 8px; font-family: 'Georgia', serif;
+        }
+
+        .story-text { font-size: 1.15em; text-align: justify; color: #2d3748; }
+
+        #storyContent p:first-of-type::first-letter {
+            font-family: 'Playfair Display', 'Georgia', serif; font-size: 3.6em;
+            font-weight: 600; float: left; line-height: 0.85;
+            padding: 6px 10px 0 2px; color: #0e7490;
+        }
+
+        .paragraph {
+            margin-bottom: 1em; padding: 18px 25px; border-radius: 10px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer;
+            border-left: 4px solid transparent; position: relative;
+        }
+        .paragraph:hover { background-color: #ecf9fd; border-left-color: #6bd0e0; }
+        .paragraph.active {
+            background: linear-gradient(90deg, #d9f3fc 0%, #f0fbff 100%);
+            border-left: 4px solid #22b3d4;
+            box-shadow: 0 6px 25px rgba(34, 179, 212, 0.25);
+            transform: translateX(8px);
+        }
+        .paragraph.read { background-color: #ecf9fd; border-left-color: #70c4d1; opacity: 0.75; }
+        .paragraph.upcoming { opacity: 0.6; }
+
+        .paragraph.image-entry,
+        .paragraph.image-entry.upcoming,
+        .paragraph.image-entry.read,
+        .paragraph.image-entry.active {
+            opacity: 1 !important; background: none !important;
+            border-left: none !important; box-shadow: none !important; transform: none !important;
+        }
+
+        .part-title {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 1.5em; color: #0e7490; letter-spacing: 0.5px;
+            margin: 2.2em 0 0.8em; padding: 0 25px; cursor: default;
+        }
+        .part-title:first-of-type { margin-top: 0.4em; }
+
+        .the-end {
+            text-align: center; margin-top: 50px;
+            font-family: 'Playfair Display', 'Georgia', serif; font-style: italic;
+            font-size: 1.4em; letter-spacing: 2px; color: #0e7490;
+        }
+
+        .controls {
+            position: fixed; bottom: 25px; right: 25px; background: white;
+            padding: 20px; border-radius: 15px; box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+            display: flex; flex-direction: column; gap: 10px; z-index: 100;
+        }
+        .btn {
+            background: linear-gradient(135deg, #22b3d4 0%, #0b7a96 100%);
+            color: white; border: none; padding: 12px 24px; border-radius: 8px;
+            cursor: pointer; font-size: 0.95em; font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s; white-space: nowrap;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(34, 179, 212, 0.4); }
+        .btn-secondary { background: linear-gradient(135deg, #718096 0%, #4a5568 100%); }
+        .btn-secondary:hover { box-shadow: 0 4px 15px rgba(113, 128, 150, 0.4); }
+        #playBtn {
+            font-size: 1.1em; padding: 14px 28px;
+            background: linear-gradient(135deg, #1a8aa8 0%, #0b5a73 100%);
+            letter-spacing: 0.5px; border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(26, 138, 168, 0.4);
+        }
+        #playBtn:hover { box-shadow: 0 6px 25px rgba(26, 138, 168, 0.55); }
+        #playBtn.playing {
+            background: linear-gradient(135deg, #0e7490 0%, #0a3f52 100%);
+            box-shadow: 0 4px 20px rgba(14, 116, 144, 0.4);
+        }
+        .status {
+            position: fixed; top: 20px; right: 20px;
+            display: flex; flex-direction: column; gap: 10px; z-index: 101;
+        }
+        .quiet-hide { display: none !important; }
+
+        .shortcut-hint {
+            position: fixed; bottom: 25px; left: 25px; background: rgba(255,255,255,0.95);
+            padding: 15px 20px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            font-size: 0.85em; color: #4a5568; z-index: 100;
+        }
+        .key {
+            background: #edf2f7; padding: 2px 8px; border-radius: 4px;
+            font-family: monospace; font-weight: bold;
+        }
+
+        .mobile-fab { display: none; }
+        .mobile-drawer { display: none; }
+
+        @media (max-width: 768px) {
+            .container { padding: 30px 20px; }
+            h1 { font-size: 2em; }
+            .story-text { text-align: left; }
+            .paragraph { padding: 14px 16px; }
+            .part-title { padding: 0 16px; font-size: 1.3em; }
+            #storyContent p:first-of-type::first-letter { font-size: 2.6em; padding: 4px 6px 0 0; }
+            .story-image { width: 92%; max-width: 92%; }
+
+            .status, .controls, .shortcut-hint { display: none !important; }
+
+            .quiet-panel.show-panel {
+                display: flex !important; top: auto; bottom: 20px;
+                left: 50%; right: auto; transform: translateX(-50%);
+            }
+
+            .mobile-fab {
+                display: flex; align-items: center; justify-content: center;
+                position: fixed; bottom: 20px; right: 20px; width: 52px; height: 52px;
+                border-radius: 50%; background: linear-gradient(135deg, #1a8aa8, #0b5a73);
+                color: white; font-size: 1.5em; border: none; cursor: pointer;
+                z-index: 200; box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+            }
+
+            .mobile-drawer {
+                display: block; position: fixed; bottom: -300px; left: 0; right: 0;
+                background: white; border-radius: 18px 18px 0 0;
+                box-shadow: 0 -6px 30px rgba(0,0,0,0.25);
+                padding: 20px 24px 32px; z-index: 199; transition: bottom 0.3s ease;
+            }
+            .mobile-drawer.open { bottom: 0; }
+            .drawer-handle {
+                width: 40px; height: 4px; background: #cbd5e0; border-radius: 2px;
+                margin: 0 auto 18px;
+            }
+            .drawer-status {
+                text-align: center; color: #0891b2; font-size: 0.9em;
+                margin-bottom: 14px; font-style: italic;
+            }
+            .drawer-buttons { display: flex; flex-direction: column; gap: 10px; }
+            .mobile-overlay-bg {
+                display: none; position: fixed; inset: 0;
+                background: rgba(0,0,0,0.3); z-index: 198;
+            }
+            .mobile-overlay-bg.open { display: block; }
+        }
+
+        .story-image {
+            max-width: 75%; width: 75%; height: auto; border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3); margin: 12px auto 20px; display: block;
+        }
+    </style>
+</head>
+<body>
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://audio.heuring.us/added/TOC.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="status" id="topControls">
+        <button class="btn" id="playBtn" onclick="handlePlayBtn()">▶ Play Story</button>
+        <button class="btn btn-secondary" onclick="toggleAutoScroll()" id="autoScrollBtn">Auto-Scroll: ON</button>
+        <button class="btn btn-secondary" id="quietModeBtn" onclick="setMode('quiet', true)">🎵 Quiet Reading</button>
+    </div>
+
+    <div class="status quiet-panel" id="quietControls" style="display: none;">
+        <button class="btn btn-secondary" id="narratedModeBtn" onclick="setMode('narrated', true)">🎧 Back to Narrated</button>
+        <button class="btn btn-secondary" id="musicMuteBtn" onclick="toggleBgMusic()">🔊 Pause Music</button>
+    </div>
+
+    <div class="container">
+        <h1>The Gym</h1>
+        <div class="subtitle">An invitation, and what came after</div>
+
+        <div class="title-image">
+            <img src="https://audio.heuring.us/added/9-Threesome.png" alt="9-Threesome">
+        </div>
+
+        <div class="audio-section" id="audioSection">
+            <h3>🎧 Narration</h3>
+            <audio id="narration" controls>
+                <source src="https://audio.heuring.us/added/11-Script.m4a" type="audio/mp4">
+                <source src="https://audio.heuring.us/added/11-Script.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBarContainer">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+                <div class="time-display">
+                    <span id="currentTimeDisplay">0:00</span>
+                    <span id="durationDisplay">0:00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="story-text" id="storyContent">
+            <!-- Paragraphs generated by JavaScript -->
+        </div>
+
+        <div class="the-end">❦ The End ❦</div>
+
+        <div class="toc-link-wrapper" style="text-align: center; margin-top: 40px;">
+            <a href="TOC.html" class="btn" style="text-decoration: none; display: inline-block; background: linear-gradient(135deg, #1a8aa8 0%, #0b5a73 100%);">📚 Back to Table of Contents</a>
+        </div>
+    </div>
+
+    <div class="mobile-overlay-bg" id="mobileOverlay" onclick="closeMobileDrawer()"></div>
+
+    <button class="mobile-fab" id="mobileFab" onclick="toggleMobileDrawer()">☰</button>
+
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-handle"></div>
+        <div class="drawer-status" id="drawerStatus">Press Play to begin</div>
+        <div class="drawer-buttons" id="drawerNarratedControls">
+            <button class="btn" id="drawerPlayBtn" onclick="handlePlayBtn(); updateDrawerStatus()">▶ Play Story</button>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="previousParagraph()">⏮ Previous</button>
+                <button class="btn btn-secondary" style="flex: 1;" onclick="nextParagraph()">Next ⏭</button>
+            </div>
+            <button class="btn btn-secondary" onclick="toggleAutoScroll(); updateDrawerStatus()" id="drawerAutoScrollBtn">Auto-Scroll: ON</button>
+            <button class="btn btn-secondary" onclick="setMode('quiet', true)">🎵 Quiet Reading</button>
+        </div>
+        <div class="drawer-buttons" id="drawerQuietControls" style="display: none;">
+            <button class="btn btn-secondary" onclick="setMode('narrated', true)">🎧 Back to Narrated</button>
+            <button class="btn btn-secondary" id="drawerMusicMuteBtn" onclick="toggleBgMusic()">🔊 Pause Music</button>
+        </div>
+    </div>
+
+    <script>
+const IMG = "<img src='https://audio.heuring.us/added/9-Threesome.png' class='story-image' alt='9-Threesome'>";
+
+const storyText = [
+    "Part One: The Invitation",
+    "The iron clanged as Alisa racked her deadlift, her breath coming in controlled exhales that made her chest heave against her compression sports bra. She caught Dave watching from the cable machine across the weight room—not staring, exactly, but appreciating. She'd noticed him noticing for weeks now.",
+    "\"Form's getting better,\" Dave called out, adjusting the pin on his weight stack. \"Though you're still not activating your glutes properly on the lockout.\"",
+    "Alisa wiped her forehead with her wristband and walked over, her leggings hugging every curve of her fatigue-warmed muscles. \"Oh, so you're a trainer now in addition to being a tech mogul?\"",
+    "\"Just observant.\" Dave's smile was easy, confident without being arrogant. \"I've been training for fifteen years. You pick things up.\"",
+    "They'd fallen into this rhythm—workout buddies who'd evolved into something flirtatious. Dave would \"accidentally\" brush against her when spotting her bench press, his hands lingering on her ribs longer than necessary. Alisa would stretch provocatively in his sightline, enjoying how his eyes tracked the arch of her back. It was a game, one they'd both been playing for three weeks without either making the decisive move.",
+    "Today, though, as they sat side-by-side on separate machines, Dave seemed different. More intentional.",
+    "\"You ever heard of kinetic sexual fitness?\" he asked, glancing mischievously at her as she pushed through her set.",
+    "\"Sounds like a gimmick.\"",
+    "\"It's not.\" He lowered his voice, though the gym was nearly empty. \"There's a facility—private, invitation only—where the training methodology incorporates... stimulation. Resistance training combined with arousal protocols. The theory is that elevated heart rate and endorphin release enhance muscle engagement.\"",
+    "Alisa raised an eyebrow, though she felt a flutter in her stomach. \"You're talking about a sex gym.\"",
+    "\"I'm talking about a serious training facility that doesn't separate physical fitness from sexual health.\" Dave's eyes held hers. \"Most people compartmentalize them. This approach integrates. Three-hour sessions. Full spa amenities. Professional standards.\"",
+    "\"And you go there?\"",
+    "\"I own it.\" He said it casually, as if mentioning he owned a car. \"Built it in my home. I offer trial memberships to select individuals I think would appreciate the methodology.\"",
+    "Alisa should have laughed. Should have dismissed it as the most elaborate pickup line she'd ever heard. But Dave wasn't smirking. He was watching her with genuine curiosity, waiting to see if she'd rise to the provocation or retreat.",
+    "\"You're inviting me to your sex mansion for a 'workout,'\" she said, making air quotes.",
+    "\"I'm inviting you to experience something unique. No obligations. Three hours. If you want to leave at any point, you leave.\" He handed her a business card—heavy stock, embossed with just an address and a phone number. \"Saturday. 2 PM. Wear something you can train in, or nothing at all. Your choice.\"",
+    "He walked away before she could respond, leaving her holding the card with trembling fingers.",
+
+    "Part Two: The Tour",
+    "The mansion sat on three gated acres, modern architecture of glass and stone that screamed new money. Alisa had dressed carefully—high-waisted training shorts and a sports bra that offered support while showcasing her toned abdomen. She'd told herself she was just curious, that she'd probably leave after the tour. She'd told herself a lot of things on the drive over.",
+    "Dave met her at a side entrance separate from the main house—a sleek door set into what appeared to be a modern outbuilding. He wore fitted training pants and a tank top that showed off shoulders that had clearly moved serious weight for years.",
+    "\"Nervous?\" he asked, taking in her flushed cheeks.",
+    "\"Intrigued,\" she corrected.",
+    "The interior defied her expectations. This wasn't some sleazy dungeon with a Bowflex in the corner. It was a legitimate high-end facility—polished concrete floors, floor-to-ceiling mirrors, equipment that looked fresh from a professional sports catalog. But there were differences. The benches had additional restraint points. The cable machines featured attachments she didn't recognize. The squat rack included a padded bar with adjustable positioning that seemed designed for more than just shoulders.",
+    "\"Everything here serves dual purposes,\" Dave explained, guiding her through. \"Standard training and... enhanced protocols. The sauna and spa are through there.\" He gestured to frosted glass doors. \"Temperature controlled, steam options, full immersion tub. And the massage suite is private, soundproofed, with temperature-controlled tables.\"",
+    "\"You're thorough.\"",
+    "\"I believe in quality experiences.\" He turned to face her, close enough that she could smell his cologne—something woodsy and expensive. \"The structure is this: ninety minutes of integrated training, forty-five minutes of thermal therapy and recovery, and forty-five minutes of therapeutic massage. I'll facilitate everything. Your only job is to receive, respond, and communicate your boundaries.\"",
+    "\"And if I have no boundaries?\"",
+    "Dave's smile was slow and devastating. \"Then we'll find out together.\"",
+    "He gestured to a changing area—luxurious, with robes and towels and a locker system. \"Strip down. Completely. The training works best skin-to-equipment.\"",
+    "Alisa's heart hammered as she entered the private space. She could leave. She knew she could leave. But her fingers were already pulling her sports bra over her head, her thumbs hooking into her waistband, sliding shorts and underwear down together. She caught her reflection in the mirror—fit, flushed, nipples already tightening in the cool air. She looked ready. She felt ready.",
+    "When she emerged, Dave was waiting by the cable station, now shirtless himself, his torso a topography of muscle that made her mouth dry. He held a remote control and gestured to the center of the room where a specialized bench waited—padded, adjustable, with straps and attachments she couldn't quite parse.",
+    "\"Beautiful,\" he said, and she knew he wasn't talking about the equipment.",
+
+    "Part Three: The Training",
+    IMG,
+    "\"Start on your back,\" Dave instructed, his voice shifting into something more authoritative. \"Legs in the air, feet in the stirrups.\"",
+    "The stirrups were padded leather loops suspended from a frame above the bench. Alisa positioned herself, feeling exposed in the best way, her sex open to the room, her breasts visible as she lay back. Dave stood beside the bench, holding a remote that controlled the machine's resistance, watching her with focused intensity.",
+    "\"Core engagement is key,\" he said, approaching with a cable attachment she now recognized—a smooth, bulbous phallus of polished silicone, attached to adjustable resistance bands. \"We're going to work your hip flexors and pelvic floor simultaneously.\"",
+    "He lubed the attachment generously, the sound obscene in the quiet room. When he pressed it against her entrance, Alisa gasped, her hands gripping the bench's side rails.",
+    "\"Breathe,\" Dave coached. \"In on two, out on two. Let me set the resistance.\"",
+    "He pushed forward, the silicone filling her slowly as he adjusted tension bands. It wasn't just penetration—it was resistance training. The attachment wanted to pull back, and she had to engage her muscles to keep it deep, to pull against the cables with her pelvic floor.",
+    "\"Hold for ten,\" Dave counted, his eyes watching her face, her chest, the place where they connected. \"Nine. Eight. Feel your deep core activating. Seven. Six.\"",
+    "By three, Alisa was trembling—not from strain, but from arousal. The resistance created a constant pressure against her g-spot, a persistent stimulation that had her squirming against the bench.",
+    "\"Release slowly,\" Dave commanded. \"Controlled negative. Feel the burn.\"",
+    "The withdrawal was torture, the ridged silicone dragging against sensitive tissue until she whimpered. But Dave didn't give her time to recover.",
+    "\"Next station,\" he said, helping her up from the bench on unsteady legs. \"Back and core—plus resistance where you need it most.\"",
+    "He guided her to a modified lat pulldown machine and positioned her on the bench, the seat fitted with a vertical attachment rising from the center—smaller than before, but thick enough to fill her completely.",
+    "\"Straddle it,\" Dave instructed, moving behind her, his hands on her hips. \"Sit down slowly. Let it settle.\"",
+    "Alisa lowered herself onto the bench, feeling the silicone enter her as she sat, her weight settling onto the padded seat with the shaft buried inside her. She was already slick from the previous exercises, and it seated fully with a soft gasp from her lips.",
+    "\"Arms up,\" Dave commanded, standing directly behind her now, his presence towering over her, his hands moving to her shoulders. \"Wide grip on the bar. Engage your lats, but keep your core tight around the attachment.\"",
+    "She reached up and gripped the wide bar above her head, her arms extended, breasts lifted, legs spread wide with feet anchored on platforms.",
+    "\"Pull,\" Dave coached, his voice low behind her ear. \"Down to your chest. Feel your back engage as you descend.\"",
+    "Alisa pulled the bar down, her elbows bending, shoulder blades squeezing together. The motion shifted her weight on the seat, making the dildo move subtly inside her—a pressure that built with each repetition. The cables above her head provided resistance, making her work for every inch, her arms burning, her core fighting to stabilize around the penetration.",
+    "\"Release slowly,\" Dave murmured, his hands steadying her shoulders as she let the bar rise. \"Controlled negative. Don't let the attachment shift you.\"",
+    "By the tenth rep, Alisa was trembling—not just from the arm burn, but from the constant internal pressure, the way her pelvic floor clenched involuntarily around the shaft with each pull. Sweat traced down her spine. Dave stood behind her, his body heat radiating against her back, his eyes watching her form in the mirror, cataloging every shiver, every gasp as she worked.",
+    "\"Five more,\" he said quietly. \"Deep pulls. Make them count.\"",
+    "She pulled harder, chasing the burn in her muscles, the fullness inside her, Dave's presence behind her like a wall of control she couldn't escape.",
+    "After the lat pulldown, Dave gave her only sixty seconds of recovery—just enough to catch her breath, not enough to cool down—before guiding her to the leg press. But this was no ordinary sled. The foot plate had been modified with a black horizontal bar extending from its center, padded and angled, waiting.",
+    "\"Lower body power,\" Dave said, positioning her on the seat, her back against the padded support. \"Legs create drive. Core stabilizes. Everything connects.\"",
+    "He helped her straddle the attachment, the horizontal bar pressing against her entrance as she settled onto the seat. When she pressed her feet to the plate and extended her legs, the bar slid inside her, filling her as the weight sled rose. When she lowered the weight, bending her knees, the bar remained buried, her own body weight keeping her impaled.",
+    "\"Ten reps,\" Dave commanded, standing beside her, his hand on her thigh. \"Drive through your heels. Feel the connection between your legs and your center.\"",
+    "Alisa pressed the weight, her legs burning, the horizontal bar shifting inside her with each extension, rubbing against her g-spot as she drove upward. The mirrors showed everything—her spread legs, the bar connecting her to the machine, Dave's hand sliding higher on her inner thigh with each rep.",
+    "By the eighth rep, she was crying out with each press, not from pain, but from the relentless friction.",
+    "Twenty minutes later—though time had dissolved into sensation—Dave moved her to the center of the room where dual cable columns stood facing each other. He attached handles to both low pulleys, then positioned her between them, straddling a narrow bench with a modest vertical protrusion rising from its center.",
+    "\"Standing flies,\" he said, his voice hoarse. \"Arms out, cables in each hand. Step down onto the bench.\"",
+    "She mounted the narrow seat, the protrusion entering her as she stood, her feet on small platforms on either side. The cables pulled her arms outward, forcing her chest open, her breasts exposed and lifted. Dave stood behind her, his hands on her ribcage.",
+    "\"Pull the cables together,\" he coached. \"Squeeze your chest. Keep your core tight around the seat.\"",
+    "She pulled the handles together in front of her, the motion rocking her hips on the bench, grinding her against the protrusion. The cables resisted, fighting her, making her work for every inch. Dave's hands slid up to her breasts, kneading as she pulled.",
+    "\"Again,\" he whispered. \"Don't stop until I say.\"",
+    "She worked through fifteen reps, Dave's hands never leaving her body—her breasts, her hips, her stomach—coaching, correcting, controlling. The cables burned her chest muscles while the bench worked her internally, a dual torture that left her dripping sweat and shaking.",
+    "For the remaining forty minutes, Dave moved her through a relentless circuit—Roman chair extensions, hip thrusts on a loaded barbell with an attachment, seated rows with a saddle seat, each station blending seamlessly into the next until her muscles quivered and her sex throbbed with constant, unrelenting stimulation. He allowed no full recovery between stations, only enough time to reposition her, to adjust the next attachment, to whisper encouragement or command against her ear.",
+    "By the end, she couldn't distinguish between exercise and arousal, between muscle burn and the fire building in her core. Every station had left her more exposed, more open, more his.",
+    "\"Time,\" Dave finally said, his own chest heaving, sweat darkening his hair. He helped her stand from the final machine, her legs barely supporting her. \"Ninety minutes. You held form perfectly.\"",
+
+    "Part Four: The Thermal Suite",
+    "Dave supported her as they moved into the private sauna, her muscles jelly, her sex throbbing with unspent need. The space enveloped them immediately—thick, wet heat that wrapped around bare skin like a physical touch, the air so dense with steam that every breath felt like swallowing warm silk. The cedar walls gleamed dark with humidity, and the scent was overwhelming—eucalyptus and something muskier, something that smelled like sex and sweat and anticipation.",
+    "Alisa was naked, and the steam loved her. It clung to her flushed skin in microscopic droplets, tracing the curve of her collarbones, gathering in the valley between her breasts before trickling down her stomach in thin, glittering rivers. Her nipples stood hard and dark against the pale swell of her breasts, tightened not from cold but from arousal and the hypersensitivity that came after hours of denial.",
+    "The sauna was custom-built, intimate, barely enough space for two bodies to move without touching. The benches were tiered, the highest level radiating heat from river stones that hissed and popped when Dave ladled water over them. Fresh steam billowed upward, momentarily obscuring Alisa's body in a white veil before the air shifted and she emerged again—glistening, pink, her thighs parted just enough to show the wetness there that had nothing to do with the humidity.",
+    "Dave lowered her onto the upper bench, and Alisa gasped as the cedar kissed her overheated backside, her spine arching instinctively, breasts lifting toward the ceiling. The heat penetrated deep into her exercised muscles, but it was the visual that held Dave's attention—her body displayed in the golden light, every curve highlighted by the sheen of sweat and steam, her sex swollen and visible between her open thighs, glistening as much as her skin.",
+    "\"Forty-five minutes,\" Dave said, his voice thick. \"I'll be just outside, preparing the massage room. The heat will keep you ready. Touch yourself, but don't orgasm yet. I want you dripping when I return.\"",
+    "He left her alone in the steam, and Alisa let herself melt against the wood, her legs falling open wider in the privacy of the white-out conditions. The heat was a lover—pressing against her breasts, sliding between her legs, making her clit throb with each pulse of warmth. She could see her own body through the shifting steam, the way her chest rose and fell with desperate breaths, the way her hips rolled slightly, seeking friction against the empty air.",
+    "She watched herself in the wall mirror, fogged at the edges but clear enough in the center—saw the image of a woman transformed by desire, skin flushed crimson, hair plastered to her neck in dark ribbons, nipples so hard they ached. Alisa ran her hands up her own thighs, stopping on her clit, circling it slowly, her body floating in a state of perfect, heated readiness.",
+    "When the door finally opened, she continued to circle her swollen cunt for Dave to see. He stood there watching and enjoying her arousal, as she fingered herself. He had an amused look on his face knowing that she wanted him to see it.",
+    "She finally rose from the bench like a spirit emerging from a cloud, steam rolling off her shoulders, her breasts, the curve of her hips. Every inch of her was visible, flushed pink and glistening, every nerve ending alive and screaming for his touch.",
+    "The massage suite was dim, warm, filled with the scent of expensive oils. Dave removed his tank top and walked to the side of a table draped in heated sheets, now wearing only loose pants that did nothing to hide his own arousal. Finally, she could see what she'd done to him—his control had been impeccable, but his body betrayed his need.",
+    "\"Lie down,\" he instructed softly. \"Face first.\"",
+    "The table was heated, conforming to her body temperature. Dave's hands, when they finally touched her bare skin, were magic—strong from years of gripping iron, knowledgeable from years of understanding muscle groups. He worked her shoulders where the straps had held her, her lower back where she'd arched against resistance, her glutes that had clenched and released for ninety minutes of teasing.",
+    "His touch was professional and intimate simultaneously. He found knots she didn't know she had, released tension that went deeper than physical. When he rolled her over, she didn't feel exposed—she felt worshipped.",
+    "He started at her feet, working arches and ankles, moving up her calves with firm strokes that had her melting into the table. Her thighs received special attention, his thumbs pressing deep into muscles that had worked so hard, his fingers grazing the crease where leg met hip, teasing, promising.",
+    "\"You're awesome,\" Dave murmured, oiling her abdomen, her ribs, the underside of her breasts. \"The way you took everything. The way you trusted the process.\"",
+    "\"Please,\" Alisa whispered, arching into his touch.",
+    "\"Please what?\"",
+    "\"Please touch me. Really touch me. I've been waiting for your hands since the weight room.\"",
+    "Dave's control finally cracked. His palm slid down her belly, fingers parting her folds with confident precision, finding her clit with the same expertise he'd shown with every machine.",
+    "\"Like this?\" he asked, circling with perfect pressure.",
+    "\"Yes. Oh God, yes.\"",
+    "He worked her with one hand while the other roamed—pinching her nipples, stroking her neck, gripping her hip. The massage table became a playground, Dave leaning over her, his bare chest brushing her as he varied his rhythm—fast, then slow, then pressing firmly against her g-spot while his thumb worked her clit in tight circles.",
+    "Alisa came apart. The orgasm that had been building for two hours finally crashed through her, a tsunami of pleasure that started in her core and radiated outward until she was screaming, convulsing, her hands gripping Dave's shoulders as he rode out the waves with her, never stopping his perfect touch until she went limp, gasping, tears of release tracking into her hair.",
+    "\"Beautiful,\" he whispered, cradling her face, his own breathing ragged. \"So beautiful.\"",
+    "Alisa opened her eyes, looking up at this man who had orchestrated such exquisite torture and release. She saw his need, his restraint, his hope that she wouldn't leave him wanting.",
+    "\"Now it's your turn big boy,\" she said, her voice husky.",
+
+    "Part Five: Reciprocation",
+    "Alisa slid off the table, her legs steady now, powered by the energy of her massive orgasm. She was done being the recipient. She wanted to give.",
+    "\"Sit,\" she commanded, pushing Dave onto the edge of the table.",
+    "He went willingly, watching as she knelt between his legs, pulling his pants down to reveal what she'd been imagining for weeks—thick, heavy, curving slightly upward in a way that made her mouth water. He was as worked up as she'd been, pre-cum already pearling at the tip.",
+    "\"Three hours of teasing,\" she said, wrapping her hand around his base. \"Let's see how you like it.\"",
+    "She took him into her mouth slowly, hollowing her cheeks, using every technique she'd ever learned. Dave's head fell back, a groan tearing from his throat that was the most satisfying sound she'd ever heard. She worked him with lips and tongue and hand, finding the rhythm that made his thighs tense, then backing off, then building again.",
+    "\"Alisa, you don't have to—\"",
+    "\"I want to,\" she interrupted, looking up at him, her hand still stroking. \"You gave me the best sexual experience of my life. Let me give you something back.\"",
+    "She stood, climbing onto the table with him, straddling his lap. His cock stood between them, and she rubbed herself against it, coating him in her arousal, teasing them both with the proximity without the penetration.",
+    "Then she positioned herself and sank down, both of them groaning in unison as he filled her. After all the toys, all the machines, having a real man inside her—this man who'd orchestrated such pleasure—felt like coming home.",
+    "She rode him slowly at first, rolling her hips, grinding against him. Dave's hands roamed her body—her breasts, her waist, her ass—touching her with the same reverence he'd shown all afternoon. They found a rhythm, athletic and passionate, Alisa using her trained muscles to grip and release him, Dave thrusting upward to meet her downward strokes.",
+    "\"Harder,\" she demanded, and he obliged, gripping her hips and pounding into her from below, the sound of flesh meeting flesh echoing in the private suite.",
+    "Alisa leaned back, bracing herself on his knees, letting him see all of her as she bounced on his cock. The angle was perfect, hitting her g-spot with every thrust, and she felt another orgasm building—impossible, she thought, but her body was primed, ready, greedy.",
+    "\"Come with me,\" she gasped, reaching down to rub her clit as he fucked her. \"Dave, come with me.\"",
+    "He couldn't have resisted if he wanted to. Alisa felt him swell, felt his rhythm falter, and then they were crashing together, her second orgasm ripping through her just as he pulsed inside her, both of them crying out, clutching each other, lost in the perfect synchronization of their release.",
+    "They collapsed together on the massage table, sweaty and spent, Dave's arms wrapped around her as they fought to catch their breath.",
+    "\"So,\" Alisa finally managed, \"about that membership.\"",
+    "Dave laughed, the sound vibrating through his chest against her ear. \"Lifetime. Absolutely lifetime. With daily sessions, if you're interested.\"",
+    "\"Daily might be excessive,\" she teased, kissing his collarbone. \"But I think I could manage three times a week. For my fitness goals.\"",
+    "\"Your fitness goals,\" Dave repeated, smiling against her hair.",
+    "\"Integrated training,\" she reminded him. \"Body and pleasure as one system.\"",
+    "\"Welcome to the facility, Alisa,\" Dave whispered. \"I have a feeling you're going to be my most dedicated member.\"",
+    "They lay together in the dim light, two athletes who'd found the perfect workout partner, already planning which machines they'd explore next time."
+];
+
+/* ---------- state ---------- */
+let autoScroll = true;
+let hasStarted = false;
+let currentParagraph = -1;
+let paragraphs = [];
+let timestamps = [];
+
+const audio = document.getElementById('narration');
+const progressBar = document.getElementById('progressBar');
+const progressBarContainer = document.getElementById('progressBarContainer');
+const playBtn = document.getElementById('playBtn');
+const autoScrollBtn = document.getElementById('autoScrollBtn');
+const currentTimeDisplay = document.getElementById('currentTimeDisplay');
+const durationDisplay = document.getElementById('durationDisplay');
+
+const isPartTitle = t => /^Part (One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten)\b/.test(t);
+const isImage = t => t.startsWith('<img');
+
+function formatTime(seconds) {
+    if (!isFinite(seconds) || seconds < 0) return '0:00';
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return m + ':' + String(s).padStart(2, '0');
+}
+
+/* Build a proportional timing map from text length so sync works
+   without a hand-written timestamp array. Images get a fixed weight
+   so they land on a real pause instead of a zero-width slot. */
+function buildTimestamps(duration) {
+    const IMAGE_WEIGHT = 60;
+    const weights = storyText.map(t => isImage(t) ? IMAGE_WEIGHT : Math.max(24, t.length));
+    const total = weights.reduce((a, b) => a + b, 0);
+    let acc = 0;
+    timestamps = weights.map(w => {
+        const at = (acc / total) * duration;
+        acc += w;
+        return at;
+    });
+}
+
+function renderProgressTicks() {
+    if (!audio.duration || !isFinite(audio.duration)) return;
+    progressBarContainer.querySelectorAll('.progress-tick').forEach(t => t.remove());
+    storyText.forEach((text, index) => {
+        if (isImage(text) && timestamps[index] !== undefined) {
+            const pct = (timestamps[index] / audio.duration) * 100;
+            const tick = document.createElement('div');
+            tick.className = 'progress-tick';
+            tick.style.left = pct + '%';
+            tick.title = 'Image';
+            progressBarContainer.appendChild(tick);
+        }
+    });
+}
+
+audio.addEventListener('loadedmetadata', () => {
+    durationDisplay.textContent = formatTime(audio.duration);
+    buildTimestamps(audio.duration);
+    renderProgressTicks();
+});
+
+function init() {
+    const container = document.getElementById('storyContent');
+    storyText.forEach((text, index) => {
+        let el;
+        if (isPartTitle(text)) {
+            el = document.createElement('h2');
+            el.className = 'part-title';
+            el.textContent = text;
+        } else {
+            el = document.createElement('p');
+            el.className = 'paragraph upcoming';
+            if (isImage(text)) {
+                el.innerHTML = text;
+                el.classList.add('image-entry');
+                el.style.textAlign = 'center';
+                el.style.cursor = 'default';
+            } else {
+                el.textContent = text;
+                el.addEventListener('click', () => seekToParagraph(index));
+            }
+        }
+        el.setAttribute('data-index', index);
+        container.appendChild(el);
+        paragraphs.push(el);
+    });
+    autoScrollBtn.textContent = 'Auto-Scroll: ON';
+}
+
+function handlePlayBtn() {
+    if (audio.paused) {
+        if (!hasStarted) {
+            hasStarted = true;
+            document.getElementById('storyContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => audio.play(), 400);
+        } else {
+            audio.play();
+        }
+    } else {
+        audio.pause();
+    }
+}
+
+audio.addEventListener('play', () => {
+    playBtn.textContent = '⏸ Pause';
+    playBtn.classList.add('playing');
+});
+
+audio.addEventListener('pause', () => {
+    playBtn.textContent = '▶ Play Story';
+    playBtn.classList.remove('playing');
+});
+
+audio.addEventListener('ended', () => {
+    playBtn.textContent = '↺ Play Again';
+    playBtn.classList.remove('playing');
+});
+
+progressBarContainer.addEventListener('click', function (e) {
+    const rect = this.getBoundingClientRect();
+    const pos = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = pos * audio.duration;
+});
+
+const IMAGE_HOLD_MS = 10000;
+let holdUntilTime = 0;
+
+function onTimeUpdate() {
+    if (!audio.duration) return;
+    progressBar.style.width = (audio.currentTime / audio.duration) * 100 + '%';
+    currentTimeDisplay.textContent = formatTime(audio.currentTime);
+
+    if (Date.now() < holdUntilTime) return;
+    if (!timestamps.length) return;
+
+    let newIndex = -1;
+    for (let i = 0; i < timestamps.length; i++) {
+        if (audio.currentTime >= timestamps[i]) newIndex = i;
+        else break;
+    }
+
+    if (newIndex !== currentParagraph) {
+        currentParagraph = newIndex;
+        highlightParagraph(newIndex);
+        if (paragraphs[newIndex] && paragraphs[newIndex].classList.contains('image-entry')) {
+            holdUntilTime = Date.now() + IMAGE_HOLD_MS;
+        }
+    }
+}
+
+audio.addEventListener('timeupdate', onTimeUpdate);
+
+function highlightParagraph(index) {
+    paragraphs.forEach((p, i) => {
+        p.classList.remove('active', 'read', 'upcoming');
+        if (i === index) {
+            p.classList.add('active');
+            if (autoScroll) p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else if (i < index) {
+            p.classList.add('read');
+        } else {
+            p.classList.add('upcoming');
+        }
+    });
+}
+
+function seekToParagraph(index) {
+    if (window.currentReadMode === 'quiet') return;
+    if (index >= 0 && index < timestamps.length) {
+        holdUntilTime = 0;
+        audio.currentTime = timestamps[index];
+        audio.play();
+    }
+}
+
+function previousParagraph() {
+    seekToParagraph(Math.max(0, currentParagraph - 1));
+}
+
+function nextParagraph() {
+    seekToParagraph(Math.min(timestamps.length - 1, currentParagraph + 1));
+}
+
+function toggleAutoScroll() {
+    autoScroll = !autoScroll;
+    autoScrollBtn.textContent = autoScroll ? 'Auto-Scroll: ON' : 'Auto-Scroll: OFF';
+    autoScrollBtn.style.background = autoScroll
+        ? 'linear-gradient(135deg, #718096 0%, #4a5568 100%)'
+        : 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+}
+
+document.addEventListener('keydown', function (e) {
+    if (window.currentReadMode === 'quiet') return;
+    if (e.code === 'Space' && e.target.tagName !== 'BUTTON') {
+        e.preventDefault();
+        handlePlayBtn();
+    } else if (e.code === 'ArrowRight') {
+        skip(10);
+    } else if (e.code === 'ArrowLeft') {
+        skip(-10);
+    } else if (e.code === 'ArrowUp') {
+        e.preventDefault();
+        previousParagraph();
+    } else if (e.code === 'ArrowDown') {
+        e.preventDefault();
+        nextParagraph();
+    }
+});
+
+function skip(seconds) { audio.currentTime += seconds; }
+
+init();
+
+/* ---------- mobile drawer ---------- */
+function toggleMobileDrawer() {
+    const drawer = document.getElementById('mobileDrawer');
+    const overlay = document.getElementById('mobileOverlay');
+    if (drawer.classList.contains('open')) {
+        closeMobileDrawer();
+    } else {
+        drawer.classList.add('open');
+        overlay.classList.add('open');
+        document.getElementById('mobileFab').textContent = '✕';
+    }
+}
+
+function closeMobileDrawer() {
+    document.getElementById('mobileDrawer').classList.remove('open');
+    document.getElementById('mobileOverlay').classList.remove('open');
+    document.getElementById('mobileFab').textContent = '☰';
+}
+
+function updateDrawerStatus() {
+    const drawerBtn = document.getElementById('drawerAutoScrollBtn');
+    if (drawerBtn) {
+        drawerBtn.textContent = autoScroll ? 'Auto-Scroll: ON' : 'Auto-Scroll: OFF';
+        drawerBtn.style.background = autoScroll
+            ? 'linear-gradient(135deg, #718096 0%, #4a5568 100%)'
+            : 'linear-gradient(135deg, #e53e3e 0%, #c53030 100%)';
+    }
+}
+
+audio.addEventListener('play', () => {
+    const btn = document.getElementById('drawerPlayBtn');
+    if (btn) { btn.textContent = '⏸ Pause'; btn.style.background = 'linear-gradient(135deg, #7c2d42 0%, #5a1f30 100%)'; }
+    document.getElementById('drawerStatus').textContent = '▶️ Playing';
+});
+audio.addEventListener('pause', () => {
+    const btn = document.getElementById('drawerPlayBtn');
+    if (btn) { btn.textContent = '▶ Play Story'; btn.style.background = ''; }
+    document.getElementById('drawerStatus').textContent = '⏸️ Paused';
+});
+audio.addEventListener('ended', () => {
+    const btn = document.getElementById('drawerPlayBtn');
+    if (btn) { btn.textContent = '↺ Play Again'; btn.style.background = ''; }
+    document.getElementById('drawerStatus').textContent = '✅ Finished';
+});
+
+/* ---------- reading mode ---------- */
+(function () {
+    const bgMusic = document.getElementById('bgMusic');
+    const topControlsEl = document.getElementById('topControls');
+    const quietControlsEl = document.getElementById('quietControls');
+    const audioSectionEl = document.getElementById('audioSection');
+    const musicMuteBtn = document.getElementById('musicMuteBtn');
+    const drawerNarratedControlsEl = document.getElementById('drawerNarratedControls');
+    const drawerQuietControlsEl = document.getElementById('drawerQuietControls');
+    const drawerMusicMuteBtn = document.getElementById('drawerMusicMuteBtn');
+    const MODE_KEY = 'heuring_read_mode';
+
+    bgMusic.volume = 0.35;
+
+    function applyModeUI(mode) {
+        const isQuiet = mode === 'quiet';
+        topControlsEl.classList.toggle('quiet-hide', isQuiet);
+        audioSectionEl.classList.toggle('quiet-hide', isQuiet);
+        quietControlsEl.classList.toggle('show-panel', isQuiet);
+        quietControlsEl.style.display = isQuiet ? 'flex' : 'none';
+        drawerNarratedControlsEl.style.display = isQuiet ? 'none' : 'flex';
+        drawerQuietControlsEl.style.display = isQuiet ? 'flex' : 'none';
+    }
+
+    function updateMusicButton() {
+        const label = bgMusic.paused ? '🔇 Play Music' : '🔊 Pause Music';
+        musicMuteBtn.textContent = label;
+        drawerMusicMuteBtn.textContent = label;
+    }
+
+    window.setMode = function (mode, userInitiated) {
+        window.currentReadMode = mode;
+        localStorage.setItem(MODE_KEY, mode);
+        applyModeUI(mode);
+        if (mode === 'quiet') {
+            if (!audio.paused) audio.pause();
+            if (userInitiated) bgMusic.play().catch(() => {});
+        } else {
+            if (!bgMusic.paused) bgMusic.pause();
+        }
+        updateMusicButton();
+    };
+
+    window.toggleBgMusic = function () {
+        if (bgMusic.paused) bgMusic.play().catch(() => {});
+        else bgMusic.pause();
+        updateMusicButton();
+    };
+
+    const savedMode = localStorage.getItem(MODE_KEY) || 'narrated';
+    setMode(savedMode, false);
+    if (savedMode === 'quiet') {
+        bgMusic.play().catch(() => {});
+        updateMusicButton();
+    }
+})();
+    </script>
+</body>
+</html>
